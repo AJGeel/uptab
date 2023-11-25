@@ -44,7 +44,7 @@ const manifest: Manifest.WebExtensionManifest = {
     ? {
         browser_specific_settings: {
           gecko: {
-            id: "geelaj01@gmail.com",
+            id: "916b0c75-3123-4626-965d-b7dc89df71fa",
             strict_min_version: "109.0",
           },
         },
