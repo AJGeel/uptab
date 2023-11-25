@@ -1,6 +1,6 @@
 import { ChevronRightIcon } from "@heroicons/react/24/solid";
 import cn from "@src/utils/cn";
-import InfoWidget from "./InfoWidget";
+import InfoWidget from "./InfoWidget/InfoWidget";
 
 type Props = {
   isExpanded: boolean;
@@ -11,7 +11,7 @@ const Sidebar = ({ isExpanded, setIsExpanded }: Props) => (
   <div
     className={cn(
       `relative bg-white flex-1 max-w-[600px] p-6 duration-500 z-10`,
-      isExpanded ? "ml-0" : `-ml-[600px]`
+      isExpanded ? "ml-0" : "-ml-[600px]"
     )}
   >
     <button
