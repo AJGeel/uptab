@@ -1,4 +1,4 @@
-import { descriptions as weatherDescriptions } from "./weatherCode/descriptions";
+import { descriptions as weatherDescriptions } from "./weatherDescriptions";
 
 export const mapWeatherCode = (code: string, isDayTime = true) => {
   const description = weatherDescriptions[code];

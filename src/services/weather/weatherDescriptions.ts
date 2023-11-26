@@ -1,4 +1,4 @@
-import { WeatherDescription } from "../types";
+import { WeatherDescription } from "./types";
 
 export const descriptions: WeatherDescription = {
   "0": {

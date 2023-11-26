@@ -1,6 +1,7 @@
 import { ChevronRightIcon } from "@heroicons/react/24/solid";
-import cn from "@src/utils/cn";
-import InfoWidget from "./InfoWidget/InfoWidget";
+import { cn } from "@src/utils";
+import InfoWidget from "./InfoWidget";
+import IconButton from "./IconButton";
 
 type Props = {
   isExpanded: boolean;
@@ -14,17 +15,22 @@ const Sidebar = ({ isExpanded, setIsExpanded }: Props) => (
       isExpanded ? "ml-0" : "-ml-[600px]"
     )}
   >
-    <button
+    <IconButton
       className={cn(
-        "absolute top-7 border rounded-full p-2 bg-white shadow duration-500",
+        "absolute top-7 group",
         isExpanded ? "-right-4" : "-right-14"
       )}
-      onClick={() => setIsExpanded(!isExpanded)}
+      onClick={() => {
+        setIsExpanded(!isExpanded);
+      }}
     >
       <ChevronRightIcon
-        className={cn("w-4 h-4 duration-500", isExpanded ? "rotate-180" : "")}
+        className={cn(
+          "w-4 h-4 group-hover:text-sky-500 duration-300",
+          isExpanded ? "rotate-180" : ""
+        )}
       />
-    </button>
+    </IconButton>
     <InfoWidget className={isExpanded ? "" : "opacity-0"} />
   </div>
 );
