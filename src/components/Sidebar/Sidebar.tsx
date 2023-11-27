@@ -1,6 +1,7 @@
 import { cn } from "@src/utils";
 import InfoWidget from "../InfoWidget";
 import { SidebarExpandButton } from "./SidebarExpandButton";
+import Shortlinks from "../Shortlinks/Shortlinks";
 
 export type Props = {
   isExpanded: boolean;
@@ -19,6 +20,7 @@ const Sidebar = ({ isExpanded, setIsExpanded }: Props) => (
       setIsExpanded={setIsExpanded}
     />
     <InfoWidget className={isExpanded ? "" : "opacity-0"} />
+    <Shortlinks />
   </div>
 );
 
