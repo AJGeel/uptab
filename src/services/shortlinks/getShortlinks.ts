@@ -2,11 +2,13 @@ import { storage } from "webextension-polyfill";
 import { Shortlink } from "./types";
 
 export const getShortlinks = async (): Promise<Shortlink[]> => {
-  const shortlinks = (await storage.local.get("shortlinks")) as Shortlink[];
+  const data = (await storage.local.get("shortlinks")) as {
+    shortlinks?: Shortlink[];
+  };
 
-  if (!shortlinks.length) {
+  if (!data.shortlinks) {
     return [];
   }
 
-  return shortlinks;
+  return data.shortlinks;
 };

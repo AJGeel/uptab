@@ -6,5 +6,4 @@ export type Shortlink = {
   subtitle: string;
   url: string;
   favicon: string;
-  date: Date;
 };
