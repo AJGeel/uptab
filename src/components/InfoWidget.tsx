@@ -31,7 +31,7 @@ const InfoWidget = () => {
 
   if (isPending) {
     return (
-      <div className="p-2 flex items-center gap-2">
+      <div className="h-10 flex items-center gap-2.5">
         <Spinner className="w-4 h-4" />
         <p>Checking the weather...</p>
       </div>

@@ -31,8 +31,6 @@ export const getLocation = async (): Promise<GeocodedLocation> => {
   const { latitude, longitude } = await getLatLong();
   const area = await getArea({ latitude, longitude });
 
-  console.log(area);
-
   return {
     latitude,
     longitude,
