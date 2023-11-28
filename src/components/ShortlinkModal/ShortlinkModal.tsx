@@ -66,18 +66,20 @@ const ShortlinkModal = () => {
     (state) => state.resetSelectedShortlink
   );
 
-  const { register, handleSubmit, setValue } = useForm<FormInputs>({
-    defaultValues: {
-      Title: selectedShortlink?.title ?? "",
-      Subtitle: selectedShortlink?.subtitle ?? "",
-      URL: selectedShortlink?.url ?? "",
-    },
+  const defaultValues = {
+    Title: selectedShortlink?.title ?? "",
+    Subtitle: selectedShortlink?.subtitle ?? "",
+    URL: selectedShortlink?.url ?? "",
+  };
+
+  const { register, handleSubmit, reset } = useForm<FormInputs>({
+    defaultValues,
   });
 
   const onSubmit: SubmitHandler<FormInputs> = async (data) => {
     const normalizedUrl = normalizeUrl(data.URL);
     const faviconLocation =
-      normalizeUrl(getRootDomain(normalizedUrl)) + "/favicon.ico";
+      normalizeUrl(getRootDomain(normalizedUrl)) + "favicon.ico";
 
     await addMutation.mutateAsync({
       id: selectedShortlink?.id ?? uuidv4(),
@@ -87,18 +89,16 @@ const ShortlinkModal = () => {
       favicon: faviconLocation,
     });
 
+    onCloseModal();
+  };
+
+  const onCloseModal = () => {
     resetSelectedShortlink();
     setIsVisible(false);
   };
 
   useEffect(() => {
-    if (!selectedShortlink) {
-      return;
-    }
-
-    setValue("Title", selectedShortlink.title);
-    setValue("Subtitle", selectedShortlink.subtitle);
-    setValue("URL", selectedShortlink.url);
+    reset(defaultValues);
   }, [selectedShortlink]);
 
   return (
@@ -107,8 +107,8 @@ const ShortlinkModal = () => {
         <Dialog.Overlay className="bg-black/50 data-[state=open]:animate-overlayShow fixed inset-0 z-20" />
         <Dialog.Content
           className="data-[state=open]:animate-contentShow fixed top-[50%] left-[50%] max-h-[85vh] w-[90vw] max-w-md translate-x-[-50%] translate-y-[-50%] rounded bg-white p-[25px] shadow-lg focus:outline-none z-20"
-          onEscapeKeyDown={() => setIsVisible(false)}
-          onInteractOutside={() => setIsVisible(false)}
+          onEscapeKeyDown={onCloseModal}
+          onInteractOutside={onCloseModal}
         >
           <Dialog.Title className="m-0 font-medium text-lg">
             {selectedShortlink ? "Edit a link" : "Save a link"}
@@ -159,7 +159,7 @@ const ShortlinkModal = () => {
             </div>
           </form>
 
-          <Dialog.Close asChild onClick={() => setIsVisible(false)}>
+          <Dialog.Close asChild onClick={onCloseModal}>
             <button
               className="absolute top-2.5 right-2.5 inline-flex h-6 w-6 appearance-none items-center justify-center rounded-full focus:outline-none focus:ring-2 ring-offset-2 ring-sky-500 duration-150"
               aria-label="Close"
