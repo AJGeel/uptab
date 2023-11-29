@@ -7,6 +7,7 @@ import { cn } from "@src/utils";
 import IconButton from "@src/components/IconButton";
 import { Cog8ToothIcon, LightBulbIcon } from "@heroicons/react/24/solid";
 import ShortlinkModal from "@src/components/ShortlinkModal/ShortlinkModal";
+import useKeyPress from "@src/hooks/useKeyPress";
 
 const Menu = ({ isExpanded }: { isExpanded: boolean }) => (
   <div
@@ -26,10 +27,11 @@ const Menu = ({ isExpanded }: { isExpanded: boolean }) => (
 
 export default function Newtab() {
   const queryClient = new QueryClient();
-
   const [isExpanded, setIsExpanded] = useState(true);
 
   const bgImgUrl = "/images/backgrounds/1.jpg";
+
+  useKeyPress("\\", () => setIsExpanded(!isExpanded));
 
   return (
     <QueryClientProvider client={queryClient}>
