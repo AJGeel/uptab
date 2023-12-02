@@ -4,6 +4,7 @@ import IconButton from "../IconButton";
 import useModalStore from "@src/hooks/useModalStore";
 import ImageWithFallback from "../ImageWithFallback";
 import { getFavicon } from "@src/utils/getFavicon";
+import { useShortlinkStore } from "@src/hooks/useShortlinkStore";
 
 type Props = {
   item: Shortlink;
@@ -11,7 +12,7 @@ type Props = {
 
 const Shortlink = ({ item }: Props) => {
   const setIsModalVisible = useModalStore((state) => state.setIsVisible);
-  const selectShortLink = useModalStore((state) => state.setSelectedShortlink);
+  const setSelectedShortlink = useShortlinkStore((state) => state.setSelected);
 
   return (
     <a
@@ -33,7 +34,7 @@ const Shortlink = ({ item }: Props) => {
           event.preventDefault();
           event.stopPropagation();
 
-          selectShortLink(item);
+          setSelectedShortlink(item);
           setIsModalVisible(true);
         }}
       >

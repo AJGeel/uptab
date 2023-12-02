@@ -6,6 +6,7 @@ import { addShortlink, deleteShortlink } from "@src/services/shortlinks";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { normalizeUrl } from "@src/utils/normalizeUrl";
 import Modal from "../ui/Modal";
+import { useShortlinkStore } from "@src/hooks/useShortlinkStore";
 
 interface FormInputs {
   URL: string;
@@ -57,12 +58,10 @@ const ShortlinkModal = () => {
     },
   });
 
-  const isVisible = useModalStore((state) => state.isVisible);
-  const setIsVisible = useModalStore((state) => state.setIsVisible);
-  const selectedShortlink = useModalStore((state) => state.selectedShortlink);
-  const resetSelectedShortlink = useModalStore(
-    (state) => state.resetSelectedShortlink
-  );
+  const activeModal = useModalStore((state) => state.activeModal);
+  const setActiveModal = useModalStore((state) => state.setActiveModal);
+  const selectedShortlink = useShortlinkStore((state) => state.selected);
+  const setSelectedShortlink = useShortlinkStore((state) => state.setSelected);
 
   const defaultValues = {
     Title: selectedShortlink?.title ?? "",
@@ -88,8 +87,8 @@ const ShortlinkModal = () => {
   };
 
   const onCloseModal = () => {
-    resetSelectedShortlink();
-    setIsVisible(false);
+    setSelectedShortlink(null);
+    setActiveModal(null);
   };
 
   useEffect(() => {
@@ -98,7 +97,7 @@ const ShortlinkModal = () => {
 
   return (
     <Modal
-      isVisible={isVisible}
+      isVisible={activeModal === "SHORTLINK"}
       title={selectedShortlink ? "Edit a link" : "Save a link"}
       subtitle={
         selectedShortlink
@@ -130,9 +129,7 @@ const ShortlinkModal = () => {
                 }
 
                 await deleteMutation.mutateAsync(selectedShortlink.id);
-                resetSelectedShortlink();
-
-                setIsVisible(false);
+                onCloseModal();
               }}
             >
               Delete

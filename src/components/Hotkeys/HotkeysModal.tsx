@@ -1,4 +1,3 @@
-import useHotkeyModalStore from "@src/hooks/useHotkeyModalStore";
 import Modal from "../ui/Modal";
 import useKeyPress from "@src/hooks/useKeyPress";
 import useModalStore from "@src/hooks/useModalStore";
@@ -21,23 +20,22 @@ const hotkeys: HotkeyType[] = [
 ];
 
 const HotkeysModal = () => {
-  const isVisible = useHotkeyModalStore((state) => state.isVisible);
-  const showHotkeyModal = useHotkeyModalStore((state) => state.setIsVisible);
-  const showShortkeyModal = useModalStore((state) => state.setIsVisible);
+  const activeModal = useModalStore((state) => state.activeModal);
+  const setActiveModal = useModalStore((state) => state.setActiveModal);
 
   // Todo: create an actual ModalStore with "selectedModal" consisting of `as const` and "isVisible" instead of this spaghetti state 🍝.
 
   useKeyPress("?", () => {
-    showHotkeyModal(!isVisible);
-    showShortkeyModal(false);
+    console.log(activeModal);
+    setActiveModal("HOTKEY");
   });
 
   return (
     <Modal
-      isVisible={isVisible}
-      onClose={() => showHotkeyModal(false)}
+      isVisible={activeModal === "HOTKEY"}
+      onClose={() => setActiveModal(null)}
       title="Keyboard Shortcuts"
-      subtitle="Speed up your game with shortcuts. So much time for activities."
+      subtitle="Speed up your UpTab game with shortcuts. So much time for activities."
     >
       <div className="flex flex-col">
         {hotkeys.map((item) => (
@@ -50,7 +48,7 @@ const HotkeysModal = () => {
         <div className="mt-8 flex justify-end gap-2">
           <button
             className="bg-sky-500 text-white hover:brightness-110 duration-150 ring-offset-2 active:ring-2 ring-sky-500 inline-flex items-center justify-center rounded px-4 py-3 font-medium leading-none focus:outline-none focus:ring-2 active:brightness-100"
-            onClick={() => showHotkeyModal(false)}
+            onClick={() => setActiveModal(null)}
           >
             Got it, thanks.
           </button>
