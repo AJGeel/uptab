@@ -1,3 +1,3 @@
 export * from "./cn";
-export * from "./formatToday";
-export * from "./formatWeekNumber";
+export * from "./date/formatToday";
+export * from "./date/formatWeekNumber";

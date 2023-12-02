@@ -1,13 +1,30 @@
+import { storage } from "webextension-polyfill";
 import { Area, GeocodeResponse, GeocodedLocation, Location } from "./types";
+import { checkCachedLatLong } from "./checkCachedLatLong";
 
-export const getLatLong = async (): Promise<Location> => {
+const getLatLong = async (): Promise<Location> => {
+  const cachedLocation = await checkCachedLatLong();
+
+  if (cachedLocation) {
+    return cachedLocation;
+  }
+
   return new Promise((resolve, reject) => {
     navigator.geolocation.getCurrentPosition(
       (position) => {
-        resolve({
+        const location = {
           latitude: position.coords.latitude,
           longitude: position.coords.longitude,
+        };
+
+        storage.local.set({
+          cachedLocation: {
+            date: Date.now(),
+            ...location,
+          },
         });
+
+        resolve(location);
       },
       (error) => {
         reject(error);
