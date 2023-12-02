@@ -6,14 +6,15 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { cn } from "@src/utils";
 import IconButton from "@src/components/IconButton";
 import { Cog8ToothIcon, LightBulbIcon } from "@heroicons/react/24/solid";
-import ShortlinkModal from "@src/components/ShortlinkModal/ShortlinkModal";
+import ShortlinkModal from "@src/components/Shortlinks/ShortlinkForm";
 import useKeyPress from "@src/hooks/useKeyPress";
+import HotkeysModal from "@src/components/Hotkeys/HotkeysModal";
 
 const Menu = ({ isExpanded }: { isExpanded: boolean }) => (
   <div
     className={cn(
-      "p-6 mt-auto flex justify-end gap-2 duration-300",
-      isExpanded ? "" : "opacity-0 pointer-events-none"
+      "absolute right-0 bottom-0 p-6 flex justify-end gap-2 duration-500",
+      isExpanded ? "" : "opacity-0 pointer-events-none translate-x-32"
     )}
   >
     <IconButton className="group" onClick={() => alert("To do: Show Menu")}>
@@ -38,17 +39,26 @@ export default function Newtab() {
       <link rel="preload" href={bgImgUrl} as="image" />
 
       <ShortlinkModal />
+      <HotkeysModal />
       <div className="relative flex items-stretch w-full min-h-screen h-full bg-gray-100">
         <Sidebar isExpanded={isExpanded} setIsExpanded={setIsExpanded} />
         <div
-          style={{ backgroundImage: `url('${bgImgUrl}')` }}
-          className="flex-1 bg-cover bg-center duration-300 flex flex-col"
+          style={{
+            backgroundImage: `url('${bgImgUrl}')`,
+          }}
+          className={cn(
+            "flex-1 bg-cover bg-center flex flex-col duration-500",
+            isExpanded ? "scale-105" : ""
+          )}
         >
           <InfoWidget
-            className={cn("p-6 pl-20 pb-16", isExpanded ? "opacity-0" : "")}
+            className={cn(
+              "p-6 pl-20 pb-16",
+              isExpanded ? "opacity-0 translate-x-40" : "translate-x-0"
+            )}
           />
-          <Menu isExpanded={isExpanded} />
         </div>
+        <Menu isExpanded={isExpanded} />
       </div>
     </QueryClientProvider>
   );
