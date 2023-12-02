@@ -7,7 +7,7 @@ const manifest: Manifest.WebExtensionManifest = {
   name: "UpTab",
   description: "What's UpTab?",
   version: pkg.version,
-  permissions: ["storage", "geolocation"],
+  permissions: ["storage", "geolocation", "bookmarks"],
   background:
     buildTarget === TARGETS.FIREFOX
       ? {
