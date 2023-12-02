@@ -38,7 +38,7 @@ export default function Newtab() {
       <link rel="preload" href={bgImgUrl} as="image" />
 
       <ShortlinkModal />
-      <div className="flex items-stretch w-full min-h-screen h-full bg-gray-100">
+      <div className="relative flex items-stretch w-full min-h-screen h-full bg-gray-100">
         <Sidebar isExpanded={isExpanded} setIsExpanded={setIsExpanded} />
         <div
           style={{ backgroundImage: `url('${bgImgUrl}')` }}

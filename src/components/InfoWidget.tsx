@@ -79,7 +79,7 @@ const InfoWidget = () => {
 };
 
 const Container = ({ className }: Props) => (
-  <div className={cn("flex gap-4 items-center duration-300", className)}>
+  <div className={cn("flex gap-4 items-center duration-500", className)}>
     <InfoWidget />
   </div>
 );

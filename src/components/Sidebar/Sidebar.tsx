@@ -12,8 +12,8 @@ export type Props = {
 const Sidebar = ({ isExpanded, setIsExpanded }: Props) => (
   <div
     className={cn(
-      "relative bg-white flex-1 max-w-[600px] duration-500 z-10 h-screen",
-      isExpanded ? "ml-0" : "-ml-[600px]"
+      "absolute bg-white flex-1 max-w-[600px] w-full duration-500 z-10 h-screen left-0 top-0",
+      isExpanded ? "-translate-x-0" : "-translate-x-full"
     )}
   >
     <SidebarExpandButton
