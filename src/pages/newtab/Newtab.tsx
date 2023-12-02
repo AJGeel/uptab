@@ -10,7 +10,7 @@ import HotkeysModal from "@src/components/Hotkeys/HotkeysModal";
 
 export default function Newtab() {
   const queryClient = new QueryClient();
-  const [isExpanded, setIsExpanded] = useState(true);
+  const [isExpanded, setIsExpanded] = useState(false);
 
   const bgImgUrl = "/images/backgrounds/1.jpg";
 

@@ -3,45 +3,14 @@ import { Bookmarks, bookmarks } from "webextension-polyfill";
 import ImageWithFallback from "../ImageWithFallback";
 import { getFavicon } from "@src/utils/getFavicon";
 import { useState } from "react";
-import {
-  ChevronUpDownIcon,
-  MagnifyingGlassIcon,
-} from "@heroicons/react/24/solid";
 import { cn } from "@src/utils";
-
-const mapBookmarks = (
-  bookmarkNodes: Bookmarks.BookmarkTreeNode[],
-  parentId?: string
-) => {
-  return bookmarkNodes.flatMap((node) => {
-    const bookmark = {
-      id: node.id,
-      parentId,
-      title: node.title,
-      url: node.url,
-      dateAdded: node.dateAdded,
-    };
-
-    const children: Bookmarks.BookmarkTreeNode[] = node.children
-      ? mapBookmarks(node.children, node.id)
-      : [];
-
-    return [bookmark, ...children];
-  });
-};
+import SearchBar from "./SearchBar";
+import Sort, { SortMode } from "./Sort";
+import { mapBookmarks } from "@src/services/bookmarks/mapBookmarks";
 
 type BookmarksProps = {
   autoFocus?: boolean;
 };
-
-const SortModes = {
-  "A-Z": "A-Z",
-  "Z-A": "Z-A",
-  Newest: "Newest",
-  Oldest: "Oldest",
-} as const;
-
-type SortMode = keyof typeof SortModes;
 
 const Bookmarks = ({ autoFocus = false }: BookmarksProps) => {
   const [sortMode, setSortMode] = useState<SortMode>("Newest");
@@ -51,7 +20,6 @@ const Bookmarks = ({ autoFocus = false }: BookmarksProps) => {
     queryKey: ["bookmarks"],
     queryFn: async () => {
       const b = await bookmarks.getTree();
-      console.log(b);
       return mapBookmarks(b).filter((item) => !!item.url);
     },
   });
@@ -97,53 +65,24 @@ const Bookmarks = ({ autoFocus = false }: BookmarksProps) => {
         )}
       >
         <div className="sticky top-0 border-b flex items-stretch">
-          {/* To Extract: Search Bar */}
-          <input
-            className="bg-white px-3 py-2 pl-9 focus-within:outline-none w-full font-sans"
-            placeholder="Search your bookmarks..."
-            type="search"
-            value={searchQuery}
+          <SearchBar
+            searchQuery={searchQuery}
+            setSearchQuery={setSearchQuery}
             autoFocus={autoFocus}
-            onChange={(event) => setSearchQuery(event.target.value)}
           />
-          <div className="flex items-center justify-center absolute top-0 left-0 pointer-events-none p-2.5">
-            <MagnifyingGlassIcon className="w-4 h-4 text-gray-600" />
-          </div>
-          {/* To Extract: Sort Mode  */}
-          <div
-            className={cn(
-              "flex items-stretch border-l flex-shrink-0 relative bg-white",
-              autoFocus ? "hidden" : ""
-            )}
-          >
-            <label
-              className="absolute left-2 top-2 pointer-events-none text-gray-500"
-              htmlFor="sortSelect"
-            >
-              Sort by:
-            </label>
-            <select
-              className="pl-20 pr-8 text-right appearance-none focus:outline-none hover:bg-sky-500/10 cursor-pointer duration-150"
-              id="sortSelect"
-              value={sortMode}
-              onChange={(event) => setSortMode(event.target.value as SortMode)}
-            >
-              {Object.keys(SortModes).map((mode) => (
-                <option key={mode} value={mode as SortMode}>
-                  {SortModes[mode as SortMode]}
-                </option>
-              ))}
-            </select>
-            <ChevronUpDownIcon className="w-4 h-4 pointer-events-none absolute right-1.5 top-3 text-gray-500" />
-          </div>
+          <Sort
+            sortMode={sortMode}
+            setSortMode={setSortMode}
+            autoFocus={autoFocus}
+          />
         </div>
         {filteredBookmarks.length === 0 && (
           <p className="py-1.5 px-2 text-gray-600">No results found...</p>
         )}
         {filteredBookmarks.map((item) => (
           <a
-            className="flex items-center gap-3 duration-150 py-1.5 px-2 hover:bg-sky-500/10 text-gray-600 hover:text-sky-800 focus-within:outline-none"
             key={item.id}
+            className="flex items-center gap-3 duration-150 py-1.5 px-2 hover:bg-sky-500/10 text-gray-600 hover:text-sky-800 focus-within:outline-none"
             href={item.url ?? ""}
           >
             <ImageWithFallback

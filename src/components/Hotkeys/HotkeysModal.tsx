@@ -24,7 +24,6 @@ const HotkeysModal = () => {
   const setActiveModal = useModalStore((state) => state.setActiveModal);
 
   useKeyPress("?", () => {
-    console.log(activeModal);
     setActiveModal("HOTKEY");
   });
 
