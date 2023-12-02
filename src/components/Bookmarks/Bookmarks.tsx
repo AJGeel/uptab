@@ -61,7 +61,7 @@ const Bookmarks = ({ autoFocus = false }: BookmarksProps) => {
       <div
         className={cn(
           "flex flex-col overflow-y-auto border rounded-md mt-2 bg-white",
-          autoFocus ? "h-96" : "h-60"
+          autoFocus ? "h-[260px] shadow-lg shadow-sky-800/30" : "h-60"
         )}
       >
         <div className="sticky top-0">
