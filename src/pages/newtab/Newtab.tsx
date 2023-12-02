@@ -34,7 +34,9 @@ export default function Newtab() {
           <InfoWidget
             className={cn(
               "p-6 pl-20 pb-16",
-              isExpanded ? "opacity-0 translate-x-40" : "translate-x-0"
+              isExpanded
+                ? "opacity-0 translate-x-40 pointer-events-none"
+                : "translate-x-0"
             )}
           />
         </div>
