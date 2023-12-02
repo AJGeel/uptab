@@ -7,7 +7,6 @@ import { v4 as uuidv4 } from "uuid";
 import { addShortlink, deleteShortlink } from "@src/services/shortlinks";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { normalizeUrl } from "@src/utils/normalizeUrl";
-import { getRootDomain } from "@src/utils/getRootDomain";
 
 interface FormInputs {
   URL: string;
@@ -78,15 +77,12 @@ const ShortlinkModal = () => {
 
   const onSubmit: SubmitHandler<FormInputs> = async (data) => {
     const normalizedUrl = normalizeUrl(data.URL);
-    const faviconLocation =
-      normalizeUrl(getRootDomain(normalizedUrl)) + "favicon.ico";
 
     await addMutation.mutateAsync({
       id: selectedShortlink?.id ?? uuidv4(),
       title: data.Title,
       subtitle: String(data.Subtitle),
       url: normalizedUrl,
-      favicon: faviconLocation,
     });
 
     onCloseModal();

@@ -3,6 +3,7 @@ import { Shortlink } from "@src/services/shortlinks";
 import IconButton from "../IconButton";
 import useModalStore from "@src/hooks/useModalStore";
 import ImageWithFallback from "../ImageWithFallback";
+import { getFavicon } from "@src/utils/getFavicon";
 
 type Props = {
   item: Shortlink;
@@ -18,7 +19,7 @@ const Shortlink = ({ item }: Props) => {
       className="flex gap-3 items-center px-3 py-2.5 rounded border shadow focus:ring focus:outline-none hover:ring ring-sky-500 duration-150 cursor-pointer"
     >
       <ImageWithFallback
-        src={item.favicon}
+        src={getFavicon(item.url)}
         fallbackSrc="/icon-34.png"
         className="flex-shrink-0 rounded w-6 h-6"
       />

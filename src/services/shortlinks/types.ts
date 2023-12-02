@@ -5,5 +5,4 @@ export type Shortlink = {
   title: string;
   subtitle: string;
   url: string;
-  favicon: string;
 };
