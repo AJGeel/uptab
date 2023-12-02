@@ -1,6 +1,6 @@
 import type { Manifest } from "webextension-polyfill";
 import pkg from "../package.json";
-import { TARGETS, buildTarget } from "./config/buildTarget";
+import { TARGETS, buildTarget } from "../buildTarget";
 
 const manifest: Manifest.WebExtensionManifest = {
   manifest_version: 3,

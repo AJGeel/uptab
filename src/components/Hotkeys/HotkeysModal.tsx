@@ -23,8 +23,6 @@ const HotkeysModal = () => {
   const activeModal = useModalStore((state) => state.activeModal);
   const setActiveModal = useModalStore((state) => state.setActiveModal);
 
-  // Todo: create an actual ModalStore with "selectedModal" consisting of `as const` and "isVisible" instead of this spaghetti state 🍝.
-
   useKeyPress("?", () => {
     console.log(activeModal);
     setActiveModal("HOTKEY");
