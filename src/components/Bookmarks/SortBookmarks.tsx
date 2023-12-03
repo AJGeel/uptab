@@ -1,5 +1,6 @@
 import { ChevronUpDownIcon } from "@heroicons/react/24/solid";
 import { cn } from "@src/utils";
+import { BookmarksProps } from "./Bookmarks";
 
 export const SortModes = {
   "A-Z": "A-Z",
@@ -10,17 +11,16 @@ export const SortModes = {
 
 export type SortMode = keyof typeof SortModes;
 
-type SortProps = {
+type SortProps = BookmarksProps & {
   sortMode: SortMode;
   setSortMode: (value: SortMode) => void;
-  autoFocus?: boolean;
 };
 
-const SortBookmarks = ({ autoFocus, sortMode, setSortMode }: SortProps) => (
+const SortBookmarks = ({ displayMode, sortMode, setSortMode }: SortProps) => (
   <div
     className={cn(
       "flex items-stretch border-l flex-shrink-0 relative bg-white",
-      autoFocus ? "hidden" : ""
+      displayMode === "Popup" && "hidden"
     )}
   >
     <label

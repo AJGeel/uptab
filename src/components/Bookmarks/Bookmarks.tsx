@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { Bookmarks, bookmarks } from "webextension-polyfill";
+import { Bookmarks, bookmarks, tabs } from "webextension-polyfill";
 import ImageWithFallback from "../ImageWithFallback";
 import { getFavicon } from "@src/utils/getFavicon";
 import { useState } from "react";
@@ -9,11 +9,11 @@ import SortBookmarks, { SortMode } from "./SortBookmarks";
 import { mapBookmarks } from "@src/services/bookmarks/mapBookmarks";
 import { BackspaceIcon } from "@heroicons/react/24/solid";
 
-type BookmarksProps = {
-  autoFocus?: boolean;
+export type BookmarksProps = {
+  displayMode?: "NewTab" | "Popup";
 };
 
-const Bookmarks = ({ autoFocus = false }: BookmarksProps) => {
+const Bookmarks = ({ displayMode = "NewTab" }: BookmarksProps) => {
   const queryClient = useQueryClient();
   const [sortMode, setSortMode] = useState<SortMode>("Newest");
   const [searchQuery, setSearchQuery] = useState("");
@@ -69,25 +69,25 @@ const Bookmarks = ({ autoFocus = false }: BookmarksProps) => {
     <div
       className={cn(
         "mt-10 w-full border rounded-md bg-white overflow-hidden relative1",
-        autoFocus ? "shadow-lg shadow-sky-800/30 flex-shrink-0" : ""
+        displayMode === "Popup" && "shadow-lg shadow-sky-800/30 flex-shrink-0"
       )}
     >
       <div className="border-b flex items-stretch relative">
         <SearchBookmarks
           searchQuery={searchQuery}
           setSearchQuery={setSearchQuery}
-          autoFocus={autoFocus}
+          autoFocus={displayMode === "Popup"}
         />
         <SortBookmarks
           sortMode={sortMode}
           setSortMode={setSortMode}
-          autoFocus={autoFocus}
+          displayMode={displayMode}
         />
       </div>
       <div
         className={cn(
           "flex flex-col overflow-y-auto flex-grow",
-          autoFocus ? "h-[380px]" : "h-60"
+          displayMode === "Popup" ? "h-[380px]" : "h-60"
         )}
       >
         {filteredBookmarks.length === 0 && (
@@ -97,6 +97,12 @@ const Bookmarks = ({ autoFocus = false }: BookmarksProps) => {
           <a
             key={item.id}
             className="group flex items-center gap-3 duration-150 py-1.5 px-2 hover:bg-sky-500/10 text-gray-600 hover:text-sky-800 focus-within:outline-none outline-none"
+            onClick={(event) => {
+              if (displayMode === "Popup") {
+                event.preventDefault();
+                tabs.create({ url: item.url });
+              }
+            }}
             href={item.url ?? ""}
           >
             <ImageWithFallback
