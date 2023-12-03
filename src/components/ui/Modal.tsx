@@ -38,10 +38,10 @@ const Modal = ({ isVisible, onClose, title, subtitle, children }: Props) => {
           {children}
           <Dialog.Close asChild onClick={onClose}>
             <button
-              className="absolute top-2.5 right-2.5 inline-flex h-6 w-6 appearance-none items-center justify-center rounded-full focus:outline-none focus:ring-2 ring-offset-2 ring-sky-500 duration-150"
+              className="absolute top-5 right-5 inline-flex p-1 appearance-none items-center justify-center rounded-full focus:outline-none hover:ring-2 focus:ring-2 ring-offset-2 ring-sky-500 duration-150"
               aria-label="Close"
             >
-              <XMarkIcon />
+              <XMarkIcon className="w-5 h-5" />
             </button>
           </Dialog.Close>
         </Dialog.Content>
