@@ -3,12 +3,14 @@ import { MagnifyingGlassIcon } from "@heroicons/react/24/solid";
 type SearchBarProps = {
   searchQuery: string;
   setSearchQuery: (value: string) => void;
+  handleSubmit: () => void;
   autoFocus?: boolean;
 };
 
 const SearchBookmarks = ({
   searchQuery,
   setSearchQuery,
+  handleSubmit,
   autoFocus,
 }: SearchBarProps) => (
   <>
@@ -19,6 +21,13 @@ const SearchBookmarks = ({
       value={searchQuery}
       autoFocus={autoFocus}
       onChange={(event) => setSearchQuery(event.target.value)}
+      onKeyDown={(event) => {
+        if (event.key === "Enter") {
+          event.preventDefault();
+          event.stopPropagation();
+          handleSubmit();
+        }
+      }}
     />
     <div className="flex items-center justify-center absolute top-0 left-0 pointer-events-none p-2.5">
       <MagnifyingGlassIcon className="w-4 h-4 text-gray-600" />

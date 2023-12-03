@@ -77,6 +77,11 @@ const Bookmarks = ({ displayMode = "NewTab" }: BookmarksProps) => {
           searchQuery={searchQuery}
           setSearchQuery={setSearchQuery}
           autoFocus={displayMode === "Popup"}
+          handleSubmit={() => {
+            if (filteredBookmarks.length >= 1) {
+              tabs.create({ url: filteredBookmarks[0].url });
+            }
+          }}
         />
         <SortBookmarks
           sortMode={sortMode}
