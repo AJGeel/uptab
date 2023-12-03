@@ -6,7 +6,7 @@ type SearchBarProps = {
   autoFocus?: boolean;
 };
 
-const SearchBar = ({
+const SearchBookmarks = ({
   searchQuery,
   setSearchQuery,
   autoFocus,
@@ -26,4 +26,4 @@ const SearchBar = ({
   </>
 );
 
-export default SearchBar;
+export default SearchBookmarks;

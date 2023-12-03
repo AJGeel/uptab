@@ -16,7 +16,7 @@ type SortProps = {
   autoFocus?: boolean;
 };
 
-const Sort = ({ autoFocus, sortMode, setSortMode }: SortProps) => (
+const SortBookmarks = ({ autoFocus, sortMode, setSortMode }: SortProps) => (
   <div
     className={cn(
       "flex items-stretch border-l flex-shrink-0 relative bg-white",
@@ -45,4 +45,4 @@ const Sort = ({ autoFocus, sortMode, setSortMode }: SortProps) => (
   </div>
 );
 
-export default Sort;
+export default SortBookmarks;
