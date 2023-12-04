@@ -17,6 +17,10 @@ const ImageFadeIn = ({
   const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
+    if (!asBackground) {
+      return;
+    }
+
     const image = new Image();
     image.src = props.src;
     image.onload = () => {
@@ -24,11 +28,13 @@ const ImageFadeIn = ({
     };
   }, []);
 
+  const classes = cn("duration-300", className, !isLoaded && "opacity-0 ");
+
   if (asBackground) {
     return (
       <div
         style={{ backgroundImage: `url('${props.src}')` }}
-        className={cn("duration-300", className, !isLoaded && "opacity-0")}
+        className={classes}
         {...props}
       >
         {children}
@@ -37,11 +43,7 @@ const ImageFadeIn = ({
   }
 
   return (
-    <img
-      className={cn("duration-300", className, !isLoaded && "opacity-0")}
-      onLoad={() => setIsLoaded(true)}
-      {...props}
-    />
+    <img className={classes} onLoad={() => setIsLoaded(true)} {...props} />
   );
 };
 

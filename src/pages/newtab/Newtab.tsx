@@ -8,14 +8,16 @@ import ShortlinkModal from "@src/components/Shortlinks/ShortlinkForm";
 import useKeyPress from "@src/hooks/useKeyPress";
 import HotkeysModal from "@src/components/Hotkeys/HotkeysModal";
 import ImageFadeIn from "@src/components/ui/ImageFadeIn";
-import { addEasterEffects } from "@src/services/addEasterEffects";
+import { addEasterEggs } from "@src/services/addEasterEggs";
+import { useRandomBackground } from "@src/hooks/useRandomBackground";
 
 export default function Newtab() {
   const queryClient = new QueryClient();
   const [isExpanded, setIsExpanded] = useState(false);
+  const { activeBg } = useRandomBackground();
 
   useKeyPress("\\", () => setIsExpanded(!isExpanded));
-  addEasterEffects();
+  addEasterEggs();
 
   return (
     <QueryClientProvider client={queryClient}>
@@ -25,7 +27,7 @@ export default function Newtab() {
         <Sidebar isExpanded={isExpanded} setIsExpanded={setIsExpanded} />
         <ImageFadeIn
           asBackground={true}
-          src="/images/backgrounds/1.jpg"
+          src={activeBg.src}
           alt="A fancy background image"
           className={cn(
             "flex-1 bg-cover bg-center flex flex-col duration-500",
@@ -40,6 +42,15 @@ export default function Newtab() {
                 : "translate-x-0"
             )}
           />
+          {activeBg.author && activeBg.link && (
+            <p className="p-6 mt-auto self-end inline hover:opacity-100 duration-150 text-white drop-shadow-md opacity-25">
+              Photo by{" "}
+              <a className="underline active:text-black" href={activeBg.link}>
+                {activeBg.author}
+              </a>
+              .
+            </p>
+          )}
         </ImageFadeIn>
       </div>
     </QueryClientProvider>
