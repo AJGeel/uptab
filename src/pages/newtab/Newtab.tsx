@@ -7,25 +7,26 @@ import { cn } from "@src/utils";
 import ShortlinkModal from "@src/components/Shortlinks/ShortlinkForm";
 import useKeyPress from "@src/hooks/useKeyPress";
 import HotkeysModal from "@src/components/Hotkeys/HotkeysModal";
+import ImageFadeIn from "@src/components/ui/ImageFadeIn";
+import { addEasterEffects } from "@src/services/addEasterEffects";
 
 export default function Newtab() {
   const queryClient = new QueryClient();
   const [isExpanded, setIsExpanded] = useState(false);
 
-  const bgImgUrl = "/images/backgrounds/1.jpg";
-
   useKeyPress("\\", () => setIsExpanded(!isExpanded));
+  addEasterEffects();
 
   return (
     <QueryClientProvider client={queryClient}>
       <ShortlinkModal />
       <HotkeysModal />
-      <div className="relative flex items-stretch w-full max-h-screen overflow-hidden min-h-screen h-full bg-gray-100">
+      <div className="relative flex items-stretch w-full max-h-screen overflow-hidden min-h-screen h-full">
         <Sidebar isExpanded={isExpanded} setIsExpanded={setIsExpanded} />
-        <div
-          style={{
-            backgroundImage: `url('${bgImgUrl}')`,
-          }}
+        <ImageFadeIn
+          asBackground={true}
+          src="/images/backgrounds/1.jpg"
+          alt="A fancy background image"
           className={cn(
             "flex-1 bg-cover bg-center flex flex-col duration-500",
             isExpanded ? "scale-105" : ""
@@ -39,7 +40,7 @@ export default function Newtab() {
                 : "translate-x-0"
             )}
           />
-        </div>
+        </ImageFadeIn>
       </div>
     </QueryClientProvider>
   );
