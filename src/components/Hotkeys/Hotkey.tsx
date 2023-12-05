@@ -8,7 +8,7 @@ const Hotkey = ({ description, k: key }: HotkeyType) => (
         <>
           {index >= 1 && <p className="font-mono text-sm text-gray-400">+</p>}
           <code
-            className="font-mono bg-white shadow border rounded-sm w-10 py-1.5 text-xs flex items-center justify-center text-sky-800"
+            className="font-sans bg-white shadow border rounded-sm w-10 py-1.5 text-xs flex items-center justify-center text-sky-800"
             key={item}
           >
             {item}

@@ -78,7 +78,7 @@ const Bookmarks = ({ displayMode = "NewTab" }: BookmarksProps) => {
           setSearchQuery={setSearchQuery}
           autoFocus={displayMode === "Popup"}
           handleSubmit={() => {
-            if (filteredBookmarks.length >= 1) {
+            if (searchQuery.length >= 1 && filteredBookmarks.length >= 1) {
               tabs.create({ url: filteredBookmarks[0].url });
             }
           }}
@@ -101,7 +101,10 @@ const Bookmarks = ({ displayMode = "NewTab" }: BookmarksProps) => {
         {filteredBookmarks.map((item) => (
           <a
             key={item.id}
-            className="group flex items-center gap-3 duration-150 py-1.5 px-2 hover:bg-sky-500/10 text-gray-600 hover:text-sky-800 focus-within:outline-none outline-none"
+            className={cn(
+              "group flex items-center gap-3 duration-150 py-1.5 px-2 hover:bg-sky-500/10 text-gray-600 hover:text-sky-800 focus-within:outline-none outline-none",
+              searchQuery.length >= 1 && "first:bg-sky-500/10"
+            )}
             onClick={(event) => {
               if (displayMode === "Popup") {
                 event.preventDefault();
