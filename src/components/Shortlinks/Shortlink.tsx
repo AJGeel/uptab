@@ -11,7 +11,7 @@ type Props = {
 };
 
 const Shortlink = ({ item }: Props) => {
-  const setIsModalVisible = useModalStore((state) => state.setIsVisible);
+  const setActiveModal = useModalStore((state) => state.setActiveModal);
   const setSelectedShortlink = useShortlinkStore((state) => state.setSelected);
 
   return (
@@ -35,7 +35,7 @@ const Shortlink = ({ item }: Props) => {
           event.stopPropagation();
 
           setSelectedShortlink(item);
-          setIsModalVisible(true);
+          setActiveModal("SHORTLINK");
         }}
       >
         <EllipsisHorizontalIcon className="w-5 h-5 text-gray-600" />
