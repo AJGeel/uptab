@@ -61,7 +61,7 @@ const backgrounds: Background[] = [
 ];
 
 export const useRandomBackground = () => {
-  const randomIndex = dailyRandomNumber(1, backgrounds.length);
+  const randomIndex = dailyRandomNumber(0, backgrounds.length - 1);
   const [activeBg, setActiveBg] = useState(backgrounds[randomIndex]);
 
   return {
