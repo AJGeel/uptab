@@ -1,7 +1,7 @@
 {
   "name": "uptab",
   "displayName": "UpTab",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "What's UpTab?",
   "author": "Arthur Geel <ageel@enrise.com>",
   "scripts": {
