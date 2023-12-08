@@ -2,7 +2,7 @@ import react from "@vitejs/plugin-react-swc";
 import { resolve } from "path";
 import { defineConfig } from "vite";
 import makeManifest from "./utils/plugins/make-manifest";
-import { TARGETS, buildTarget } from "./src/config/buildTarget";
+import { TARGETS, buildTarget } from "./buildTarget";
 
 const root = resolve(__dirname, "src");
 const pagesDir = resolve(root, "pages");

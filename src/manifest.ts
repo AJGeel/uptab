@@ -1,36 +1,50 @@
 import type { Manifest } from "webextension-polyfill";
 import pkg from "../package.json";
-import { TARGETS, buildTarget } from "./config/buildTarget";
+import { TARGETS, buildTarget } from "../buildTarget";
+
+const pages = {
+  new: "src/pages/newtab/index.html",
+  popup: "src/pages/popup/index.html",
+  background: "src/pages/background/index.js",
+};
 
 const manifest: Manifest.WebExtensionManifest = {
   manifest_version: 3,
   name: "UpTab",
   description: "What's UpTab?",
   version: pkg.version,
-  permissions: ["storage", "geolocation"],
+  permissions: ["storage", "geolocation", "bookmarks", "commands"],
   background:
     buildTarget === TARGETS.FIREFOX
       ? {
-          page: "src/pages/background/index.html",
+          page: pages.background.split(".js")[0] + ".html",
         }
       : {
-          service_worker: "src/pages/background/index.js",
+          service_worker: pages.background,
           type: "module",
         },
   action: {
-    default_popup: "src/pages/popup/index.html",
+    default_popup: pages.popup,
     default_icon: "icon-34.png",
   },
   chrome_url_overrides: {
-    newtab: "src/pages/newtab/index.html",
+    newtab: pages.new,
   },
   ...(buildTarget === TARGETS.FIREFOX
     ? {
         chrome_settings_overrides: {
-          homepage: "src/pages/newtab/index.html",
+          homepage: pages.new,
         },
       }
     : {}),
+  commands: {
+    _execute_action: {
+      suggested_key: {
+        default: "Ctrl+U",
+        mac: "Command+U",
+      },
+    },
+  },
   icons: {
     "128": "icon-128.png",
   },

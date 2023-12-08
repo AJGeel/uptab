@@ -4,14 +4,15 @@ import IconButton from "../IconButton";
 import useModalStore from "@src/hooks/useModalStore";
 import ImageWithFallback from "../ImageWithFallback";
 import { getFavicon } from "@src/utils/getFavicon";
+import { useShortlinkStore } from "@src/hooks/useShortlinkStore";
 
 type Props = {
   item: Shortlink;
 };
 
 const Shortlink = ({ item }: Props) => {
-  const setIsModalVisible = useModalStore((state) => state.setIsVisible);
-  const selectShortLink = useModalStore((state) => state.setSelectedShortlink);
+  const setActiveModal = useModalStore((state) => state.setActiveModal);
+  const setSelectedShortlink = useShortlinkStore((state) => state.setSelected);
 
   return (
     <a
@@ -33,8 +34,8 @@ const Shortlink = ({ item }: Props) => {
           event.preventDefault();
           event.stopPropagation();
 
-          selectShortLink(item);
-          setIsModalVisible(true);
+          setSelectedShortlink(item);
+          setActiveModal("SHORTLINK");
         }}
       >
         <EllipsisHorizontalIcon className="w-5 h-5 text-gray-600" />

@@ -1,23 +1,21 @@
-import { Shortlink } from "@src/services/shortlinks";
 import { create } from "zustand";
 
+export const ActiveModal = {
+  HOTKEY: "HOTKEY",
+  SHORTLINK: "SHORTLINK",
+} as const;
+
 type State = {
-  isVisible: boolean;
-  selectedShortlink: Shortlink | null;
+  activeModal: keyof typeof ActiveModal | null;
 };
 
-type Action = {
-  setIsVisible: (value: boolean) => void;
-  setSelectedShortlink: (item: Shortlink) => void;
-  resetSelectedShortlink: () => void;
+type Actions = {
+  setActiveModal: (to: keyof typeof ActiveModal | null) => void;
 };
 
-const useModalStore = create<State & Action>()((set) => ({
-  isVisible: false,
-  selectedShortlink: null,
-  setIsVisible: (value) => set({ isVisible: value }),
-  setSelectedShortlink: (item) => set(() => ({ selectedShortlink: item })),
-  resetSelectedShortlink: () => set({ selectedShortlink: null }),
+export const useModalStore = create<State & Actions>()((set) => ({
+  activeModal: null,
+  setActiveModal: (value) => set({ activeModal: value }),
 }));
 
 export default useModalStore;

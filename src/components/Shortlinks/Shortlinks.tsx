@@ -5,7 +5,7 @@ import Shortlink from "./Shortlink";
 import useModalStore from "@src/hooks/useModalStore";
 
 const Shortlinks = () => {
-  const setIsModalVisible = useModalStore((state) => state.setIsVisible);
+  const setActiveModal = useModalStore((state) => state.setActiveModal);
 
   const { isPending, isError, data } = useQuery({
     queryKey: ["shortlinks"],
@@ -31,7 +31,7 @@ const Shortlinks = () => {
           ))}
           <span
             className="underline hover:no-underline hover:text-black cursor-pointer col-span-2 mt-4 inline"
-            onClick={() => setIsModalVisible(true)}
+            onClick={() => setActiveModal("SHORTLINK")}
           >
             Add a link
           </span>
