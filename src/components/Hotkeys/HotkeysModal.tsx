@@ -10,12 +10,12 @@ export type HotkeyType = {
 
 const hotkeys: HotkeyType[] = [
   {
-    k: "\\",
     description: "Toggle sidebar visibility",
+    k: "\\",
   },
   {
-    k: "?",
     description: "Toggle the menu you're currently looking at",
+    k: "?",
   },
 ];
 

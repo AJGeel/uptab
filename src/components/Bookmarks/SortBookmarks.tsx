@@ -5,6 +5,7 @@ import { BookmarksProps } from "./Bookmarks";
 export const SortModes = {
   "A-Z": "A-Z",
   "Z-A": "Z-A",
+  // eslint-disable-next-line sort-keys
   Newest: "Newest",
   Oldest: "Oldest",
 } as const;

@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import Link from "./Link";
 import { getLocation } from "@src/services/location";
 import { getWeather, mapWeatherCode } from "@src/services/weather";
-import { formatToday, formatWeekNumber, cn } from "@src/utils";
+import { cn, formatToday, formatWeekNumber } from "@src/utils";
 import Spinner from "./Spinner";
 
 type Props = {
@@ -11,8 +11,8 @@ type Props = {
 
 const InfoWidget = () => {
   const { data: locationData } = useQuery({
-    queryKey: ["location"],
     queryFn: getLocation,
+    queryKey: ["location"],
   });
 
   const {
@@ -20,13 +20,13 @@ const InfoWidget = () => {
     isError,
     data: weatherData,
   } = useQuery({
-    queryKey: ["weather", locationData?.latitude, locationData?.longitude],
+    enabled: !!locationData,
     queryFn: () =>
       getWeather({
         latitude: locationData?.latitude,
         longitude: locationData?.longitude,
       }),
-    enabled: !!locationData,
+    queryKey: ["weather", locationData?.latitude, locationData?.longitude],
   });
 
   if (isPending) {

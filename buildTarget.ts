@@ -1,6 +1,6 @@
 export const TARGETS = {
-  FIREFOX: "FIREFOX",
   CHROMIUM: "CHROMIUM",
+  FIREFOX: "FIREFOX",
 } as const;
 
 export const buildTarget: keyof typeof TARGETS = TARGETS.CHROMIUM;

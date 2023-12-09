@@ -1,19 +1,19 @@
+/* eslint-disable camelcase */
 import type { Manifest } from "webextension-polyfill";
 import pkg from "../package.json";
 import { TARGETS, buildTarget } from "../buildTarget";
 
 const pages = {
+  background: "src/pages/background/index.js",
   new: "src/pages/newtab/index.html",
   popup: "src/pages/popup/index.html",
-  background: "src/pages/background/index.js",
 };
 
 const manifest: Manifest.WebExtensionManifest = {
-  manifest_version: 3,
-  name: "UpTab",
-  description: "What's UpTab?",
-  version: pkg.version,
-  permissions: ["storage", "geolocation", "bookmarks", "commands"],
+  action: {
+    default_icon: "icon-34.png",
+    default_popup: pages.popup,
+  },
   background:
     buildTarget === TARGETS.FIREFOX
       ? {
@@ -23,10 +23,6 @@ const manifest: Manifest.WebExtensionManifest = {
           service_worker: pages.background,
           type: "module",
         },
-  action: {
-    default_popup: pages.popup,
-    default_icon: "icon-34.png",
-  },
   chrome_url_overrides: {
     newtab: pages.new,
   },
@@ -45,13 +41,18 @@ const manifest: Manifest.WebExtensionManifest = {
       },
     },
   },
+  description: "What's UpTab?",
   icons: {
     "128": "icon-128.png",
   },
+  manifest_version: 3,
+  name: "UpTab",
+  permissions: ["storage", "geolocation", "bookmarks", "commands"],
+  version: pkg.version,
   web_accessible_resources: [
     {
-      resources: ["icon-128.png", "icon-34.png"],
       matches: [],
+      resources: ["icon-128.png", "icon-34.png"],
     },
   ],
   ...(buildTarget === TARGETS.FIREFOX

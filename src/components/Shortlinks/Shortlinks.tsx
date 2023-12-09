@@ -8,8 +8,8 @@ const Shortlinks = () => {
   const setActiveModal = useModalStore((state) => state.setActiveModal);
 
   const { isPending, isError, data } = useQuery({
-    queryKey: ["shortlinks"],
     queryFn: getShortlinks,
+    queryKey: ["shortlinks"],
   });
 
   if (isPending) {

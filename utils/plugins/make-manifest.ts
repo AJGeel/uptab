@@ -1,8 +1,8 @@
 import * as fs from "fs";
 import * as path from "path";
+import { PluginOption } from "vite";
 import colorLog from "../log";
 import manifest from "../../src/manifest";
-import { PluginOption } from "vite";
 
 const { resolve } = path;
 
@@ -10,7 +10,6 @@ const outDir = resolve(__dirname, "..", "..", "public");
 
 export default function makeManifest(): PluginOption {
   return {
-    name: "make-manifest",
     buildEnd() {
       if (!fs.existsSync(outDir)) {
         fs.mkdirSync(outDir);
@@ -22,5 +21,6 @@ export default function makeManifest(): PluginOption {
 
       colorLog(`Manifest file copy complete: ${manifestPath}`, "success");
     },
+    name: "make-manifest",
   };
 }

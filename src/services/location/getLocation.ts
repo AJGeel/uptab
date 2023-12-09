@@ -29,7 +29,7 @@ const getLatLong = async (): Promise<Location> => {
       (error) => {
         reject(error);
       },
-      { enableHighAccuracy: false, timeout: 5000, maximumAge: 3600000 }
+      { enableHighAccuracy: false, maximumAge: 3600000, timeout: 5000 }
     );
   });
 };
@@ -49,9 +49,9 @@ export const getLocation = async (): Promise<GeocodedLocation> => {
   const area = await getArea({ latitude, longitude });
 
   return {
-    latitude,
-    longitude,
     area:
       area.residential ?? area.municipality ?? area.city_district ?? area.city,
+    latitude,
+    longitude,
   };
 };

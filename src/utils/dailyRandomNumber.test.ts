@@ -25,9 +25,9 @@ describe("dailyRandomNumber", () => {
 
   it("should handle different ranges", () => {
     const ranges = [
-      { min: 10, max: 20 },
-      { min: -50, max: 50 },
-      { min: 0, max: 1 },
+      { max: 20, min: 10 },
+      { max: 50, min: -50 },
+      { max: 1, min: 0 },
     ];
 
     ranges.forEach(({ min, max }) => {

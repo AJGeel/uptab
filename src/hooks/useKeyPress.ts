@@ -1,4 +1,4 @@
-import { useEffect, useCallback } from "react";
+import { useCallback, useEffect } from "react";
 
 const useKeyPress = (targetKey: string, callback: () => void) => {
   const handleKeyPress = useCallback(

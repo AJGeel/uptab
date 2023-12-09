@@ -36,7 +36,7 @@ const FormField = ({
     <input
       id={label}
       className="inline-flex w-full flex-1 items-center justify-center rounded border border-gray-400 px-3 py-2 leading-none shadow outline-none ring-sky-500 ring-offset-2 duration-150 focus:ring-2"
-      {...register(label, { required, maxLength, pattern })}
+      {...register(label, { maxLength, pattern, required })}
     />
   </fieldset>
 );
@@ -63,13 +63,14 @@ const ShortlinkModal = () => {
   const selectedShortlink = useShortlinkStore((state) => state.selected);
   const setSelectedShortlink = useShortlinkStore((state) => state.setSelected);
 
-  const defaultValues = useMemo(() => {
-    return {
-      Title: selectedShortlink?.title ?? "",
+  const defaultValues = useMemo(
+    () => ({
       Subtitle: selectedShortlink?.subtitle ?? "",
+      Title: selectedShortlink?.title ?? "",
       URL: selectedShortlink?.url ?? "",
-    };
-  }, [selectedShortlink]);
+    }),
+    [selectedShortlink]
+  );
 
   const { register, handleSubmit, reset } = useForm<FormInputs>({
     defaultValues,
@@ -80,8 +81,8 @@ const ShortlinkModal = () => {
 
     await addMutation.mutateAsync({
       id: selectedShortlink?.id ?? uuidv4(),
-      title: data.Title,
       subtitle: String(data.Subtitle),
+      title: data.Title,
       url: normalizedUrl,
     });
 

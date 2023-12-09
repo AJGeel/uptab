@@ -1,4 +1,4 @@
-import { describe, expect, it, vi, afterEach, beforeEach } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { mapWeatherCode } from "./mapWeatherCode";
 import { descriptions as weatherDescriptions } from "./weatherDescriptions";
 

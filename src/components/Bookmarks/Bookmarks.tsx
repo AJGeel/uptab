@@ -19,11 +19,11 @@ const Bookmarks = ({ displayMode = "NewTab" }: BookmarksProps) => {
   const [searchQuery, setSearchQuery] = useState("");
 
   const { isPending, isError, data } = useQuery({
-    queryKey: ["bookmarks"],
     queryFn: async () => {
       const b = await bookmarks.getTree();
       return mapBookmarks(b).filter((item) => !!item.url);
     },
+    queryKey: ["bookmarks"],
   });
 
   const deleteMutation = useMutation({
