@@ -16,7 +16,7 @@ const Modal = ({ isVisible, onClose, title, subtitle, children }: Props) => {
   return (
     <Dialog.Root open={isVisible}>
       <Dialog.Portal>
-        <Dialog.Overlay className="bg-black/50 data-[state=open]:animate-overlayShow fixed inset-0 z-20" />
+        <Dialog.Overlay className="fixed inset-0 z-20 bg-black/50 data-[state=open]:animate-overlayShow" />
         <Dialog.Content
           className={cn(
             "data-[state=open]:animate-contentShow fixed top-[50%] left-[50%] max-h-[85vh] w-[90vw] max-w-md translate-x-[-50%] translate-y-[-50%] rounded bg-white p-6 shadow-lg focus:outline-none z-20"
@@ -24,10 +24,10 @@ const Modal = ({ isVisible, onClose, title, subtitle, children }: Props) => {
           onEscapeKeyDown={onClose}
           onInteractOutside={onClose}
         >
-          <Dialog.Title className="m-0 font-bold text-lg">{title}</Dialog.Title>
+          <Dialog.Title className="m-0 text-lg font-bold">{title}</Dialog.Title>
           {subtitle && (
             <Dialog.Description
-              className="mt-3 mb-6 leading-normal text-gray-800"
+              className="mb-6 mt-3 leading-normal text-gray-800"
               // eslint-disable-next-line @typescript-eslint/ban-ts-comment
               // @ts-ignore  (until `textWrap: "balance'` becomes part of Tailwind / DOM spec 😪)
               style={{ textWrap: "balance" }}
@@ -38,10 +38,10 @@ const Modal = ({ isVisible, onClose, title, subtitle, children }: Props) => {
           {children}
           <Dialog.Close asChild onClick={onClose}>
             <button
-              className="absolute top-5 right-5 inline-flex p-1 appearance-none items-center justify-center rounded-full focus:outline-none hover:ring-2 focus:ring-2 ring-offset-2 ring-sky-500 duration-150"
+              className="absolute right-5 top-5 inline-flex appearance-none items-center justify-center rounded-full p-1 ring-sky-500 ring-offset-2 duration-150 hover:ring-2 focus:outline-none focus:ring-2"
               aria-label="Close"
             >
-              <XMarkIcon className="w-5 h-5" />
+              <XMarkIcon className="h-5 w-5" />
             </button>
           </Dialog.Close>
         </Dialog.Content>

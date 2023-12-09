@@ -20,7 +20,7 @@ const Sidebar = ({ isExpanded, setIsExpanded }: Props) => (
       isExpanded={isExpanded}
       setIsExpanded={setIsExpanded}
     />
-    <div className="p-6 h-full overflow-y-auto">
+    <div className="h-full overflow-y-auto p-6">
       <InfoWidget className={isExpanded ? "" : "opacity-0"} />
       <Shortlinks />
       <Bookmarks />

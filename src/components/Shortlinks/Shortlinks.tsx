@@ -30,7 +30,7 @@ const Shortlinks = () => {
             <Shortlink key={item.id} item={item} />
           ))}
           <span
-            className="underline hover:no-underline hover:text-black cursor-pointer col-span-2 mt-4 inline"
+            className="col-span-2 mt-4 inline cursor-pointer underline hover:text-black hover:no-underline"
             onClick={() => setActiveModal("SHORTLINK")}
           >
             Add a link

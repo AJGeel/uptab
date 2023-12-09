@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import useModalStore from "@src/hooks/useModalStore";
 import { Path, SubmitHandler, UseFormRegister, useForm } from "react-hook-form";
 import { v4 as uuidv4 } from "uuid";
@@ -30,12 +30,12 @@ const FormField = ({
   pattern,
 }: FormFieldProps) => (
   <fieldset className="mb-4 flex items-center gap-5">
-    <label className="text-gray-600 w-24 text-right" htmlFor={label}>
+    <label className="w-24 text-right text-gray-600" htmlFor={label}>
       {label}
     </label>
     <input
       id={label}
-      className="shadow px-3 py-2 inline-flex w-full flex-1 items-center justify-center rounded leading-none outline-none focus:ring-2 border border-gray-400 ring-offset-2 ring-sky-500 duration-150"
+      className="inline-flex w-full flex-1 items-center justify-center rounded border border-gray-400 px-3 py-2 leading-none shadow outline-none ring-sky-500 ring-offset-2 duration-150 focus:ring-2"
       {...register(label, { required, maxLength, pattern })}
     />
   </fieldset>
@@ -63,11 +63,13 @@ const ShortlinkModal = () => {
   const selectedShortlink = useShortlinkStore((state) => state.selected);
   const setSelectedShortlink = useShortlinkStore((state) => state.setSelected);
 
-  const defaultValues = {
-    Title: selectedShortlink?.title ?? "",
-    Subtitle: selectedShortlink?.subtitle ?? "",
-    URL: selectedShortlink?.url ?? "",
-  };
+  const defaultValues = useMemo(() => {
+    return {
+      Title: selectedShortlink?.title ?? "",
+      Subtitle: selectedShortlink?.subtitle ?? "",
+      URL: selectedShortlink?.url ?? "",
+    };
+  }, [selectedShortlink]);
 
   const { register, handleSubmit, reset } = useForm<FormInputs>({
     defaultValues,
@@ -93,7 +95,7 @@ const ShortlinkModal = () => {
 
   useEffect(() => {
     reset(defaultValues);
-  }, [selectedShortlink]);
+  }, [defaultValues, reset, selectedShortlink]);
 
   return (
     <Modal
@@ -106,7 +108,7 @@ const ShortlinkModal = () => {
       }
       onClose={onCloseModal}
     >
-      <form className="flex flex-col mt-6" onSubmit={handleSubmit(onSubmit)}>
+      <form className="mt-6 flex flex-col" onSubmit={handleSubmit(onSubmit)}>
         <FormField
           label="URL"
           register={register}
@@ -121,7 +123,7 @@ const ShortlinkModal = () => {
         <div className="mt-6 flex justify-end gap-2">
           {selectedShortlink && (
             <button
-              className="bg-white hover:bg-gray-100 active:bg-gray-200 duration-150 ring-offset-2 active:ring-2 ring-sky-500 inline-flex items-center justify-center rounded px-4 py-3 font-medium leading-none focus:outline-none focus:ring-2"
+              className="inline-flex items-center justify-center rounded bg-white px-4 py-3 font-medium leading-none ring-sky-500 ring-offset-2 duration-150 hover:bg-gray-100 focus:outline-none focus:ring-2 active:bg-gray-200 active:ring-2"
               onClick={async (event) => {
                 event.preventDefault();
                 if (!selectedShortlink?.id) {
@@ -135,7 +137,7 @@ const ShortlinkModal = () => {
               Delete
             </button>
           )}
-          <button className="bg-sky-500 text-white hover:brightness-110 duration-150 ring-offset-2 active:ring-2 ring-sky-500 inline-flex items-center justify-center rounded px-4 py-3 font-medium leading-none focus:outline-none focus:ring-2 active:brightness-100">
+          <button className="inline-flex items-center justify-center rounded bg-sky-500 px-4 py-3 font-medium leading-none text-white ring-sky-500 ring-offset-2 duration-150 hover:brightness-110 focus:outline-none focus:ring-2 active:ring-2 active:brightness-100">
             {selectedShortlink ? "Update link" : "Save link"}
           </button>
         </div>

@@ -1,0 +1,7 @@
+- [x] Add unit tests to ts functions
+- [] Add linters: TailwindCSS, React, import, immutable
+- [] Add CI with steps: Linter -> Firefox Linter -> Tests -> Build
+- [] Add Security checker to CI
+- [] Add dependabot
+
+- [] Feedback: https://github.com/AJGeel/uptab/issues/new/choose

@@ -23,7 +23,7 @@ export default function Newtab() {
     <QueryClientProvider client={queryClient}>
       <ShortlinkModal />
       <HotkeysModal />
-      <div className="relative flex items-stretch w-full max-h-screen overflow-hidden min-h-screen h-full">
+      <div className="relative flex h-full max-h-screen min-h-screen w-full items-stretch overflow-hidden">
         <Sidebar isExpanded={isExpanded} setIsExpanded={setIsExpanded} />
         <ImageFadeIn
           asBackground={true}
@@ -43,7 +43,7 @@ export default function Newtab() {
             )}
           />
           {activeBg.author && activeBg.link && (
-            <p className="p-6 mt-auto self-end inline hover:opacity-100 duration-150 text-white drop-shadow-md opacity-25">
+            <p className="mt-auto inline self-end p-6 text-white opacity-25 drop-shadow-md duration-150 hover:opacity-100">
               Photo by{" "}
               <a className="underline active:text-black" href={activeBg.link}>
                 {activeBg.author}

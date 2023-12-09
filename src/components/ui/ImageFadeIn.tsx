@@ -26,7 +26,7 @@ const ImageFadeIn = ({
     image.onload = () => {
       setIsLoaded(true);
     };
-  }, []);
+  }, [asBackground, props.src]);
 
   const classes = cn("duration-300", className, !isLoaded && "opacity-0 ");
 

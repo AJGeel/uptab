@@ -31,8 +31,8 @@ const InfoWidget = () => {
 
   if (isPending) {
     return (
-      <div className="h-10 flex items-center gap-2.5">
-        <Spinner className="w-4 h-4" />
+      <div className="flex h-10 items-center gap-2.5">
+        <Spinner className="h-4 w-4" />
         <p>Checking the weather...</p>
       </div>
     );
@@ -69,7 +69,7 @@ const InfoWidget = () => {
           </div>
         )}
       </Link>
-      <div className="w-0.5 h-10 bg-black/5 rounded" />
+      <div className="h-10 w-0.5 rounded bg-black/5" />
       <Link href="https://calendar.google.com" className="flex flex-col">
         <p className="font-medium">{formatToday(today)}</p>
         <p className="text-xs opacity-70">{formatWeekNumber(today)}</p>
