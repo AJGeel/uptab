@@ -10,7 +10,6 @@ import { normalizeUrl } from "@/src/utils/normalizeUrl";
 
 import Modal from "../ui/Modal";
 
-
 interface FormInputs {
   URL: string;
   Title: string;
@@ -81,6 +80,7 @@ const ShortlinkModal = () => {
 
   const onSubmit: SubmitHandler<FormInputs> = async (data) => {
     const normalizedUrl = normalizeUrl(data.URL);
+    reset(defaultValues);
 
     await addMutation.mutateAsync({
       id: selectedShortlink?.id ?? uuidv4(),
