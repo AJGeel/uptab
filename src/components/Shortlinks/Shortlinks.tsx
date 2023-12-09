@@ -33,15 +33,17 @@ const Shortlinks = () => {
           {data.map((item) => (
             <Shortlink key={item.id} item={item} />
           ))}
-          <span
-            className="col-span-2 mt-4 inline cursor-pointer underline hover:text-black hover:no-underline"
-            onClick={() => {
-              setSelectedShortlink(null);
-              setActiveModal("SHORTLINK");
-            }}
-          >
-            Add a link
-          </span>
+          <div className="col-span-2 mt-4">
+            <button
+              className="inline cursor-pointer underline hover:text-black hover:no-underline"
+              onClick={() => {
+                setSelectedShortlink(null);
+                setActiveModal("SHORTLINK");
+              }}
+            >
+              Add a link
+            </button>
+          </div>
         </div>
       )}
     </div>
