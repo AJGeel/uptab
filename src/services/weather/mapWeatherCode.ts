@@ -5,7 +5,7 @@ export const mapWeatherCode = (code: string) => {
 
   if (description) {
     const currentHour = new Date().getHours();
-    const isDayTime = currentHour >= 0 && currentHour < 18;
+    const isDayTime = currentHour >= 7 && currentHour < 18;
 
     return isDayTime ? description.day : description.night;
   }
