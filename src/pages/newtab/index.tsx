@@ -1,7 +1,8 @@
 import { createRoot } from "react-dom/client";
-import Newtab from "@pages/newtab/Newtab";
-import "@assets/styles/tailwind.css";
-import "@pages/newtab/index.css";
+
+import Newtab from "@/pages/newtab/Newtab";
+import "@/assets/styles/tailwind.css";
+import "@/pages/newtab/index.css";
 
 function init() {
   const rootContainer = document.querySelector("#__root");

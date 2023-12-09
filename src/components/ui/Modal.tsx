@@ -1,7 +1,8 @@
 import { XMarkIcon } from "@heroicons/react/24/solid";
 import * as Dialog from "@radix-ui/react-dialog";
-import { cn } from "@src/utils";
 import { ReactElement } from "react";
+
+import { cn } from "@/src/utils";
 
 type Props = {
   isVisible: boolean;

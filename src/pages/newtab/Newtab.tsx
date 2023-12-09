@@ -1,15 +1,16 @@
+
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { useState } from "react";
 
-import Sidebar from "@src/components/Sidebar/Sidebar";
-import InfoWidget from "@src/components/InfoWidget";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { cn } from "@src/utils";
-import ShortlinkModal from "@src/components/Shortlinks/ShortlinkForm";
-import useKeyPress from "@src/hooks/useKeyPress";
-import HotkeysModal from "@src/components/Hotkeys/HotkeysModal";
-import ImageFadeIn from "@src/components/ui/ImageFadeIn";
-import { addEasterEggs } from "@src/services/addEasterEggs";
-import { useRandomBackground } from "@src/hooks/useRandomBackground";
+import HotkeysModal from "@/src/components/Hotkeys/HotkeysModal";
+import InfoWidget from "@/src/components/InfoWidget";
+import ShortlinkModal from "@/src/components/Shortlinks/ShortlinkForm";
+import Sidebar from "@/src/components/Sidebar/Sidebar";
+import ImageFadeIn from "@/src/components/ui/ImageFadeIn";
+import useKeyPress from "@/src/hooks/useKeyPress";
+import { useRandomBackground } from "@/src/hooks/useRandomBackground";
+import { addEasterEggs } from "@/src/services/addEasterEggs";
+import { cn } from "@/src/utils";
 
 const queryClient = new QueryClient();
 

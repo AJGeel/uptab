@@ -1,12 +1,15 @@
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useMemo } from "react";
-import useModalStore from "@src/hooks/useModalStore";
 import { Path, SubmitHandler, UseFormRegister, useForm } from "react-hook-form";
 import { v4 as uuidv4 } from "uuid";
-import { addShortlink, deleteShortlink } from "@src/services/shortlinks";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { normalizeUrl } from "@src/utils/normalizeUrl";
+
+import { useModalStore } from "@/src/hooks/useModalStore";
+import { useShortlinkStore } from "@/src/hooks/useShortlinkStore";
+import { addShortlink, deleteShortlink } from "@/src/services/shortlinks";
+import { normalizeUrl } from "@/src/utils/normalizeUrl";
+
 import Modal from "../ui/Modal";
-import { useShortlinkStore } from "@src/hooks/useShortlinkStore";
+
 
 interface FormInputs {
   URL: string;

@@ -1,5 +1,6 @@
-import { dailyRandomNumber } from "@src/utils/dailyRandomNumber";
 import { useState } from "react";
+
+import { dailyRandomNumber } from "@/src/utils/dailyRandomNumber";
 
 type Background = {
   src: string;

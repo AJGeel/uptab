@@ -1,8 +1,9 @@
-import { cn } from "@src/utils";
-import InfoWidget from "../InfoWidget";
+import { cn } from "@/src/utils";
+
 import { SidebarExpandButton } from "./SidebarExpandButton";
-import Shortlinks from "../Shortlinks/Shortlinks";
 import Bookmarks from "../Bookmarks/Bookmarks";
+import InfoWidget from "../InfoWidget";
+import Shortlinks from "../Shortlinks/Shortlinks";
 
 export type Props = {
   isExpanded: boolean;

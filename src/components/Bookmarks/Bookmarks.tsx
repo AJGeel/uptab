@@ -1,13 +1,17 @@
+import { BackspaceIcon } from "@heroicons/react/24/solid";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { Bookmarks, bookmarks, tabs } from "webextension-polyfill";
-import ImageWithFallback from "../ImageWithFallback";
-import { getFavicon } from "@src/utils/getFavicon";
 import { useState } from "react";
-import { cn } from "@src/utils";
+import { Bookmarks, bookmarks, tabs } from "webextension-polyfill";
+
+import { mapBookmarks } from "@/src/services/bookmarks/mapBookmarks";
+import { cn } from "@/src/utils";
+import { getFavicon } from "@/src/utils/getFavicon";
+
+
 import SearchBookmarks from "./SearchBookmarks";
 import SortBookmarks, { SortMode } from "./SortBookmarks";
-import { mapBookmarks } from "@src/services/bookmarks/mapBookmarks";
-import { BackspaceIcon } from "@heroicons/react/24/solid";
+import ImageWithFallback from "../ImageWithFallback";
+
 
 export type BookmarksProps = {
   displayMode?: "NewTab" | "Popup";

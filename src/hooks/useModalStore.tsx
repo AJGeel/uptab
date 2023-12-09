@@ -17,5 +17,3 @@ export const useModalStore = create<State & Actions>()((set) => ({
   activeModal: null,
   setActiveModal: (value) => set({ activeModal: value }),
 }));
-
-export default useModalStore;

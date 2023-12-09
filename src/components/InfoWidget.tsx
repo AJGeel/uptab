@@ -1,8 +1,10 @@
 import { useQuery } from "@tanstack/react-query";
+
+import { getLocation } from "@/src/services/location";
+import { getWeather, mapWeatherCode } from "@/src/services/weather";
+import { cn, formatToday, formatWeekNumber } from "@/src/utils";
+
 import Link from "./Link";
-import { getLocation } from "@src/services/location";
-import { getWeather, mapWeatherCode } from "@src/services/weather";
-import { cn, formatToday, formatWeekNumber } from "@src/utils";
 import Spinner from "./Spinner";
 
 type Props = {

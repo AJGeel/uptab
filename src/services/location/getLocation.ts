@@ -1,6 +1,7 @@
 import { storage } from "webextension-polyfill";
-import { Area, GeocodeResponse, GeocodedLocation, Location } from "./types";
+
 import { checkCachedLatLong } from "./checkCachedLatLong";
+import { Area, GeocodeResponse, GeocodedLocation, Location } from "./types";
 
 const getLatLong = async (): Promise<Location> => {
   const cachedLocation = await checkCachedLatLong();

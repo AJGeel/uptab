@@ -1,5 +1,7 @@
 import { ChevronUpDownIcon } from "@heroicons/react/24/solid";
-import { cn } from "@src/utils";
+
+import { cn } from "@/src/utils";
+
 import { BookmarksProps } from "./Bookmarks";
 
 export const SortModes = {

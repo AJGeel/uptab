@@ -1,5 +1,6 @@
-import { cn } from "@src/utils";
 import { ComponentProps, useEffect, useState } from "react";
+
+import { cn } from "@/src/utils";
 
 interface ImageProps extends ComponentProps<"img"> {
   src: string;

@@ -1,7 +1,8 @@
-import Modal from "../ui/Modal";
-import useKeyPress from "@src/hooks/useKeyPress";
-import useModalStore from "@src/hooks/useModalStore";
+import useKeyPress from "@/src/hooks/useKeyPress";
+import { useModalStore } from "@/src/hooks/useModalStore";
+
 import Hotkey from "./Hotkey";
+import Modal from "../ui/Modal";
 
 export type HotkeyType = {
   k: string | string[];

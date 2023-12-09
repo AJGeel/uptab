@@ -1,6 +1,7 @@
-import { describe, expect, it } from "vitest";
-import { formatWeekNumber } from "./formatWeekNumber";
 import { getISOWeek } from "date-fns";
+import { describe, expect, it } from "vitest";
+
+import { formatWeekNumber } from "./formatWeekNumber";
 
 describe("formatWeekNumber", () => {
   it("should format the week number correctly", () => {

@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest";
+
 import { formatToday } from "./formatToday";
 
 describe("formatToday", () => {

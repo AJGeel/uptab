@@ -1,7 +1,9 @@
 import { ChevronRightIcon } from "@heroicons/react/24/solid";
-import { cn } from "@src/utils";
-import IconButton from "../IconButton";
+
+import { cn } from "@/src/utils";
+
 import { Props } from "./Sidebar";
+import IconButton from "../IconButton";
 
 export const SidebarExpandButton = ({ isExpanded, setIsExpanded }: Props) => (
   <IconButton

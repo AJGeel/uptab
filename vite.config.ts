@@ -1,8 +1,10 @@
-import react from "@vitejs/plugin-react-swc";
 import { resolve } from "path";
+
+import react from "@vitejs/plugin-react-swc";
 import { defineConfig } from "vite";
-import makeManifest from "./utils/plugins/make-manifest";
+
 import { TARGETS, buildTarget } from "./buildTarget";
+import makeManifest from "./utils/plugins/make-manifest";
 
 const root = resolve(__dirname, "src");
 const pagesDir = resolve(root, "pages");
@@ -36,9 +38,9 @@ export default defineConfig({
   publicDir,
   resolve: {
     alias: {
-      "@assets": assetsDir,
-      "@pages": pagesDir,
-      "@src": root,
+      "@/assets": assetsDir,
+      "@/pages": pagesDir,
+      "@/src": root,
     },
   },
 });

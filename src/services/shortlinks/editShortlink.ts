@@ -1,4 +1,5 @@
 import { storage } from "webextension-polyfill";
+
 import { getShortlinks } from "./getShortlinks";
 import { Shortlink } from "./types";
 

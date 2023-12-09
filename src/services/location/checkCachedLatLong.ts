@@ -1,4 +1,5 @@
 import { storage } from "webextension-polyfill";
+
 import { Location } from "./types";
 
 const CACHE_DURATION = 20 * 60 * 1000; // 20 minutes

@@ -1,8 +1,11 @@
-import { getShortlinks } from "@src/services/shortlinks";
 import { useQuery } from "@tanstack/react-query";
+
+import { useModalStore } from "@/src/hooks/useModalStore";
+import { getShortlinks } from "@/src/services/shortlinks";
+
 import EmptyState from "./EmptyState";
 import Shortlink from "./Shortlink";
-import useModalStore from "@src/hooks/useModalStore";
+
 
 const Shortlinks = () => {
   const setActiveModal = useModalStore((state) => state.setActiveModal);
