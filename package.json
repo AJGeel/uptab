@@ -20,6 +20,7 @@
   "dependencies": {
     "@heroicons/react": "^2.0.18",
     "@radix-ui/react-dialog": "^1.0.5",
+    "@sentry/browser": "^7.86.0",
     "@tanstack/react-query": "^5.8.7",
     "clsx": "^2.0.0",
     "date-fns": "^2.30.0",
