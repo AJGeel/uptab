@@ -1,10 +1,13 @@
 import { ChevronUpDownIcon } from "@heroicons/react/24/solid";
-import { cn } from "@src/utils";
+
+import { cn } from "@/src/utils";
+
 import { BookmarksProps } from "./Bookmarks";
 
 export const SortModes = {
   "A-Z": "A-Z",
   "Z-A": "Z-A",
+  // eslint-disable-next-line sort-keys
   Newest: "Newest",
   Oldest: "Oldest",
 } as const;
@@ -24,13 +27,13 @@ const SortBookmarks = ({ displayMode, sortMode, setSortMode }: SortProps) => (
     )}
   >
     <label
-      className="absolute left-2 top-2 pointer-events-none text-gray-500"
+      className="pointer-events-none absolute left-2 top-2 text-gray-500"
       htmlFor="sortSelect"
     >
       Sort by:
     </label>
     <select
-      className="pl-20 pr-8 text-right appearance-none focus:outline-none hover:bg-sky-500/10 cursor-pointer duration-150"
+      className="cursor-pointer appearance-none pl-20 pr-8 text-right duration-150 hover:bg-sky-500/10 focus:outline-none"
       id="sortSelect"
       value={sortMode}
       onChange={(event) => setSortMode(event.target.value as SortMode)}
@@ -41,7 +44,7 @@ const SortBookmarks = ({ displayMode, sortMode, setSortMode }: SortProps) => (
         </option>
       ))}
     </select>
-    <ChevronUpDownIcon className="w-4 h-4 pointer-events-none absolute right-1.5 top-3 text-gray-500" />
+    <ChevronUpDownIcon className="pointer-events-none absolute right-1.5 top-3 h-4 w-4 text-gray-500" />
   </div>
 );
 

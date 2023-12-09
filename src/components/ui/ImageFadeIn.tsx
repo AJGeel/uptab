@@ -1,5 +1,6 @@
-import { cn } from "@src/utils";
 import { ComponentProps, useEffect, useState } from "react";
+
+import { cn } from "@/src/utils";
 
 interface ImageProps extends ComponentProps<"img"> {
   src: string;
@@ -26,7 +27,7 @@ const ImageFadeIn = ({
     image.onload = () => {
       setIsLoaded(true);
     };
-  }, []);
+  }, [asBackground, props.src]);
 
   const classes = cn("duration-300", className, !isLoaded && "opacity-0 ");
 

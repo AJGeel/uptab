@@ -1,8 +1,10 @@
 import { useQuery } from "@tanstack/react-query";
+
+import { getLocation } from "@/src/services/location";
+import { getWeather, mapWeatherCode } from "@/src/services/weather";
+import { cn, formatToday, formatWeekNumber } from "@/src/utils";
+
 import Link from "./Link";
-import { getLocation } from "@src/services/location";
-import { getWeather, mapWeatherCode } from "@src/services/weather";
-import { formatToday, formatWeekNumber, cn } from "@src/utils";
 import Spinner from "./Spinner";
 
 type Props = {
@@ -11,8 +13,8 @@ type Props = {
 
 const InfoWidget = () => {
   const { data: locationData } = useQuery({
-    queryKey: ["location"],
     queryFn: getLocation,
+    queryKey: ["location"],
   });
 
   const {
@@ -20,19 +22,19 @@ const InfoWidget = () => {
     isError,
     data: weatherData,
   } = useQuery({
-    queryKey: ["weather", locationData?.latitude, locationData?.longitude],
+    enabled: !!locationData,
     queryFn: () =>
       getWeather({
         latitude: locationData?.latitude,
         longitude: locationData?.longitude,
       }),
-    enabled: !!locationData,
+    queryKey: ["weather", locationData?.latitude, locationData?.longitude],
   });
 
   if (isPending) {
     return (
-      <div className="h-10 flex items-center gap-2.5">
-        <Spinner className="w-4 h-4" />
+      <div className="flex h-10 items-center gap-2.5">
+        <Spinner className="h-4 w-4" />
         <p>Checking the weather...</p>
       </div>
     );
@@ -69,7 +71,7 @@ const InfoWidget = () => {
           </div>
         )}
       </Link>
-      <div className="w-0.5 h-10 bg-black/5 rounded" />
+      <div className="h-10 w-0.5 rounded bg-black/5" />
       <Link href="https://calendar.google.com" className="flex flex-col">
         <p className="font-medium">{formatToday(today)}</p>
         <p className="text-xs opacity-70">{formatWeekNumber(today)}</p>

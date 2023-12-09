@@ -1,4 +1,5 @@
 import { storage } from "webextension-polyfill";
+
 import { Shortlink } from "./types";
 
 export const getShortlinks = async (): Promise<Shortlink[]> => {

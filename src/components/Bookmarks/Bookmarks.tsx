@@ -1,13 +1,17 @@
+import { BackspaceIcon } from "@heroicons/react/24/solid";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { Bookmarks, bookmarks, tabs } from "webextension-polyfill";
-import ImageWithFallback from "../ImageWithFallback";
-import { getFavicon } from "@src/utils/getFavicon";
 import { useState } from "react";
-import { cn } from "@src/utils";
+import { Bookmarks, bookmarks, tabs } from "webextension-polyfill";
+
+import { mapBookmarks } from "@/src/services/bookmarks/mapBookmarks";
+import { cn } from "@/src/utils";
+import { getFavicon } from "@/src/utils/getFavicon";
+
+
 import SearchBookmarks from "./SearchBookmarks";
 import SortBookmarks, { SortMode } from "./SortBookmarks";
-import { mapBookmarks } from "@src/services/bookmarks/mapBookmarks";
-import { BackspaceIcon } from "@heroicons/react/24/solid";
+import ImageWithFallback from "../ImageWithFallback";
+
 
 export type BookmarksProps = {
   displayMode?: "NewTab" | "Popup";
@@ -19,11 +23,11 @@ const Bookmarks = ({ displayMode = "NewTab" }: BookmarksProps) => {
   const [searchQuery, setSearchQuery] = useState("");
 
   const { isPending, isError, data } = useQuery({
-    queryKey: ["bookmarks"],
     queryFn: async () => {
       const b = await bookmarks.getTree();
       return mapBookmarks(b).filter((item) => !!item.url);
     },
+    queryKey: ["bookmarks"],
   });
 
   const deleteMutation = useMutation({
@@ -68,11 +72,11 @@ const Bookmarks = ({ displayMode = "NewTab" }: BookmarksProps) => {
   return (
     <div
       className={cn(
-        "mt-10 w-full border rounded-md bg-white overflow-hidden relative1",
+        "mt-10 w-full border rounded-md bg-white overflow-hidden relative",
         displayMode === "Popup" && "shadow-lg shadow-sky-800/30 flex-shrink-0"
       )}
     >
-      <div className="border-b flex items-stretch relative">
+      <div className="relative flex items-stretch border-b">
         <SearchBookmarks
           searchQuery={searchQuery}
           setSearchQuery={setSearchQuery}
@@ -96,7 +100,7 @@ const Bookmarks = ({ displayMode = "NewTab" }: BookmarksProps) => {
         )}
       >
         {filteredBookmarks.length === 0 && (
-          <p className="py-1.5 px-2 text-gray-600">No results found...</p>
+          <p className="px-2 py-1.5 text-gray-600">No results found...</p>
         )}
         {filteredBookmarks.map((item) => (
           <a
@@ -114,11 +118,11 @@ const Bookmarks = ({ displayMode = "NewTab" }: BookmarksProps) => {
             href={item.url ?? ""}
           >
             <ImageWithFallback
-              className="w-4 h-4"
+              className="h-4 w-4"
               src={getFavicon(item?.url || "")}
               fallbackSrc="/icon-34.png"
             />
-            <p className="truncate flex-grow">{item.title}</p>
+            <p className="grow truncate">{item.title}</p>
             <BackspaceIcon
               onClick={async (event) => {
                 event.preventDefault();
@@ -127,7 +131,7 @@ const Bookmarks = ({ displayMode = "NewTab" }: BookmarksProps) => {
                   await deleteMutation.mutateAsync(item.id);
                 }
               }}
-              className="w-7 h-7 p-1 flex-shrink-0 border shadow-sm bg-white text-gray-500 rounded-md hover:text-red-500 hover:border-red-500 opacity-0 group-hover:opacity-100 duration-150"
+              className="h-7 w-7 shrink-0 rounded-md border bg-white p-1 text-gray-500 opacity-0 shadow-sm duration-150 hover:border-red-500 hover:text-red-500 group-hover:opacity-100"
             />
           </a>
         ))}

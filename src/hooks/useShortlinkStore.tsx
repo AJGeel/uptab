@@ -1,5 +1,6 @@
-import { Shortlink } from "@src/services/shortlinks";
 import { create } from "zustand";
+
+import { Shortlink } from "@/src/services/shortlinks";
 
 type State = {
   selected: Shortlink | null;

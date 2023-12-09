@@ -1,8 +1,9 @@
-import { cn } from "@src/utils";
-import InfoWidget from "../InfoWidget";
+import { cn } from "@/src/utils";
+
 import { SidebarExpandButton } from "./SidebarExpandButton";
-import Shortlinks from "../Shortlinks/Shortlinks";
 import Bookmarks from "../Bookmarks/Bookmarks";
+import InfoWidget from "../InfoWidget";
+import Shortlinks from "../Shortlinks/Shortlinks";
 
 export type Props = {
   isExpanded: boolean;
@@ -20,7 +21,7 @@ const Sidebar = ({ isExpanded, setIsExpanded }: Props) => (
       isExpanded={isExpanded}
       setIsExpanded={setIsExpanded}
     />
-    <div className="p-6 h-full overflow-y-auto">
+    <div className="h-full overflow-y-auto p-6">
       <InfoWidget className={isExpanded ? "" : "opacity-0"} />
       <Shortlinks />
       <Bookmarks />

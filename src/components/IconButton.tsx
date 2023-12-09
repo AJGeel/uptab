@@ -1,5 +1,6 @@
-import { cn } from "@src/utils";
 import { ComponentProps } from "react";
+
+import { cn } from "@/src/utils";
 
 type Props = ComponentProps<"button">;
 

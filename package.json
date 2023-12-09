@@ -7,9 +7,12 @@
   "scripts": {
     "build": "vite build",
     "dev": "nodemon",
-    "test": "vitest --watch",
-    "load:firefox": "web-ext run --source-dir dist/firefox",
+    "test": "vitest",
+    "test:watch": "vitest --watch",
+    "lint": "eslint ./",
+    "lint:fix": "eslint ./ --fix",
     "lint:firefox": "web-ext lint --source-dir dist/firefox --output json --pretty | grep -v 'Applying config file: ./package.json' > dist/firefox-lint-output.json",
+    "load:firefox": "web-ext run --source-dir dist/firefox",
     "zip:firefox": "cd dist/firefox && zip -r firefox.zip . && mv firefox.zip ../firefox.zip && cd ../../",
     "zip:chromium": "cd dist/chromium && zip -r chromium.zip . && mv chromium.zip ../chromium.zip && cd ../../"
   },
@@ -17,6 +20,7 @@
   "dependencies": {
     "@heroicons/react": "^2.0.18",
     "@radix-ui/react-dialog": "^1.0.5",
+    "@sentry/browser": "^7.86.0",
     "@tanstack/react-query": "^5.8.7",
     "clsx": "^2.0.0",
     "date-fns": "^2.30.0",
@@ -30,6 +34,7 @@
     "zustand": "^4.4.6"
   },
   "devDependencies": {
+    "@tanstack/eslint-plugin-query": "^5.12.1",
     "@types/node": "^18.11.18",
     "@types/react": "^18.0.27",
     "@types/react-dom": "^18.0.10",
@@ -41,10 +46,12 @@
     "autoprefixer": "^10.4.13",
     "eslint": "^8.32.0",
     "eslint-config-prettier": "^8.6.0",
-    "eslint-plugin-import": "^2.27.5",
+    "eslint-import-resolver-alias": "^1.1.2",
+    "eslint-plugin-import": "^2.29.0",
     "eslint-plugin-jsx-a11y": "^6.7.1",
     "eslint-plugin-react": "^7.32.1",
-    "eslint-plugin-react-hooks": "^4.3.0",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "eslint-plugin-tailwindcss": "^3.13.0",
     "fs-extra": "^11.1.0",
     "nodemon": "^2.0.20",
     "postcss": "^8.4.21",

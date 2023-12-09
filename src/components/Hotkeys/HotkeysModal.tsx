@@ -1,7 +1,8 @@
-import Modal from "../ui/Modal";
-import useKeyPress from "@src/hooks/useKeyPress";
-import useModalStore from "@src/hooks/useModalStore";
+import useKeyPress from "@/src/hooks/useKeyPress";
+import { useModalStore } from "@/src/hooks/useModalStore";
+
 import Hotkey from "./Hotkey";
+import Modal from "../ui/Modal";
 
 export type HotkeyType = {
   k: string | string[];
@@ -10,12 +11,12 @@ export type HotkeyType = {
 
 const hotkeys: HotkeyType[] = [
   {
-    k: "\\",
     description: "Toggle sidebar visibility",
+    k: "\\",
   },
   {
-    k: "?",
     description: "Toggle the menu you're currently looking at",
+    k: "?",
   },
 ];
 
@@ -44,7 +45,7 @@ const HotkeysModal = () => {
         ))}
         <div className="mt-8 flex justify-end gap-2">
           <button
-            className="bg-sky-500 text-white hover:brightness-110 duration-150 ring-offset-2 active:ring-2 ring-sky-500 inline-flex items-center justify-center rounded px-4 py-3 font-medium leading-none focus:outline-none focus:ring-2 active:brightness-100"
+            className="inline-flex items-center justify-center rounded bg-sky-500 px-4 py-3 font-medium leading-none text-white ring-sky-500 ring-offset-2 duration-150 hover:brightness-110 focus:outline-none focus:ring-2 active:ring-2 active:brightness-100"
             onClick={() => setActiveModal(null)}
           >
             Got it, thanks.

@@ -1,15 +1,18 @@
-import { getShortlinks } from "@src/services/shortlinks";
 import { useQuery } from "@tanstack/react-query";
+
+import { useModalStore } from "@/src/hooks/useModalStore";
+import { getShortlinks } from "@/src/services/shortlinks";
+
 import EmptyState from "./EmptyState";
 import Shortlink from "./Shortlink";
-import useModalStore from "@src/hooks/useModalStore";
+
 
 const Shortlinks = () => {
   const setActiveModal = useModalStore((state) => state.setActiveModal);
 
   const { isPending, isError, data } = useQuery({
-    queryKey: ["shortlinks"],
     queryFn: getShortlinks,
+    queryKey: ["shortlinks"],
   });
 
   if (isPending) {
@@ -30,7 +33,7 @@ const Shortlinks = () => {
             <Shortlink key={item.id} item={item} />
           ))}
           <span
-            className="underline hover:no-underline hover:text-black cursor-pointer col-span-2 mt-4 inline"
+            className="col-span-2 mt-4 inline cursor-pointer underline hover:text-black hover:no-underline"
             onClick={() => setActiveModal("SHORTLINK")}
           >
             Add a link

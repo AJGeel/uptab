@@ -12,10 +12,9 @@ runtime.onInstalled.addListener((details) => {
 
     // Runs when the extension is updated. Currently unused.
     case "update":
-      return;
+      return console.log("Extension has been updated!");
 
-    // Runs when the browser is updated. Currently unused.
-    case "browser_update":
-      return;
+    default:
+      return "";
   }
 });

@@ -1,10 +1,13 @@
 import { EllipsisHorizontalIcon } from "@heroicons/react/24/solid";
-import { Shortlink } from "@src/services/shortlinks";
+
+import { useModalStore } from "@/src/hooks/useModalStore";
+import { useShortlinkStore } from "@/src/hooks/useShortlinkStore";
+import { Shortlink } from "@/src/services/shortlinks";
+import { getFavicon } from "@/src/utils/getFavicon";
+
 import IconButton from "../IconButton";
-import useModalStore from "@src/hooks/useModalStore";
 import ImageWithFallback from "../ImageWithFallback";
-import { getFavicon } from "@src/utils/getFavicon";
-import { useShortlinkStore } from "@src/hooks/useShortlinkStore";
+
 
 type Props = {
   item: Shortlink;
@@ -17,19 +20,19 @@ const Shortlink = ({ item }: Props) => {
   return (
     <a
       href={item.url}
-      className="flex gap-3 items-center px-3 py-2.5 rounded border shadow focus:ring focus:outline-none hover:ring ring-sky-500 duration-150 cursor-pointer"
+      className="flex cursor-pointer items-center gap-3 rounded border px-3 py-2.5 shadow ring-sky-500 duration-150 hover:ring focus:outline-none focus:ring"
     >
       <ImageWithFallback
         src={getFavicon(item.url)}
         fallbackSrc="/icon-34.png"
-        className="flex-shrink-0 rounded w-6 h-6"
+        className="h-6 w-6 shrink-0 rounded"
       />
-      <div className="flex flex-col grow truncate">
-        <h2 className="font-semibold truncate text-sm">{item.title}</h2>
-        <p className="truncate text-gray-600 text-sm">{item.subtitle}</p>
+      <div className="flex grow flex-col truncate">
+        <h2 className="truncate text-sm font-semibold">{item.title}</h2>
+        <p className="truncate text-sm text-gray-600">{item.subtitle}</p>
       </div>
       <IconButton
-        className="shadow-none border-none"
+        className="border-none shadow-none"
         onClick={(event) => {
           event.preventDefault();
           event.stopPropagation();
@@ -38,7 +41,7 @@ const Shortlink = ({ item }: Props) => {
           setActiveModal("SHORTLINK");
         }}
       >
-        <EllipsisHorizontalIcon className="w-5 h-5 text-gray-600" />
+        <EllipsisHorizontalIcon className="h-5 w-5 text-gray-600" />
       </IconButton>
     </a>
   );

@@ -1,18 +1,19 @@
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { useState } from "react";
 
-import Sidebar from "@src/components/Sidebar/Sidebar";
-import InfoWidget from "@src/components/InfoWidget";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { cn } from "@src/utils";
-import ShortlinkModal from "@src/components/Shortlinks/ShortlinkForm";
-import useKeyPress from "@src/hooks/useKeyPress";
-import HotkeysModal from "@src/components/Hotkeys/HotkeysModal";
-import ImageFadeIn from "@src/components/ui/ImageFadeIn";
-import { addEasterEggs } from "@src/services/addEasterEggs";
-import { useRandomBackground } from "@src/hooks/useRandomBackground";
+import HotkeysModal from "@/src/components/Hotkeys/HotkeysModal";
+import InfoWidget from "@/src/components/InfoWidget";
+import ShortlinkModal from "@/src/components/Shortlinks/ShortlinkForm";
+import Sidebar from "@/src/components/Sidebar/Sidebar";
+import ImageFadeIn from "@/src/components/ui/ImageFadeIn";
+import useKeyPress from "@/src/hooks/useKeyPress";
+import { useRandomBackground } from "@/src/hooks/useRandomBackground";
+import { addEasterEggs } from "@/src/services/addEasterEggs";
+import { cn } from "@/src/utils";
+
+const queryClient = new QueryClient();
 
 export default function Newtab() {
-  const queryClient = new QueryClient();
   const [isExpanded, setIsExpanded] = useState(false);
   const { activeBg } = useRandomBackground();
 
@@ -23,7 +24,7 @@ export default function Newtab() {
     <QueryClientProvider client={queryClient}>
       <ShortlinkModal />
       <HotkeysModal />
-      <div className="relative flex items-stretch w-full max-h-screen overflow-hidden min-h-screen h-full">
+      <div className="relative flex h-full max-h-screen min-h-screen w-full items-stretch overflow-hidden">
         <Sidebar isExpanded={isExpanded} setIsExpanded={setIsExpanded} />
         <ImageFadeIn
           asBackground={true}
@@ -43,7 +44,7 @@ export default function Newtab() {
             )}
           />
           {activeBg.author && activeBg.link && (
-            <p className="p-6 mt-auto self-end inline hover:opacity-100 duration-150 text-white drop-shadow-md opacity-25">
+            <p className="mt-auto inline self-end p-6 text-white opacity-25 drop-shadow-md duration-150 hover:opacity-100">
               Photo by{" "}
               <a className="underline active:text-black" href={activeBg.link}>
                 {activeBg.author}

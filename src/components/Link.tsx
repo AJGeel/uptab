@@ -1,5 +1,6 @@
-import { cn } from "@src/utils";
 import { ReactNode } from "react";
+
+import { cn } from "@/src/utils";
 
 type Props = {
   href: string;

@@ -15,7 +15,7 @@ const SearchBookmarks = ({
 }: SearchBarProps) => (
   <>
     <input
-      className="bg-white px-3 py-2 pl-9 focus-within:outline-none w-full font-sans"
+      className="w-full bg-white px-3 py-2 pl-9 font-sans focus-within:outline-none"
       placeholder="Search your bookmarks..."
       type="search"
       value={searchQuery}
@@ -29,8 +29,8 @@ const SearchBookmarks = ({
         }
       }}
     />
-    <div className="flex items-center justify-center absolute top-0 left-0 pointer-events-none p-2.5">
-      <MagnifyingGlassIcon className="w-4 h-4 text-gray-600" />
+    <div className="pointer-events-none absolute left-0 top-0 flex items-center justify-center p-2.5">
+      <MagnifyingGlassIcon className="h-4 w-4 text-gray-600" />
     </div>
   </>
 );
