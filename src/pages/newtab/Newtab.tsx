@@ -11,8 +11,9 @@ import ImageFadeIn from "@src/components/ui/ImageFadeIn";
 import { addEasterEggs } from "@src/services/addEasterEggs";
 import { useRandomBackground } from "@src/hooks/useRandomBackground";
 
+const queryClient = new QueryClient();
+
 export default function Newtab() {
-  const queryClient = new QueryClient();
   const [isExpanded, setIsExpanded] = useState(false);
   const { activeBg } = useRandomBackground();
 
