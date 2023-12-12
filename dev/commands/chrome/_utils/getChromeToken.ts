@@ -1,13 +1,9 @@
 /* eslint-disable camelcase */
 
 type AccessToken = string;
+const tokenEndpoint = "https://oauth2.googleapis.com/token";
 
 export const getChromeToken = async (): Promise<AccessToken | void> => {
-  const tokenEndpoint = "https://oauth2.googleapis.com/token";
-  const headers = {
-    "Content-Type": "application/x-www-form-urlencoded",
-  };
-
   const body = new URLSearchParams({
     client_id: process.env.CHROME_CLIENT_ID ?? "",
     client_secret: process.env.CHROME_CLIENT_SECRET ?? "",
@@ -18,7 +14,9 @@ export const getChromeToken = async (): Promise<AccessToken | void> => {
   try {
     const response = await fetch(tokenEndpoint, {
       body: body.toString(),
-      headers: headers,
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
       method: "POST",
     });
 
@@ -28,9 +26,9 @@ export const getChromeToken = async (): Promise<AccessToken | void> => {
 
     const data = await response.json();
 
+    console.log("✅ Token refresh succeeded!");
     return data.access_token;
   } catch (error) {
-    console.error("Error refreshing access token:", error);
-    throw error;
+    throw new Error(`Error refreshing access token: ${error}`);
   }
 };
