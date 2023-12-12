@@ -34,21 +34,13 @@ const manifest: Manifest.WebExtensionManifest = {
         },
       }
     : {}),
-  commands: {
-    _execute_action: {
-      suggested_key: {
-        default: "Ctrl+U",
-        mac: "Command+U",
-      },
-    },
-  },
   description: "What's UpTab?",
   icons: {
     "128": "icon-128.png",
   },
   manifest_version: 3,
   name: "UpTab",
-  permissions: ["storage", "geolocation", "bookmarks", "commands"],
+  permissions: ["storage", "geolocation", "bookmarks"],
   version: pkg.version,
   web_accessible_resources: [
     {
