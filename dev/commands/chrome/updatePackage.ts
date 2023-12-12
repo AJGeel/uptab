@@ -1,11 +1,12 @@
-import { EXTENSION_ID, UPLOAD_URL } from "./_utils/constants";
-import { getChromeHeaders } from "./_utils/getChromeHeaders";
-import { getChromeToken } from "./_utils/getChromeToken";
-
-const CONSTANTS = {
-  fileName: `chrome-extension.zip`,
-  filePath: "/dist/chromium.zip",
-};
+import {
+  EXTENSION_ID,
+  UPLOAD_URL,
+  FILE_PATH,
+  FILE_NAME,
+} from "./_helpers/constants";
+import { getChromeHeaders } from "./_helpers/getChromeHeaders";
+import { getChromeToken } from "./_helpers/getChromeToken";
+import { log } from "../_utils/log";
 
 const updatePackage = async () => {
   const token = await getChromeToken();
@@ -18,7 +19,7 @@ const updatePackage = async () => {
 
   try {
     const formData = new FormData();
-    formData.append("file", new File([CONSTANTS.fileName], CONSTANTS.filePath));
+    formData.append("file", new File([FILE_PATH], FILE_NAME));
 
     const response = await fetch(url, {
       body: formData,
@@ -32,7 +33,7 @@ const updatePackage = async () => {
 
     const data = await response.json();
 
-    console.log(data);
+    log(data);
   } catch (error) {
     throw new Error(`Error fetching data: ${error}`);
   }

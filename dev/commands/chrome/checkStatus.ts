@@ -1,6 +1,7 @@
-import { BASE_URL, EXTENSION_ID } from "./_utils/constants";
-import { getChromeHeaders } from "./_utils/getChromeHeaders";
-import { getChromeToken } from "./_utils/getChromeToken";
+import { BASE_URL, EXTENSION_ID } from "./_helpers/constants";
+import { getChromeHeaders } from "./_helpers/getChromeHeaders";
+import { getChromeToken } from "./_helpers/getChromeToken";
+import { log } from "../_utils/log";
 
 const checkStatus = async () => {
   const token = await getChromeToken();
@@ -23,7 +24,7 @@ const checkStatus = async () => {
 
     const data = await response.json();
 
-    console.log(data);
+    log(data);
     return data;
   } catch (error) {
     throw new Error(`Error fetching data: ${error}`);
