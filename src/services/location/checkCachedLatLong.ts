@@ -10,6 +10,10 @@ const CACHE_DURATION = 20 * 60 * 1000; // 20 minutes
 export const checkCachedLatLong = async (): Promise<Location | void> => {
   const { cachedLocation } = await storage.local.get("cachedLocation");
 
+  if (!cachedLocation) {
+    return;
+  }
+
   if (Math.abs(Date.now() - cachedLocation.date) < CACHE_DURATION) {
     return {
       latitude: cachedLocation.latitude,
