@@ -23,7 +23,7 @@ A humble extension that super-charges your new tabs, adding quick access to book
 ## Docs 📓 <a name="docs"></a>
 
 1. [Setting up the application](/docs/1-setup.md)
-2. To be added.
+2. [Releasing your extension](/docs/2-releasing.md).
 
 ## Credit 👏 <a name="credit"></a>
 

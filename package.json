@@ -14,7 +14,11 @@
     "lint:firefox": "web-ext lint --source-dir dist/firefox --output json --pretty | grep -v 'Applying config file: ./package.json' > dist/firefox-lint-output.json",
     "load:firefox": "web-ext run --source-dir dist/firefox",
     "zip:firefox": "cd dist/firefox && zip -r firefox.zip . && mv firefox.zip ../firefox.zip && cd ../../",
-    "zip:chromium": "cd dist/chromium && zip -r chromium.zip . && mv chromium.zip ../chromium.zip && cd ../../"
+    "zip:chromium": "cd dist/chromium && zip -r chromium.zip . && mv chromium.zip ../chromium.zip && cd ../../",
+    "chrome:store:init": "bun dev/commands/chrome/initPackage.ts",
+    "chrome:store:update-package": "bun dev/commands/chrome/updatePackage.ts",
+    "chrome:store:publish": "bun dev/commands/chrome/publish.ts",
+    "chrome:store:status": "bun dev/commands/chrome/checkStatus.ts"
   },
   "type": "module",
   "dependencies": {
