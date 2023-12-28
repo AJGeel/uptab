@@ -32,16 +32,16 @@ These are the scripts available to use the Chrome Web Store API.
 
 - `bun chrome:store:init`
   - Add your extension to the store for the first time.
-  - Requires [ 1 ].
+  - Requires a valid build in "/dist/chrome-extension.zip".
 - `bun chrome:store:status`
   - Checks the status of your extension in the store.
-  - Requires [ 2 ].
-- `bun chrome:store:update-package`
-  - Updates your extension to the store.
-  - Requires [ 1 , 2]
+  - Requires a valid `CHROME_EXTENSION_ID` to be set in the `.env`.
+- `bun chrome:store:update`
+  - Updates your extension in the store.
+  - Requires a valid build in "/dist/chrome-extension.zip" and a valid `CHROME_EXTENSION_ID` to be set in the `.env`.
 - `bun chrome:store:publish`
   - Publishes your extension in the store to all users.
-  - Requires [ 1 , 2]
+  - Requires a valid build in "/dist/chrome-extension.zip" and a valid `CHROME_EXTENSION_ID` to be set in the `.env`.
 
 **Requirements**
 
@@ -50,7 +50,40 @@ These are the scripts available to use the Chrome Web Store API.
 
 <br/>
 
-- [ ] Implement Firefox Store API:
+## 2. Firefox Add-Ons
+
+Before you can begin making REST calls against the Firefox Add-Ons enviromnent, you will need to generate your API access keys.
+
+### 2.1 Initial Setup: Auth for Firefox Add-Ons API
+
+1. Follow the instructions provided on https://addons-server.readthedocs.io/en/latest/topics/api/auth.html
+2. This should provide you with a `FIREFOX_JWT_ISSUER` and a `FIREFOX_JWT_SECRET`. Add these to your `.env`.
+3. Randomly generate a value and store it as the `FIREFOX_JWT_ID`.
+4. Optional: If your Firefox Extension is already published, store your `FIREFOX_EXTENSION_ID` in the `.env` too.
+
+You can now use the commands to add, update, publish and check the status of your Chrome Extension! 🚀
+
+### 2.2 Using the Firefox Add-Ons API
+
+These are the scripts available to use the Firefox Add-Ons API.
+
+- `bun firefox:store:init`
+  - Add your extension to the store for the first time.
+  - Requires a valid build in "/dist/chrome-extension.zip".
+- `bun firefox:store:status`
+  - Checks the status of your extension in the store.
+  - Requires a valid `CHROME_EXTENSION_ID` to be set in the `.env`.
+- `bun firefox:store:update`
+  - Updates your extension in the store.
+  - Requires a valid build in "/dist/chrome-extension.zip" and a valid `CHROME_EXTENSION_ID` to be set in the `.env`.
+- `bun firefox:store:publish`
+  - Publishes your extension in the store to all users.
+  - Requires a valid build in "/dist/chrome-extension.zip" and a valid `CHROME_EXTENSION_ID` to be set in the `.env`.
+
+**Requirements**
+
+1. Requires a valid build in "/dist/chrome-extension.zip"
+2. Requires a valid `CHROME_EXTENSION_ID` to be set in the .env
 
 https://addons-server.readthedocs.io/en/latest/topics/api/index.html
 
