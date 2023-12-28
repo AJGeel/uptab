@@ -394,3 +394,6 @@ public/contentStyle.css
 
 # Prevent builds from keeping committed
 /builds
+
+# Dev scripts: environment secrets and variables
+/dev/env
