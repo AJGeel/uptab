@@ -29,7 +29,7 @@
     "@heroicons/react": "^2.0.18",
     "@radix-ui/react-dialog": "^1.0.5",
     "@sentry/browser": "^7.86.0",
-    "@tanstack/react-query": "^5.13.4",
+    "@tanstack/react-query": "^5.15.0",
     "clsx": "^2.0.0",
     "date-fns": "^2.30.0",
     "react": "^18.2.0",
