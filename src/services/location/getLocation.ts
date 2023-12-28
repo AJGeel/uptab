@@ -37,10 +37,16 @@ const getLatLong = async (): Promise<Location> => {
 
 const getArea = async ({ latitude, longitude }: Location): Promise<Area> => {
   const res = await fetch(
-    `https://geocode.maps.co/reverse?lat=${latitude}&lon=${longitude}`
+    `https://geocode.maps.co/reverse?lat=${latitude}&lon=${longitude}&api_key=${
+      import.meta.env.VITE_GEOCODING_API_KEY ?? ""
+    }`
   );
 
   const data = (await res.json()) as GeocodeResponse;
+
+  if (!data) {
+    return { city: "Unknown location" };
+  }
 
   return data.address as Area;
 };
