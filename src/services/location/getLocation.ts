@@ -37,9 +37,7 @@ const getLatLong = async (): Promise<Location> => {
 
 const getArea = async ({ latitude, longitude }: Location): Promise<Area> => {
   const res = await fetch(
-    `https://geocode.maps.co/reverse?lat=${latitude}&lon=${longitude}&api_key=${
-      import.meta.env.VITE_GEOCODING_API_KEY ?? ""
-    }`
+    `https://nominatim.openstreetmap.org/reverse?lat=${latitude}&lon=${longitude}&format=json`
   );
 
   const data = (await res.json()) as GeocodeResponse;
