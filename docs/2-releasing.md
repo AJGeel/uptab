@@ -30,16 +30,18 @@ You can now use the commands to add, update, publish and check the status of you
 
 These are the scripts available to use the Chrome Web Store API.
 
-- `bun chrome:store:init`
+`bun chrome:store`
+
+- `Init`
   - Add your extension to the store for the first time.
   - Requires a valid build in "/dist/chrome-extension.zip".
-- `bun chrome:store:status`
+- `Status`
   - Checks the status of your extension in the store.
   - Requires a valid `CHROME_EXTENSION_ID` to be set in the `.env`.
-- `bun chrome:store:update`
+- `Update`
   - Updates your extension in the store.
   - Requires a valid build in "/dist/chrome-extension.zip" and a valid `CHROME_EXTENSION_ID` to be set in the `.env`.
-- `bun chrome:store:publish`
+- `Publish`
   - Publishes your extension in the store to all users.
   - Requires a valid build in "/dist/chrome-extension.zip" and a valid `CHROME_EXTENSION_ID` to be set in the `.env`.
 
@@ -67,18 +69,17 @@ You can now use the commands to add, update, publish and check the status of you
 
 These are the scripts available to use the Firefox Add-Ons API.
 
-- `bun firefox:store:init`
-  - Add your extension to the store for the first time.
+`bun firefox:store`
+
+- `Update`
+  - Update your extension in the Firefox Add-Ons Store
   - Requires a valid build in "/dist/chrome-extension.zip".
-- `bun firefox:store:status`
+- `Status`
   - Checks the status of your extension in the store.
-  - Requires a valid `CHROME_EXTENSION_ID` to be set in the `.env`.
-- `bun firefox:store:update`
-  - Updates your extension in the store.
-  - Requires a valid build in "/dist/chrome-extension.zip" and a valid `CHROME_EXTENSION_ID` to be set in the `.env`.
-- `bun firefox:store:publish`
+  - Requires a valid `FIREFOX_EXTENSION_ID` to be set in the `.env`.
+- `Publish`
   - Publishes your extension in the store to all users.
-  - Requires a valid build in "/dist/chrome-extension.zip" and a valid `CHROME_EXTENSION_ID` to be set in the `.env`.
+  - Requires a valid build in "/dist/chrome-extension.zip" and a valid `FIREFOX_EXTENSION_ID` to be set in the `.env`.
 
 **Requirements**
 
