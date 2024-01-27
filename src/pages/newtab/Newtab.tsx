@@ -43,15 +43,18 @@ export default function Newtab() {
                 : "translate-x-0"
             )}
           />
-          {activeBg.author && activeBg.link && (
-            <p className="mt-auto inline self-end p-6 text-white opacity-25 drop-shadow-md duration-150 hover:opacity-100">
-              Photo by{" "}
-              <a className="underline active:text-black" href={activeBg.link}>
-                {activeBg.author}
-              </a>
-              .
-            </p>
-          )}
+          <p className="mt-auto inline self-end p-6 text-white opacity-75 drop-shadow-md duration-150 hover:opacity-100">
+            Got feedback?{" "}
+            <a
+              className="underline"
+              href="https://docs.google.com/forms/d/e/1FAIpQLSfvi2jV7AlzGamcSzMUlXT74HAisrrjUiKFZ4-rmQKeG41oHA/viewform?usp=sf_link"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Drop it here
+            </a>
+            .
+          </p>
         </ImageFadeIn>
       </div>
     </QueryClientProvider>
