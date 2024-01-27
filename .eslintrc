@@ -43,7 +43,6 @@
     "arrow-body-style": "error",
     "block-scoped-var": "error",
     "camelcase": "error",
-    "capitalized-comments": "warn",
     "curly": "error",
     "default-case-last": "error",
     "default-case": "error",

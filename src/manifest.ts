@@ -52,7 +52,7 @@ const manifest: Manifest.WebExtensionManifest = {
     ? {
         browser_specific_settings: {
           gecko: {
-            id: "916b0c75-3123-4626-965d-b7dc89df71fa",
+            id: "ageel@enrise.com",
             strict_min_version: "109.0",
           },
         },
