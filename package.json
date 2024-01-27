@@ -15,14 +15,8 @@
     "load:firefox": "web-ext run --source-dir dist/firefox",
     "zip:firefox": "cd dist/firefox && zip -r firefox.zip . && mv firefox.zip ../firefox.zip && cd ../../",
     "zip:chromium": "cd dist/chromium && zip -r chromium.zip . && mv chromium.zip ../chromium.zip && cd ../../",
-    "chrome:store:init": "bun dev/commands/chrome/initPackage.ts",
-    "chrome:store:update": "bun dev/commands/chrome/updatePackage.ts",
-    "chrome:store:publish": "bun dev/commands/chrome/publish.ts",
-    "chrome:store:status": "bun dev/commands/chrome/checkStatus.ts",
-    "firefox:store:init": "bun dev/commands/firefox/initPackage.ts",
-    "firefox:store:update": "bun dev/commands/firefox/updatePackage.ts",
-    "firefox:store:publish": "bun dev/commands/firefox/publish.ts",
-    "firefox:store:status": "bun dev/commands/firefox/checkStatus.ts"
+    "chrome:store": "bun dev/commands/chrome/main.ts",
+    "firefox:store": "bun dev/commands/firefox/main.ts"
   },
   "type": "module",
   "dependencies": {
@@ -43,6 +37,7 @@
   },
   "devDependencies": {
     "@tanstack/eslint-plugin-query": "^5.12.1",
+    "@types/inquirer": "^9.0.7",
     "@types/jsonwebtoken": "^9.0.5",
     "@types/node": "^20.10.4",
     "@types/react": "^18.2.43",
@@ -63,6 +58,7 @@
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-tailwindcss": "^3.13.0",
     "fs-extra": "^11.2.0",
+    "inquirer": "^9.2.12",
     "jsonwebtoken": "^9.0.2",
     "nodemon": "^3.0.2",
     "postcss": "^8.4.32",

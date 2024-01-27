@@ -3,7 +3,7 @@ import { generateJWT } from "./_helpers/generateJWT";
 import { log } from "../_utils/log";
 
 // API Reference: https://addons-server.readthedocs.io/en/latest/topics/api/addons.html#upload-create
-const updatePackage = async () => {
+export const run = async () => {
   const url = BASE_URL + "addons/upload";
 
   try {
@@ -20,18 +20,16 @@ const updatePackage = async () => {
       method: "POST",
     });
 
-    console.log(response);
+    log(response);
 
     if (!response.ok) {
       throw new Error(`Request failed with status: ${response.status}`);
     }
 
-    // const data = await response.json();
+    const data = await response.json();
 
-    // log(data);
+    log(data);
   } catch (error) {
     log(`Error uploading addon: ${error}`);
   }
 };
-
-updatePackage();

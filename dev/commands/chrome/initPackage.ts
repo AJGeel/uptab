@@ -3,7 +3,7 @@ import { getChromeHeaders } from "./_helpers/getChromeHeaders";
 import { getChromeToken } from "./_helpers/getChromeToken";
 import { log } from "../_utils/log";
 
-const initPackage = async () => {
+export const run = async () => {
   const token = await getChromeToken();
 
   if (!token) {
@@ -36,5 +36,3 @@ const initPackage = async () => {
     throw new Error(`Error fetching data: ${error}`);
   }
 };
-
-initPackage();

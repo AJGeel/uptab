@@ -3,7 +3,7 @@ import { getChromeHeaders } from "./_helpers/getChromeHeaders";
 import { getChromeToken } from "./_helpers/getChromeToken";
 import { log } from "../_utils/log";
 
-const publish = async () => {
+export const run = async () => {
   const token = await getChromeToken();
 
   if (!token) {
@@ -29,5 +29,3 @@ const publish = async () => {
     throw new Error(`Error fetching data: ${error}`);
   }
 };
-
-publish();

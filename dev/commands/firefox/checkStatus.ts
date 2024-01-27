@@ -3,7 +3,7 @@ import { log } from "../_utils/log";
 
 // API Reference: https://addons-server.readthedocs.io/en/latest/topics/api/addons.html#detail
 
-const checkStatus = async () => {
+export const run = async () => {
   const url = BASE_URL + "addons/addon/" + EXTENSION_ID;
 
   try {
@@ -21,5 +21,3 @@ const checkStatus = async () => {
     throw new Error(error);
   }
 };
-
-checkStatus();
