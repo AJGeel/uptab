@@ -1,7 +1,7 @@
 {
   "name": "uptab",
   "displayName": "UpTab",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "What's UpTab?",
   "author": "Arthur Geel <ageel@enrise.com>",
   "scripts": {
@@ -14,14 +14,16 @@
     "lint:firefox": "web-ext lint --source-dir dist/firefox --output json --pretty | grep -v 'Applying config file: ./package.json' > dist/firefox-lint-output.json",
     "load:firefox": "web-ext run --source-dir dist/firefox",
     "zip:firefox": "cd dist/firefox && zip -r firefox.zip . && mv firefox.zip ../firefox.zip && cd ../../",
-    "zip:chromium": "cd dist/chromium && zip -r chromium.zip . && mv chromium.zip ../chromium.zip && cd ../../"
+    "zip:chromium": "cd dist/chromium && zip -r chromium.zip . && mv chromium.zip ../chromium.zip && cd ../../",
+    "chrome:store": "bun dev/commands/chrome/main.ts",
+    "firefox:store": "bun dev/commands/firefox/main.ts"
   },
   "type": "module",
   "dependencies": {
     "@heroicons/react": "^2.0.18",
     "@radix-ui/react-dialog": "^1.0.5",
     "@sentry/browser": "^7.86.0",
-    "@tanstack/react-query": "^5.13.4",
+    "@tanstack/react-query": "^5.15.0",
     "clsx": "^2.0.0",
     "date-fns": "^2.30.0",
     "react": "^18.2.0",
@@ -35,6 +37,8 @@
   },
   "devDependencies": {
     "@tanstack/eslint-plugin-query": "^5.12.1",
+    "@types/inquirer": "^9.0.7",
+    "@types/jsonwebtoken": "^9.0.5",
     "@types/node": "^20.10.4",
     "@types/react": "^18.2.43",
     "@types/react-dom": "^18.2.17",
@@ -44,6 +48,7 @@
     "@typescript-eslint/parser": "^6.13.2",
     "@vitejs/plugin-react-swc": "^3.5.0",
     "autoprefixer": "^10.4.16",
+    "bun": "^1.0.17",
     "eslint": "^8.55.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-import-resolver-alias": "^1.1.2",
@@ -53,12 +58,14 @@
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-tailwindcss": "^3.13.0",
     "fs-extra": "^11.2.0",
+    "inquirer": "^9.2.12",
+    "jsonwebtoken": "^9.0.2",
     "nodemon": "^3.0.2",
     "postcss": "^8.4.32",
     "tailwindcss": "^3.3.6",
     "ts-node": "^10.9.2",
     "typescript": "^5.3.3",
-    "vite": "^5.0.7",
+    "vite": "^5.0.12",
     "vitest": "^1.0.4",
     "web-ext": "^7.9.0"
   }
