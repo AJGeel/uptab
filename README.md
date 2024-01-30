@@ -7,7 +7,7 @@ What's UpTab?
 
 A humble extension that super-charges your new tabs, adding quick access to bookmarks, shortlinks, weather information and of course beautiful photographs of Dutch landscapes.
 
-[![Badge_Chrome]](https://chrome.google.com/webstore/devconsole/290657b5-8cc7-45c8-badb-4c3e6bb540f5/dapdeiobfagcbhcpeijbhhlggopmjnlf/edit/status)
+[![Badge_Chrome]](https://chromewebstore.google.com/detail/uptab/dapdeiobfagcbhcpeijbhhlggopmjnlf)
 [![Badge_Firefox]](https://addons.mozilla.org/en-US/firefox/addon/uptab/)
 
 <hr />
