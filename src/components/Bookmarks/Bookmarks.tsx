@@ -7,11 +7,9 @@ import { mapBookmarks } from "@/src/services/bookmarks/mapBookmarks";
 import { cn } from "@/src/utils";
 import { getFavicon } from "@/src/utils/getFavicon";
 
-
 import SearchBookmarks from "./SearchBookmarks";
 import SortBookmarks, { SortMode } from "./SortBookmarks";
 import ImageWithFallback from "../ImageWithFallback";
-
 
 export type BookmarksProps = {
   displayMode?: "NewTab" | "Popup";
@@ -121,6 +119,7 @@ const Bookmarks = ({ displayMode = "NewTab" }: BookmarksProps) => {
               className="h-4 w-4"
               src={getFavicon(item?.url || "")}
               fallbackSrc="/icon-34.png"
+              loading="lazy"
             />
             <p className="grow truncate">{item.title}</p>
             <BackspaceIcon
