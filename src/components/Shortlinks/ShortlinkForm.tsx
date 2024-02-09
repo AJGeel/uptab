@@ -3,7 +3,7 @@ import { useEffect, useMemo } from "react";
 import { Path, SubmitHandler, UseFormRegister, useForm } from "react-hook-form";
 import { v4 as uuidv4 } from "uuid";
 
-import { useModalStore } from "@/src/hooks/useModalStore";
+import { Modals, useModalStore } from "@/src/hooks/useModalStore";
 import { useShortlinkStore } from "@/src/hooks/useShortlinkStore";
 import { addShortlink, deleteShortlink } from "@/src/services/shortlinks";
 import { normalizeUrl } from "@/src/utils/normalizeUrl";
@@ -103,7 +103,7 @@ const ShortlinkModal = () => {
 
   return (
     <Modal
-      isVisible={activeModal === "SHORTLINK"}
+      isVisible={activeModal === Modals.shortlink}
       title={selectedShortlink ? "Edit a link" : "Save a link"}
       subtitle={
         selectedShortlink

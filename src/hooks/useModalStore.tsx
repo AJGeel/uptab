@@ -1,16 +1,18 @@
 import { create } from "zustand";
 
-export const ActiveModal = {
-  HOTKEY: "HOTKEY",
-  SHORTLINK: "SHORTLINK",
+export const Modals = {
+  hotkey: "hotkey",
+  shortlink: "shortlink",
 } as const;
 
+export type Modals = (typeof Modals)[keyof typeof Modals];
+
 type State = {
-  activeModal: keyof typeof ActiveModal | null;
+  activeModal: Modals | null;
 };
 
 type Actions = {
-  setActiveModal: (to: keyof typeof ActiveModal | null) => void;
+  setActiveModal: (to: Modals | null) => void;
 };
 
 export const useModalStore = create<State & Actions>()((set) => ({
