@@ -4,7 +4,7 @@ import { Bookmarks, tabs } from "webextension-polyfill";
 import { cn } from "@/src/utils";
 import { getFavicon } from "@/src/utils/getFavicon";
 
-import ImageWithFallback from "../../ImageWithFallback";
+import ImageWithFallback from "../../ui/ImageWithFallback";
 
 type Props = {
   item: Bookmarks.BookmarkTreeNode;

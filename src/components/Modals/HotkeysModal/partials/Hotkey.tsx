@@ -1,4 +1,4 @@
-import { HotkeyType } from "./HotkeysModal";
+import { HotkeyType } from "../HotkeysModal";
 
 const Hotkey = ({ description, k: key }: HotkeyType) => (
   <div className="mt-2 flex items-center justify-between border-t pt-2 first:mt-0 first:border-t-0">

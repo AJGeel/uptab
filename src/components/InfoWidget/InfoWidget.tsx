@@ -4,8 +4,9 @@ import { getLocation } from "@/src/services/location";
 import { getWeather, mapWeatherCode } from "@/src/services/weather";
 import { cn, formatToday, formatWeekNumber } from "@/src/utils";
 
-import Link from "./Link";
-import Spinner from "./Spinner";
+import ErrorState from "./partials/ErrorState";
+import LoadingState from "./partials/LoadingState";
+import Link from "../ui/Link";
 
 type Props = {
   className?: string;
@@ -32,16 +33,11 @@ const InfoWidget = () => {
   });
 
   if (isPending) {
-    return (
-      <div className="flex h-10 items-center gap-2.5">
-        <Spinner className="h-4 w-4" />
-        <p>Checking the weather...</p>
-      </div>
-    );
+    return <LoadingState />;
   }
 
   if (isError) {
-    return <span>Unable to display weather information.</span>;
+    return <ErrorState />;
   }
 
   const weatherDescription = mapWeatherCode(
