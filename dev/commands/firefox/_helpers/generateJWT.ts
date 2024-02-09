@@ -1,4 +1,3 @@
-/* eslint-disable sort-keys */
 import jwt from "jsonwebtoken";
 
 export const generateJWT = () => {
