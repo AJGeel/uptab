@@ -1,47 +1,44 @@
 # Changelog
 
-All notable changes to this project will be documented in this file.
-
-The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
-and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+UpTab adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [1.1.0] - Unreleased
 
-### Added
+### ✨ Added
 
 - Added lazy-loading for Bookmark favicons
 - Added changelog, retrospectively add V1.0.1 and V1.0.0 changelogs
 
-### Changed
+### ♻️ Changed
 
 - Updated README chrome store link
 - Code refactors to improve code quality
 
 ## [1.0.1] - 2023-12-10
 
-### Added
+### ✨ Added
 
 - Added feedback form link
 - Automate submissions for Chrome Web Store using Submit API
 - Start implementing Firefox Plugin Store submissions using API
 - Added dependabot for managing dependencies
 
-### Fixed
+### 🐛 Fixed
 
 - Update Geolocation service: previous service broke due to requiring a paid API key
 - Fix stale Geolocation cache issue
 
-### Removed
+### 🧹 Removed
 
 - CTRL+U command to open popup due to Firefox submission errors
 
-### Changed
+### ♻️ Changed
 
 - Upgrade dependencies: Tanstack Query 5.15.0, Vite 5.0.12
 
 ## [1.0.0] - 2023-12-02
 
-### Added
+### ✨ Added
 
 - Added New Tab functionalities:
   - Added dynamic backgrounds shown when opening a new tab
@@ -54,3 +51,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Added shortkeys modal that shows configured shortcuts, shown using "?"
 - Added Popup functionalities:
   - Added Bookmarks: allowing you to easily view, open and delete your browser bookmarks
+  - Added CTRL+U shortkey to open popup
