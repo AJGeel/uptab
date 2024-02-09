@@ -1,4 +1,4 @@
-import { useModalStore } from "@/src/hooks/useModalStore";
+import { Modals, useModalStore } from "@/src/hooks/useModalStore";
 
 const EmptyState = () => {
   const setActiveModal = useModalStore((state) => state.setActiveModal);
@@ -8,7 +8,7 @@ const EmptyState = () => {
       No links found. Why don&apos;t you{" "}
       <span
         className="cursor-pointer underline hover:text-black hover:no-underline"
-        onClick={() => setActiveModal("SHORTLINK")}
+        onClick={() => setActiveModal(Modals.shortlink)}
       >
         add one
       </span>

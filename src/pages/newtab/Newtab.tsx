@@ -1,9 +1,9 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { useState } from "react";
 
-import HotkeysModal from "@/src/components/Hotkeys/HotkeysModal";
-import InfoWidget from "@/src/components/InfoWidget";
-import ShortlinkModal from "@/src/components/Shortlinks/ShortlinkForm";
+import InfoWidget from "@/src/components/InfoWidget/InfoWidget";
+import HotkeysModal from "@/src/components/Modals/HotkeysModal/HotkeysModal";
+import ShortlinksModal from "@/src/components/Modals/ShortlinksModal/ShortlinksModal";
 import Sidebar from "@/src/components/Sidebar/Sidebar";
 import ImageFadeIn from "@/src/components/ui/ImageFadeIn";
 import useKeyPress from "@/src/hooks/useKeyPress";
@@ -22,7 +22,7 @@ export default function Newtab() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <ShortlinkModal />
+      <ShortlinksModal />
       <HotkeysModal />
       <div className="relative flex h-full max-h-screen min-h-screen w-full items-stretch overflow-hidden">
         <Sidebar isExpanded={isExpanded} setIsExpanded={setIsExpanded} />

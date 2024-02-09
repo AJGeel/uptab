@@ -1,13 +1,12 @@
 import { EllipsisHorizontalIcon } from "@heroicons/react/24/solid";
 
-import { useModalStore } from "@/src/hooks/useModalStore";
+import { Modals, useModalStore } from "@/src/hooks/useModalStore";
 import { useShortlinkStore } from "@/src/hooks/useShortlinkStore";
 import { Shortlink } from "@/src/services/shortlinks";
 import { getFavicon } from "@/src/utils/getFavicon";
 
-import IconButton from "../IconButton";
-import ImageWithFallback from "../ImageWithFallback";
-
+import IconButton from "../ui/IconButton";
+import ImageWithFallback from "../ui/ImageWithFallback";
 
 type Props = {
   item: Shortlink;
@@ -38,7 +37,7 @@ const Shortlink = ({ item }: Props) => {
           event.stopPropagation();
 
           setSelectedShortlink(item);
-          setActiveModal("SHORTLINK");
+          setActiveModal(Modals.shortlink);
         }}
       >
         <EllipsisHorizontalIcon className="h-5 w-5 text-gray-600" />

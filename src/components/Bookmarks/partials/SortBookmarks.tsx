@@ -1,18 +1,9 @@
 import { ChevronUpDownIcon } from "@heroicons/react/24/solid";
 
+import { SortMode, SortModes } from "@/src/services/bookmarks/sortBookmarks";
 import { cn } from "@/src/utils";
 
-import { BookmarksProps } from "./Bookmarks";
-
-export const SortModes = {
-  "A-Z": "A-Z",
-  "Z-A": "Z-A",
-  // eslint-disable-next-line sort-keys
-  Newest: "Newest",
-  Oldest: "Oldest",
-} as const;
-
-export type SortMode = keyof typeof SortModes;
+import { BookmarksProps } from "../Bookmarks";
 
 type SortProps = BookmarksProps & {
   sortMode: SortMode;

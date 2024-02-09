@@ -2,7 +2,7 @@ import { cn } from "@/src/utils";
 
 import { SidebarExpandButton } from "./SidebarExpandButton";
 import Bookmarks from "../Bookmarks/Bookmarks";
-import InfoWidget from "../InfoWidget";
+import InfoWidget from "../InfoWidget/InfoWidget";
 import Shortlinks from "../Shortlinks/Shortlinks";
 
 export type Props = {

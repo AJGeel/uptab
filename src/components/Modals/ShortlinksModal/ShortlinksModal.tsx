@@ -1,49 +1,23 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useMemo } from "react";
-import { Path, SubmitHandler, UseFormRegister, useForm } from "react-hook-form";
+import { SubmitHandler, useForm } from "react-hook-form";
 import { v4 as uuidv4 } from "uuid";
 
-import { useModalStore } from "@/src/hooks/useModalStore";
+import { Modals, useModalStore } from "@/src/hooks/useModalStore";
 import { useShortlinkStore } from "@/src/hooks/useShortlinkStore";
 import { addShortlink, deleteShortlink } from "@/src/services/shortlinks";
 import { normalizeUrl } from "@/src/utils/normalizeUrl";
 
-import Modal from "../ui/Modal";
+import FormField from "./partials/FormField";
+import Modal from "../../ui/Modal";
 
-interface FormInputs {
+export interface FormInputs {
   URL: string;
   Title: string;
   Subtitle: string;
 }
 
-type FormFieldProps = {
-  label: Path<FormInputs>;
-  register: UseFormRegister<FormInputs>;
-  required: boolean;
-  maxLength?: number;
-  pattern?: RegExp;
-};
-
-const FormField = ({
-  label,
-  register,
-  required,
-  maxLength,
-  pattern,
-}: FormFieldProps) => (
-  <fieldset className="mb-4 flex items-center gap-5">
-    <label className="w-24 text-right text-gray-600" htmlFor={label}>
-      {label}
-    </label>
-    <input
-      id={label}
-      className="inline-flex w-full flex-1 items-center justify-center rounded border border-gray-400 px-3 py-2 leading-none shadow outline-none ring-sky-500 ring-offset-2 duration-150 focus:ring-2"
-      {...register(label, { maxLength, pattern, required })}
-    />
-  </fieldset>
-);
-
-const ShortlinkModal = () => {
+const ShortlinksModal = () => {
   const queryClient = useQueryClient();
 
   const addMutation = useMutation({
@@ -103,7 +77,7 @@ const ShortlinkModal = () => {
 
   return (
     <Modal
-      isVisible={activeModal === "SHORTLINK"}
+      isVisible={activeModal === Modals.shortlink}
       title={selectedShortlink ? "Edit a link" : "Save a link"}
       subtitle={
         selectedShortlink
@@ -150,4 +124,4 @@ const ShortlinkModal = () => {
   );
 };
 
-export default ShortlinkModal;
+export default ShortlinksModal;
