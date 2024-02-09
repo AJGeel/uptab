@@ -2,19 +2,20 @@
 
 UpTab adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.1.0] - Unreleased
+## V1.1.0 — Unreleased
 
 ### ✨ Added
 
 - Added lazy-loading for Bookmark favicons
-- Added changelog, retrospectively add V1.0.1 and V1.0.0 changelogs
+- Added changelog, retrospectively add `V1.0.1` and `V1.0.0` changelogs
+- Added changelog page, shown when UpTab is updated
 
 ### ♻️ Changed
 
 - Updated README chrome store link
 - Code refactors to improve code quality
 
-## [1.0.1] - 2023-12-10
+## V1.0.1 — 2023-12-10
 
 ### ✨ Added
 
@@ -36,7 +37,7 @@ UpTab adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 - Upgrade dependencies: Tanstack Query 5.15.0, Vite 5.0.12
 
-## [1.0.0] - 2023-12-02
+## V1.0.0 — 2023-12-02
 
 ### ✨ Added
 
@@ -47,8 +48,8 @@ UpTab adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
   - Added calendar widget: showing current day and week
   - Added Shortlinks: allowing you to store
   - Added Bookmarks: allowing you to easily view, open and delete your browser bookmarks
-  - Added shortkeys to hide/close sidebar using "/"
-  - Added shortkeys modal that shows configured shortcuts, shown using "?"
+  - Added shortkeys to hide/close sidebar using `/`
+  - Added shortkeys modal that shows configured shortcuts, shown using `?`
 - Added Popup functionalities:
   - Added Bookmarks: allowing you to easily view, open and delete your browser bookmarks
-  - Added CTRL+U shortkey to open popup
+  - Added `CTRL+U` shortkey to open popup
