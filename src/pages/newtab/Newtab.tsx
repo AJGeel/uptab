@@ -6,9 +6,9 @@ import HotkeysModal from "@/src/components/Modals/HotkeysModal/HotkeysModal";
 import ShortlinksModal from "@/src/components/Modals/ShortlinksModal/ShortlinksModal";
 import Sidebar from "@/src/components/Sidebar/Sidebar";
 import ImageFadeIn from "@/src/components/ui/ImageFadeIn";
+import { useEasterEggs } from "@/src/hooks/useEasterEggs";
 import useKeyPress from "@/src/hooks/useKeyPress";
 import { useRandomBackground } from "@/src/hooks/useRandomBackground";
-import { addEasterEggs } from "@/src/services/addEasterEggs";
 import { cn } from "@/src/utils";
 
 const queryClient = new QueryClient();
@@ -18,7 +18,7 @@ export default function Newtab() {
   const { activeBg } = useRandomBackground();
 
   useKeyPress("\\", () => setIsExpanded(!isExpanded));
-  addEasterEggs();
+  useEasterEggs();
 
   return (
     <QueryClientProvider client={queryClient}>
