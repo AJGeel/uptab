@@ -24,7 +24,7 @@ const SortBookmarks = ({ displayMode, sortMode, setSortMode }: SortProps) => (
       Sort by:
     </label>
     <select
-      className="cursor-pointer appearance-none pl-20 pr-8 text-right duration-150 hover:bg-sky-500/10 focus:outline-none"
+      className="cursor-pointer appearance-none bg-white pl-20 pr-8 text-right duration-150 hover:bg-sky-500/10 focus:outline-none"
       id="sortSelect"
       value={sortMode}
       onChange={(event) => setSortMode(event.target.value as SortMode)}
