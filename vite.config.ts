@@ -4,6 +4,7 @@ import react from "@vitejs/plugin-react-swc";
 import { defineConfig } from "vite";
 
 import { TARGETS, buildTarget } from "./buildTarget";
+import includeChangelog from "./utils/plugins/include-changelog";
 import makeManifest from "./utils/plugins/make-manifest";
 
 const root = resolve(__dirname, "src");
@@ -27,6 +28,7 @@ export default defineConfig({
         ),
         newtab: resolve(pagesDir, "newtab", "index.html"),
         popup: resolve(pagesDir, "popup", "index.html"),
+        changelog: resolve(pagesDir, "changelog", "index.html"),
       },
       output: {
         entryFileNames: (chunk) => `src/pages/${chunk.name}/index.js`,
@@ -34,7 +36,7 @@ export default defineConfig({
     },
     sourcemap: process.env.__DEV__ === "true",
   },
-  plugins: [react(), makeManifest()],
+  plugins: [react(), makeManifest(), includeChangelog()],
   publicDir,
   resolve: {
     alias: {

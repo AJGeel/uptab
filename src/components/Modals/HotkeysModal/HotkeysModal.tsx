@@ -1,8 +1,8 @@
 import useKeyPress from "@/src/hooks/useKeyPress";
-import { useModalStore } from "@/src/hooks/useModalStore";
+import { Modals, useModalStore } from "@/src/hooks/useModalStore";
 
-import Hotkey from "./Hotkey";
-import Modal from "../ui/Modal";
+import Hotkey from "./partials/Hotkey";
+import Modal from "../../ui/Modal";
 
 export type HotkeyType = {
   k: string | string[];
@@ -25,12 +25,12 @@ const HotkeysModal = () => {
   const setActiveModal = useModalStore((state) => state.setActiveModal);
 
   useKeyPress("?", () => {
-    setActiveModal("HOTKEY");
+    setActiveModal(Modals.hotkey);
   });
 
   return (
     <Modal
-      isVisible={activeModal === "HOTKEY"}
+      isVisible={activeModal === Modals.hotkey}
       onClose={() => setActiveModal(null)}
       title="Keyboard Shortcuts"
       subtitle="Speed up your UpTab game with shortcuts. So much time for activities."

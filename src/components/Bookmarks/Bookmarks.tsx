@@ -1,17 +1,19 @@
-import { BackspaceIcon } from "@heroicons/react/24/solid";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { Bookmarks, bookmarks, tabs } from "webextension-polyfill";
 
+import { filterBookmarks } from "@/src/services/bookmarks/filterBookmarks";
 import { mapBookmarks } from "@/src/services/bookmarks/mapBookmarks";
+import {
+  SortMode,
+  SortModes,
+  sortBookmarks,
+} from "@/src/services/bookmarks/sortBookmarks";
 import { cn } from "@/src/utils";
-import { getFavicon } from "@/src/utils/getFavicon";
 
-
-import SearchBookmarks from "./SearchBookmarks";
-import SortBookmarks, { SortMode } from "./SortBookmarks";
-import ImageWithFallback from "../ImageWithFallback";
-
+import BookmarkItem from "./partials/BookmarkItem";
+import SearchBookmarks from "./partials/SearchBookmarks";
+import SortBookmarks from "./partials/SortBookmarks";
 
 export type BookmarksProps = {
   displayMode?: "NewTab" | "Popup";
@@ -19,7 +21,7 @@ export type BookmarksProps = {
 
 const Bookmarks = ({ displayMode = "NewTab" }: BookmarksProps) => {
   const queryClient = useQueryClient();
-  const [sortMode, setSortMode] = useState<SortMode>("Newest");
+  const [sortMode, setSortMode] = useState<SortMode>(SortModes.Newest);
   const [searchQuery, setSearchQuery] = useState("");
 
   const { isPending, isError, data } = useQuery({
@@ -47,27 +49,8 @@ const Bookmarks = ({ displayMode = "NewTab" }: BookmarksProps) => {
     return <p>Unable to display your bookmarks.</p>;
   }
 
-  const sortedBookmarks = data.sort((a, b) => {
-    switch (sortMode) {
-      case "A-Z":
-        return a.title.localeCompare(b.title);
-      case "Z-A":
-        return b.title.localeCompare(a.title);
-      case "Newest":
-        return (b?.dateAdded ?? 0) - (a?.dateAdded ?? 0);
-      case "Oldest":
-        return (a?.dateAdded ?? 0) - (b?.dateAdded ?? 0);
-      default:
-        return a.title.localeCompare(b.title);
-    }
-  });
-
-  const filteredBookmarks = sortedBookmarks.filter(
-    (item) =>
-      item.title.toLowerCase().includes(searchQuery.toLowerCase().trim()) ||
-      (item.url &&
-        item.url.toLowerCase().includes(searchQuery.toLowerCase().trim()))
-  );
+  const sortedBookmarks = sortBookmarks(data, sortMode);
+  const filteredBookmarks = filterBookmarks(sortedBookmarks, searchQuery);
 
   return (
     <div
@@ -102,38 +85,19 @@ const Bookmarks = ({ displayMode = "NewTab" }: BookmarksProps) => {
         {filteredBookmarks.length === 0 && (
           <p className="px-2 py-1.5 text-gray-600">No results found...</p>
         )}
-        {filteredBookmarks.map((item) => (
-          <a
-            key={item.id}
-            className={cn(
-              "group flex items-center gap-3 duration-150 py-1.5 px-2 hover:bg-sky-500/10 text-gray-600 hover:text-sky-800 focus-within:outline-none outline-none",
-              searchQuery.length >= 1 && "first:bg-sky-500/10"
-            )}
-            onClick={(event) => {
-              if (displayMode === "Popup") {
-                event.preventDefault();
-                tabs.create({ url: item.url });
+
+        {filteredBookmarks.map((bookmark) => (
+          <BookmarkItem
+            key={bookmark.id}
+            item={bookmark}
+            isFocused={searchQuery.length >= 1}
+            displayMode={displayMode}
+            onDelete={async () => {
+              if (confirm("Are you sure you want to remove this bookmark?")) {
+                await deleteMutation.mutateAsync(bookmark.id);
               }
             }}
-            href={item.url ?? ""}
-          >
-            <ImageWithFallback
-              className="h-4 w-4"
-              src={getFavicon(item?.url || "")}
-              fallbackSrc="/icon-34.png"
-            />
-            <p className="grow truncate">{item.title}</p>
-            <BackspaceIcon
-              onClick={async (event) => {
-                event.preventDefault();
-
-                if (confirm("Are you sure you want to remove this bookmark?")) {
-                  await deleteMutation.mutateAsync(item.id);
-                }
-              }}
-              className="h-7 w-7 shrink-0 rounded-md border bg-white p-1 text-gray-500 opacity-0 shadow-sm duration-150 hover:border-red-500 hover:text-red-500 group-hover:opacity-100"
-            />
-          </a>
+          />
         ))}
       </div>
     </div>

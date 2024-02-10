@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 
-import { useModalStore } from "@/src/hooks/useModalStore";
+import { Modals, useModalStore } from "@/src/hooks/useModalStore";
 import { useShortlinkStore } from "@/src/hooks/useShortlinkStore";
 import { getShortlinks } from "@/src/services/shortlinks";
 
@@ -38,7 +38,7 @@ const Shortlinks = () => {
               className="inline cursor-pointer underline hover:text-black hover:no-underline"
               onClick={() => {
                 setSelectedShortlink(null);
-                setActiveModal("SHORTLINK");
+                setActiveModal(Modals.shortlink);
               }}
             >
               Add a link
