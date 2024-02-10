@@ -2,7 +2,7 @@
 
 UpTab adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## V1.1.0 — Unreleased
+## [V1.1.0] — Unreleased
 
 ### ✨ Added
 
@@ -14,8 +14,9 @@ UpTab adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 - Updated README chrome store link
 - Code refactors to improve code quality
+- Reduce how often Easter eggs are added
 
-## V1.0.1 — 2023-12-10
+## [V1.0.1] — 2023-12-10
 
 ### ✨ Added
 
@@ -37,7 +38,7 @@ UpTab adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 - Upgrade dependencies: Tanstack Query 5.15.0, Vite 5.0.12
 
-## V1.0.0 — 2023-12-02
+## [V1.0.0] — 2023-12-02
 
 ### ✨ Added
 
@@ -53,3 +54,7 @@ UpTab adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - Added Popup functionalities:
   - Added Bookmarks: allowing you to easily view, open and delete your browser bookmarks
   - Added `CTRL+U` shortkey to open popup
+
+[V1.1.0]: https://github.com/AJGeel/uptab/compare/v1.1.0...v1.0.1
+[V1.0.1]: https://github.com/AJGeel/uptab/compare/v1.0.0...v1.0.1
+[V1.0.0]: https://github.com/AJGeel/uptab/releases/tag/V1.0.0

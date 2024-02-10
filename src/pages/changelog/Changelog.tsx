@@ -49,7 +49,7 @@ export default function Changelog() {
               ),
               a: ({ ...props }) => (
                 <a
-                  className="duration-150 hover:text-sky-400 hover:no-underline"
+                  className="border-b-2 pb-1 font-bold no-underline duration-150 hover:border-sky-400 hover:text-sky-400"
                   target="_blank"
                   rel="noopener noreferrer"
                   {...props}
