@@ -389,6 +389,9 @@ $RECYCLE.BIN/
 # Generated manifest
 public/manifest.json
 
+# Generated changelog
+public/CHANGELOG.md
+
 # Copied contentStyle
 public/contentStyle.css
 
