@@ -3,7 +3,7 @@ import { resolve } from "path";
 import react from "@vitejs/plugin-react-swc";
 import { defineConfig } from "vite";
 
-import { TARGETS, buildTarget } from "./buildTarget";
+import { buildTargets, buildTarget } from "./buildTarget";
 import includeChangelog from "./utils/plugins/include-changelog";
 import makeManifest from "./utils/plugins/make-manifest";
 
@@ -12,7 +12,7 @@ const pagesDir = resolve(root, "pages");
 const assetsDir = resolve(root, "assets");
 const outDir = resolve(
   __dirname,
-  buildTarget === TARGETS.FIREFOX ? "dist/firefox" : "dist/chromium"
+  buildTarget === buildTargets.firefox ? "dist/firefox" : "dist/chromium"
 );
 const publicDir = resolve(__dirname, "public");
 
@@ -24,7 +24,7 @@ export default defineConfig({
         background: resolve(
           pagesDir,
           "background",
-          buildTarget === TARGETS.FIREFOX ? "index.html" : "index.ts"
+          buildTarget === buildTargets.firefox ? "index.html" : "index.ts"
         ),
         newtab: resolve(pagesDir, "newtab", "index.html"),
         popup: resolve(pagesDir, "popup", "index.html"),

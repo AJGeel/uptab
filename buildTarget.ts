@@ -1,6 +1,7 @@
-export const TARGETS = {
-  CHROMIUM: "CHROMIUM",
-  FIREFOX: "FIREFOX",
+export const buildTargets = {
+  chromium: "chrome",
+  firefox: "firefox",
 } as const;
 
-export const buildTarget: keyof typeof TARGETS = TARGETS.CHROMIUM;
+export const buildTarget: (typeof buildTargets)[keyof typeof buildTargets] =
+  buildTargets.chromium;
