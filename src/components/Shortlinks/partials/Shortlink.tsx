@@ -5,8 +5,8 @@ import { useShortlinkStore } from "@/src/hooks/useShortlinkStore";
 import { Shortlink } from "@/src/services/shortlinks";
 import { getFavicon } from "@/src/utils/getFavicon";
 
-import IconButton from "../ui/IconButton";
-import ImageWithFallback from "../ui/ImageWithFallback";
+import IconButton from "../../ui/IconButton";
+import ImageWithFallback from "../../ui/ImageWithFallback";
 
 type Props = {
   item: Shortlink;

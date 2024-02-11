@@ -1,6 +1,6 @@
 import { cn } from "@/src/utils";
 
-import { SidebarExpandButton } from "./SidebarExpandButton";
+import { SidebarExpandButton } from "./partials/SidebarExpandButton";
 import Bookmarks from "../Bookmarks/Bookmarks";
 import InfoWidget from "../InfoWidget/InfoWidget";
 import Shortlinks from "../Shortlinks/Shortlinks";

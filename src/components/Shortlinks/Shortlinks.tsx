@@ -4,8 +4,8 @@ import { Modals, useModalStore } from "@/src/hooks/useModalStore";
 import { useShortlinkStore } from "@/src/hooks/useShortlinkStore";
 import { getShortlinks } from "@/src/services/shortlinks";
 
-import EmptyState from "./EmptyState";
-import Shortlink from "./Shortlink";
+import EmptyState from "./partials/EmptyState";
+import Shortlink from "./partials/Shortlink";
 
 const Shortlinks = () => {
   const setActiveModal = useModalStore((state) => state.setActiveModal);

@@ -1,7 +1,7 @@
 import { SparklesIcon, XMarkIcon } from "@heroicons/react/24/solid";
 import { useMemo } from "react";
 
-import { useUpdateNotification } from "./useUpdateNotification";
+import { useUpdateNotification } from "../../hooks/useUpdateNotification";
 
 const UpdateNotification = () => {
   const { isVisible, onOpen, onHide } = useUpdateNotification();
