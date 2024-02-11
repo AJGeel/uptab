@@ -2,9 +2,9 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { useState } from "react";
 
 import InfoWidget from "@/src/components/InfoWidget/InfoWidget";
-import HotkeysModal from "@/src/components/Modals/HotkeysModal/HotkeysModal";
-import ShortlinksModal from "@/src/components/Modals/ShortlinksModal/ShortlinksModal";
+import Modals from "@/src/components/Modals/Modals";
 import Sidebar from "@/src/components/Sidebar/Sidebar";
+import FeedbackPrompt from "@/src/components/ui/FeedbackPrompt";
 import ImageFadeIn from "@/src/components/ui/ImageFadeIn";
 import { useEasterEggs } from "@/src/hooks/useEasterEggs";
 import useKeyPress from "@/src/hooks/useKeyPress";
@@ -22,8 +22,7 @@ export default function Newtab() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <ShortlinksModal />
-      <HotkeysModal />
+      <Modals />
       <div className="relative flex h-full max-h-screen min-h-screen w-full items-stretch overflow-hidden">
         <Sidebar isExpanded={isExpanded} setIsExpanded={setIsExpanded} />
         <ImageFadeIn
@@ -43,18 +42,7 @@ export default function Newtab() {
                 : "translate-x-0"
             )}
           />
-          <p className="mt-auto inline self-end p-6 text-white opacity-75 drop-shadow-md duration-150 hover:opacity-100">
-            Got feedback?{" "}
-            <a
-              className="underline"
-              href="https://docs.google.com/forms/d/e/1FAIpQLSfvi2jV7AlzGamcSzMUlXT74HAisrrjUiKFZ4-rmQKeG41oHA/viewform?usp=sf_link"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Drop it here
-            </a>
-            .
-          </p>
+          <FeedbackPrompt className="mt-auto inline self-end p-6" isDarkMode />
         </ImageFadeIn>
       </div>
     </QueryClientProvider>

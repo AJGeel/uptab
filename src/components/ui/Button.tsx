@@ -25,7 +25,7 @@ const Button = ({
         "bg-sky-500 text-white hover:brightness-110 active:brightness-100",
       variant === buttonVariants.secondary &&
         "bg-white hover:bg-gray-100 active:bg-gray-200",
-      "inline-flex items-center justify-center rounded px-4 py-3 font-medium leading-none ring-offset-2 duration-150 focus:outline-none focus:ring-2 active:ring-2",
+      "inline-flex items-center justify-center rounded px-4 py-3 font-medium leading-none ring-offset-2 duration-150 focus:outline-none focus:ring-2 active:ring-2 ring-sky-500",
       className
     )}
     onClick={onClick}

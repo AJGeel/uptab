@@ -1,4 +1,4 @@
-import { Modals, useModalStore } from "@/src/hooks/useModalStore";
+import { Modals, useModalStore } from "@/src/hooks/stores/useModalStore";
 
 const EmptyState = () => {
   const setActiveModal = useModalStore((state) => state.setActiveModal);

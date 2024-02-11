@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 
-import { Modals, useModalStore } from "@/src/hooks/useModalStore";
-import { useShortlinkStore } from "@/src/hooks/useShortlinkStore";
+import { Modals, useModalStore } from "@/src/hooks/stores/useModalStore";
+import { useShortlinkStore } from "@/src/hooks/stores/useShortlinkStore";
 import { getShortlinks } from "@/src/services/shortlinks";
 
 import EmptyState from "./partials/EmptyState";

@@ -3,13 +3,13 @@ import { useEffect, useMemo } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { v4 as uuidv4 } from "uuid";
 
-import { Modals, useModalStore } from "@/src/hooks/useModalStore";
-import { useShortlinkStore } from "@/src/hooks/useShortlinkStore";
+import { Modals, useModalStore } from "@/src/hooks/stores/useModalStore";
+import { useShortlinkStore } from "@/src/hooks/stores/useShortlinkStore";
 import { addShortlink, deleteShortlink } from "@/src/services/shortlinks";
 import { normalizeUrl } from "@/src/utils/normalizeUrl";
 
 import FormField from "./partials/FormField";
-import Button from "../../ui/Button";
+import Button, { buttonVariants } from "../../ui/Button";
 import Modal from "../../ui/Modal";
 
 export interface FormInputs {
@@ -102,7 +102,7 @@ const ShortlinksModal = () => {
         <div className="mt-6 flex justify-end gap-2">
           {selectedShortlink && (
             <Button
-              variant="secondary"
+              variant={buttonVariants.secondary}
               label="Delete"
               onClick={async (event) => {
                 event.preventDefault();

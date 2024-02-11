@@ -1,5 +1,5 @@
+import { Modals, useModalStore } from "@/src/hooks/stores/useModalStore";
 import useKeyPress from "@/src/hooks/useKeyPress";
-import { Modals, useModalStore } from "@/src/hooks/useModalStore";
 
 import Hotkey from "./partials/Hotkey";
 import Button from "../../ui/Button";
@@ -10,6 +10,8 @@ export type HotkeyType = {
   description: string;
 };
 
+const altKey = () => (navigator?.platform.indexOf("Mac") === 0 ? "⌥" : "ALT");
+
 const hotkeys: HotkeyType[] = [
   {
     description: "Toggle sidebar visibility",
@@ -19,6 +21,10 @@ const hotkeys: HotkeyType[] = [
     description: "Toggle the menu you're currently looking at",
     k: "?",
   },
+  {
+    description: "Toggle the settings menu",
+    k: [altKey(), "J"],
+  },
 ];
 
 const HotkeysModal = () => {
@@ -26,7 +32,7 @@ const HotkeysModal = () => {
   const setActiveModal = useModalStore((state) => state.setActiveModal);
 
   useKeyPress("?", () => {
-    setActiveModal(Modals.hotkey);
+    setActiveModal(activeModal === Modals.hotkey ? null : Modals.hotkey);
   });
 
   return (
