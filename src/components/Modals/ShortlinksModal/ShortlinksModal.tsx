@@ -9,6 +9,7 @@ import { addShortlink, deleteShortlink } from "@/src/services/shortlinks";
 import { normalizeUrl } from "@/src/utils/normalizeUrl";
 
 import FormField from "./partials/FormField";
+import Button from "../../ui/Button";
 import Modal from "../../ui/Modal";
 
 export interface FormInputs {
@@ -100,8 +101,9 @@ const ShortlinksModal = () => {
 
         <div className="mt-6 flex justify-end gap-2">
           {selectedShortlink && (
-            <button
-              className="inline-flex items-center justify-center rounded bg-white px-4 py-3 font-medium leading-none ring-sky-500 ring-offset-2 duration-150 hover:bg-gray-100 focus:outline-none focus:ring-2 active:bg-gray-200 active:ring-2"
+            <Button
+              variant="secondary"
+              label="Delete"
               onClick={async (event) => {
                 event.preventDefault();
                 if (!selectedShortlink?.id) {
@@ -111,13 +113,9 @@ const ShortlinksModal = () => {
                 await deleteMutation.mutateAsync(selectedShortlink.id);
                 onCloseModal();
               }}
-            >
-              Delete
-            </button>
+            />
           )}
-          <button className="inline-flex items-center justify-center rounded bg-sky-500 px-4 py-3 font-medium leading-none text-white ring-sky-500 ring-offset-2 duration-150 hover:brightness-110 focus:outline-none focus:ring-2 active:ring-2 active:brightness-100">
-            {selectedShortlink ? "Update link" : "Save link"}
-          </button>
+          <Button label={selectedShortlink ? "Update link" : "Save link"} />
         </div>
       </form>
     </Modal>

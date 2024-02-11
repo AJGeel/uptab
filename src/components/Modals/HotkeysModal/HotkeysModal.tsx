@@ -2,6 +2,7 @@ import useKeyPress from "@/src/hooks/useKeyPress";
 import { Modals, useModalStore } from "@/src/hooks/useModalStore";
 
 import Hotkey from "./partials/Hotkey";
+import Button from "../../ui/Button";
 import Modal from "../../ui/Modal";
 
 export type HotkeyType = {
@@ -44,12 +45,10 @@ const HotkeysModal = () => {
           />
         ))}
         <div className="mt-8 flex justify-end gap-2">
-          <button
-            className="inline-flex items-center justify-center rounded bg-sky-500 px-4 py-3 font-medium leading-none text-white ring-sky-500 ring-offset-2 duration-150 hover:brightness-110 focus:outline-none focus:ring-2 active:ring-2 active:brightness-100"
+          <Button
+            label="Got it, thanks."
             onClick={() => setActiveModal(null)}
-          >
-            Got it, thanks.
-          </button>
+          />
         </div>
       </div>
     </Modal>
