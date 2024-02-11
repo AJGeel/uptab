@@ -1,13 +1,16 @@
 import { SparklesIcon, XMarkIcon } from "@heroicons/react/24/solid";
 import { useMemo } from "react";
 
+import { useSettings } from "@/src/hooks/useSettings";
+
 import { useUpdateNotification } from "../../hooks/useUpdateNotification";
 
 const UpdateNotification = () => {
+  const { data: settingsData } = useSettings();
   const { isVisible, onOpen, onHide } = useUpdateNotification();
   const RNG = useMemo(() => Math.random(), []);
 
-  if (!isVisible) {
+  if (!settingsData?.sidebar.showUpdates || !isVisible) {
     return <></>;
   }
 

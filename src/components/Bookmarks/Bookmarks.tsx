@@ -2,6 +2,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { Bookmarks, bookmarks, tabs } from "webextension-polyfill";
 
+import { useSettings } from "@/src/hooks/useSettings";
 import { filterBookmarks } from "@/src/services/bookmarks/filterBookmarks";
 import { mapBookmarks } from "@/src/services/bookmarks/mapBookmarks";
 import {
@@ -20,6 +21,8 @@ export type BookmarksProps = {
 };
 
 const Bookmarks = ({ displayMode = "NewTab" }: BookmarksProps) => {
+  const { data: settingsData } = useSettings();
+
   const queryClient = useQueryClient();
   const [sortMode, setSortMode] = useState<SortMode>(SortModes.Newest);
   const [searchQuery, setSearchQuery] = useState("");
@@ -40,6 +43,10 @@ const Bookmarks = ({ displayMode = "NewTab" }: BookmarksProps) => {
       queryClient.invalidateQueries({ queryKey: ["bookmarks"] });
     },
   });
+
+  if (displayMode === "NewTab" && !settingsData?.sidebar.showBookmarks) {
+    return <></>;
+  }
 
   if (isPending) {
     return <p className="mt-10">Loading...</p>;

@@ -2,12 +2,15 @@ import { useQuery } from "@tanstack/react-query";
 
 import { Modals, useModalStore } from "@/src/hooks/stores/useModalStore";
 import { useShortlinkStore } from "@/src/hooks/stores/useShortlinkStore";
+import { useSettings } from "@/src/hooks/useSettings";
 import { getShortlinks } from "@/src/services/shortlinks";
 
 import EmptyState from "./partials/EmptyState";
 import Shortlink from "./partials/Shortlink";
 
 const Shortlinks = () => {
+  const { data: settingsData } = useSettings();
+
   const setActiveModal = useModalStore((state) => state.setActiveModal);
   const setSelectedShortlink = useShortlinkStore((state) => state.setSelected);
 
@@ -15,6 +18,10 @@ const Shortlinks = () => {
     queryFn: getShortlinks,
     queryKey: ["shortlinks"],
   });
+
+  if (!settingsData?.sidebar.showShortlinks) {
+    return <></>;
+  }
 
   if (isPending) {
     return <p className="mt-10">Loading...</p>;
