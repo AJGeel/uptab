@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 
-import { getLocation } from "@/src/services/location";
+import { getGeocodedLocation } from "@/src/services/location";
 import { getWeather } from "@/src/services/weather";
 import { cn } from "@/src/utils";
 
@@ -14,7 +14,7 @@ type Props = {
 
 const InfoWidget = () => {
   const { isError: isLocationError, data: locationData } = useQuery({
-    queryFn: getLocation,
+    queryFn: getGeocodedLocation,
     queryKey: ["location"],
   });
 

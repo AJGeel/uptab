@@ -1,10 +1,10 @@
 import { storage } from "webextension-polyfill";
 
-import { checkCachedLatLong } from "./checkCachedLatLong";
-import { Area, GeocodeResponse, GeocodedLocation, Location } from "./types";
+import { getCachedLocation } from "./getCachedLocation";
+import { Location } from "./types";
 
-const getLatLong = async (): Promise<Location> => {
-  const cachedLocation = await checkCachedLatLong();
+export const getLocation = async (): Promise<Location> => {
+  const cachedLocation = await getCachedLocation();
 
   if (cachedLocation) {
     return cachedLocation;
@@ -33,30 +33,4 @@ const getLatLong = async (): Promise<Location> => {
       { enableHighAccuracy: false, maximumAge: 3600000, timeout: 5000 }
     );
   });
-};
-
-const getArea = async ({ latitude, longitude }: Location): Promise<Area> => {
-  const res = await fetch(
-    `https://nominatim.openstreetmap.org/reverse?lat=${latitude}&lon=${longitude}&format=json`
-  );
-
-  const data = (await res.json()) as GeocodeResponse;
-
-  if (!data) {
-    return { city: "Unknown location" };
-  }
-
-  return data.address as Area;
-};
-
-export const getLocation = async (): Promise<GeocodedLocation> => {
-  const { latitude, longitude } = await getLatLong();
-  const area = await getArea({ latitude, longitude });
-
-  return {
-    area:
-      area.residential ?? area.municipality ?? area.city_district ?? area.city,
-    latitude,
-    longitude,
-  };
 };
