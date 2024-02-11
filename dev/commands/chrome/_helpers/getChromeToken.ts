@@ -1,5 +1,7 @@
 /* eslint-disable camelcase */
 
+import { log } from "../../_utils/log";
+
 type AccessToken = string;
 const tokenEndpoint = "https://oauth2.googleapis.com/token";
 
@@ -26,7 +28,7 @@ export const getChromeToken = async (): Promise<AccessToken | void> => {
 
     const data = await response.json();
 
-    console.log("✅ Token refresh succeeded!");
+    log("✅ Token refresh succeeded!");
     return data.access_token;
   } catch (error) {
     throw new Error(`Error refreshing access token: ${error}`);

@@ -16,7 +16,6 @@ export const normalizeUrl = (url: string) => {
 
     return parsedUrl.href;
   } catch (error) {
-    console.error("Invalid URL:", url);
     return url;
   }
 };
