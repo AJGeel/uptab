@@ -9,7 +9,7 @@ on:
       - "*"
 
 jobs:
-  common-setup:
+  test:
     runs-on: ubuntu-latest
     steps:
       - name: 👀 Checkout code
@@ -20,26 +20,42 @@ jobs:
           bun-version: latest
       - name: 📦 Install dependencies
         run: bun install
-
-  test:
-    needs: common-setup
-    runs-on: ubuntu-latest
-    steps:
       - name: 🧪 Run unit tests
         run: bun run test
 
   lint:
-    needs: common-setup
     runs-on: ubuntu-latest
     steps:
+      - name: 👀 Checkout code
+        uses: actions/checkout@v4
+      - name: 🍞 Setup Bun
+        uses: oven-sh/setup-bun@v1
+        with:
+          bun-version: latest
+      - name: 📦 Install dependencies
+        run: bun install
       - name: ✨ Run Linter
         run: bun run lint
 
   build:
-    needs: common-setup
     runs-on: ubuntu-latest
     steps:
+      - name: 👀 Checkout code
+        uses: actions/checkout@v4
+      - name: 🍞 Setup Bun
+        uses: oven-sh/setup-bun@v1
+        with:
+          bun-version: latest
+      - name: 📦 Install dependencies
+        run: bun install
       - name: 👷 Build for Chrome
         run: bun run build:chrome
       - name: 🦊 Build for Firefox
         run: bun run build:firefox
+      - name: 🚀 Upload Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-artifacts
+          path: |
+            dist/chromium
+            dist/firefox
