@@ -5,7 +5,8 @@
   "description": "What's UpTab?",
   "author": "Arthur Geel <ageel@enrise.com>",
   "scripts": {
-    "build": "vite build",
+    "build:chrome": "BUILD_TARGET=chrome vite build",
+    "build:firefox": "BUILD_TARGET=firefox vite build",
     "dev": "nodemon",
     "test": "vitest",
     "test:watch": "vitest --watch",

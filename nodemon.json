@@ -1,13 +1,10 @@
 {
   "env": {
-    "__DEV__": "true"
+    "__DEV__": "true",
+    "BUILD_TARGET": "chrome"
   },
-  "watch": [
-    "src", "utils", "vite.config.ts"
-  ],
-  "ext": "tsx,css,html,ts",
-  "ignore": [
-    "src/**/*.spec.ts"
-  ],
+  "watch": ["src", "utils", "vite.config.ts"],
+  "ext": "tsx,css,html,ts,md",
+  "ignore": ["src/**/*.spec.ts"],
   "exec": "vite build"
 }
