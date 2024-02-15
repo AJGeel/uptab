@@ -6,6 +6,7 @@ runtime.onInstalled.addListener((details) => {
   switch (details.reason) {
     // Runs when the extension is first installed: opens a page within the extension.
     case "install":
+      // ( ͡° ͜ʖ ͡°)
       runtime.setUninstallURL("https://www.youtube.com/watch?v=dQw4w9WgXcQ");
 
       tabs.create({
@@ -19,6 +20,6 @@ runtime.onInstalled.addListener((details) => {
       break;
 
     default:
-      return "";
+      break;
   }
 });
