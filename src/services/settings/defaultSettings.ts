@@ -5,5 +5,10 @@ export const defaultSettings: Settings = {
     showShortlinks: true,
     showBookmarks: true,
     showUpdates: true,
+    showInfoWidget: true,
+  },
+  homescreen: {
+    showFeedbackPrompt: true,
+    showInfoWidget: true,
   },
 };

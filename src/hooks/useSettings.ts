@@ -1,8 +1,13 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
+import { defaultSettings } from "../services/settings/defaultSettings";
 import { editSettings } from "../services/settings/editSettings";
 import { getSettings } from "../services/settings/getSettings";
-import { Settings } from "../services/settings/types";
+import {
+  HomescreenSettings,
+  Settings,
+  SidebarSettings,
+} from "../services/settings/types";
 
 export const useSettings = () => {
   const queryClient = useQueryClient();
@@ -25,10 +30,44 @@ export const useSettings = () => {
     },
   });
 
+  const toggleSidebarSetting = async (key: keyof SidebarSettings) => {
+    if (!data) {
+      return;
+    }
+
+    await editMutation.mutateAsync({
+      ...data,
+      sidebar: {
+        ...data.sidebar,
+        [key]: !data.sidebar[key],
+      },
+    });
+  };
+
+  const toggleHomescreenSetting = async (key: keyof HomescreenSettings) => {
+    if (!data) {
+      return;
+    }
+
+    await editMutation.mutateAsync({
+      ...data,
+      homescreen: {
+        ...data.homescreen,
+        [key]: !data.homescreen[key],
+      },
+    });
+  };
+
+  const resetDefaultSettings = async () => {
+    await editMutation.mutateAsync(defaultSettings);
+  };
+
   return {
     isPending,
     isError,
     data,
-    editMutation,
+    toggleSidebarSetting,
+    toggleHomescreenSetting,
+    resetDefaultSettings,
   };
 };

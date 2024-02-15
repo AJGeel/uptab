@@ -1,4 +1,5 @@
 import { Modals, useModalStore } from "@/src/hooks/stores/useModalStore";
+import { useSettings } from "@/src/hooks/useSettings";
 import { cn } from "@/src/utils";
 
 import { SidebarExpandButton } from "./partials/SidebarExpandButton";
@@ -13,6 +14,7 @@ export type Props = {
 };
 
 const Sidebar = ({ isExpanded, setIsExpanded }: Props) => {
+  const { data: settings } = useSettings();
   const setActiveModal = useModalStore((state) => state.setActiveModal);
 
   return (
@@ -27,10 +29,12 @@ const Sidebar = ({ isExpanded, setIsExpanded }: Props) => {
         setIsExpanded={setIsExpanded}
       />
       <div className="h-full overflow-y-auto p-6">
-        <UpdateNotification />
-        <InfoWidget className={isExpanded ? "" : "opacity-0"} />
-        <Shortlinks />
-        <Bookmarks />
+        {settings?.sidebar.showUpdates && <UpdateNotification />}
+        {settings?.sidebar.showInfoWidget && (
+          <InfoWidget className={isExpanded ? "" : "opacity-0"} />
+        )}
+        {settings?.sidebar.showShortlinks && <Shortlinks />}
+        {settings?.sidebar.showBookmarks && <Bookmarks />}
         <button
           className="mt-6 text-left text-black/70 underline hover:text-black hover:no-underline"
           onClick={() => setActiveModal(Modals.settings)}

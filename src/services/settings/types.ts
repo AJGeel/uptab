@@ -1,7 +1,16 @@
+export type SidebarSettings = {
+  showShortlinks: boolean;
+  showBookmarks: boolean;
+  showUpdates: boolean;
+  showInfoWidget: boolean;
+};
+
+export type HomescreenSettings = {
+  showFeedbackPrompt: boolean;
+  showInfoWidget: boolean;
+};
+
 export type Settings = {
-  sidebar: {
-    showShortlinks: boolean;
-    showBookmarks: boolean;
-    showUpdates: boolean;
-  };
+  sidebar: SidebarSettings;
+  homescreen: HomescreenSettings;
 };
