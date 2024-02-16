@@ -3,6 +3,7 @@ export type SidebarSettings = {
   showBookmarks: boolean;
   showUpdates: boolean;
   showInfoWidget: boolean;
+  isOpen: boolean;
 };
 
 export type HomescreenSettings = {

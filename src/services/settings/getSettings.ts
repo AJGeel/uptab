@@ -12,5 +12,9 @@ export const getSettings = async (): Promise<Settings> => {
     return defaultSettings;
   }
 
-  return data.settings;
+  // Merge default settings to update clients that may not have newly added keys
+  return {
+    ...defaultSettings,
+    ...data.settings,
+  };
 };

@@ -39,7 +39,7 @@ const Sidebar = ({ isExpanded, setIsExpanded }: Props) => {
           className="mt-6 text-left text-black/70 underline hover:text-black hover:no-underline"
           onClick={() => setActiveModal(Modals.settings)}
         >
-          Edit settings
+          Edit preferences
         </button>
       </div>
     </div>

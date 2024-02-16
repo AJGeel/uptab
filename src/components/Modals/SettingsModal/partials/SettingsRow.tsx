@@ -9,7 +9,7 @@ type Props = {
 
 const SettingsRow = ({ title, description, isActive, onClick }: Props) => (
   <div
-    className="group flex cursor-pointer items-center justify-between gap-2 py-3"
+    className="group flex cursor-pointer items-center justify-between gap-2 border-b py-3 last:border-b-0"
     onClick={onClick}
   >
     <div className="flex flex-col">

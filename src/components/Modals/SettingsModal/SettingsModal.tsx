@@ -1,19 +1,25 @@
 import { Modals, useModalStore } from "@/src/hooks/stores/useModalStore";
-import useKeyPress from "@/src/hooks/useKeyPress";
+import useKeyPress, { hotkeys } from "@/src/hooks/useKeyPress";
 import { useSettings } from "@/src/hooks/useSettings";
 
+import { rows } from "./partials/rows";
 import SettingsRow from "./partials/SettingsRow";
 import Button, { buttonVariants } from "../../ui/Button";
 import Modal from "../../ui/Modal";
+import Tabs from "../../ui/Tabs/Tabs";
 
 const SettingsModal = () => {
-  // const { isPending, isError} = useSettings();
-  const { data, toggleSidebarSetting, resetDefaultSettings } = useSettings();
+  const {
+    data: settings,
+    toggleSidebarSetting,
+    toggleHomescreenSetting,
+    resetDefaultSettings,
+  } = useSettings();
 
   const activeModal = useModalStore((state) => state.activeModal);
   const setActiveModal = useModalStore((state) => state.setActiveModal);
 
-  useKeyPress("∆", () => {
+  useKeyPress(hotkeys.slash, () => {
     setActiveModal(activeModal === Modals.settings ? null : Modals.settings);
   });
 
@@ -21,42 +27,51 @@ const SettingsModal = () => {
     <Modal
       isVisible={activeModal === Modals.settings}
       onClose={() => setActiveModal(null)}
-      title="Edit Settings"
+      title="Edit Preferences"
+      className="max-w-xl"
     >
       <div className="mt-4 space-y-4">
-        {!!data && (
-          <div className="flex flex-col divide-y divide-gray-200">
-            <SettingsRow
-              title="Info Widget in Sidebar"
-              description="Shows weather forecasts and date."
-              isActive={data.sidebar.showInfoWidget}
-              onClick={() => {
-                toggleSidebarSetting("showInfoWidget");
-              }}
-            />
-            <SettingsRow
-              title="Shortlinks in Sidebar"
-              description="Enables quick access to configurable links."
-              isActive={data.sidebar.showShortlinks}
-              onClick={() => {
-                toggleSidebarSetting("showShortlinks");
-              }}
-            />
-            <SettingsRow
-              title="Bookmarks in Sidebar"
-              description="Access your browser bookmarks in the sidebar."
-              isActive={data.sidebar.showBookmarks}
-              onClick={() => {
-                toggleSidebarSetting("showBookmarks");
-              }}
-            />
-            <SettingsRow
-              title="Updates in Sidebar"
-              description="Shows an inline notification when UpTab is updated."
-              isActive={data.sidebar.showUpdates}
-              onClick={() => {
-                toggleSidebarSetting("showUpdates");
-              }}
+        {!!settings && (
+          <div className="flex flex-col">
+            <Tabs
+              tabs={[
+                {
+                  label: "Sidebar",
+                  content: (
+                    <>
+                      {rows.sidebar.map((row) => (
+                        <SettingsRow
+                          key={"sidebar" + row.title}
+                          title={row.title}
+                          description={row.description}
+                          isActive={settings.sidebar[row.setting]}
+                          onClick={() => {
+                            toggleSidebarSetting(row.setting);
+                          }}
+                        />
+                      ))}
+                    </>
+                  ),
+                },
+                {
+                  label: "Homescreen",
+                  content: (
+                    <>
+                      {rows.homescreen.map((row) => (
+                        <SettingsRow
+                          key={"description" + row.title}
+                          title={row.title}
+                          description={row.description}
+                          isActive={settings.homescreen[row.setting]}
+                          onClick={() => {
+                            toggleHomescreenSetting(row.setting);
+                          }}
+                        />
+                      ))}
+                    </>
+                  ),
+                },
+              ]}
             />
           </div>
         )}

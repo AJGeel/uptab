@@ -6,6 +6,7 @@ export const defaultSettings: Settings = {
     showBookmarks: true,
     showUpdates: true,
     showInfoWidget: true,
+    isOpen: false,
   },
   homescreen: {
     showFeedbackPrompt: true,
