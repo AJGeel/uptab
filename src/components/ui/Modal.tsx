@@ -26,7 +26,7 @@ const Modal = ({
       <Dialog.Overlay className="fixed inset-0 z-20 bg-black/50 data-[state=open]:animate-overlayShow" />
       <Dialog.Content
         className={cn(
-          "data-[state=open]:animate-contentShow fixed top-[50%] left-[50%] max-h-[85vh] w-[90vw] max-w-md translate-x-[-50%] translate-y-[-50%] rounded bg-white p-6 shadow-lg focus:outline-none z-20",
+          "data-[state=open]:animate-contentShow fixed top-[50%] left-[50%] max-h-[85vh] w-[90vw] max-w-md translate-x-[-50%] translate-y-[-50%] rounded bg-white p-6 shadow-lg focus:outline-none z-20 overflow-y-auto",
           className
         )}
         onEscapeKeyDown={onClose}

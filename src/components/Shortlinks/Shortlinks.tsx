@@ -25,7 +25,7 @@ const Shortlinks = () => {
   }
 
   return (
-    <div className="mt-10">
+    <div className="mt-10 first:mt-0">
       {data.length === 0 ? (
         <EmptyState />
       ) : (

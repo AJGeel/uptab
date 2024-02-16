@@ -11,7 +11,16 @@ type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
 export const buttonVariants = {
   primary: "primary",
   secondary: "secondary",
+  inline: "inline",
 } as const;
+
+const buttonStyles = {
+  primary:
+    "bg-sky-500 text-white hover:brightness-110 active:brightness-100 px-4 py-3",
+  secondary: "bg-white hover:bg-gray-100 active:bg-gray-200 px-4 py-3",
+  inline:
+    "underline text-black/70 font-normal hover:text-black hover:no-underline duration-0",
+};
 
 const Button = ({
   label,
@@ -21,11 +30,10 @@ const Button = ({
 }: ButtonProps) => (
   <button
     className={cn(
-      variant === buttonVariants.primary &&
-        "bg-sky-500 text-white hover:brightness-110 active:brightness-100",
-      variant === buttonVariants.secondary &&
-        "bg-white hover:bg-gray-100 active:bg-gray-200",
-      "inline-flex items-center justify-center rounded px-4 py-3 font-medium leading-none ring-offset-2 duration-150 focus:outline-none focus:ring-2 active:ring-2 ring-sky-500",
+      "inline-flex items-center justify-center rounded font-medium leading-none ring-offset-2 duration-150 focus:outline-none focus:ring-2 active:ring-2 ring-sky-500",
+      variant === buttonVariants.primary && buttonStyles.primary,
+      variant === buttonVariants.secondary && buttonStyles.secondary,
+      variant === buttonVariants.inline && buttonStyles.inline,
       className
     )}
     onClick={onClick}

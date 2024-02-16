@@ -6,6 +6,7 @@ import { SidebarExpandButton } from "./partials/SidebarExpandButton";
 import Bookmarks from "../Bookmarks/Bookmarks";
 import InfoWidget from "../InfoWidget/InfoWidget";
 import Shortlinks from "../Shortlinks/Shortlinks";
+import Button, { buttonVariants } from "../ui/Button";
 import UpdateNotification from "../UpdateNotification/UpdateNotification";
 
 export type Props = {
@@ -35,12 +36,12 @@ const Sidebar = ({ isExpanded, setIsExpanded }: Props) => {
         )}
         {settings?.sidebar.showShortlinks && <Shortlinks />}
         {settings?.sidebar.showBookmarks && <Bookmarks />}
-        <button
-          className="mt-6 text-left text-black/70 underline hover:text-black hover:no-underline"
+        <Button
+          className="mt-6 first:mt-0"
+          variant={buttonVariants.inline}
           onClick={() => setActiveModal(Modals.settings)}
-        >
-          Edit preferences
-        </button>
+          label="Edit preferences"
+        />
       </div>
     </div>
   );

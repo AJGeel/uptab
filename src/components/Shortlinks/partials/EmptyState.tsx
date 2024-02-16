@@ -1,19 +1,22 @@
 import { Modals, useModalStore } from "@/src/hooks/stores/useModalStore";
 
+import Button, { buttonVariants } from "../../ui/Button";
+
 const EmptyState = () => {
   const setActiveModal = useModalStore((state) => state.setActiveModal);
 
   return (
-    <p className="mt-2 text-sm text-black/70">
-      No links found. Why don&apos;t you{" "}
-      <span
-        className="cursor-pointer underline hover:text-black hover:no-underline"
-        onClick={() => setActiveModal(Modals.shortlink)}
-      >
-        add one
-      </span>
-      ?
-    </p>
+    <div className="mt-2 text-black/70 first:mt-0">
+      <p>
+        No links found. Why don&apos;t you{" "}
+        <Button
+          variant={buttonVariants.inline}
+          label="add one"
+          onClick={() => setActiveModal(Modals.shortlink)}
+        />
+        ?
+      </p>
+    </div>
   );
 };
 
