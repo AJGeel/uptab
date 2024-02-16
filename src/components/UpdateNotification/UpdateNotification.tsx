@@ -1,7 +1,7 @@
 import { SparklesIcon, XMarkIcon } from "@heroicons/react/24/solid";
 import { useMemo } from "react";
 
-import { useUpdateNotification } from "./useUpdateNotification";
+import { useUpdateNotification } from "../../hooks/useUpdateNotification";
 
 const UpdateNotification = () => {
   const { isVisible, onOpen, onHide } = useUpdateNotification();
@@ -20,7 +20,7 @@ const UpdateNotification = () => {
       }}
       rel="noreferrer noopener"
     >
-      <SparklesIcon className="h-4 w-4 shrink-0 opacity-50" />
+      <SparklesIcon className="size-4 shrink-0 opacity-50" />
       <p className="grow text-left">
         UpTab has been updated! See what&apos;s new.
       </p>
@@ -32,7 +32,7 @@ const UpdateNotification = () => {
         }}
       >
         {RNG >= 0.95 ? "Shut UpTab" : "Close"}
-        <XMarkIcon className="h-4 w-4" />
+        <XMarkIcon className="size-4" />
       </button>
     </button>
   );
