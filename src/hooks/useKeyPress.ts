@@ -1,9 +1,19 @@
+/* eslint-disable no-console */
 import { useCallback, useEffect } from "react";
 
 const debugMode = false;
-/* eslint-disable no-console */
 
-const useKeyPress = (targetKey: string, callback: () => void) => {
+export const hotkeys = {
+  slash: "/",
+  backslash: "\\",
+  questionMark: "?",
+  left: "ArrowLeft",
+  right: "ArrowRight",
+} as const;
+
+type Hotkeys = (typeof hotkeys)[keyof typeof hotkeys];
+
+const useKeyPress = (targetKey: Hotkeys, callback: () => void) => {
   const handleKeyPress = useCallback(
     (event: KeyboardEvent) => {
       if (debugMode) {

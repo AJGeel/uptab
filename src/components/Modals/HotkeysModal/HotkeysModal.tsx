@@ -1,5 +1,5 @@
 import { Modals, useModalStore } from "@/src/hooks/stores/useModalStore";
-import useKeyPress from "@/src/hooks/useKeyPress";
+import useKeyPress, { hotkeys } from "@/src/hooks/useKeyPress";
 
 import Hotkey from "./partials/Hotkey";
 import Button from "../../ui/Button";
@@ -10,20 +10,18 @@ export type HotkeyType = {
   description: string;
 };
 
-const altKey = () => (navigator?.platform.indexOf("Mac") === 0 ? "⌥" : "ALT");
-
-const hotkeys: HotkeyType[] = [
+const items: HotkeyType[] = [
   {
     description: "Toggle sidebar visibility",
-    k: "\\",
+    k: hotkeys.backslash,
   },
   {
     description: "Toggle the menu you're currently looking at",
-    k: "?",
+    k: hotkeys.questionMark,
   },
   {
     description: "Toggle the settings menu",
-    k: [altKey(), "J"],
+    k: hotkeys.slash,
   },
 ];
 
@@ -31,7 +29,7 @@ const HotkeysModal = () => {
   const activeModal = useModalStore((state) => state.activeModal);
   const setActiveModal = useModalStore((state) => state.setActiveModal);
 
-  useKeyPress("?", () => {
+  useKeyPress(hotkeys.questionMark, () => {
     setActiveModal(activeModal === Modals.hotkey ? null : Modals.hotkey);
   });
 
@@ -43,7 +41,7 @@ const HotkeysModal = () => {
       subtitle="Speed up your UpTab game with shortcuts. So much time for activities."
     >
       <div className="flex flex-col">
-        {hotkeys.map((item) => (
+        {items.map((item) => (
           <Hotkey
             key={String(item.k)}
             k={item.k}
