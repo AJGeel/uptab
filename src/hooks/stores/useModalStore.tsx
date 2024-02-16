@@ -3,6 +3,7 @@ import { create } from "zustand";
 export const Modals = {
   hotkey: "hotkey",
   shortlink: "shortlink",
+  settings: "settings",
 } as const;
 
 export type Modals = (typeof Modals)[keyof typeof Modals];

@@ -2,7 +2,27 @@
 
 UpTab adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [V1.1.0] — Unreleased
+## [V1.2.0] — 2024-02-16
+
+### ✨ Added
+
+- Added Settings: customize your UpTab experience by enabling or disabling features!
+- Persist Sidebar open/close status across uses
+- Added caching for reverse geocoding: improving start up speed
+
+### 🐛 Fixed
+
+- Fixed background color for Firefox selects
+- Fixed Modal vertical overflows by making them scrollable
+
+### ♻️ Changed
+
+- Improve CI by upgrading to Bun instead of node
+- Include release builds in CI
+- Refactored Hotkeys to reduce loose use of keys
+- Extracted reusable Button component
+
+## [V1.1.0] — 2024-02-10
 
 ### ✨ Added
 
@@ -55,6 +75,7 @@ UpTab adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
   - Added Bookmarks: allowing you to easily view, open and delete your browser bookmarks
   - Added `CTRL+U` shortkey to open popup
 
+[V1.2.0]: https://github.com/AJGeel/uptab/compare/v1.2.0...v1.1.0
 [V1.1.0]: https://github.com/AJGeel/uptab/compare/v1.1.0...v1.0.1
 [V1.0.1]: https://github.com/AJGeel/uptab/compare/v1.0.0...v1.0.1
 [V1.0.0]: https://github.com/AJGeel/uptab/releases/tag/V1.0.0

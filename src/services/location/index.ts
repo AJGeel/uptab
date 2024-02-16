@@ -1,2 +1,2 @@
-export * from "./getLocation";
+export * from "./getGeocodedLocation";
 export * from "./types";

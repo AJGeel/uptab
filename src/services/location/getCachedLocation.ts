@@ -4,8 +4,10 @@ import { Location } from "./types";
 
 const CACHE_DURATION = 20 * 60 * 1000; // 20 minutes
 
-/* Persists the user's lat/long to speed up performance */
-export const checkCachedLatLong = async (): Promise<Location | void> => {
+/**
+ * Persists the user's latitude / longitude to speed up performance
+ */
+export const getCachedLocation = async (): Promise<Location | void> => {
   const { cachedLocation } = await storage.local.get("cachedLocation");
 
   if (!cachedLocation) {

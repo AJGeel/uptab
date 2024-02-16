@@ -1,7 +1,7 @@
 /* eslint-disable camelcase */
 import type { Manifest } from "webextension-polyfill";
 
-import { TARGETS, buildTarget } from "../buildTarget";
+import { buildTargets } from "../buildTarget";
 import pkg from "../package.json";
 
 const pages = {
@@ -16,7 +16,7 @@ const manifest: Manifest.WebExtensionManifest = {
     default_popup: pages.popup,
   },
   background:
-    buildTarget === TARGETS.FIREFOX
+    process.env.BUILD_TARGET === buildTargets.firefox
       ? {
           page: pages.background.split(".js")[0] + ".html",
         }
@@ -27,7 +27,7 @@ const manifest: Manifest.WebExtensionManifest = {
   chrome_url_overrides: {
     newtab: pages.new,
   },
-  ...(buildTarget === TARGETS.FIREFOX
+  ...(process.env.BUILD_TARGET === buildTargets.firefox
     ? {
         chrome_settings_overrides: {
           homepage: pages.new,
@@ -48,7 +48,7 @@ const manifest: Manifest.WebExtensionManifest = {
       resources: ["icon-128.png", "icon-34.png"],
     },
   ],
-  ...(buildTarget === TARGETS.FIREFOX
+  ...(process.env.BUILD_TARGET === buildTargets.firefox
     ? {
         browser_specific_settings: {
           gecko: {

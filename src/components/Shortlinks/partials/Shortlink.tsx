@@ -1,12 +1,12 @@
 import { EllipsisHorizontalIcon } from "@heroicons/react/24/solid";
 
-import { Modals, useModalStore } from "@/src/hooks/useModalStore";
-import { useShortlinkStore } from "@/src/hooks/useShortlinkStore";
+import { Modals, useModalStore } from "@/src/hooks/stores/useModalStore";
+import { useShortlinkStore } from "@/src/hooks/stores/useShortlinkStore";
 import { Shortlink } from "@/src/services/shortlinks";
 import { getFavicon } from "@/src/utils/getFavicon";
 
-import IconButton from "../ui/IconButton";
-import ImageWithFallback from "../ui/ImageWithFallback";
+import IconButton from "../../ui/IconButton";
+import ImageWithFallback from "../../ui/ImageWithFallback";
 
 type Props = {
   item: Shortlink;

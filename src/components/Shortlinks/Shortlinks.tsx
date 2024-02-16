@@ -1,11 +1,11 @@
 import { useQuery } from "@tanstack/react-query";
 
-import { Modals, useModalStore } from "@/src/hooks/useModalStore";
-import { useShortlinkStore } from "@/src/hooks/useShortlinkStore";
+import { Modals, useModalStore } from "@/src/hooks/stores/useModalStore";
+import { useShortlinkStore } from "@/src/hooks/stores/useShortlinkStore";
 import { getShortlinks } from "@/src/services/shortlinks";
 
-import EmptyState from "./EmptyState";
-import Shortlink from "./Shortlink";
+import EmptyState from "./partials/EmptyState";
+import Shortlink from "./partials/Shortlink";
 
 const Shortlinks = () => {
   const setActiveModal = useModalStore((state) => state.setActiveModal);
@@ -25,7 +25,7 @@ const Shortlinks = () => {
   }
 
   return (
-    <div className="mt-10">
+    <div className="mt-10 first:mt-0">
       {data.length === 0 ? (
         <EmptyState />
       ) : (
