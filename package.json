@@ -7,6 +7,7 @@
   "scripts": {
     "build:chrome": "BUILD_TARGET=chrome vite build",
     "build:firefox": "BUILD_TARGET=firefox vite build",
+    "build:all": "BUILD_TARGET=chrome vite build && BUILD_TARGET=firefox vite build && cd dist/firefox && zip -r firefox.zip . && mv firefox.zip ../firefox.zip && cd ../../ && cd dist/chromium && zip -r chromium.zip . && mv chromium.zip ../chromium.zip && cd ../../",
     "dev": "nodemon",
     "test": "vitest",
     "test:watch": "vitest --watch",
