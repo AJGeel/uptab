@@ -13,13 +13,21 @@ type Props = {
   children: ReactElement;
 };
 
-const Modal = ({ isVisible, onClose, title, subtitle, children }: Props) => (
+const Modal = ({
+  isVisible,
+  onClose,
+  title,
+  subtitle,
+  className,
+  children,
+}: Props) => (
   <Dialog.Root open={isVisible}>
     <Dialog.Portal>
       <Dialog.Overlay className="fixed inset-0 z-20 bg-black/50 data-[state=open]:animate-overlayShow" />
       <Dialog.Content
         className={cn(
-          "data-[state=open]:animate-contentShow fixed top-[50%] left-[50%] max-h-[85vh] w-[90vw] max-w-md translate-x-[-50%] translate-y-[-50%] rounded bg-white p-6 shadow-lg focus:outline-none z-20"
+          "data-[state=open]:animate-contentShow fixed top-[50%] left-[50%] max-h-[85vh] w-[90vw] max-w-md translate-x-[-50%] translate-y-[-50%] rounded bg-white p-6 shadow-lg focus:outline-none z-20",
+          className
         )}
         onEscapeKeyDown={onClose}
         onInteractOutside={onClose}
@@ -28,8 +36,6 @@ const Modal = ({ isVisible, onClose, title, subtitle, children }: Props) => (
         {subtitle && (
           <Dialog.Description
             className="mb-6 mt-3 leading-normal text-gray-800"
-            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-            // @ts-ignore  (until `textWrap: "balance'` becomes part of Tailwind / DOM spec 😪)
             style={{ textWrap: "balance" }}
           >
             {subtitle}
@@ -41,7 +47,7 @@ const Modal = ({ isVisible, onClose, title, subtitle, children }: Props) => (
             className="absolute right-5 top-5 inline-flex appearance-none items-center justify-center rounded-full p-1 ring-sky-500 ring-offset-2 duration-150 hover:ring-2 focus:outline-none focus:ring-2"
             aria-label="Close"
           >
-            <XMarkIcon className="h-5 w-5" />
+            <XMarkIcon className="size-5" />
           </button>
         </Dialog.Close>
       </Dialog.Content>
