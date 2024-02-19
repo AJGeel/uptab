@@ -63,6 +63,8 @@ const SettingsModal = () => {
                           title={row.title}
                           description={row.description}
                           isActive={settings.homescreen[row.setting]}
+                          // Offset by 66 pixels per row difference
+                          className="last:mb-[132px]"
                           onClick={() => {
                             toggleHomescreenSetting(row.setting);
                           }}
