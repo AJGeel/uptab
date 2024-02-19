@@ -10,12 +10,10 @@ export const run = async () => {
     return;
   }
 
-  const url = BASE_URL + EXTENSION_ID + "/publish";
-
   try {
-    const response = await fetch(url, {
+    const response = await fetch(`${BASE_URL}${EXTENSION_ID}/publish`, {
       headers: getChromeHeaders(token),
-      method: "GET",
+      method: "POST",
     });
 
     if (!response.ok) {
