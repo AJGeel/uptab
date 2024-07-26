@@ -35,7 +35,7 @@ const SortBookmarks = ({ displayMode, sortMode, setSortMode }: SortProps) => (
         </option>
       ))}
     </select>
-    <ChevronUpDownIcon className="pointer-events-none absolute right-1.5 top-3 h-4 w-4 text-gray-500" />
+    <ChevronUpDownIcon className="pointer-events-none absolute right-1.5 top-3 size-4 text-gray-500" />
   </div>
 );
 

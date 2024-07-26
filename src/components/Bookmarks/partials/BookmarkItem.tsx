@@ -28,7 +28,7 @@ const BookmarkItem = ({ item, isFocused, displayMode, onDelete }: Props) => (
     href={item.url ?? ""}
   >
     <ImageWithFallback
-      className="h-4 w-4"
+      className="size-4"
       src={getFavicon(item?.url || "")}
       fallbackSrc="/icon-34.png"
       loading="lazy"
@@ -39,7 +39,7 @@ const BookmarkItem = ({ item, isFocused, displayMode, onDelete }: Props) => (
         event.preventDefault();
         onDelete();
       }}
-      className="h-7 w-7 shrink-0 rounded-md border bg-white p-1 text-gray-500 opacity-0 shadow-sm duration-150 hover:border-red-500 hover:text-red-500 group-hover:opacity-100"
+      className="size-7 shrink-0 rounded-md border bg-white p-1 text-gray-500 opacity-0 shadow-sm duration-150 hover:border-red-500 hover:text-red-500 group-hover:opacity-100"
     />
   </a>
 );
