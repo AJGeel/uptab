@@ -2,6 +2,17 @@
 
 UpTab adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [V1.2.1] — 2024-07-26
+
+### ✨ Added
+
+- A new background: a photograph of the "Lage Zwaluwe - 's Hertogenbosch" railway. Thanks for the contribution, Max!
+- Two more new backgrounds: Tivoli Vredenburg in Utrecht and a bad-ass Dutch Castle
+
+### ♻️ Changed
+
+- Various dependency updates
+
 ## [V1.2.0] — 2024-02-16
 
 ### ✨ Added
