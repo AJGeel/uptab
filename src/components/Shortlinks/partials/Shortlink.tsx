@@ -24,7 +24,7 @@ const Shortlink = ({ item }: Props) => {
       <ImageWithFallback
         src={getFavicon(item.url)}
         fallbackSrc="/icon-34.png"
-        className="h-6 w-6 shrink-0 rounded"
+        className="size-6 shrink-0 rounded"
       />
       <div className="flex grow flex-col truncate">
         <h2 className="truncate text-sm font-semibold">{item.title}</h2>
@@ -40,7 +40,7 @@ const Shortlink = ({ item }: Props) => {
           setActiveModal(Modals.shortlink);
         }}
       >
-        <EllipsisHorizontalIcon className="h-5 w-5 text-gray-600" />
+        <EllipsisHorizontalIcon className="size-5 text-gray-600" />
       </IconButton>
     </a>
   );

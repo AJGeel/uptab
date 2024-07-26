@@ -78,17 +78,22 @@ export const useRandomBackground = () => {
 
   // Interesting idea: allow users to offset backgrounds. Should be persisted in LocalStorage.
 
-  // useKeyPress("ArrowRight", () => {
-  //   setActiveIndex((prevIndex) => (prevIndex + 1) % backgrounds.length);
-  // });
+  /*
+   * useKeyPress("ArrowRight", () => {
+   *   setActiveIndex((prevIndex) => (prevIndex + 1) % backgrounds.length);
+   * });
+   */
 
-  // useKeyPress("ArrowLeft", () => {
-  //   setActiveIndex(
-  //     (prevIndex) => (prevIndex - 1 + backgrounds.length) % backgrounds.length
-  //   );
-  // });
+  /*
+   * useKeyPress("ArrowLeft", () => {
+   *   setActiveIndex(
+   *     (prevIndex) => (prevIndex - 1 + backgrounds.length) % backgrounds.length
+   *   );
+   * });
+   */
 
   return {
     activeBg: backgrounds[activeIndex],
+    setActiveIndex,
   };
 };

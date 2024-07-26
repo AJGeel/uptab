@@ -30,7 +30,7 @@ const SearchBookmarks = ({
       }}
     />
     <div className="pointer-events-none absolute left-0 top-0 flex items-center justify-center p-2.5">
-      <MagnifyingGlassIcon className="h-4 w-4 text-gray-600" />
+      <MagnifyingGlassIcon className="size-4 text-gray-600" />
     </div>
   </>
 );
