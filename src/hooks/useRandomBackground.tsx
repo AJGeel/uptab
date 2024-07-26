@@ -1,6 +1,7 @@
 import { useState } from "react";
 
 import { dailyRandomNumber } from "@/src/utils/dailyRandomNumber";
+// import useKeyPress from "./useKeyPress";
 
 type Background = {
   src: string;
@@ -54,6 +55,12 @@ const backgrounds: Background[] = [
     src: "/images/backgrounds/halve-zolenlijn.jpg",
   },
   {
+    src: "/images/backgrounds/aerial-castle-view.jpg",
+  },
+  {
+    src: "/images/backgrounds/tivoli-vredenburg.jpg",
+  },
+  {
     author: "Victor",
     link: "https://unsplash.com/photos/white-high-rise-building-at-daytime-qm9pHqVt7KA",
     src: "/images/backgrounds/white-highrise-building.jpg",
@@ -67,10 +74,21 @@ const backgrounds: Background[] = [
 
 export const useRandomBackground = () => {
   const randomIndex = dailyRandomNumber(0, backgrounds.length - 1);
-  const [activeBg, setActiveBg] = useState(backgrounds[randomIndex]);
+  const [activeIndex, setActiveIndex] = useState(randomIndex);
+
+  // Interesting idea: allow users to offset backgrounds. Should be persisted in LocalStorage.
+
+  // useKeyPress("ArrowRight", () => {
+  //   setActiveIndex((prevIndex) => (prevIndex + 1) % backgrounds.length);
+  // });
+
+  // useKeyPress("ArrowLeft", () => {
+  //   setActiveIndex(
+  //     (prevIndex) => (prevIndex - 1 + backgrounds.length) % backgrounds.length
+  //   );
+  // });
 
   return {
-    activeBg,
-    setActiveBg,
+    activeBg: backgrounds[activeIndex],
   };
 };
