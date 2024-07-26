@@ -1,9 +1,15 @@
 import {
+  BackgroundSettings,
   HomescreenSettings,
   SidebarSettings,
 } from "@/src/services/settings/types";
 
 type SettingsRows = {
+  background: {
+    setting: keyof BackgroundSettings;
+    title: string;
+    description: string;
+  }[];
   sidebar: {
     setting: keyof SidebarSettings;
     title: string;
@@ -17,6 +23,13 @@ type SettingsRows = {
 };
 
 export const rows: SettingsRows = {
+  background: [
+    {
+      setting: "theme",
+      title: "Background theme",
+      description: "Pick a snazzy theme",
+    },
+  ],
   sidebar: [
     {
       setting: "showInfoWidget",

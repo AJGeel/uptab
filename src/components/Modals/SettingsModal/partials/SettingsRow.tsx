@@ -1,16 +1,41 @@
 import { ReactElement } from "react";
 
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/src/components/ui/Select";
 import { Switch } from "@/src/components/ui/Switch";
+
+type SwitchProps = {
+  type: "Switch";
+  isActive: boolean;
+};
+
+type DropdownProps = {
+  type: "Dropdown";
+  options: string[];
+  selected: string;
+};
 
 type Props = {
   title: string;
   description: string;
   icon?: ReactElement;
-  isActive: boolean;
   onClick: () => void;
-};
+} & (SwitchProps | DropdownProps);
 
-const SettingsRow = ({ title, description, isActive, onClick }: Props) => (
+const SettingsRow = ({
+  title,
+  description,
+  type,
+  onClick,
+  options,
+  selected,
+  isActive,
+}: Props) => (
   <div
     className="group flex cursor-pointer items-center justify-between gap-2 border-b py-3 last:border-b-0"
     onClick={onClick}
@@ -23,7 +48,27 @@ const SettingsRow = ({ title, description, isActive, onClick }: Props) => (
         {description}
       </p>
     </div>
-    <Switch checked={isActive} onCheckedChange={onClick} />
+    {type === "Switch" && (
+      <Switch checked={isActive} onCheckedChange={onClick} />
+    )}
+    {type === "Dropdown" && (
+      <Select>
+        <SelectTrigger className="w-[180px] capitalize">
+          <SelectValue placeholder="Huts" className="capitalize" />
+        </SelectTrigger>
+        <SelectContent>
+          {options.map((item) => (
+            <SelectItem
+              key={item}
+              value={item}
+              className="cursor-pointer capitalize duration-150 hover:bg-sky-100"
+            >
+              {item}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
+    )}
   </div>
 );
 

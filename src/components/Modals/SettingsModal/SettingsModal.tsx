@@ -1,6 +1,7 @@
 import { Modals, useModalStore } from "@/src/hooks/stores/useModalStore";
 import useKeyPress, { hotkeys } from "@/src/hooks/useKeyPress";
 import { useSettings } from "@/src/hooks/useSettings";
+import { bgThemes } from "@/src/services/background/types";
 
 import { rows } from "./partials/rows";
 import SettingsRow from "./partials/SettingsRow";
@@ -30,11 +31,26 @@ const SettingsModal = () => {
       title="Edit Preferences"
       className="max-w-xl"
     >
-      <div className="mt-4 space-y-4">
+      <div className="mt-4 flex max-h-screen min-h-[420px] flex-col">
         {!!settings && (
-          <div className="flex flex-col">
+          <div className="flex grow flex-col">
             <Tabs
               tabs={[
+                {
+                  label: "Background",
+                  content: (
+                    <>
+                      <SettingsRow
+                        title={rows.background[0].title}
+                        description={rows.background[0].description}
+                        type="Dropdown"
+                        options={Object.values(bgThemes)}
+                        selected={settings.background.theme}
+                        onClick={() => {}}
+                      />
+                    </>
+                  ),
+                },
                 {
                   label: "Sidebar",
                   content: (
@@ -44,6 +60,7 @@ const SettingsModal = () => {
                           key={"sidebar" + row.title}
                           title={row.title}
                           description={row.description}
+                          type="Switch"
                           isActive={settings.sidebar[row.setting]}
                           onClick={() => {
                             toggleSidebarSetting(row.setting);
@@ -61,6 +78,7 @@ const SettingsModal = () => {
                         <SettingsRow
                           key={"description" + row.title}
                           title={row.title}
+                          type="Switch"
                           description={row.description}
                           isActive={settings.homescreen[row.setting]}
                           onClick={() => {
@@ -75,7 +93,7 @@ const SettingsModal = () => {
             />
           </div>
         )}
-        <div className="flex items-center justify-end gap-2">
+        <div className="mt-auto flex items-center justify-end gap-2 pt-4">
           <Button
             label="Reset defaults"
             variant={buttonVariants.secondary}
