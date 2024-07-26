@@ -50,6 +50,10 @@ const backgrounds: Background[] = [
     src: "/images/backgrounds/a-field-with-a-house-in-the-distance.jpg",
   },
   {
+    author: "Max Hoogenbosch",
+    src: "/images/backgrounds/halve-zolenlijn.jpg",
+  },
+  {
     author: "Victor",
     link: "https://unsplash.com/photos/white-high-rise-building-at-daytime-qm9pHqVt7KA",
     src: "/images/backgrounds/white-highrise-building.jpg",
