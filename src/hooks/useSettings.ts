@@ -44,6 +44,7 @@ export const useSettings = () => {
     });
   };
 
+  // TODO: Refactor, toggleSidebarSetting and toggleHomescreenSettings contain too much duplication.
   const toggleHomescreenSetting = async (key: keyof HomescreenSettings) => {
     if (!data) {
       return;
@@ -57,6 +58,8 @@ export const useSettings = () => {
       },
     });
   };
+
+  // TODO: Add function to mutate background settings
 
   const resetDefaultSettings = async () => {
     await editMutation.mutateAsync(defaultSettings);

@@ -1,4 +1,5 @@
 import { Settings } from "./types";
+import { bgThemes } from "../background/types";
 
 export const defaultSettings: Settings = {
   sidebar: {
@@ -11,5 +12,8 @@ export const defaultSettings: Settings = {
   homescreen: {
     showFeedbackPrompt: true,
     showInfoWidget: true,
+  },
+  background: {
+    theme: bgThemes.holland,
   },
 };

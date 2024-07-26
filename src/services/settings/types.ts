@@ -1,3 +1,5 @@
+import { BgTheme } from "../background/types";
+
 export type SidebarSettings = {
   showShortlinks: boolean;
   showBookmarks: boolean;
@@ -11,7 +13,12 @@ export type HomescreenSettings = {
   showInfoWidget: boolean;
 };
 
+export type BackgroundSettings = {
+  theme: BgTheme;
+};
+
 export type Settings = {
+  background: BackgroundSettings;
   sidebar: SidebarSettings;
   homescreen: HomescreenSettings;
 };

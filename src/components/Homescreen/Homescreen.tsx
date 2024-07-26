@@ -13,7 +13,6 @@ import ImageFadeIn from "../ui/ImageFadeIn";
 const Homescreen = () => {
   const { data: settings, isPending, toggleSidebarSetting } = useSettings();
   const { activeBg } = useRandomBackground();
-
   const isSidebarOpen = settings?.sidebar?.isOpen;
 
   useKeyPress(hotkeys.backslash, () => toggleSidebarSetting("isOpen"));
@@ -22,6 +21,9 @@ const Homescreen = () => {
   if (isPending) {
     return <></>;
   }
+
+  const bgImage = activeBg.src;
+  // const bgImage = `http://localhost:3000/api/background?theme=${settings?.background.theme}`;
 
   return (
     <>
@@ -33,7 +35,7 @@ const Homescreen = () => {
         />
         <ImageFadeIn
           asBackground={true}
-          src={activeBg.src}
+          src={bgImage}
           alt="A fancy background image"
           className={cn(
             "flex-1 bg-cover bg-center flex flex-col duration-500",
