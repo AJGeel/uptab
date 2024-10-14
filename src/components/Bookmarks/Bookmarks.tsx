@@ -25,10 +25,8 @@ const Bookmarks = ({ displayMode = "NewTab" }: BookmarksProps) => {
   const [searchQuery, setSearchQuery] = useState("");
 
   const { isPending, isError, data } = useQuery({
-    queryFn: async () => {
-      const b = await bookmarks.getTree();
-      return mapBookmarks(b).filter((item) => !!item.url);
-    },
+    queryFn: async () => await bookmarks.getTree(),
+    select: (bookmarks) => mapBookmarks(bookmarks).filter((item) => !!item.url),
     queryKey: ["bookmarks"],
   });
 

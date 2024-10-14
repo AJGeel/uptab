@@ -1,6 +1,5 @@
+import Link from "@/src/components/ui/Link";
 import { OpenMeteoResponse, mapWeatherCode } from "@/src/services/weather";
-
-import Link from "../../ui/Link";
 
 interface WeatherWidgetProps {
   weatherData: OpenMeteoResponse;
