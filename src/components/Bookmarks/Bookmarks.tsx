@@ -2,13 +2,13 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { Bookmarks, bookmarks, tabs } from "webextension-polyfill";
 
-import { filterBookmarks } from "@/src/services/bookmarks/filterBookmarks";
-import { mapBookmarks } from "@/src/services/bookmarks/mapBookmarks";
 import {
+  filterBookmarks,
+  mapBookmarks,
   SortMode,
   SortModes,
   sortBookmarks,
-} from "@/src/services/bookmarks/sortBookmarks";
+} from "@/src/services/bookmarks";
 import { cn } from "@/src/utils";
 
 import BookmarkItem from "./partials/BookmarkItem";

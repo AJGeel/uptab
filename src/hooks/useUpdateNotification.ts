@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
 
-import { getUpdateNotification } from "@/src/services/updateNotification/getUpdateNotification";
-import { setUpdateNotification } from "@/src/services/updateNotification/setUpdateNotification";
+import {
+  getUpdateNotification,
+  setUpdateNotification,
+} from "@/src/services/updateNotification";
 
 export const useUpdateNotification = () => {
   const [isVisible, setIsVisible] = useState(false);
@@ -16,6 +18,7 @@ export const useUpdateNotification = () => {
     setUpdateNotification(false);
   };
 
+  // TODO: Refactor in TanStack Query
   useEffect(() => {
     const fetchData = async () => {
       const data = await getUpdateNotification();
