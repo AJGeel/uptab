@@ -14,7 +14,6 @@ runtime.onInstalled.addListener((details) => {
       });
       break;
 
-    // Runs when the extension is updated. Currently unused.
     case "update":
       setUpdateNotification(true);
       break;

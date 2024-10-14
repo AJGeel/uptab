@@ -1,3 +1,4 @@
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { createRoot } from "react-dom/client";
 
 import Changelog from "@/pages/changelog/Changelog";
@@ -7,6 +8,8 @@ import { initSentry } from "@/src/services/initSentry";
 
 initSentry();
 
+const queryClient = new QueryClient();
+
 const init = () => {
   const rootContainer = document.querySelector("#__root");
 
@@ -15,7 +18,11 @@ const init = () => {
   }
 
   const root = createRoot(rootContainer);
-  root.render(<Changelog />);
+  root.render(
+    <QueryClientProvider client={queryClient}>
+      <Changelog />
+    </QueryClientProvider>
+  );
 };
 
 init();
