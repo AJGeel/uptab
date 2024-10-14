@@ -7,7 +7,7 @@
   "scripts": {
     "build:chrome": "BUILD_TARGET=chrome vite build",
     "build:firefox": "BUILD_TARGET=firefox vite build",
-    "dev": "nodemon",
+    "dev": "BUILD_TARGET=firefox nodemon",
     "test": "vitest",
     "test:watch": "vitest --watch",
     "lint": "eslint ./",
@@ -28,6 +28,7 @@
     "@tanstack/react-query": "^5.51.14",
     "clsx": "^2.1.0",
     "date-fns": "^3.6.0",
+    "deepmerge": "^4.3.1",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-hook-form": "^7.50.1",
