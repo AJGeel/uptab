@@ -1,3 +1,4 @@
+import deepmerge from "deepmerge";
 import { storage } from "webextension-polyfill";
 
 import { defaultSettings } from "./defaultSettings";
@@ -12,9 +13,5 @@ export const getSettings = async (): Promise<Settings> => {
     return defaultSettings;
   }
 
-  // Merge default settings to update clients that may not have newly added keys
-  return {
-    ...defaultSettings,
-    ...data.settings,
-  };
+  return deepmerge(defaultSettings, data.settings);
 };

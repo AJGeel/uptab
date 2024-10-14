@@ -28,7 +28,7 @@ const BookmarkItem = ({ item, isFocused, displayMode, onDelete }: Props) => (
     href={item.url ?? ""}
   >
     <ImageWithFallback
-      className="size-4"
+      className="size-4 rounded-sm"
       src={getFavicon(item?.url || "")}
       fallbackSrc="/icon-34.png"
       loading="lazy"

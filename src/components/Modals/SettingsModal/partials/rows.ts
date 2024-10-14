@@ -38,17 +38,17 @@ export const rows: SettingsRows = {
       title: "Notify when updated",
       description: "Shows an inline notification when UpTab is updated.",
     },
+    {
+      setting: "showFeedbackPrompt",
+      title: "Feedback Prompt",
+      description: "Displays a link to show feedback at the right bottom",
+    },
   ],
   homescreen: [
     {
       setting: "showInfoWidget",
       title: "Show Info Widget",
       description: "Shows weather forecasts and date.",
-    },
-    {
-      setting: "showFeedbackPrompt",
-      title: "Feedback Prompt",
-      description: "Displays a link to show feedback at the right bottom",
     },
   ],
 } as const;

@@ -7,6 +7,7 @@ import Bookmarks from "../Bookmarks/Bookmarks";
 import InfoWidget from "../InfoWidget/InfoWidget";
 import Shortlinks from "../Shortlinks/Shortlinks";
 import Button, { buttonVariants } from "../ui/Button";
+import FeedbackPrompt from "../ui/FeedbackPrompt";
 import UpdateNotification from "../UpdateNotification/UpdateNotification";
 
 export type Props = {
@@ -36,12 +37,20 @@ const Sidebar = ({ isExpanded, setIsExpanded }: Props) => {
         )}
         {settings?.sidebar.showShortlinks && <Shortlinks />}
         {settings?.sidebar.showBookmarks && <Bookmarks />}
-        <Button
-          className="mt-6 first:mt-0"
-          variant={buttonVariants.inline}
-          onClick={() => setActiveModal(Modals.settings)}
-          label="Edit preferences"
-        />
+        <div className="mt-6 flex items-center gap-2 first:mt-0">
+          <Button
+            className="leading-normal first:mt-0"
+            variant={buttonVariants.inline}
+            onClick={() => setActiveModal(Modals.settings)}
+            label="Edit preferences"
+          />
+          {settings?.sidebar.showFeedbackPrompt && (
+            <>
+              <p>&middot;</p>
+              <FeedbackPrompt />
+            </>
+          )}
+        </div>
       </div>
     </div>
   );

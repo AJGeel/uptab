@@ -5,7 +5,7 @@ import { getFavicon } from "./getFavicon";
 describe("getFavicon", () => {
   it("should generate the correct favicon URL for a given input URL", () => {
     expect(getFavicon("https://example.com")).toBe(
-      "https://f1.allesedv.com/32/https://example.com"
+      "https://www.google.com/s2/favicons?domain=https://example.com"
     );
   });
 
@@ -16,9 +16,9 @@ describe("getFavicon", () => {
       "https://site3.net",
     ];
     const expectedFaviconUrls = [
-      "https://f1.allesedv.com/32/https://site1.com",
-      "https://f1.allesedv.com/32/https://site2.org",
-      "https://f1.allesedv.com/32/https://site3.net",
+      "https://www.google.com/s2/favicons?domain=https://site1.com",
+      "https://www.google.com/s2/favicons?domain=https://site2.org",
+      "https://www.google.com/s2/favicons?domain=https://site3.net",
     ];
 
     inputUrls.forEach((url, index) => {
@@ -30,7 +30,7 @@ describe("getFavicon", () => {
   it("should handle special characters in the input URL", () => {
     const inputUrl = "https://site-with_special_characters.com";
     const expectedFaviconUrl =
-      "https://f1.allesedv.com/32/https://site-with_special_characters.com";
+      "https://www.google.com/s2/favicons?domain=https://site-with_special_characters.com";
 
     const result = getFavicon(inputUrl);
 

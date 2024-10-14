@@ -7,7 +7,6 @@ import { cn } from "@/src/utils";
 import InfoWidget from "../InfoWidget/InfoWidget";
 import Modals from "../Modals/Modals";
 import Sidebar from "../Sidebar/Sidebar";
-import FeedbackPrompt from "../ui/FeedbackPrompt";
 import ImageFadeIn from "../ui/ImageFadeIn";
 
 const Homescreen = () => {
@@ -48,12 +47,6 @@ const Homescreen = () => {
                   ? "opacity-0 translate-x-40 pointer-events-none"
                   : "translate-x-0"
               )}
-            />
-          )}
-          {settings?.homescreen?.showFeedbackPrompt && (
-            <FeedbackPrompt
-              className="mt-auto inline self-end p-6"
-              isDarkMode
             />
           )}
         </ImageFadeIn>
