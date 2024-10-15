@@ -16,6 +16,9 @@ const Homescreen = () => {
   const isSidebarOpen = settings?.sidebar?.isOpen;
 
   useKeyPress(hotkeys.backslash, () => toggleSidebarSetting("isOpen"));
+  useKeyPress(hotkeys.greaterThan, () =>
+    window.open("/src/pages/history/index.html")
+  );
   useEasterEggs();
 
   if (isPending) {
