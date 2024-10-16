@@ -1,13 +1,11 @@
-# This release contains:
-
-## Updates:
+# What has been done
 
 -
 
-## Bugfixes:
+## To do
 
--
+- [ ]
 
-## Others:
+## Notes
 
 -
