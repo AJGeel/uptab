@@ -12,13 +12,14 @@ const UpdateNotification = () => {
   }
 
   return (
-    <button
+    <a
+      href="https://uptab.vercel.app/changelog"
+      target="_blank"
+      rel="noopener noreferrer"
       className="mb-8 flex w-full items-center gap-2 rounded bg-sky-500/10 p-2 pl-4 duration-150 hover:bg-sky-500/20"
-      onClick={(event) => {
-        event.preventDefault();
+      onClick={() => {
         onOpen();
       }}
-      rel="noreferrer noopener"
     >
       <SparklesIcon className="size-4 shrink-0 opacity-50" />
       <p className="grow text-left">
@@ -27,6 +28,7 @@ const UpdateNotification = () => {
       <button
         className="flex items-center gap-1 rounded-sm px-3 py-2 duration-150 hover:bg-sky-800/10 hover:text-sky-800"
         onClick={(event) => {
+          event.preventDefault();
           event.stopPropagation();
           onHide();
         }}
@@ -34,7 +36,7 @@ const UpdateNotification = () => {
         {RNG >= 0.95 ? "Shut UpTab" : "Close"}
         <XMarkIcon className="size-4" />
       </button>
-    </button>
+    </a>
   );
 };
 
