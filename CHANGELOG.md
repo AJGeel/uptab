@@ -2,6 +2,24 @@
 
 UpTab adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [V1.3.0] — Unreleased
+
+### ✨ Added
+
+-
+
+### 🐛 Fixed
+
+-
+
+### 🧹 Removed
+
+-
+
+### ♻️ Changed
+
+-
+
 ## [V1.2.2] — 2024-09-05
 
 ### ♻️ Changed
@@ -93,6 +111,7 @@ UpTab adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
   - Added Bookmarks: allowing you to easily view, open and delete your browser bookmarks
   - Added `CTRL+U` shortkey to open popup
 
+[V1.3.0]: https://github.com/AJGeel/uptab/compare/v1.3.0...v1.2.2
 [V1.2.1]: https://github.com/AJGeel/uptab/compare/v1.2.2...v1.2.1
 [V1.2.1]: https://github.com/AJGeel/uptab/compare/v1.2.1...v1.2.0
 [V1.2.0]: https://github.com/AJGeel/uptab/compare/v1.2.0...v1.1.0

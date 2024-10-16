@@ -7,7 +7,6 @@ export const useUpdateNotification = () => {
   const [isVisible, setIsVisible] = useState(false);
 
   const onOpen = () => {
-    window.open("/src/pages/changelog/index.html");
     setIsVisible(false);
     setUpdateNotification(false);
   };
