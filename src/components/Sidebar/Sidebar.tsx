@@ -50,6 +50,15 @@ const Sidebar = ({ isExpanded, setIsExpanded }: Props) => {
               <FeedbackPrompt />
             </>
           )}
+          <>
+            <p>&middot;</p>
+            <a
+              href="/src/pages/history/index.html"
+              className="text-black/70 underline hover:text-black hover:no-underline"
+            >
+              View history
+            </a>
+          </>
         </div>
       </div>
     </div>
