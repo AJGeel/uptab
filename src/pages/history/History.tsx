@@ -1,63 +1,94 @@
+import { MagnifyingGlassIcon } from "@heroicons/react/24/solid";
 import { useQuery } from "@tanstack/react-query";
-import { format } from "date-fns";
+import { format, parseISO } from "date-fns";
+import { useState } from "react";
 
+import HistoryItem from "@/src/components/History/HistoryItem";
+import Spinner from "@/src/components/ui/Spinner";
+import { useDebounce } from "@/src/hooks/useDebounce";
 import { getHistory, organiseHistory } from "@/src/services/history";
-import { getFavicon } from "@/src/utils";
 
-const formatTime = (timestamp: number) => {
-  const date = new Date(timestamp);
-  return format(date, "HH:mm:ss");
-};
+const SearchHeader = ({
+  searchQuery,
+  setSearchQuery,
+}: {
+  searchQuery: string;
+  setSearchQuery: (value: string) => void;
+}) => (
+  <div className="mb-6 flex items-center gap-6" id="header">
+    <h1 className="text-2xl font-bold">History</h1>
+    <div className="relative w-full max-w-sm overflow-hidden rounded-md border bg-gray-50">
+      <input
+        className="group w-full bg-transparent px-2 py-1.5 pl-9 font-sans focus-within:outline-none"
+        placeholder="Search title or url"
+        type="search"
+        value={searchQuery}
+        onChange={(event) => setSearchQuery(event.target.value)}
+      />
+      <div className="pointer-events-none absolute left-0 top-0 flex items-center justify-center p-2.5">
+        <MagnifyingGlassIcon className="size-4 text-gray-600" />
+      </div>
+    </div>
+  </div>
+);
 
 const History = () => {
+  const [searchQuery, setSearchQuery] = useState("");
+  const { debouncedValue: debouncedSearchQuery } = useDebounce(
+    searchQuery,
+    200
+  );
+
   const { data, isError, isPending } = useQuery({
-    queryFn: getHistory,
-    queryKey: ["changelog"],
+    queryFn: () => getHistory({ query: debouncedSearchQuery }),
+    queryKey: ["changelog", debouncedSearchQuery],
+    placeholderData: (previousData) => previousData,
     select: (data) => organiseHistory(data),
   });
 
-  if (isError) {
-    return <p>Something has gone wrong.</p>;
-  }
+  console.log(data);
 
-  if (isPending) {
-    return <p>Loading...</p>;
+  if (isError) {
+    return <p>Unable to display history.</p>;
   }
 
   return (
     <main className="min-h-screen">
-      <div className="mx-auto max-w-4xl p-12">
-        <h2 className="mb-6 text-2xl font-bold">History</h2>
-        {Object.entries(data).map(([date, hours]) => (
-          <div key={date}>
-            <h3 className="text-lg font-bold first:hidden">{date}</h3>
-            {Object.entries(hours).map(([hours, items]) => (
-              <div key={`${date}-${hours}`}>
-                <h4 className="tabular-nums text-black/70">{hours}</h4>
-                {items.map(({ id, url, title, lastVisitTime }) => (
-                  <a
-                    key={id}
-                    href={url}
-                    className="flex cursor-pointer items-start gap-4 rounded-md px-3 py-2 duration-150 hover:bg-gray-100"
-                  >
-                    <img
-                      className="size-4 shrink-0"
-                      loading="lazy"
-                      src={getFavicon(url ?? "")}
-                    />
-                    <div className="flex grow flex-col truncate pr-12">
-                      <p className="truncate font-medium">{title ?? url}</p>
-                      <p className="truncate text-xs text-black/70">{url}</p>
-                    </div>
-                    <p className="shrink-0 text-xs tabular-nums text-black/70">
-                      {formatTime(lastVisitTime || 0)}
-                    </p>
-                  </a>
+      <div className="mx-auto max-w-4xl p-8">
+        <SearchHeader
+          searchQuery={searchQuery}
+          setSearchQuery={setSearchQuery}
+        />
+        {isPending ? (
+          <Spinner className="size-6" />
+        ) : (
+          <>
+            {Array.from(data.entries()).map(([date, hours]) => (
+              <div key={date} className="">
+                {/* TODO: Format dates to (Monday, 16-10-2024) or intl */}
+                <h2 className="pt-10 text-lg font-bold">
+                  {format(parseISO(date), "EEEE yyyy-MM-dd")}
+                </h2>
+                {Array.from(hours.entries()).map(([hour, items]) => (
+                  <div key={`${date}-${hour}`}>
+                    <h3 className="py-4 font-medium text-black/80">
+                      {hour}:00
+                    </h3>
+                    {items.map((item) => (
+                      <HistoryItem key={item.id} {...item} />
+                    ))}
+                  </div>
                 ))}
               </div>
             ))}
-          </div>
-        ))}
+          </>
+          // <>
+          //   {/* {data.length === 0 && <p>Nothing was found.</p>} */}
+          //   {/* {data.map(({item}) => (
+          //     <HistoryItem key={item.id} {...item} />
+          //   ))} */}
+          // </>
+        )}
       </div>
     </main>
   );
