@@ -7,4 +7,10 @@ export interface HistoryItem {
   typedCount?: number;
 }
 
-export type OrganisedHistory = Map<string, Map<string, HistoryItem[]>>;
+type historyDate = string;
+type historyHour = string;
+
+export type OrganisedHistory = Map<
+  historyDate,
+  Map<historyHour, HistoryItem[]>
+>;

@@ -1,9 +1,8 @@
 import { format } from "date-fns";
 
+import ImageFadeIn from "@/src/components/ui/ImageFadeIn";
 import type { HistoryItem } from "@/src/services/history";
 import { getFavicon } from "@/src/utils";
-
-import ImageFadeIn from "../ui/ImageFadeIn";
 
 const formatTime = (timestamp: number) => {
   const date = new Date(timestamp);
@@ -17,7 +16,7 @@ const HistoryItem = ({ id, url, title, lastVisitTime }: HistoryItem) => (
     className="flex cursor-pointer items-start gap-4 rounded-md px-2 py-1.5 outline-none ring-sky-500 duration-150 hover:bg-gray-100 focus:z-10 focus:ring-2 active:scale-95 active:opacity-70"
   >
     <ImageFadeIn
-      className="mt-2 size-4 shrink-0"
+      className="mt-2 size-4 shrink-0 rounded-sm"
       loading="lazy"
       src={getFavicon(url ?? "")}
       alt={`Favicon for ${url}`}

@@ -50,7 +50,6 @@
     "dot-notation": "error",
     "eqeqeq": "error",
     "max-lines": ["error"],
-    "multiline-comment-style": "error",
     "no-console": "warn",
     "no-duplicate-imports": "error",
     "no-else-return": "warn",

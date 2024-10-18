@@ -1,36 +1,19 @@
-import { MagnifyingGlassIcon } from "@heroicons/react/24/solid";
 import { useQuery } from "@tanstack/react-query";
 import { format, parseISO } from "date-fns";
-import { useState } from "react";
+import { useMemo, useState } from "react";
+import { InView } from "react-intersection-observer";
 
-import HistoryItem from "@/src/components/History/HistoryItem";
 import Spinner from "@/src/components/ui/Spinner";
 import { useDebounce } from "@/src/hooks/useDebounce";
-import { getHistory, organiseHistory } from "@/src/services/history";
+import {
+  getHistory,
+  getHoursWithHistory,
+  organiseHistory,
+} from "@/src/services/history";
 
-const SearchHeader = ({
-  searchQuery,
-  setSearchQuery,
-}: {
-  searchQuery: string;
-  setSearchQuery: (value: string) => void;
-}) => (
-  <div className="mb-6 flex items-center gap-6" id="header">
-    <h1 className="text-2xl font-bold">History</h1>
-    <div className="relative w-full max-w-sm overflow-hidden rounded-md border bg-gray-50">
-      <input
-        className="group w-full bg-transparent px-2 py-1.5 pl-9 font-sans focus-within:outline-none"
-        placeholder="Search title or url"
-        type="search"
-        value={searchQuery}
-        onChange={(event) => setSearchQuery(event.target.value)}
-      />
-      <div className="pointer-events-none absolute left-0 top-0 flex items-center justify-center p-2.5">
-        <MagnifyingGlassIcon className="size-4 text-gray-600" />
-      </div>
-    </div>
-  </div>
-);
+import HistoryItem from "./components/HistoryItem";
+import SearchHeader from "./components/SearchHeader";
+import TimelineView from "./components/TimelineView";
 
 const History = () => {
   const [searchQuery, setSearchQuery] = useState("");
@@ -38,6 +21,8 @@ const History = () => {
     searchQuery,
     200
   );
+  const [activeDay, setActiveDay] = useState<string>();
+  const [activeHour, setActiveHour] = useState<string>();
 
   const { data, isError, isPending } = useQuery({
     queryFn: () => getHistory({ query: debouncedSearchQuery }),
@@ -46,7 +31,10 @@ const History = () => {
     select: (data) => organiseHistory(data),
   });
 
-  console.log(data);
+  const availableHours = useMemo(
+    () => getHoursWithHistory(data, activeDay),
+    [data, activeDay]
+  );
 
   if (isError) {
     return <p>Unable to display history.</p>;
@@ -54,40 +42,57 @@ const History = () => {
 
   return (
     <main className="min-h-screen">
-      <div className="mx-auto max-w-4xl p-8">
-        <SearchHeader
-          searchQuery={searchQuery}
-          setSearchQuery={setSearchQuery}
-        />
+      <div className="mx-auto max-w-4xl px-4">
+        <div className="sticky top-0 mb-6 space-y-4 border-b bg-white pb-4 pt-6">
+          <SearchHeader
+            searchQuery={searchQuery}
+            setSearchQuery={setSearchQuery}
+          />
+          <TimelineView
+            activeDay={activeDay}
+            activeHour={activeHour}
+            availableHours={availableHours}
+          />
+        </div>
         {isPending ? (
           <Spinner className="size-6" />
         ) : (
-          <>
+          <div>
+            {Array.from(data.entries()).length === 0 && <p>*crickets*</p>}
             {Array.from(data.entries()).map(([date, hours]) => (
-              <div key={date} className="">
-                {/* TODO: Format dates to (Monday, 16-10-2024) or intl */}
-                <h2 className="pt-10 text-lg font-bold">
-                  {format(parseISO(date), "EEEE yyyy-MM-dd")}
+              <InView
+                key={date}
+                as="section"
+                onChange={(inView) => {
+                  if (inView) {
+                    setActiveDay(date);
+                  }
+                }}
+              >
+                <h2 className="mt-10 text-lg font-bold">
+                  {format(parseISO(date), "EEEE, yyyy-MM-dd")}
                 </h2>
                 {Array.from(hours.entries()).map(([hour, items]) => (
-                  <div key={`${date}-${hour}`}>
-                    <h3 className="py-4 font-medium text-black/80">
+                  <InView
+                    key={`${date}_${hour}`}
+                    as="div"
+                    onChange={(inView) => {
+                      if (inView) {
+                        setActiveHour(hour);
+                      }
+                    }}
+                  >
+                    <h3 className="my-4 font-medium text-black/80">
                       {hour}:00
                     </h3>
                     {items.map((item) => (
                       <HistoryItem key={item.id} {...item} />
                     ))}
-                  </div>
+                  </InView>
                 ))}
-              </div>
+              </InView>
             ))}
-          </>
-          // <>
-          //   {/* {data.length === 0 && <p>Nothing was found.</p>} */}
-          //   {/* {data.map(({item}) => (
-          //     <HistoryItem key={item.id} {...item} />
-          //   ))} */}
-          // </>
+          </div>
         )}
       </div>
     </main>

@@ -1,4 +1,3 @@
-/* eslint-disable camelcase */
 import { HistoryItem, OrganisedHistory } from "./types";
 
 /**
