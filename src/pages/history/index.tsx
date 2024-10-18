@@ -3,7 +3,7 @@ import { createRoot } from "react-dom/client";
 
 import History from "@/pages/history/History";
 import "@/assets/styles/tailwind.css";
-import "@/pages/newtab/index.css";
+import "@/pages/history/index.css";
 import { initSentry } from "@/src/services/initSentry";
 
 initSentry();
