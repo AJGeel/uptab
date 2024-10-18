@@ -7,7 +7,7 @@ import { cn } from "@/src/utils";
 import InfoWidget from "../InfoWidget/InfoWidget";
 import Modals from "../Modals/Modals";
 import Sidebar from "../Sidebar/Sidebar";
-import ImageFadeIn from "../ui/ImageFadeIn";
+import ImageBackgroundFadeIn from "../ui/ImageBackgroundFadeIn";
 
 const Homescreen = () => {
   const { data: settings, isPending, toggleSidebarSetting } = useSettings();
@@ -16,6 +16,9 @@ const Homescreen = () => {
   const isSidebarOpen = settings?.sidebar?.isOpen;
 
   useKeyPress(hotkeys.backslash, () => toggleSidebarSetting("isOpen"));
+  useKeyPress(hotkeys.greaterThan, () =>
+    window.open("/src/pages/history/index.html")
+  );
   useEasterEggs();
 
   if (isPending) {
@@ -30,8 +33,8 @@ const Homescreen = () => {
           isExpanded={!!isSidebarOpen}
           setIsExpanded={() => toggleSidebarSetting("isOpen")}
         />
-        <ImageFadeIn
-          asBackground={true}
+
+        <ImageBackgroundFadeIn
           src={activeBg.src}
           alt="A fancy background image"
           className={cn(
@@ -49,7 +52,7 @@ const Homescreen = () => {
               )}
             />
           )}
-        </ImageFadeIn>
+        </ImageBackgroundFadeIn>
       </div>
     </>
   );

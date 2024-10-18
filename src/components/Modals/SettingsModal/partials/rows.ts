@@ -1,7 +1,4 @@
-import {
-  HomescreenSettings,
-  SidebarSettings,
-} from "@/src/services/settings/types";
+import { HomescreenSettings, SidebarSettings } from "@/src/services/settings";
 
 type SettingsRows = {
   sidebar: {

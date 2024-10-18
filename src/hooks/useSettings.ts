@@ -1,13 +1,13 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
-import { defaultSettings } from "../services/settings/defaultSettings";
-import { editSettings } from "../services/settings/editSettings";
-import { getSettings } from "../services/settings/getSettings";
 import {
+  defaultSettings,
+  editSettings,
+  getSettings,
   HomescreenSettings,
   Settings,
   SidebarSettings,
-} from "../services/settings/types";
+} from "@/src/services/settings";
 
 export const useSettings = () => {
   const queryClient = useQueryClient();
