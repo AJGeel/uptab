@@ -43,7 +43,7 @@ const History = () => {
   return (
     <main className="min-h-screen">
       <div className="mx-auto max-w-4xl px-4">
-        <div className="sticky top-0 mb-6 space-y-4 border-b bg-white pb-4 pt-6">
+        <div className="sticky top-0 z-10 mb-6 space-y-4 border-b bg-white pb-4 pt-6">
           <SearchHeader
             searchQuery={searchQuery}
             setSearchQuery={setSearchQuery}
