@@ -5,7 +5,7 @@ import { getFavicon } from "./getFavicon";
 describe("getFavicon", () => {
   it("should generate the correct favicon URL for a given input URL", () => {
     expect(getFavicon("https://example.com")).toBe(
-      "https://www.google.com/s2/favicons?domain=https://example.com"
+      "https://www.google.com/s2/favicons?domain=https://example.com&sz=64"
     );
   });
 
