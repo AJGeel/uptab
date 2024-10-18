@@ -60,15 +60,7 @@ const History = () => {
           <div>
             {Array.from(data.entries()).length === 0 && <p>*crickets*</p>}
             {Array.from(data.entries()).map(([date, hours]) => (
-              <InView
-                key={date}
-                as="section"
-                onChange={(inView) => {
-                  if (inView) {
-                    setActiveDay(date);
-                  }
-                }}
-              >
+              <section key={date}>
                 <h2 className="mt-10 text-lg font-bold">
                   {format(parseISO(date), "EEEE, yyyy-MM-dd")}
                 </h2>
@@ -79,6 +71,7 @@ const History = () => {
                     onChange={(inView) => {
                       if (inView) {
                         setActiveHour(hour);
+                        setActiveDay(date);
                       }
                     }}
                   >
@@ -90,7 +83,7 @@ const History = () => {
                     ))}
                   </InView>
                 ))}
-              </InView>
+              </section>
             ))}
           </div>
         )}
