@@ -1,14 +1,19 @@
-import { ComponentProps, useEffect, useState } from "react";
+import { ComponentProps, ReactNode, useEffect, useState } from "react";
 
 import { cn } from "@/src/utils";
 
-interface ImageProps extends ComponentProps<"img"> {
+interface ImageBackgroundFadeInProps extends ComponentProps<"img"> {
   src: string;
   alt: string;
   className?: string;
+  children: ReactNode;
 }
 
-const ImageFadeIn = ({ className, ...props }: ImageProps) => {
+const ImageBackgroundFadeIn = ({
+  className,
+  children,
+  ...props
+}: ImageBackgroundFadeInProps) => {
   const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
@@ -20,12 +25,14 @@ const ImageFadeIn = ({ className, ...props }: ImageProps) => {
   }, [props.src]);
 
   return (
-    <img
+    <div
+      style={{ backgroundImage: `url('${props.src}')` }}
       className={cn("duration-300", className, !isLoaded && "opacity-0 ")}
-      onLoad={() => setIsLoaded(true)}
       {...props}
-    />
+    >
+      {children}
+    </div>
   );
 };
 
-export default ImageFadeIn;
+export default ImageBackgroundFadeIn;
