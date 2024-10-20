@@ -8,7 +8,7 @@ type SearchHeaderProps = {
 const SearchHeader = ({ searchQuery, setSearchQuery }: SearchHeaderProps) => (
   <div className="flex items-center gap-6">
     <h1 className="text-xl font-bold">History</h1>
-    <div className="relative w-full max-w-sm overflow-hidden rounded-md border bg-gray-50 ring-sky-500 ring-offset-2 duration-150 focus-within:ring-2">
+    <div className="relative w-full max-w-sm overflow-hidden rounded-md border bg-gray-50 ring-gray-300 ring-offset-2 duration-150 focus-within:ring-2">
       <input
         className="group w-full bg-transparent px-2 py-1.5 pl-9 font-sans focus-within:outline-none"
         placeholder="Search title or url"

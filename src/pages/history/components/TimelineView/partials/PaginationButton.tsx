@@ -15,7 +15,7 @@ const PaginationButton = ({
 }: PaginationButtonProps) => (
   <button
     className={cn(
-      "rounded-md border bg-gray-50 px-1.5 py-2 text-gray-600 duration-150",
+      "rounded-md border bg-gray-50 px-1.5 py-2 text-gray-600 duration-150 focus-visible:ring-2 ring-offset-2 ring-gray-300 outline-none",
       isDisabled && "opacity-50",
       !isDisabled && "hover:bg-black hover:text-white"
     )}

@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { format, parseISO } from "date-fns";
+import { addHours, format, parseISO } from "date-fns";
 import { useMemo, useState } from "react";
 import { InView } from "react-intersection-observer";
 
@@ -75,9 +75,19 @@ const History = () => {
                       }
                     }}
                   >
-                    <h3 className="my-4 font-medium text-black/80">
-                      {hour}:00
-                    </h3>
+                    <div className="flex items-center justify-between gap-4">
+                      <h3 className="my-4 font-medium text-black/80">
+                        {hour}:00
+                      </h3>
+                      <button
+                        onClick={() => {
+                          alert("TODO: Delete the history range");
+                        }}
+                        className="rounded-md bg-gray-50 px-1.5 py-0.5 text-xs border border-gray-200 duration-150 hover:border-black hover:bg-black hover:text-white focus-visible:ring-2 ring-offset-2 ring-gray-300 outline-none"
+                      >
+                        Delete
+                      </button>
+                    </div>
                     {items.map((item) => (
                       <HistoryItem key={item.id} {...item} />
                     ))}
