@@ -9,6 +9,7 @@ export const hotkeys = {
   questionMark: "?",
   left: "ArrowLeft",
   right: "ArrowRight",
+  greaterThan: ">",
 } as const;
 
 type Hotkeys = (typeof hotkeys)[keyof typeof hotkeys];

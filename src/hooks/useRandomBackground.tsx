@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-import { dailyRandomNumber } from "@/src/utils/dailyRandomNumber";
+import { dailyRandomNumber } from "@/src/utils";
 // import useKeyPress from "./useKeyPress";
 
 type Background = {

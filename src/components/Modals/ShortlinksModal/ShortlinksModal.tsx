@@ -6,7 +6,7 @@ import { v4 as uuidv4 } from "uuid";
 import { Modals, useModalStore } from "@/src/hooks/stores/useModalStore";
 import { useShortlinkStore } from "@/src/hooks/stores/useShortlinkStore";
 import { addShortlink, deleteShortlink } from "@/src/services/shortlinks";
-import { normalizeUrl } from "@/src/utils/normalizeUrl";
+import { normalizeUrl } from "@/src/utils";
 
 import FormField from "./partials/FormField";
 import Button, { buttonVariants } from "../../ui/Button";
