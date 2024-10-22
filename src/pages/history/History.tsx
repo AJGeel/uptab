@@ -10,17 +10,11 @@ import {
   getHoursWithHistory,
   organiseHistory,
 } from "@/src/services/history";
+import { formatHourDisplay } from "@/src/utils/date/formatHourDisplay";
 
 import HistoryItem from "./components/HistoryItem";
 import SearchHeader from "./components/SearchHeader";
 import TimelineView from "./components/TimelineView";
-
-const formatHourDisplay = (dateStr: string, hourStr: string) => {
-  const fullDateTime = `${dateStr}T${hourStr}:00:00Z`;
-  const date = new Date(fullDateTime);
-  // Format just the hour in local time
-  return format(date, "HH:00");
-};
 
 const History = () => {
   const [searchQuery, setSearchQuery] = useState("");
