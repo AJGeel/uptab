@@ -8,7 +8,7 @@ export const organiseHistory = (history: HistoryItem[]): OrganisedHistory => {
   const grouped = history.reduce<OrganisedHistory>((acc, item) => {
     const date = new Date(item.lastVisitTime || 0);
     const [dateString] = date.toISOString().split("T");
-    const hourString = date.getHours().toString().padStart(2, "0");
+    const hourString = date.getUTCHours().toString().padStart(2, "0");
 
     if (!acc.has(dateString)) {
       acc.set(dateString, new Map());

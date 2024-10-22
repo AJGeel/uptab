@@ -6,6 +6,7 @@ import { getFavicon } from "@/src/utils";
 
 const formatTime = (timestamp: number) => {
   const date = new Date(timestamp);
+
   return format(date, "HH:mm:ss");
 };
 
