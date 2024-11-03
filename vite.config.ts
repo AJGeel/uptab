@@ -35,6 +35,11 @@ export default defineConfig({
       output: {
         entryFileNames: (chunk) => `src/pages/${chunk.name}/index.js`,
       },
+      onwarn(warning, defaultHandler) {
+        return warning.code === "SOURCEMAP_ERROR"
+          ? null
+          : defaultHandler(warning);
+      },
     },
     sourcemap: process.env.__DEV__ === "true",
   },
