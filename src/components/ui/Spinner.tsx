@@ -1,7 +1,7 @@
 import { cn } from "@/src/utils";
 
 type Props = {
-  className: string;
+  className?: string;
 };
 
 const Spinner = ({ className }: Props) => (
