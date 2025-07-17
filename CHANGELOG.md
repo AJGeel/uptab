@@ -2,6 +2,12 @@
 
 UpTab adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [V1.2.3] — 2025-07-17
+
+### ✨ Added
+
+- Added two new backgrounds. Thanks, Max! 👏
+
 ## [V1.2.2] — 2024-09-05
 
 ### ♻️ Changed
