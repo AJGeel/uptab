@@ -70,6 +70,14 @@ const backgrounds: Background[] = [
     link: "https://unsplash.com/photos/red-flower-field-near-wind-turbines-C4rDHqqmu4w",
     src: "/images/backgrounds/red-flower-field-near-wind-turbines.jpg",
   },
+  {
+    author: "Max Hoogenbosch",
+    src: "/images/backgrounds/the-dom-tower-in-utrecht.jpg",
+  },
+  {
+    author: "Max Hoogenbosch",
+    src: "/images/backgrounds/overdamspad-in-houten.jpg",
+  },
 ];
 
 export const useRandomBackground = () => {
