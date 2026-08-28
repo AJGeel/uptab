@@ -2,6 +2,18 @@
 
 UpTab adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [V1.3.0] — 2026-09-01
+
+### ✨ Added
+
+- You can now re-order shortlinks however you want using a drag 'n drop interaction
+- Quickly turn bookmarks into shortlinks with one button click
+- Overhauled the edit shortlink modal with a snazzy preview
+
+### 🐛 Fixed
+
+- Hotkeys no longer interrupt active input fields
+
 ## [V1.2.3] — 2025-07-17
 
 ### ✨ Added
