@@ -24,7 +24,7 @@ const Shortlink = ({ item, isDragging }: Props) => {
       className={cn("flex cursor-pointer items-center gap-3 rounded border bg-white px-3 py-2.5 shadow ring-sky-500 duration-150 hover:ring focus:outline-none focus:ring", isDragging && "cursor-grabbing")}
     >
       <ImageWithFallback
-        src={getFavicon(item.url)}
+        src={item.icon ?? getFavicon(item.url)}
         fallbackSrc="/icon-34.png"
         className="size-6 shrink-0 rounded"
       />
@@ -35,8 +35,13 @@ const Shortlink = ({ item, isDragging }: Props) => {
       <IconButton
         className="border-none shadow-none "
         onClick={(event) => {
+
           event.preventDefault();
           event.stopPropagation();
+
+          if (isDragging) {
+            return
+          }
 
           setSelectedShortlink(item);
           setActiveModal(Modals.shortlink);

@@ -1,21 +1,29 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useMemo } from "react";
-import { SubmitHandler, useForm } from "react-hook-form";
+import { SubmitHandler, useForm, useWatch } from "react-hook-form";
 import { v4 as uuidv4 } from "uuid";
 
 import { Modals, useModalStore } from "@/src/hooks/stores/useModalStore";
 import { useShortlinkStore } from "@/src/hooks/stores/useShortlinkStore";
-import { addShortlink, deleteShortlink, editShortlink } from "@/src/services/shortlinks";
+import {
+  addShortlink,
+  deleteShortlink,
+  editShortlink,
+  Shortlink as ShortlinkType,
+} from "@/src/services/shortlinks";
+import { getFavicon } from "@/src/utils/getFavicon";
 import { normalizeUrl } from "@/src/utils/normalizeUrl";
 
 import FormField from "./partials/FormField";
+import Shortlink from "../../Shortlinks/partials/Shortlink";
 import Button, { buttonVariants } from "../../ui/Button";
 import Modal from "../../ui/Modal";
 
 export interface FormInputs {
-  URL: string;
-  Title: string;
-  Subtitle: string;
+  url: string;
+  title: string;
+  subtitle: string;
+  icon: string;
 }
 
 const ShortlinksModal = () => {
@@ -49,33 +57,47 @@ const ShortlinksModal = () => {
 
   const defaultValues = useMemo(
     () => ({
-      Subtitle: selectedShortlink?.subtitle ?? "",
-      Title: selectedShortlink?.title ?? "",
-      URL: selectedShortlink?.url ?? "",
+      subtitle: selectedShortlink?.subtitle ?? "",
+      title: selectedShortlink?.title ?? "",
+      url: selectedShortlink?.url ?? "",
+      icon: selectedShortlink?.icon ?? "",
     }),
-    [selectedShortlink]
+    [selectedShortlink],
   );
 
-  const { register, handleSubmit, reset } = useForm<FormInputs>({
+  const { register, handleSubmit, reset, control } = useForm<FormInputs>({
     defaultValues,
   });
 
+  const previewValues = useWatch({ control });
+
+  const previewShortlink: ShortlinkType = {
+    id: selectedShortlink?.id ?? "preview",
+    subtitle: previewValues.subtitle ?? "",
+    title: previewValues.title ?? "Untitled...",
+    url: previewValues.url ?? "",
+    icon: previewValues.icon
+      ? previewValues.icon
+      : selectedShortlink
+        ? getFavicon(selectedShortlink.url)
+        : undefined,
+  };
+
   const onSubmit: SubmitHandler<FormInputs> = async (data) => {
-    const normalizedUrl = normalizeUrl(data.URL);
+    const normalizedUrl = normalizeUrl(data.url);
     reset(defaultValues);
 
-    const payload = {
+    const mutation = selectedShortlink ? editMutation : addMutation;
+
+    const payload: ShortlinkType = {
       id: selectedShortlink?.id ?? uuidv4(),
-      subtitle: String(data.Subtitle),
-      title: data.Title,
+      subtitle: String(data.subtitle),
+      title: data.title,
       url: normalizedUrl,
+      icon: data?.icon ? data.icon : undefined,
     };
 
-    if (selectedShortlink) {
-      await editMutation.mutateAsync(payload);
-    } else {
-      await addMutation.mutateAsync(payload);
-    }
+    await mutation.mutateAsync(payload);
 
     onCloseModal();
   };
@@ -99,41 +121,53 @@ const ShortlinksModal = () => {
           : "Save a link for later. You know, so you might be able to actually find it when you need it."
       }
       onClose={onCloseModal}
+      className="max-w-3xl"
     >
-      <form className="mt-6 flex flex-col" onSubmit={handleSubmit(onSubmit)}>
-        <FormField
-          label="URL"
-          register={register}
-          required
-          pattern={
-            /^(https?:\/\/)?(www\.)?[a-zA-Z0-9-]+(\.[a-zA-Z]{2,})+(\/\S*)?$/
-          }
-        />
-        <FormField label="Title" register={register} required />
-        <FormField label="Subtitle" register={register} required={false} />
-
-        <div className="mt-6 flex justify-end gap-2">
-          {selectedShortlink && (
-            <Button
-              variant={buttonVariants.secondary}
-              label="Delete"
-              type="button"
-              onClick={async (event) => {
-                event.preventDefault();
-                event.stopPropagation();
-
-                if (!selectedShortlink?.id) {
-                  return;
-                }
-
-                await deleteMutation.mutateAsync(selectedShortlink.id);
-                onCloseModal();
-              }}
-            />
-          )}
-          <Button label={selectedShortlink ? "Update link" : "Save link"} />
+      <div className="grid grid-cols-5">
+        <div className="pointer-events-none col-span-2 mt-4 flex flex-col gap-2 self-start rounded bg-gray-100 p-3">
+          <p className="text-sm font-semibold text-gray-500">Preview</p>
+          <Shortlink item={previewShortlink} isDragging={true} />
         </div>
-      </form>
+        <form
+          className="col-span-3 mt-6 flex flex-col"
+          onSubmit={handleSubmit(onSubmit)}
+        >
+          <FormField
+            autoFocus
+            label="url"
+            register={register}
+            required
+            pattern={
+              /^(https?:\/\/)?(www\.)?[a-zA-Z0-9-]+(\.[a-zA-Z]{2,})+(\/\S*)?$/
+            }
+          />
+          <FormField label="title" register={register} required />
+          <FormField label="subtitle" register={register} required={false} />
+          <FormField label="icon" register={register} required={false} />
+
+          <div className="mt-6 flex justify-end gap-2">
+            {selectedShortlink && (
+              <Button
+                variant={buttonVariants.secondary}
+                label="Delete"
+                type="button"
+                onClick={async (event) => {
+                  event.preventDefault();
+                  event.stopPropagation();
+
+                  if (!selectedShortlink?.id) {
+                    return;
+                  }
+
+                  await deleteMutation.mutateAsync(selectedShortlink.id);
+                  onCloseModal();
+                }}
+              />
+            )}
+            <Button label={selectedShortlink ? "Update link" : "Save link"} />
+          </div>
+        </form>
+      </div>
     </Modal>
   );
 };

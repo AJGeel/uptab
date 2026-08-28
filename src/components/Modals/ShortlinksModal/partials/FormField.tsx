@@ -8,6 +8,7 @@ type FormFieldProps = {
   required: boolean;
   maxLength?: number;
   pattern?: RegExp;
+  autoFocus?: boolean
 };
 
 const FormField = ({
@@ -16,14 +17,16 @@ const FormField = ({
   required,
   maxLength,
   pattern,
+  autoFocus = false
 }: FormFieldProps) => (
   <fieldset className="mb-4 flex items-center gap-5">
-    <label className="w-24 text-right text-gray-600" htmlFor={label}>
+    <label className="w-24 text-right capitalize text-gray-600" htmlFor={label}>
       {label}
     </label>
     <input
       id={label}
-      className="inline-flex w-full flex-1 items-center justify-center rounded border border-gray-400 px-3 py-2 leading-none shadow outline-none ring-sky-500 ring-offset-2 duration-150 focus:ring-2"
+      className="inline-flex w-full flex-1 items-center justify-center rounded border border-gray-300 px-3 py-2 leading-none shadow outline-none ring-sky-500 ring-offset-2 duration-150 focus:ring-2"
+      autoFocus={autoFocus}
       {...register(label, { maxLength, pattern, required })}
     />
   </fieldset>

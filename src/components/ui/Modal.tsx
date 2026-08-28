@@ -1,17 +1,16 @@
 import { XMarkIcon } from "@heroicons/react/24/solid";
 import * as Dialog from "@radix-ui/react-dialog";
-import { ReactElement } from "react";
+import { PropsWithChildren } from "react";
 
 import { cn } from "@/src/utils";
 
-type Props = {
+type Props = PropsWithChildren<{
   isVisible: boolean;
   onClose: () => void;
   title: string;
   subtitle?: string;
   className?: string;
-  children: ReactElement;
-};
+}>;
 
 const Modal = ({
   isVisible,
