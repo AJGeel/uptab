@@ -5,7 +5,7 @@ import { v4 as uuidv4 } from "uuid";
 
 import { Modals, useModalStore } from "@/src/hooks/stores/useModalStore";
 import { useShortlinkStore } from "@/src/hooks/stores/useShortlinkStore";
-import { addShortlink, deleteShortlink } from "@/src/services/shortlinks";
+import { addShortlink, deleteShortlink, editShortlink } from "@/src/services/shortlinks";
 import { normalizeUrl } from "@/src/utils/normalizeUrl";
 
 import FormField from "./partials/FormField";
@@ -23,6 +23,13 @@ const ShortlinksModal = () => {
 
   const addMutation = useMutation({
     mutationFn: addShortlink,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["shortlinks"] });
+    },
+  });
+
+  const editMutation = useMutation({
+    mutationFn: editShortlink,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["shortlinks"] });
     },
@@ -57,12 +64,18 @@ const ShortlinksModal = () => {
     const normalizedUrl = normalizeUrl(data.URL);
     reset(defaultValues);
 
-    await addMutation.mutateAsync({
+    const payload = {
       id: selectedShortlink?.id ?? uuidv4(),
       subtitle: String(data.Subtitle),
       title: data.Title,
       url: normalizedUrl,
-    });
+    };
+
+    if (selectedShortlink) {
+      await editMutation.mutateAsync(payload);
+    } else {
+      await addMutation.mutateAsync(payload);
+    }
 
     onCloseModal();
   };
@@ -105,7 +118,10 @@ const ShortlinksModal = () => {
               variant={buttonVariants.secondary}
               label="Delete"
               type="button"
-              onClick={async () => {
+              onClick={async (event) => {
+                event.preventDefault();
+                event.stopPropagation();
+
                 if (!selectedShortlink?.id) {
                   return;
                 }
