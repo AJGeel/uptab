@@ -104,8 +104,8 @@ const ShortlinksModal = () => {
             <Button
               variant={buttonVariants.secondary}
               label="Delete"
-              onClick={async (event) => {
-                event.preventDefault();
+              type="button"
+              onClick={async () => {
                 if (!selectedShortlink?.id) {
                   return;
                 }
