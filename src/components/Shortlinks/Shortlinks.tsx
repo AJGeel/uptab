@@ -11,12 +11,15 @@ import {
   arrayMove,
   rectSortingStrategy,
 } from "@dnd-kit/sortable";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useRef, useState } from "react";
 
+import {
+  SHORTLINK_QUERY_KEY,
+  useShortlinks,
+} from "@/src/hooks/queries/useShortlinks";
 import { Modals, useModalStore } from "@/src/hooks/stores/useModalStore";
 import { useShortlinkStore } from "@/src/hooks/stores/useShortlinkStore";
-import { getShortlinks } from "@/src/services/shortlinks";
 import { reorderShortlinks } from "@/src/services/shortlinks/reorderShortlinks";
 import { Shortlink as ShortlinkType } from "@/src/services/shortlinks/types";
 import { cn } from "@/src/utils";
@@ -38,25 +41,22 @@ const Shortlinks = () => {
       activationConstraint: {
         distance: 3,
       },
-    })
+    }),
   );
 
-  const { isPending, isError, data } = useQuery({
-    queryFn: getShortlinks,
-    queryKey: ["shortlinks"],
-  });
+  const { isPending, isError, data } = useShortlinks();
 
   const reorderMutation = useMutation({ mutationFn: reorderShortlinks });
 
   const handleDragEnd = async ({ active, over }: DragEndEvent) => {
-    setIsDragging(false)
+    setIsDragging(false);
 
     requestAnimationFrame(() => {
-      wasDragging.current = false
-    })
+      wasDragging.current = false;
+    });
 
     if (!data) {
-      return
+      return;
     }
 
     if (!over || active.id === over.id) {
@@ -69,8 +69,8 @@ const Shortlinks = () => {
     const updatedItems = arrayMove(data, oldIndex, newIndex);
 
     queryClient.setQueryData<ShortlinkType[]>(
-      ["shortlinks"],
-      updatedItems
+      SHORTLINK_QUERY_KEY,
+      updatedItems,
     );
 
     await reorderMutation.mutateAsync(updatedItems);
@@ -93,7 +93,7 @@ const Shortlinks = () => {
           sensors={sensors}
           collisionDetection={closestCenter}
           onDragStart={() => {
-            setIsDragging(true)
+            setIsDragging(true);
             wasDragging.current = true;
           }}
           onDragEnd={handleDragEnd}
@@ -102,23 +102,31 @@ const Shortlinks = () => {
             items={data.map((item) => item.id)}
             strategy={rectSortingStrategy}
           >
-            <div className={cn("grid grid-cols-2 gap-2 p-2 -m-2 rounded duration-250 border border-dashed border-transparent transition-colors", isDragging && "bg-gray-100 border-gray-200")}>
+            <div
+              className={cn(
+                "grid grid-cols-2 gap-2 p-2 -m-2 rounded duration-250 border border-dashed border-transparent transition-colors",
+                isDragging && "bg-gray-100 border-gray-200",
+              )}
+            >
               {data.map((item) => (
-                <SortableShortlink key={item.id} item={item} isDragging={wasDragging.current} />
+                <SortableShortlink
+                  key={item.id}
+                  item={item}
+                  isDragging={wasDragging.current}
+                />
               ))}
-
             </div>
-              <div className="col-span-2 mt-4">
-                <button
-                  className="inline cursor-pointer underline hover:text-black hover:no-underline"
-                  onClick={() => {
-                    setSelectedShortlink(null);
-                    setActiveModal(Modals.shortlink);
-                  }}
-                >
-                  Add a link
-                </button>
-              </div>
+            <div className="col-span-2 mt-4">
+              <button
+                className="inline cursor-pointer underline hover:text-black hover:no-underline"
+                onClick={() => {
+                  setSelectedShortlink(null);
+                  setActiveModal(Modals.shortlink);
+                }}
+              >
+                Add a link
+              </button>
+            </div>
           </SortableContext>
         </DndContext>
       )}

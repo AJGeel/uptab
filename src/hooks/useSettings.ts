@@ -9,6 +9,8 @@ import {
   SidebarSettings,
 } from "../services/settings/types";
 
+const SETTINGS_QUERY_KEY = ["settings"] as const
+
 export const useSettings = () => {
   const queryClient = useQueryClient();
 
@@ -18,7 +20,7 @@ export const useSettings = () => {
 
       return settings;
     },
-    queryKey: ["settings"],
+    queryKey: SETTINGS_QUERY_KEY,
   });
 
   const editMutation = useMutation({
@@ -26,7 +28,7 @@ export const useSettings = () => {
       await editSettings(newSettings);
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["settings"] });
+      queryClient.invalidateQueries({ queryKey: SETTINGS_QUERY_KEY });
     },
   });
 

@@ -3,6 +3,7 @@ import { useEffect, useMemo } from "react";
 import { SubmitHandler, useForm, useWatch } from "react-hook-form";
 import { v4 as uuidv4 } from "uuid";
 
+import { SHORTLINK_QUERY_KEY } from "@/src/hooks/queries/useShortlinks";
 import { Modals, useModalStore } from "@/src/hooks/stores/useModalStore";
 import { useShortlinkStore } from "@/src/hooks/stores/useShortlinkStore";
 import {
@@ -32,21 +33,21 @@ const ShortlinksModal = () => {
   const addMutation = useMutation({
     mutationFn: addShortlink,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["shortlinks"] });
+      queryClient.invalidateQueries({ queryKey: SHORTLINK_QUERY_KEY });
     },
   });
 
   const editMutation = useMutation({
     mutationFn: editShortlink,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["shortlinks"] });
+      queryClient.invalidateQueries({ queryKey: SHORTLINK_QUERY_KEY });
     },
   });
 
   const deleteMutation = useMutation({
     mutationFn: deleteShortlink,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["shortlinks"] });
+      queryClient.invalidateQueries({ queryKey: SHORTLINK_QUERY_KEY });
     },
   });
 

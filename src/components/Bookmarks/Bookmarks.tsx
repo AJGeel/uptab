@@ -1,16 +1,23 @@
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { Bookmarks, bookmarks, tabs } from "webextension-polyfill";
 
+import {
+  BOOKMARKS_QUERY_KEY,
+  useBookmarks,
+} from "@/src/hooks/queries/useBookmarks";
+import {
+  SHORTLINK_QUERY_KEY,
+  useShortlinks,
+} from "@/src/hooks/queries/useShortlinks";
 import { filterBookmarks } from "@/src/services/bookmarks/filterBookmarks";
-import { mapBookmarks } from "@/src/services/bookmarks/mapBookmarks";
 import {
   SortMode,
   SortModes,
   sortBookmarks,
 } from "@/src/services/bookmarks/sortBookmarks";
-import { addShortlink, getShortlinks } from "@/src/services/shortlinks";
+import { addShortlink } from "@/src/services/shortlinks";
 import { cn } from "@/src/utils";
 
 import BookmarkItem from "./partials/BookmarkItem";
@@ -26,30 +33,23 @@ const Bookmarks = ({ displayMode = "NewTab" }: BookmarksProps) => {
   const [sortMode, setSortMode] = useState<SortMode>(SortModes.Newest);
   const [searchQuery, setSearchQuery] = useState("");
 
-  const { isPending, isError, data } = useQuery({
-    queryFn: async () => await bookmarks.getTree(),
-    select: (bookmarks) => mapBookmarks(bookmarks).filter((item) => !!item.url),
-    queryKey: ["bookmarks"],
-  });
+  const { isPending, isError, data } = useBookmarks();
 
-  const { data: shortlinks } = useQuery({
-    queryFn: getShortlinks,
-    queryKey: ["shortlinks"],
-  });
+  const { data: shortlinks } = useShortlinks();
 
   const deleteMutation = useMutation({
     mutationFn: async (id: string) => {
       await bookmarks.remove(id);
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["bookmarks"] });
+      queryClient.invalidateQueries({ queryKey: BOOKMARKS_QUERY_KEY });
     },
   });
 
   const addShortlinkMutation = useMutation({
     mutationFn: addShortlink,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["shortlinks"] });
+      queryClient.invalidateQueries({ queryKey: SHORTLINK_QUERY_KEY });
     },
   });
 
@@ -68,7 +68,7 @@ const Bookmarks = ({ displayMode = "NewTab" }: BookmarksProps) => {
     <div
       className={cn(
         "first:mt-0 mt-10 w-full border rounded-md bg-white overflow-hidden relative",
-        displayMode === "Popup" && "shadow-lg shadow-sky-800/30 flex-shrink-0"
+        displayMode === "Popup" && "shadow-lg shadow-sky-800/30 flex-shrink-0",
       )}
     >
       <div className="relative flex items-stretch border-b">
@@ -91,7 +91,7 @@ const Bookmarks = ({ displayMode = "NewTab" }: BookmarksProps) => {
       <div
         className={cn(
           "flex flex-col overflow-y-auto flex-grow",
-          displayMode === "Popup" ? "h-[380px]" : "h-60"
+          displayMode === "Popup" ? "h-[380px]" : "h-60",
         )}
       >
         {filteredBookmarks.length === 0 && (
@@ -100,7 +100,7 @@ const Bookmarks = ({ displayMode = "NewTab" }: BookmarksProps) => {
 
         {filteredBookmarks.map((bookmark) => {
           const isAlreadyShortlink = shortlinks?.some(
-            (shortlink) => shortlink.url === bookmark.url
+            (shortlink) => shortlink.url === bookmark.url,
           );
 
           return (
@@ -118,17 +118,17 @@ const Bookmarks = ({ displayMode = "NewTab" }: BookmarksProps) => {
                 isAlreadyShortlink
                   ? undefined
                   : async () => {
-                    if (!bookmark.url) {
-                      return;
-                    }
+                      if (!bookmark.url) {
+                        return;
+                      }
 
-                    await addShortlinkMutation.mutateAsync({
-                      id: uuidv4(),
-                      url: bookmark.url,
-                      title: bookmark.title,
-                      subtitle: "",
-                    });
-                  }
+                      await addShortlinkMutation.mutateAsync({
+                        id: uuidv4(),
+                        url: bookmark.url,
+                        title: bookmark.title,
+                        subtitle: "",
+                      });
+                    }
               }
             />
           );
