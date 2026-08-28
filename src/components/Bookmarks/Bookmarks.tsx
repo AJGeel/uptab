@@ -1,5 +1,4 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { Bookmarks, bookmarks, tabs } from "webextension-polyfill";
 
@@ -11,6 +10,7 @@ import {
   SHORTLINK_QUERY_KEY,
   useShortlinks,
 } from "@/src/hooks/queries/useShortlinks";
+import { usePersistedState } from "@/src/hooks/usePersistedState";
 import { filterBookmarks } from "@/src/services/bookmarks/filterBookmarks";
 import {
   SortMode,
@@ -30,8 +30,16 @@ export type BookmarksProps = {
 
 const Bookmarks = ({ displayMode = "NewTab" }: BookmarksProps) => {
   const queryClient = useQueryClient();
-  const [sortMode, setSortMode] = useState<SortMode>(SortModes.Newest);
-  const [searchQuery, setSearchQuery] = useState("");
+
+  const [sortMode, setSortMode] = usePersistedState<SortMode>(
+    "bookmarks.sortMode",
+    SortModes.Newest,
+  );
+
+  const [searchQuery, setSearchQuery] = usePersistedState(
+    "bookmarks.searchQuery",
+    "",
+  );
 
   const { isPending, isError, data } = useBookmarks();
 
