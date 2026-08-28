@@ -1,51 +1,74 @@
-import { ComponentProps, useEffect, useState } from "react";
+import { AnimatePresence, motion } from "motion/react";
+import { HTMLAttributes, useEffect, useState } from "react";
 
 import { cn } from "@/src/utils";
 
-interface ImageProps extends ComponentProps<"img"> {
+interface ImageProps extends HTMLAttributes<HTMLDivElement> {
   src: string;
   alt: string;
   className?: string;
-  asBackground?: boolean;
 }
 
-const ImageFadeIn = ({
+interface Layer {
+  id: string;
+  src: string;
+}
+
+export const ImageFadeIn = ({
   className,
+  src,
+  alt,
   children,
-  asBackground = false,
   ...props
 }: ImageProps) => {
-  const [isLoaded, setIsLoaded] = useState(false);
+  const [layers, setLayers] = useState<Layer[]>([]);
 
   useEffect(() => {
-    if (!asBackground) {
-      return;
-    }
-
     const image = new Image();
-    image.src = props.src;
+    image.src = src;
+
     image.onload = () => {
-      setIsLoaded(true);
+      setLayers((layers) => [
+        ...layers,
+        {
+          id: crypto.randomUUID(),
+          src,
+        },
+      ]);
     };
-  }, [asBackground, props.src]);
 
-  const classes = cn("duration-300", className, !isLoaded && "opacity-0 ");
-
-  if (asBackground) {
-    return (
-      <div
-        style={{ backgroundImage: `url('${props.src}')` }}
-        className={classes}
-        {...props}
-      >
-        {children}
-      </div>
-    );
-  }
+    return () => {
+      image.onload = null;
+    };
+  }, [src]);
 
   return (
-    <img className={classes} onLoad={() => setIsLoaded(true)} {...props} />
+    <div
+      role="img"
+      aria-label={alt}
+      className={cn("relative overflow-hidden", className)}
+      {...props}
+    >
+      <AnimatePresence initial={false}>
+        {layers.map((layer) => (
+          <motion.div
+            key={layer.id}
+            className="pointer-events-none absolute inset-0 z-0 bg-cover bg-center"
+            style={{
+              backgroundImage: `url("${layer.src}")`,
+            }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{
+              duration: 0.3,
+              ease: "easeInOut",
+            }}
+          />
+        ))}
+      </AnimatePresence>
+
+      <div className="relative z-10">{children}</div>
+    </div>
   );
 };
-
-export default ImageFadeIn;

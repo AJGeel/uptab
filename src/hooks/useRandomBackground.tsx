@@ -1,7 +1,7 @@
-import { useState } from "react";
-
 import { dailyRandomNumber } from "@/src/utils/dailyRandomNumber";
-// import useKeyPress from "./useKeyPress";
+
+import useKeyPress from "./useKeyPress";
+import { usePersistedState } from "./usePersistedState";
 
 type Background = {
   src: string;
@@ -82,26 +82,23 @@ const backgrounds: Background[] = [
 
 export const useRandomBackground = () => {
   const randomIndex = dailyRandomNumber(0, backgrounds.length - 1);
-  const [activeIndex, setActiveIndex] = useState(randomIndex);
+  const [offset, randomOffset] = usePersistedState(
+    "random-bg-offset",
+    randomIndex,
+  );
 
-  // Interesting idea: allow users to offset backgrounds. Should be persisted in LocalStorage.
+  useKeyPress("ArrowRight", () => {
+    randomOffset((prevIndex) => (prevIndex + 1) % backgrounds.length);
+  });
 
-  /*
-   * useKeyPress("ArrowRight", () => {
-   *   setActiveIndex((prevIndex) => (prevIndex + 1) % backgrounds.length);
-   * });
-   */
-
-  /*
-   * useKeyPress("ArrowLeft", () => {
-   *   setActiveIndex(
-   *     (prevIndex) => (prevIndex - 1 + backgrounds.length) % backgrounds.length
-   *   );
-   * });
-   */
+  useKeyPress("ArrowLeft", () => {
+    randomOffset(
+      (prevIndex) => (prevIndex - 1 + backgrounds.length) % backgrounds.length,
+    );
+  });
 
   return {
-    activeBg: backgrounds[activeIndex],
-    setActiveIndex,
+    activeBg: backgrounds[offset],
+    setActiveIndex: randomOffset,
   };
 };
