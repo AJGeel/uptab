@@ -1,5 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
+import { v4 as uuidv4 } from "uuid";
 import { Bookmarks, bookmarks, tabs } from "webextension-polyfill";
 
 import { filterBookmarks } from "@/src/services/bookmarks/filterBookmarks";
@@ -9,6 +10,7 @@ import {
   SortModes,
   sortBookmarks,
 } from "@/src/services/bookmarks/sortBookmarks";
+import { addShortlink, getShortlinks } from "@/src/services/shortlinks";
 import { cn } from "@/src/utils";
 
 import BookmarkItem from "./partials/BookmarkItem";
@@ -30,12 +32,24 @@ const Bookmarks = ({ displayMode = "NewTab" }: BookmarksProps) => {
     queryKey: ["bookmarks"],
   });
 
+  const { data: shortlinks } = useQuery({
+    queryFn: getShortlinks,
+    queryKey: ["shortlinks"],
+  });
+
   const deleteMutation = useMutation({
     mutationFn: async (id: string) => {
       await bookmarks.remove(id);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["bookmarks"] });
+    },
+  });
+
+  const addShortlinkMutation = useMutation({
+    mutationFn: addShortlink,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["shortlinks"] });
     },
   });
 
@@ -84,19 +98,41 @@ const Bookmarks = ({ displayMode = "NewTab" }: BookmarksProps) => {
           <p className="px-2 py-1.5 text-gray-600">No results found...</p>
         )}
 
-        {filteredBookmarks.map((bookmark) => (
-          <BookmarkItem
-            key={bookmark.id}
-            item={bookmark}
-            isFocused={searchQuery.length >= 1}
-            displayMode={displayMode}
-            onDelete={async () => {
-              if (confirm("Are you sure you want to remove this bookmark?")) {
-                await deleteMutation.mutateAsync(bookmark.id);
+        {filteredBookmarks.map((bookmark) => {
+          const isAlreadyShortlink = shortlinks?.some(
+            (shortlink) => shortlink.url === bookmark.url
+          );
+
+          return (
+            <BookmarkItem
+              key={bookmark.id}
+              item={bookmark}
+              isFocused={searchQuery.length >= 1}
+              displayMode={displayMode}
+              handleDelete={async () => {
+                if (confirm("Are you sure you want to remove this bookmark?")) {
+                  await deleteMutation.mutateAsync(bookmark.id);
+                }
+              }}
+              handleAddToShortlink={
+                isAlreadyShortlink
+                  ? undefined
+                  : async () => {
+                    if (!bookmark.url) {
+                      return;
+                    }
+
+                    await addShortlinkMutation.mutateAsync({
+                      id: uuidv4(),
+                      url: bookmark.url,
+                      title: bookmark.title,
+                      subtitle: "",
+                    });
+                  }
               }
-            }}
-          />
-        ))}
+            />
+          );
+        })}
       </div>
     </div>
   );
