@@ -66,7 +66,13 @@ const ShortlinksModal = () => {
     [selectedShortlink],
   );
 
-  const { register, handleSubmit, reset, control } = useForm<FormInputs>({
+  const {
+    register,
+    handleSubmit,
+    reset,
+    control,
+    formState: { errors },
+  } = useForm<FormInputs>({
     defaultValues,
   });
 
@@ -124,27 +130,37 @@ const ShortlinksModal = () => {
       onClose={onCloseModal}
       className="max-w-3xl"
     >
-      <div className="grid grid-cols-5">
-        <div className="pointer-events-none col-span-2 mt-4 flex flex-col gap-2 self-start rounded bg-gray-100 p-3">
+      <div className="mt-4 grid grid-cols-5">
+        <div className="pointer-events-none col-span-2 flex flex-col gap-2 self-start rounded bg-gray-100 p-3">
           <p className="text-sm font-semibold text-gray-500">Preview</p>
           <Shortlink item={previewShortlink} isDragging={true} />
         </div>
         <form
-          className="col-span-3 mt-6 flex flex-col"
+          className="col-span-3 flex flex-col"
           onSubmit={handleSubmit(onSubmit)}
         >
           <FormField
             autoFocus
             label="url"
             register={register}
+            error={errors.url}
             required
             pattern={
               /^(https?:\/\/)?(www\.)?[a-zA-Z0-9-]+(\.[a-zA-Z]{2,})+(\/\S*)?$/
             }
           />
-          <FormField label="title" register={register} required />
-          <FormField label="subtitle" register={register} required={false} />
-          <FormField label="icon" register={register} required={false} />
+          <FormField
+            label="title"
+            register={register}
+            required
+            error={errors.title}
+          />
+          <FormField
+            label="subtitle"
+            register={register}
+            error={errors.subtitle}
+          />
+          <FormField label="icon" register={register} error={errors.icon} />
 
           <div className="mt-6 flex justify-end gap-2">
             {selectedShortlink && (
