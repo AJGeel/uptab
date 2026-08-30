@@ -81,7 +81,7 @@ const ShortlinksModal = () => {
   const previewShortlink: ShortlinkType = {
     id: selectedShortlink?.id ?? "preview",
     subtitle: previewValues.subtitle ?? "",
-    title: previewValues.title ?? "Untitled...",
+    title: previewValues.title || "…",
     url: previewValues.url ?? "",
     icon: previewValues.icon
       ? previewValues.icon
