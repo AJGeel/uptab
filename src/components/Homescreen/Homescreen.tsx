@@ -38,7 +38,7 @@ const Homescreen = () => {
           alt="A fancy background image"
           className={cn(
             "flex-1 bg-cover bg-center flex flex-col duration-500",
-            isSidebarOpen ? "scale-105" : "",
+            isSidebarOpen && "scale-105",
           )}
         >
           {settings?.homescreen?.showInfoWidget && (

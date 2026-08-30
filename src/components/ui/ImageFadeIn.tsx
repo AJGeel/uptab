@@ -87,7 +87,6 @@ export const ImageFadeIn = ({
           />
         ))}
       </AnimatePresence>
-
       <div className="relative z-10">{children}</div>
     </div>
   );

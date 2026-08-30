@@ -33,11 +33,19 @@ const InfoWidget = ({ className }: Props) => {
   });
 
   if (isLocationError) {
-    return <CalendarWidget />;
+    return (
+      <div className={className}>
+        <CalendarWidget />
+      </div>
+    );
   }
 
   if (isPending) {
-    return <LoadingState />;
+    return (
+      <div className={className}>
+        <LoadingState />
+      </div>
+    );
   }
 
   if (isError) {
