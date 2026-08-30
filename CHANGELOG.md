@@ -9,6 +9,8 @@ UpTab adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - You can now re-order shortlinks however you want using a drag 'n drop interaction
 - Quickly turn bookmarks into shortlinks with one button click
 - Overhauled the edit shortlink modal with a snazzy preview
+- Use 'left' and 'right' arrow keys to change backgrounds
+- Added three new backgrounds, enhanced some existing backgrounds
 
 ### 🐛 Fixed
 
