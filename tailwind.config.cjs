@@ -3,6 +3,9 @@ module.exports = {
 
   theme: {
     extend: {
+      fontFamily: {
+        sans: ["DM Sans", "sans-serif"],
+      },
       colors: {
         sky: {
           400: "#25B1FF",
