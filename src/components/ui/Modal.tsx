@@ -3,6 +3,7 @@ import * as Dialog from "@radix-ui/react-dialog";
 import { PropsWithChildren } from "react";
 
 import { cn } from "@/src/utils";
+import IconButton from "./IconButton";
 
 type Props = PropsWithChildren<{
   isVisible: boolean;
@@ -42,12 +43,13 @@ const Modal = ({
         )}
         {children}
         <Dialog.Close asChild onClick={onClose}>
-          <button
-            className="absolute right-5 top-5 inline-flex appearance-none items-center justify-center rounded-full p-1 ring-sky-500 ring-offset-2 duration-150 hover:ring-2 focus:outline-none focus:ring-2"
+          <IconButton
             aria-label="Close"
+            className="absolute right-5 top-5"
+            hideBorder
           >
             <XMarkIcon className="size-5" />
-          </button>
+          </IconButton>
         </Dialog.Close>
       </Dialog.Content>
     </Dialog.Portal>
