@@ -1,5 +1,5 @@
-import { AnimatePresence, motion } from "motion/react";
-import { HTMLAttributes, useEffect, useState } from "react";
+import { AnimatePresence, motion, Variants } from "motion/react";
+import { HTMLAttributes, useEffect, useRef, useState } from "react";
 
 import { cn } from "@/src/utils";
 
@@ -9,9 +9,17 @@ interface ImageProps extends HTMLAttributes<HTMLDivElement> {
   className?: string;
 }
 
-type Layer = Pick<ImageProps, "src">;
+interface Layer {
+  id: number;
+  src: string;
+}
 
-export const ImageFadeIn = ({
+const layerVariants: Variants = {
+  hidden: { opacity: 0 },
+  visible: { opacity: 1 },
+};
+
+export const Background = ({
   className,
   src,
   alt,
@@ -19,6 +27,7 @@ export const ImageFadeIn = ({
   ...props
 }: ImageProps) => {
   const [layers, setLayers] = useState<Layer[]>([]);
+  const nextId = useRef(0);
 
   useEffect(() => {
     let cancelled = false;
@@ -27,9 +36,7 @@ export const ImageFadeIn = ({
     image.src = src;
 
     image.onload = async () => {
-      if (cancelled) {
-        return;
-      }
+      if (cancelled) return;
 
       try {
         await image.decode();
@@ -37,16 +44,11 @@ export const ImageFadeIn = ({
         // Image may already be decoded.
       }
 
-      if (cancelled) {
-        return;
-      }
+      if (cancelled) return;
 
-      setLayers((layers) => [
-        ...layers,
-        {
-          src,
-        },
-      ]);
+      const id = nextId.current++;
+
+      setLayers((layers) => [...layers, { id, src }]);
     };
 
     return () => {
@@ -54,8 +56,11 @@ export const ImageFadeIn = ({
     };
   }, [src]);
 
-  const removeLayer = (src: string) =>
-    setLayers((layers) => layers.filter((layer) => layer.src !== src));
+  const removeLayer = (id: number) =>
+    setLayers((layers) => layers.filter((layer) => layer.id !== id));
+
+  const pruneOlderThan = (id: number) =>
+    setLayers((layers) => layers.filter((layer) => layer.id >= id));
 
   return (
     <div
@@ -67,21 +72,24 @@ export const ImageFadeIn = ({
       <AnimatePresence initial={false}>
         {layers.map((layer) => (
           <motion.div
-            key={layer.src}
+            key={layer.id}
             className="pointer-events-none absolute inset-0 z-0 bg-cover bg-center"
             style={{
               backgroundImage: `url("${layer.src}")`,
             }}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
+            variants={layerVariants}
+            initial="hidden"
+            animate="visible"
+            exit="hidden"
             transition={{
-              duration: 0.3,
+              duration: 0.5,
               ease: "easeInOut",
             }}
             onAnimationComplete={(definition) => {
-              if (definition === "exit") {
-                removeLayer(layer.src);
+              if (definition === "visible") {
+                pruneOlderThan(layer.id);
+              } else if (definition === "hidden") {
+                removeLayer(layer.id);
               }
             }}
           />

@@ -9,7 +9,7 @@ import InfoWidget from "../InfoWidget/InfoWidget";
 import { ActiveHotkeyIndicator } from "../Modals/HotkeysModal/partials/ActiveHotkeyIndicator";
 import Modals from "../Modals/Modals";
 import Sidebar from "../Sidebar/Sidebar";
-import { ImageFadeIn } from "../ui/ImageFadeIn";
+import { Background } from "../ui/Background";
 
 const Homescreen = () => {
   const { data: settings, isPending, toggleSidebarSetting } = useSettings();
@@ -33,9 +33,9 @@ const Homescreen = () => {
           isExpanded={!!isSidebarOpen}
           setIsExpanded={() => toggleSidebarSetting("isOpen")}
         />
-        <ImageFadeIn
+        <Background
           src={activeBg.src}
-          alt="A fancy background image"
+          alt={`A great photo by ${activeBg.author}`}
           className={cn(
             "flex-1 bg-cover bg-center flex flex-col duration-500",
             isSidebarOpen && "scale-105",
@@ -51,7 +51,7 @@ const Homescreen = () => {
               )}
             />
           )}
-        </ImageFadeIn>
+        </Background>
       </div>
     </>
   );
