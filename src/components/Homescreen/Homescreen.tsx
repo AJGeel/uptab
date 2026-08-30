@@ -45,11 +45,22 @@ const Homescreen = () => {
             <InfoWidget
               className={cn(
                 "p-6 pl-20 pb-16",
-                isSidebarOpen
-                  ? "opacity-0 translate-x-40 pointer-events-none"
-                  : "translate-x-0",
+                isSidebarOpen && "opacity-0 translate-x-40 pointer-events-none",
               )}
             />
+          )}
+          {settings?.homescreen.showPhotoCredit && (
+            <div className="mt-auto self-start p-2">
+              <p
+                className={cn(
+                  "inline-block self-start opacity-50 hover:opacity-100 p-2 px-4 duration-500 hover:bg-white rounded-2xl",
+                  isSidebarOpen &&
+                    "opacity-0 translate-x-40 pointer-events-none",
+                )}
+              >
+                Photo by {activeBg.author}
+              </p>
+            </div>
           )}
         </Background>
       </div>

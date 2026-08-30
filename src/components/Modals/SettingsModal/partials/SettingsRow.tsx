@@ -16,7 +16,7 @@ const SettingsRow = ({ title, description, isActive, onClick }: Props) => (
     onClick={onClick}
   >
     <div className="flex grow flex-col">
-      <h2 className="font-bold duration-150 group-hover:text-sky-800">
+      <h2 className="font-semibold duration-150 group-hover:text-sky-800">
         {title}
       </h2>
       <p className="text-sm text-gray-700 duration-150 group-hover:text-sky-800">

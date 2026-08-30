@@ -1,45 +1,40 @@
 import { ReactElement, useState } from "react";
 
-import useKeyPress from "@/src/hooks/useKeyPress";
-import { hotkeys } from "@/src/services/hotkeys/hotkeys";
-
 import Tab from "./partials/Tab";
 
-type Props = {
-  tabs: {
-    label: string;
-    content: ReactElement;
-  }[];
+type TabItem<T> = {
+  label: T;
+  content: ReactElement;
 };
 
-const Tabs = ({ tabs }: Props) => {
-  const [activeTab, setActiveTab] = useState(0);
+type Props<T> = {
+  tabs: TabItem<T>[];
+  onTabChange?: (id: T) => void;
+};
 
-  useKeyPress(hotkeys.left, () => {
-    if (activeTab > 0) {
-      setActiveTab(activeTab - 1);
-    }
-  });
+const Tabs = <T extends string>({ tabs, onTabChange }: Props<T>) => {
+  const [activeTab, setActiveTab] = useState<T | undefined>(tabs[0]?.label);
 
-  useKeyPress(hotkeys.right, () => {
-    if (activeTab < tabs.length) {
-      setActiveTab(activeTab + 1);
-    }
-  });
+  const handleTabChange = (id: T) => {
+    setActiveTab(id);
+    onTabChange?.(id);
+  };
+
+  const activeContent = tabs.find((tab) => tab.label === activeTab)?.content;
 
   return (
     <>
       <div className="mb-4 flex items-center gap-1 rounded-xl bg-gray-100 p-1.5">
-        {tabs.map((item, index) => (
+        {tabs.map((tab) => (
           <Tab
-            key={index}
-            label={item.label}
-            isActive={index === activeTab}
-            onClick={() => setActiveTab(index)}
+            label={tab.label}
+            isActive={tab.label === activeTab}
+            onClick={() => handleTabChange(tab.label)}
           />
         ))}
       </div>
-      {tabs[activeTab].content}
+
+      {activeContent}
     </>
   );
 };
