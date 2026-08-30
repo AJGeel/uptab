@@ -1,6 +1,6 @@
 import { useEasterEggs } from "@/src/hooks/useEasterEggs";
 import useKeyPress from "@/src/hooks/useKeyPress";
-import { useRandomBackground } from "@/src/hooks/useRandomBackground";
+import { useRandomBackground } from "@/src/hooks/useRandomBackground/useRandomBackground";
 import { useSettings } from "@/src/hooks/useSettings";
 import { hotkeys } from "@/src/services/hotkeys/hotkeys";
 import { cn } from "@/src/utils";
