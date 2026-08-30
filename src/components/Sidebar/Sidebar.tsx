@@ -22,8 +22,8 @@ const Sidebar = ({ isExpanded, setIsExpanded }: Props) => {
   return (
     <div
       className={cn(
-        "absolute bg-white flex-1 max-w-[600px] w-full duration-500 z-10 h-screen left-0 top-0",
-        isExpanded ? "-translate-x-0" : "-translate-x-full"
+        "absolute bg-white flex-1 max-w-[600px] w-full duration-500 z-20 h-screen left-0 top-0",
+        isExpanded ? "-translate-x-0" : "-translate-x-full",
       )}
     >
       <SidebarExpandButton
@@ -32,9 +32,7 @@ const Sidebar = ({ isExpanded, setIsExpanded }: Props) => {
       />
       <div className="h-full overflow-y-auto p-6">
         {settings?.sidebar.showUpdates && <UpdateNotification />}
-        {settings?.sidebar.showInfoWidget && (
-          <InfoWidget className={isExpanded ? "" : "opacity-0"} />
-        )}
+        {settings?.sidebar.showInfoWidget && <InfoWidget />}
         {settings?.sidebar.showShortlinks && <Shortlinks />}
         {settings?.sidebar.showBookmarks && <Bookmarks />}
         <div className="mt-6 flex items-center gap-2 first:mt-0">
@@ -43,6 +41,13 @@ const Sidebar = ({ isExpanded, setIsExpanded }: Props) => {
             variant={buttonVariants.inline}
             onClick={() => setActiveModal(Modals.settings)}
             label="Edit preferences"
+          />
+          <p>&middot;</p>
+          <Button
+            className="leading-normal first:mt-0"
+            variant={buttonVariants.inline}
+            onClick={() => setActiveModal(Modals.hotkey)}
+            label="View hotkeys"
           />
           {settings?.sidebar.showFeedbackPrompt && (
             <>

@@ -1,4 +1,4 @@
-import { ComponentProps, useState } from "react";
+import { ComponentProps, useEffect, useState } from "react";
 
 interface ImageWithFallbackProps extends ComponentProps<"img"> {
   src: string;
@@ -11,6 +11,10 @@ const ImageWithFallback = ({
   ...props
 }: ImageWithFallbackProps) => {
   const [hasError, setHasError] = useState(false);
+
+  useEffect(() => {
+    setHasError(false)
+  }, [src])
 
   return (
     <img

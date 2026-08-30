@@ -1,17 +1,16 @@
 import { XMarkIcon } from "@heroicons/react/24/solid";
 import * as Dialog from "@radix-ui/react-dialog";
-import { ReactElement } from "react";
+import { PropsWithChildren } from "react";
 
 import { cn } from "@/src/utils";
 
-type Props = {
+type Props = PropsWithChildren<{
   isVisible: boolean;
   onClose: () => void;
   title: string;
   subtitle?: string;
   className?: string;
-  children: ReactElement;
-};
+}>;
 
 const Modal = ({
   isVisible,
@@ -27,7 +26,7 @@ const Modal = ({
       <Dialog.Content
         className={cn(
           "data-[state=open]:animate-contentShow fixed top-[50%] left-[50%] max-h-[85vh] w-[90vw] max-w-md translate-x-[-50%] translate-y-[-50%] rounded bg-white p-6 shadow-lg focus:outline-none z-20 overflow-y-auto",
-          className
+          className,
         )}
         onEscapeKeyDown={onClose}
         onInteractOutside={onClose}
@@ -36,7 +35,7 @@ const Modal = ({
         {subtitle && (
           <Dialog.Description
             className="mb-6 mt-3 leading-normal text-gray-800"
-            style={{ textWrap: "balance" }}
+            style={{ textWrap: "pretty" }}
           >
             {subtitle}
           </Dialog.Description>

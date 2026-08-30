@@ -1,6 +1,7 @@
 import { ReactElement, useState } from "react";
 
-import useKeyPress, { hotkeys } from "@/src/hooks/useKeyPress";
+import useKeyPress from "@/src/hooks/useKeyPress";
+import { hotkeys } from "@/src/services/hotkeys/hotkeys";
 
 import Tab from "./partials/Tab";
 

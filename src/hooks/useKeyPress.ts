@@ -1,30 +1,39 @@
 /* eslint-disable no-console */
 import { useCallback, useEffect } from "react";
 
-const debugMode = false;
+import { Hotkeys } from "../services/hotkeys/types";
 
-export const hotkeys = {
-  slash: "/",
-  backslash: "\\",
-  questionMark: "?",
-  left: "ArrowLeft",
-  right: "ArrowRight",
-} as const;
+const DEBUG_ENABLED = false;
 
-type Hotkeys = (typeof hotkeys)[keyof typeof hotkeys];
+export const isEditableElement = (element: EventTarget | null): boolean => {
+  if (!(element instanceof HTMLElement)) {
+    return false;
+  }
+
+  return (
+    element instanceof HTMLInputElement ||
+    element instanceof HTMLTextAreaElement ||
+    element instanceof HTMLSelectElement ||
+    element.isContentEditable
+  );
+};
 
 const useKeyPress = (targetKey: Hotkeys, callback: () => void) => {
   const handleKeyPress = useCallback(
     (event: KeyboardEvent) => {
-      if (debugMode) {
+      if (DEBUG_ENABLED) {
         console.info(event);
+      }
+
+      if (isEditableElement(event.target)) {
+        return
       }
 
       if (event.key === targetKey) {
         callback();
       }
     },
-    [targetKey, callback]
+    [targetKey, callback],
   );
 
   useEffect(() => {

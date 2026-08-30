@@ -1,6 +1,7 @@
 import { Modals, useModalStore } from "@/src/hooks/stores/useModalStore";
-import useKeyPress, { hotkeys } from "@/src/hooks/useKeyPress";
+import useKeyPress from "@/src/hooks/useKeyPress";
 import { useSettings } from "@/src/hooks/useSettings";
+import { hotkeys } from "@/src/services/hotkeys/hotkeys";
 
 import { rows } from "./partials/rows";
 import SettingsRow from "./partials/SettingsRow";

@@ -1,13 +1,15 @@
 import { useEasterEggs } from "@/src/hooks/useEasterEggs";
-import useKeyPress, { hotkeys } from "@/src/hooks/useKeyPress";
-import { useRandomBackground } from "@/src/hooks/useRandomBackground";
+import useKeyPress from "@/src/hooks/useKeyPress";
+import { useRandomBackground } from "@/src/hooks/useRandomBackground/useRandomBackground";
 import { useSettings } from "@/src/hooks/useSettings";
+import { hotkeys } from "@/src/services/hotkeys/hotkeys";
 import { cn } from "@/src/utils";
 
 import InfoWidget from "../InfoWidget/InfoWidget";
+import { ActiveHotkeyIndicator } from "../Modals/HotkeysModal/partials/ActiveHotkeyIndicator";
 import Modals from "../Modals/Modals";
 import Sidebar from "../Sidebar/Sidebar";
-import ImageFadeIn from "../ui/ImageFadeIn";
+import { ImageFadeIn } from "../ui/ImageFadeIn";
 
 const Homescreen = () => {
   const { data: settings, isPending, toggleSidebarSetting } = useSettings();
@@ -25,18 +27,18 @@ const Homescreen = () => {
   return (
     <>
       <Modals />
+      <ActiveHotkeyIndicator />
       <div className="relative flex size-full max-h-screen min-h-screen items-stretch overflow-hidden">
         <Sidebar
           isExpanded={!!isSidebarOpen}
           setIsExpanded={() => toggleSidebarSetting("isOpen")}
         />
         <ImageFadeIn
-          asBackground={true}
           src={activeBg.src}
           alt="A fancy background image"
           className={cn(
             "flex-1 bg-cover bg-center flex flex-col duration-500",
-            isSidebarOpen ? "scale-105" : ""
+            isSidebarOpen ? "scale-105" : "",
           )}
         >
           {settings?.homescreen?.showInfoWidget && (
@@ -45,7 +47,7 @@ const Homescreen = () => {
                 "p-6 pl-20 pb-16",
                 isSidebarOpen
                   ? "opacity-0 translate-x-40 pointer-events-none"
-                  : "translate-x-0"
+                  : "translate-x-0",
               )}
             />
           )}

@@ -1,5 +1,11 @@
+import { ArrowPathIcon } from "@heroicons/react/24/solid";
 import { useQuery } from "@tanstack/react-query";
 import ReactMarkdown from "react-markdown";
+
+export const targetBlank = {
+  target: "_blank",
+  rel: "noopener noreferrer",
+} as const;
 
 const Changelog = () => {
   const { data, isError, isPending } = useQuery({
@@ -25,31 +31,58 @@ const Changelog = () => {
   }
 
   return (
-    <main className="min-h-screen">
-      <div className="mx-auto max-w-4xl p-12">
-        <ReactMarkdown
-          className="prose lg:prose-lg"
-          components={{
-            h1: ({ ...props }) => (
-              <h1 className="text-3xl font-bold lg:text-5xl" {...props} />
-            ),
-            h2: ({ ...props }) => (
-              <h2 className="mt-8 border-t border-sky-800/10 pt-8" {...props} />
-            ),
-            a: ({ ...props }) => (
-              <a
-                className="border-b-2 pb-1 font-bold no-underline duration-150 hover:border-sky-400 hover:text-sky-400"
-                target="_blank"
-                rel="noopener noreferrer"
-                {...props}
-              />
-            ),
-          }}
-        >
-          {data}
-        </ReactMarkdown>
+    <div className="bg-gradient-to-b from-white via-slate-200 to-slate-200">
+      <div className="mx-auto w-full max-w-3xl px-4 py-32 md:px-6">
+        <div className="prose-sm text-slate-700">
+          <ReactMarkdown
+            components={{
+              h1: () => (
+                <h1 className="text-2xl font-bold lg:text-3xl">
+                  <ArrowPathIcon className="-mt-1 mr-2 inline size-6 text-sky-500" />
+                  <span>UpTab Changelog</span>
+                </h1>
+              ),
+              h2: ({ children }) => (
+                <h2 className="mt-40 flex items-center gap-2">
+                  <img
+                    src="/icon-128.png"
+                    width="20"
+                    height="20"
+                    alt="UpTab Logo"
+                    className="m-0"
+                  />
+                  {children}
+                </h2>
+              ),
+              h3: ({ children }) => (
+                <h3 className="bg-black bg-clip-text font-semibold text-transparent">
+                  {children}
+                </h3>
+              ),
+              a: ({ href, children }) => (
+                <a
+                  className="font-bold text-sky-500 no-underline duration-150 hover:text-black"
+                  {...targetBlank}
+                  href={href}
+                >
+                  {children}
+                </a>
+              ),
+              ul: ({ children }) => (
+                <ul className="list-disc pl-8">{children}</ul>
+              ),
+              code: ({ children }) => (
+                <code className="rounded-md border border-black/20 bg-white px-1.5 py-1 shadow-[0px_2px_rgba(0,0,0,.1)]">
+                  {children}
+                </code>
+              ),
+            }}
+          >
+            {data}
+          </ReactMarkdown>
+        </div>
       </div>
-    </main>
+    </div>
   );
 };
 

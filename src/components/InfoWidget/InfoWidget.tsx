@@ -12,7 +12,7 @@ type Props = {
   className?: string;
 };
 
-const InfoWidget = () => {
+const InfoWidget = ({ className }: Props) => {
   const { isError: isLocationError, data: locationData } = useQuery({
     queryFn: getGeocodedLocation,
     queryKey: ["location"],
@@ -45,7 +45,7 @@ const InfoWidget = () => {
   }
 
   return (
-    <>
+    <div className={cn("flex gap-4 items-center duration-500", className)}>
       {weatherData && (
         <>
           <WeatherWidget weatherData={weatherData} area={locationData?.area} />
@@ -53,14 +53,8 @@ const InfoWidget = () => {
         </>
       )}
       <CalendarWidget />
-    </>
+    </div>
   );
 };
 
-const Container = ({ className }: Props) => (
-  <div className={cn("flex gap-4 items-center duration-500", className)}>
-    <InfoWidget />
-  </div>
-);
-
-export default Container;
+export default InfoWidget;
