@@ -11,7 +11,7 @@ export const hotkeys = {
 export const hotkeyDescriptions: Record<Hotkeys, HotkeyDescription> = {
     [hotkeys.slash]: {
         keyDisplay: "/",
-        description: "Toggle the settings menu",
+        description: "View/hide the settings menu",
     },
     [hotkeys.backslash]: {
         keyDisplay: "\\",
@@ -19,7 +19,7 @@ export const hotkeyDescriptions: Record<Hotkeys, HotkeyDescription> = {
     },
     [hotkeys.questionMark]: {
         keyDisplay: "?",
-        description: "Toggle the menu you're currently looking at",
+        description: "View/hide the keyboard shortcuts",
     },
     [hotkeys.left]: {
         keyDisplay: "←",

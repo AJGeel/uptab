@@ -42,6 +42,13 @@ const Sidebar = ({ isExpanded, setIsExpanded }: Props) => {
             onClick={() => setActiveModal(Modals.settings)}
             label="Edit preferences"
           />
+          <p>&middot;</p>
+          <Button
+            className="leading-normal first:mt-0"
+            variant={buttonVariants.inline}
+            onClick={() => setActiveModal(Modals.hotkey)}
+            label="View hotkeys"
+          />
           {settings?.sidebar.showFeedbackPrompt && (
             <>
               <p>&middot;</p>

@@ -19,7 +19,7 @@ const HotkeysModal = () => {
       isVisible={activeModal === Modals.hotkey}
       onClose={() => setActiveModal(null)}
       title="Keyboard Shortcuts"
-      subtitle="Speed up your UpTab game with shortcuts. So much time for activities."
+      subtitle="Speed up your UpTab game with hotkeys. So much time for activities."
     >
       <div className="flex flex-col">
         {Object.entries(hotkeyDescriptions).map(([key, item]) => (
