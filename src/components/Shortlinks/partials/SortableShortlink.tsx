@@ -1,13 +1,12 @@
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import { LightBulbIcon } from "@heroicons/react/24/outline";
+import { InformationCircleIcon } from "@heroicons/react/24/solid";
 
 import useLongHover from "@/src/hooks/useLongHover";
 import { Shortlink as ShortlinkType } from "@/src/services/shortlinks/types";
 import { cn } from "@/src/utils";
 
 import Shortlink from "./Shortlink";
-import { InformationCircleIcon } from "@heroicons/react/24/solid";
 
 interface SortableShortlinkProps {
   item: ShortlinkType;

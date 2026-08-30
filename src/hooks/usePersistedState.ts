@@ -1,4 +1,3 @@
-
 import { useCallback, useEffect, useState } from "react";
 import { storage } from "webextension-polyfill";
 
@@ -22,6 +21,8 @@ export function usePersistedState<T>(
     initialValue: T | (() => T),
     options: PersistedStateOptions<T> = {},
 ) {
+    const { serialize, deserialize } = options;
+
     const getInitialValue = useCallback(
         () => (initialValue instanceof Function ? initialValue() : initialValue),
         [initialValue],
@@ -41,8 +42,8 @@ export function usePersistedState<T>(
             }
 
             if (result[key] !== undefined) {
-                const value = options.deserialize
-                    ? options.deserialize(result[key])
+                const value = deserialize
+                    ? deserialize(result[key])
                     : (result[key] as T);
 
                 setState(value);
@@ -56,7 +57,7 @@ export function usePersistedState<T>(
         return () => {
             cancelled = true;
         };
-    }, [key, options.deserialize]);
+    }, [key, deserialize]);
 
     const setPersistedState = useCallback(
         (value: SetStateAction<T>) => {
@@ -64,8 +65,8 @@ export function usePersistedState<T>(
                 const nextState =
                     value instanceof Function ? value(prevState) : value;
 
-                const valueToStore = options.serialize
-                    ? options.serialize(nextState)
+                const valueToStore = serialize
+                    ? serialize(nextState)
                     : nextState;
 
                 void storage.local.set({
@@ -75,7 +76,7 @@ export function usePersistedState<T>(
                 return nextState;
             });
         },
-        [key, options.serialize],
+        [key, serialize],
     );
 
     return [state, setPersistedState, isHydrated] as const;

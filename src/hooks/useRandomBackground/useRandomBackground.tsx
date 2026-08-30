@@ -1,8 +1,8 @@
 import { dailyRandomNumber } from "@/src/utils/dailyRandomNumber";
 
+import { backgrounds } from "./backgrounds";
 import useKeyPress from "../useKeyPress";
 import { usePersistedState } from "../usePersistedState";
-import { backgrounds } from "./backgrounds";
 
 export const useRandomBackground = () => {
   const randomIndex = dailyRandomNumber(0, backgrounds.length - 1);
