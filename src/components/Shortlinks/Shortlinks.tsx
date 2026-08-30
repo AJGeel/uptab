@@ -12,7 +12,7 @@ import {
   rectSortingStrategy,
 } from "@dnd-kit/sortable";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useRef, useState } from "react";
+import { useState } from "react";
 
 import {
   SHORTLINK_QUERY_KEY,
@@ -30,30 +30,26 @@ import SortableShortlink from "./partials/SortableShortlink";
 const Shortlinks = () => {
   const queryClient = useQueryClient();
 
-  const [isDragging, setIsDragging] = useState(false);
-  const wasDragging = useRef(false);
+  const { isPending, isError, data } = useShortlinks();
+  const reorderMutation = useMutation({ mutationFn: reorderShortlinks });
 
   const setActiveModal = useModalStore((state) => state.setActiveModal);
   const setSelectedShortlink = useShortlinkStore((state) => state.setSelected);
 
+  const [isDragging, setIsDragging] = useState(false);
+
   const sensors = useSensors(
     useSensor(PointerSensor, {
       activationConstraint: {
-        distance: 3,
+        distance: 5,
       },
     }),
   );
 
-  const { isPending, isError, data } = useShortlinks();
-
-  const reorderMutation = useMutation({ mutationFn: reorderShortlinks });
-
   const handleDragEnd = async ({ active, over }: DragEndEvent) => {
-    setIsDragging(false);
-
-    requestAnimationFrame(() => {
-      wasDragging.current = false;
-    });
+    setTimeout(() => {
+      setIsDragging(false);
+    }, 1);
 
     if (!data) {
       return;
@@ -92,10 +88,7 @@ const Shortlinks = () => {
         <DndContext
           sensors={sensors}
           collisionDetection={closestCenter}
-          onDragStart={() => {
-            setIsDragging(true);
-            wasDragging.current = true;
-          }}
+          onDragStart={() => setIsDragging(true)}
           onDragEnd={handleDragEnd}
         >
           <SortableContext
@@ -112,7 +105,7 @@ const Shortlinks = () => {
                 <SortableShortlink
                   key={item.id}
                   item={item}
-                  isDragging={wasDragging.current}
+                  isDragging={isDragging}
                 />
               ))}
             </div>
