@@ -2,7 +2,7 @@ import { Modals, useModalStore } from "@/src/hooks/stores/useModalStore";
 import useKeyPress from "@/src/hooks/useKeyPress";
 import { hotkeyDescriptions, hotkeys } from "@/src/services/hotkeys/hotkeys";
 
-import { Hotkey } from "./partials/HotkeyDescription";
+import { Hotkey } from "./partials/Hotkey";
 import Button from "../../ui/Button";
 import Modal from "../../ui/Modal";
 

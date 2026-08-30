@@ -13,7 +13,7 @@ const UpdateNotification = () => {
 
   return (
     <button
-      className="mb-8 flex w-full items-center gap-2 rounded bg-sky-500/10 p-2 pl-4 duration-150 hover:bg-sky-500/20"
+      className="mb-8 flex w-full items-center gap-2 rounded-2xl bg-sky-500/10 p-2 pl-4 duration-150 hover:bg-sky-500/20"
       onClick={(event) => {
         event.preventDefault();
         onOpen();
@@ -25,7 +25,7 @@ const UpdateNotification = () => {
         UpTab has been updated! See what&apos;s new.
       </p>
       <button
-        className="flex items-center gap-1 rounded-sm px-3 py-2 duration-150 hover:bg-sky-800/10 hover:text-sky-800"
+        className="flex items-center gap-1 rounded-xl px-3 py-2 duration-150 hover:bg-sky-800/10 hover:text-sky-800"
         onClick={(event) => {
           event.stopPropagation();
           onHide();

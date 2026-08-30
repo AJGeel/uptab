@@ -5,7 +5,7 @@ import { hotkeyDescriptions, hotkeys } from "@/src/services/hotkeys/hotkeys";
 import { Hotkeys } from "@/src/services/hotkeys/types";
 import { cn } from "@/src/utils";
 
-import { Hotkey } from "./HotkeyDescription";
+import { Hotkey } from "./Hotkey";
 
 export const ActiveHotkeyIndicator = () => {
   const [pressedKey, setPressedKey] = useState<Hotkeys | null>(null);

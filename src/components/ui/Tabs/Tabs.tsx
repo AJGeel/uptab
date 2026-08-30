@@ -29,7 +29,7 @@ const Tabs = ({ tabs }: Props) => {
 
   return (
     <>
-      <div className="mb-4 flex items-center gap-1 rounded-md bg-gray-100 p-1.5">
+      <div className="mb-4 flex items-center gap-1 rounded-xl bg-gray-100 p-1.5">
         {tabs.map((item, index) => (
           <Tab
             key={index}

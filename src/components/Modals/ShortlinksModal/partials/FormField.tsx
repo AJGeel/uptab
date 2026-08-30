@@ -43,7 +43,7 @@ const FormField = ({
           id={label}
           aria-invalid={!!error}
           aria-describedby={error ? `${label}-error` : undefined}
-          className={`inline-flex w-full items-center justify-center rounded border px-3 py-2 leading-none shadow outline-none ring-sky-500 ring-offset-2 duration-150 focus:ring-2 ${error ? "border-red-400 focus:ring-red-400" : "border-gray-300"}`}
+          className={`inline-flex w-full items-center justify-center rounded-lg border px-3 py-2 leading-none shadow outline-none ring-sky-500 ring-offset-2 duration-150 focus:ring-2 ${error ? "border-red-400 focus:ring-red-400" : "border-gray-300"}`}
           autoFocus={autoFocus}
           {...register(label, { required, maxLength, pattern })}
         />

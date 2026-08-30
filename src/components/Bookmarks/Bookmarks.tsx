@@ -75,7 +75,7 @@ const Bookmarks = ({ displayMode = "NewTab" }: BookmarksProps) => {
   return (
     <div
       className={cn(
-        "first:mt-0 mt-10 w-full border rounded-md bg-white overflow-hidden relative",
+        "first:mt-0 mt-10 w-full border rounded-2xl bg-white overflow-hidden relative",
         displayMode === "Popup" && "shadow-lg shadow-sky-800/30 flex-shrink-0",
       )}
     >
