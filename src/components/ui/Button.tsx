@@ -27,8 +27,10 @@ const Button = ({
   onClick,
   className,
   variant = buttonVariants.primary,
+  ...props
 }: ButtonProps) => (
   <button
+    {...props}
     className={cn(
       "inline-flex items-center justify-center rounded-xl font-medium leading-none ring-offset-2 duration-150 focus:outline-none focus:ring-2 active:ring-2 ring-sky-500",
       variant === buttonVariants.primary && buttonStyles.primary,
