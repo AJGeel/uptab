@@ -9,10 +9,7 @@ interface ImageProps extends HTMLAttributes<HTMLDivElement> {
   className?: string;
 }
 
-interface Layer {
-  id: string;
-  src: string;
-}
+type Layer = Pick<ImageProps, "src">;
 
 export const ImageFadeIn = ({
   className,
@@ -24,23 +21,41 @@ export const ImageFadeIn = ({
   const [layers, setLayers] = useState<Layer[]>([]);
 
   useEffect(() => {
+    let cancelled = false;
+
     const image = new Image();
     image.src = src;
 
-    image.onload = () => {
+    image.onload = async () => {
+      if (cancelled) {
+        return;
+      }
+
+      try {
+        await image.decode();
+      } catch {
+        // Image may already be decoded.
+      }
+
+      if (cancelled) {
+        return;
+      }
+
       setLayers((layers) => [
         ...layers,
         {
-          id: crypto.randomUUID(),
           src,
         },
       ]);
     };
 
     return () => {
-      image.onload = null;
+      cancelled = true;
     };
   }, [src]);
+
+  const removeLayer = (src: string) =>
+    setLayers((layers) => layers.filter((layer) => layer.src !== src));
 
   return (
     <div
@@ -52,7 +67,7 @@ export const ImageFadeIn = ({
       <AnimatePresence initial={false}>
         {layers.map((layer) => (
           <motion.div
-            key={layer.id}
+            key={layer.src}
             className="pointer-events-none absolute inset-0 z-0 bg-cover bg-center"
             style={{
               backgroundImage: `url("${layer.src}")`,
@@ -63,6 +78,11 @@ export const ImageFadeIn = ({
             transition={{
               duration: 0.3,
               ease: "easeInOut",
+            }}
+            onAnimationComplete={(definition) => {
+              if (definition === "exit") {
+                removeLayer(layer.src);
+              }
             }}
           />
         ))}
