@@ -2,7 +2,29 @@
 
 UpTab adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [V1.3.0] — 2026-09-01
+## [V1.4.0] — 2026-09-04
+
+### ✨ Added
+
+- Photo authors are now credited
+
+### ♻️ Changed
+
+- Updated the visual design to be more modern:
+  - Custom font: Figtree
+  - Tweaks to border radii, colours
+  - Added layout animations, reduce layout shift
+- Show/hide sidebar when editing relevant preferences
+- Viewing changelogs no longer closes the update notification
+- Improved changelog page design
+
+### 🐛 Fixed
+
+- Fix background change performance issue
+- Hotkeys no longer interrupt active input fields
+- Correct V1.3.0 release date
+
+## [V1.3.0] — 2026-08-30
 
 ### ✨ Added
 
@@ -11,10 +33,6 @@ UpTab adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - Overhauled the edit shortlink modal with a snazzy preview
 - Use 'left' and 'right' arrow keys to change backgrounds
 - Added three new backgrounds, enhanced some existing backgrounds
-
-### 🐛 Fixed
-
-- Hotkeys no longer interrupt active input fields
 
 ## [V1.2.3] — 2025-07-17
 

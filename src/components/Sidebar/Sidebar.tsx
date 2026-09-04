@@ -30,12 +30,12 @@ const Sidebar = ({ isExpanded, setIsExpanded }: Props) => {
         isExpanded={isExpanded}
         setIsExpanded={setIsExpanded}
       />
-      <div className="h-full overflow-y-auto p-6">
+      <div className="flex h-full flex-col overflow-y-auto p-6">
         {settings?.sidebar.showUpdates && <UpdateNotification />}
         {settings?.sidebar.showInfoWidget && <InfoWidget />}
         {settings?.sidebar.showShortlinks && <Shortlinks />}
         {settings?.sidebar.showBookmarks && <Bookmarks />}
-        <div className="mt-6 flex items-center gap-2 first:mt-0">
+        <div className="mt-auto flex items-center gap-2 pt-6 first:mt-0">
           <Button
             className="leading-normal first:mt-0"
             variant={buttonVariants.inline}

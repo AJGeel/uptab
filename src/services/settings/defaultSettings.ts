@@ -11,5 +11,6 @@ export const defaultSettings: Settings = {
   },
   homescreen: {
     showInfoWidget: true,
+    showPhotoCredit: true,
   },
 };

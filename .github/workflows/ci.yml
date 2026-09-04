@@ -48,10 +48,8 @@ jobs:
           bun-version: latest
       - name: 📦 Install dependencies
         run: bun install
-      - name: 👷 Build for Chrome
-        run: bun run build:chrome
-      - name: 🦊 Build for Firefox
-        run: bun run build:firefox
+      - name: 🚢 Create shippable files
+        run: bun ship
       - name: 🚀 Upload Artifacts
         if: github.ref == 'refs/head/main'
         uses: actions/upload-artifact@v4

@@ -32,6 +32,20 @@ export const useSettings = () => {
     },
   });
 
+  const setSidebarOpen = async (to: boolean) => {
+    if (!data) {
+      return;
+    }
+
+    await editMutation.mutateAsync({
+      ...data,
+      sidebar: {
+        ...data.sidebar,
+        isOpen: to
+      },
+    });
+  }
+
   const toggleSidebarSetting = async (key: keyof SidebarSettings) => {
     if (!data) {
       return;
@@ -70,6 +84,7 @@ export const useSettings = () => {
     data,
     toggleSidebarSetting,
     toggleHomescreenSetting,
+    setSidebarOpen,
     resetDefaultSettings,
   };
 };

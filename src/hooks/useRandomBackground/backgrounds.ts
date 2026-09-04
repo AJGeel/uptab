@@ -1,6 +1,6 @@
 type Background = {
     src: string;
-    author?: string;
+    author: string;
     link?: string;
 };
 
@@ -45,9 +45,11 @@ export const backgrounds: Background[] = [
         src: "/images/backgrounds/halve-zolenlijn.jpg",
     },
     {
+        author: "Sven van W",
         src: "/images/backgrounds/aerial-castle-view.jpg",
     },
     {
+        author: "Alex Lanting",
         src: "/images/backgrounds/tivoli-vredenburg.jpg",
     },
     {

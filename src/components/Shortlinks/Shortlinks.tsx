@@ -73,7 +73,7 @@ const Shortlinks = () => {
   };
 
   if (isPending) {
-    return <p className="mt-10">Loading...</p>;
+    return;
   }
 
   if (isError) {
@@ -97,7 +97,7 @@ const Shortlinks = () => {
           >
             <div
               className={cn(
-                "grid grid-cols-2 gap-2 p-2 -m-2 rounded duration-250 border border-dashed border-transparent transition-colors",
+                "grid grid-cols-2 gap-2 p-2 -m-2 rounded-2xl duration-250 border border-dashed border-transparent transition-colors",
                 isDragging && "bg-gray-100 border-gray-200",
               )}
             >

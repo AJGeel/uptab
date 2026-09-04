@@ -81,7 +81,7 @@ const ShortlinksModal = () => {
   const previewShortlink: ShortlinkType = {
     id: selectedShortlink?.id ?? "preview",
     subtitle: previewValues.subtitle ?? "",
-    title: previewValues.title ?? "Untitled...",
+    title: previewValues.title || "…",
     url: previewValues.url ?? "",
     icon: previewValues.icon
       ? previewValues.icon
@@ -131,7 +131,7 @@ const ShortlinksModal = () => {
       className="max-w-3xl"
     >
       <div className="mt-4 grid grid-cols-5">
-        <div className="pointer-events-none col-span-2 flex flex-col gap-2 self-start rounded bg-gray-100 p-3">
+        <div className="pointer-events-none col-span-2 flex flex-col gap-2 self-start rounded-xl bg-gray-100 p-3">
           <p className="text-sm font-semibold text-gray-500">Preview</p>
           <Shortlink item={previewShortlink} isDragging={true} />
         </div>

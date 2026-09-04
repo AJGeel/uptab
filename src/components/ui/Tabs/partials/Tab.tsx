@@ -9,10 +9,10 @@ type TabProps = {
 const Tab = ({ isActive, label, onClick }: TabProps) => (
   <button
     className={cn(
-      "px-3 py-2 rounded-sm grow text-center duration-150 font-medium",
+      "px-3 py-2 rounded-lg grow text-center duration-150 font-medium",
       isActive
-        ? "bg-white text-black shadow-sm outline outline-black/5"
-        : "text-gray-500 active:bg-gray-200"
+        ? "bg-white text-black shadow-sm outline outline-1 outline-black/5"
+        : "text-gray-500 active:bg-gray-200",
     )}
     onClick={onClick}
   >

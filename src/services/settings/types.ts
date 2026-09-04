@@ -9,6 +9,7 @@ export type SidebarSettings = {
 
 export type HomescreenSettings = {
   showInfoWidget: boolean;
+  showPhotoCredit: boolean;
 };
 
 export type Settings = {

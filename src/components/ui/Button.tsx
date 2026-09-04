@@ -19,7 +19,7 @@ const buttonStyles = {
     "bg-sky-500 text-white hover:brightness-110 active:brightness-100 px-4 py-3",
   secondary: "bg-white hover:bg-gray-100 active:bg-gray-200 px-4 py-3",
   inline:
-    "underline text-black/70 font-normal hover:text-black hover:no-underline duration-0",
+    "underline text-black/70 font-normal hover:text-black hover:no-underline duration-0 rounded-sm",
 };
 
 const Button = ({
@@ -27,14 +27,16 @@ const Button = ({
   onClick,
   className,
   variant = buttonVariants.primary,
+  ...props
 }: ButtonProps) => (
   <button
+    {...props}
     className={cn(
-      "inline-flex items-center justify-center rounded font-medium leading-none ring-offset-2 duration-150 focus:outline-none focus:ring-2 active:ring-2 ring-sky-500",
+      "inline-flex items-center justify-center rounded-xl font-medium leading-none ring-offset-2 duration-150 focus:outline-none focus:ring-2 active:ring-2 ring-sky-500",
       variant === buttonVariants.primary && buttonStyles.primary,
       variant === buttonVariants.secondary && buttonStyles.secondary,
       variant === buttonVariants.inline && buttonStyles.inline,
-      className
+      className,
     )}
     onClick={onClick}
   >

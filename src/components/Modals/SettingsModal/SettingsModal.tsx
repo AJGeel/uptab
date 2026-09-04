@@ -2,8 +2,8 @@ import { Modals, useModalStore } from "@/src/hooks/stores/useModalStore";
 import useKeyPress from "@/src/hooks/useKeyPress";
 import { useSettings } from "@/src/hooks/useSettings";
 import { hotkeys } from "@/src/services/hotkeys/hotkeys";
+import { settingsRows } from "@/src/services/settings/settingsRows";
 
-import { rows } from "./partials/rows";
 import SettingsRow from "./partials/SettingsRow";
 import Button, { buttonVariants } from "../../ui/Button";
 import Modal from "../../ui/Modal";
@@ -15,6 +15,7 @@ const SettingsModal = () => {
     toggleSidebarSetting,
     toggleHomescreenSetting,
     resetDefaultSettings,
+    setSidebarOpen,
   } = useSettings();
 
   const activeModal = useModalStore((state) => state.activeModal);
@@ -40,9 +41,9 @@ const SettingsModal = () => {
                   label: "Sidebar",
                   content: (
                     <>
-                      {rows.sidebar.map((row) => (
+                      {Object.values(settingsRows.sidebar).map((row) => (
                         <SettingsRow
-                          key={"sidebar" + row.title}
+                          key={row.setting}
                           title={row.title}
                           description={row.description}
                           isActive={settings.sidebar[row.setting]}
@@ -58,9 +59,9 @@ const SettingsModal = () => {
                   label: "Homescreen",
                   content: (
                     <>
-                      {rows.homescreen.map((row) => (
+                      {Object.values(settingsRows.homescreen).map((row) => (
                         <SettingsRow
-                          key={"description" + row.title}
+                          key={row.setting}
                           title={row.title}
                           description={row.description}
                           isActive={settings.homescreen[row.setting]}
@@ -73,9 +74,21 @@ const SettingsModal = () => {
                   ),
                 },
               ]}
+              onTabChange={(id) => {
+                if (id === "Sidebar") {
+                  setSidebarOpen(true);
+                  return;
+                }
+
+                if (id === "Homescreen") {
+                  setSidebarOpen(false);
+                  return;
+                }
+              }}
             />
           </div>
         )}
+
         <div className="flex items-center justify-end gap-2">
           <Button
             label="Reset defaults"

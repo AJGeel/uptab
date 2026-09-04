@@ -62,7 +62,7 @@ const Bookmarks = ({ displayMode = "NewTab" }: BookmarksProps) => {
   });
 
   if (isPending) {
-    return <p className="mt-10 first:mt-0">Loading...</p>;
+    return;
   }
 
   if (isError) {
@@ -75,7 +75,7 @@ const Bookmarks = ({ displayMode = "NewTab" }: BookmarksProps) => {
   return (
     <div
       className={cn(
-        "first:mt-0 mt-10 w-full border rounded-md bg-white overflow-hidden relative",
+        "first:mt-0 mt-10 w-full border rounded-2xl bg-white overflow-hidden relative",
         displayMode === "Popup" && "shadow-lg shadow-sky-800/30 flex-shrink-0",
       )}
     >

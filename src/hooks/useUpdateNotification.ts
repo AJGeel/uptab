@@ -9,7 +9,6 @@ export const useUpdateNotification = () => {
   const onOpen = () => {
     window.open("/src/pages/changelog/index.html");
     setIsVisible(false);
-    setUpdateNotification(false);
   };
 
   const onHide = () => {
