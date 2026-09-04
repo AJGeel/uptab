@@ -62,7 +62,7 @@ const Bookmarks = ({ displayMode = "NewTab" }: BookmarksProps) => {
   });
 
   if (isPending) {
-    return <p className="mt-10 first:mt-0">Loading...</p>;
+    return;
   }
 
   if (isError) {

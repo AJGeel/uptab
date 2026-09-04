@@ -73,7 +73,7 @@ const Shortlinks = () => {
   };
 
   if (isPending) {
-    return <p className="mt-10">Loading...</p>;
+    return;
   }
 
   if (isError) {

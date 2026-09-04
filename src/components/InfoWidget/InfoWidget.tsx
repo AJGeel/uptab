@@ -5,7 +5,7 @@ import { getWeather } from "@/src/services/weather";
 import { cn } from "@/src/utils";
 
 import CalendarWidget from "./partials/CalendarWidget";
-import LoadingState from "./partials/LoadingState";
+import Loader from "../ui/Loader";
 import WeatherWidget from "./partials/WeatherWidget";
 
 import { AnimatePresence, motion } from "motion/react";
@@ -61,7 +61,7 @@ const InfoWidget = ({ className }: Props) => {
 
         {isPending && (
           <Wrapper key="loading">
-            <LoadingState />
+            <Loader label="Checking the weather..." className="h-10" />
           </Wrapper>
         )}
 
