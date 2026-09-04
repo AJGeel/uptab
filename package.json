@@ -7,7 +7,7 @@
   "scripts": {
     "build:chrome": "BUILD_TARGET=chrome vite build",
     "build:firefox": "BUILD_TARGET=firefox vite build",
-    "dev": "BUILD_TARGET=firefox nodemon",
+    "dev": "BUILD_TARGET=firefox nodemon & bun load:firefox",
     "test": "vitest",
     "test:watch": "vitest --watch",
     "lint": "eslint ./",
