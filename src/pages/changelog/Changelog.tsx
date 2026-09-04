@@ -9,8 +9,8 @@ export const targetBlank = {
 } as const;
 
 const Container = ({ children }: PropsWithChildren) => (
-  <div className="bg-gradient-to-b from-white via-slate-200 to-slate-200 min-h-screen">
-    <div className="mx-auto w-full max-w-3xl px-4 py-32 md:px-6 prose-sm text-slate-700">
+  <div className="min-h-screen bg-gradient-to-b from-white via-slate-200 to-slate-200">
+    <div className="prose-sm mx-auto w-full max-w-3xl px-4 py-32 text-slate-700 md:px-6">
       {children}
     </div>
   </div>

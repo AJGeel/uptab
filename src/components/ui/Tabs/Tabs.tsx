@@ -27,6 +27,7 @@ const Tabs = <T extends string>({ tabs, onTabChange }: Props<T>) => {
       <div className="mb-4 flex items-center gap-1 rounded-xl bg-gray-100 p-1.5">
         {tabs.map((tab) => (
           <Tab
+            key={tab.label}
             label={tab.label}
             isActive={tab.label === activeTab}
             onClick={() => handleTabChange(tab.label)}

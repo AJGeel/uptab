@@ -1,15 +1,15 @@
 import { useQuery } from "@tanstack/react-query";
+import { AnimatePresence, motion } from "motion/react";
+import { PropsWithChildren } from "react";
 
 import { getGeocodedLocation } from "@/src/services/location";
 import { getWeather } from "@/src/services/weather";
 import { cn } from "@/src/utils";
 
 import CalendarWidget from "./partials/CalendarWidget";
-import Loader from "../ui/Loader";
 import WeatherWidget from "./partials/WeatherWidget";
+import Loader from "../ui/Loader";
 
-import { AnimatePresence, motion } from "motion/react";
-import { PropsWithChildren } from "react";
 
 type Props = {
   className?: string;

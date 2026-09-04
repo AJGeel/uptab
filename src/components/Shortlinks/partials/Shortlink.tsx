@@ -58,7 +58,7 @@ const Shortlink = ({ item, isDragging }: Props) => {
       <IconButton
         onMouseEnter={() => setIsHoveringSecondary(true)}
         onMouseLeave={() => setIsHoveringSecondary(false)}
-        className="rounded-lg border-none opacity-0 scale-90 group-hover:scale-100 shadow-none group-hover:opacity-100"
+        className="scale-90 rounded-lg border-none opacity-0 shadow-none group-hover:scale-100 group-hover:opacity-100"
         onClick={(event) => {
           event.preventDefault();
           event.stopPropagation();

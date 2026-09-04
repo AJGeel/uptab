@@ -36,7 +36,7 @@ export const Background = ({
     image.src = src;
 
     image.onload = async () => {
-      if (cancelled) return;
+      if (cancelled) {return;}
 
       try {
         await image.decode();
@@ -44,7 +44,7 @@ export const Background = ({
         // Image may already be decoded.
       }
 
-      if (cancelled) return;
+      if (cancelled) {return;}
 
       const id = nextId.current++;
 
@@ -95,7 +95,7 @@ export const Background = ({
           />
         ))}
       </AnimatePresence>
-      <div className="relative z-10 flex flex-col flex-1">{children}</div>
+      <div className="relative z-10 flex flex-1 flex-col">{children}</div>
     </div>
   );
 };

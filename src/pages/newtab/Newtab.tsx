@@ -1,8 +1,8 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { AnimatePresence, motion } from "motion/react";
 
 import Homescreen from "@/src/components/Homescreen/Homescreen";
 import { useEasterEggs } from "@/src/hooks/useEasterEggs";
-import { AnimatePresence, motion } from "motion/react";
 
 const queryClient = new QueryClient();
 

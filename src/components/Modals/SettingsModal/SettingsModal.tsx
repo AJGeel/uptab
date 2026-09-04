@@ -2,12 +2,12 @@ import { Modals, useModalStore } from "@/src/hooks/stores/useModalStore";
 import useKeyPress from "@/src/hooks/useKeyPress";
 import { useSettings } from "@/src/hooks/useSettings";
 import { hotkeys } from "@/src/services/hotkeys/hotkeys";
+import { settingsRows } from "@/src/services/settings/settingsRows";
 
 import SettingsRow from "./partials/SettingsRow";
 import Button, { buttonVariants } from "../../ui/Button";
 import Modal from "../../ui/Modal";
 import Tabs from "../../ui/Tabs/Tabs";
-import { settingsRows } from "@/src/services/settings/settingsRows";
 
 const SettingsModal = () => {
   const {
