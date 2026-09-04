@@ -44,8 +44,8 @@ const Homescreen = () => {
           {settings?.homescreen?.showInfoWidget && (
             <InfoWidget
               className={cn(
-                "p-6 pl-20 pb-16",
-                isSidebarOpen && "opacity-0 translate-x-40 pointer-events-none",
+                "p-6 pl-20 pb-16 duration-500",
+                isSidebarOpen && "translate-x-40 pointer-events-none opacity-0",
               )}
             />
           )}

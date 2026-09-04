@@ -8,9 +8,27 @@ import CalendarWidget from "./partials/CalendarWidget";
 import LoadingState from "./partials/LoadingState";
 import WeatherWidget from "./partials/WeatherWidget";
 
+import { AnimatePresence, motion } from "motion/react";
+import { PropsWithChildren } from "react";
+
 type Props = {
   className?: string;
 };
+
+const Wrapper = ({ children, className }: PropsWithChildren<Props>) => (
+  <motion.div
+    initial={{ opacity: 0, x: -4 }}
+    animate={{ opacity: 1, x: 0 }}
+    exit={{ opacity: 0, x: -4 }}
+    transition={{
+      duration: 0.3,
+      ease: "easeInOut",
+    }}
+    className={cn(className)}
+  >
+    {children}
+  </motion.div>
+);
 
 const InfoWidget = ({ className }: Props) => {
   const { isError: isLocationError, data: locationData } = useQuery({
@@ -32,35 +50,38 @@ const InfoWidget = ({ className }: Props) => {
     queryKey: ["weather", locationData?.latitude, locationData?.longitude],
   });
 
-  if (isLocationError) {
-    return (
-      <div className={className}>
-        <CalendarWidget />
-      </div>
-    );
-  }
-
-  if (isPending) {
-    return (
-      <div className={className}>
-        <LoadingState />
-      </div>
-    );
-  }
-
-  if (isError) {
-    return <span>Unable to display weather information.</span>;
-  }
-
   return (
-    <div className={cn("flex gap-4 items-center duration-500", className)}>
-      {weatherData && (
-        <>
-          <WeatherWidget weatherData={weatherData} area={locationData?.area} />
-          <div className="h-10 w-0.5 rounded bg-black/5" />
-        </>
-      )}
-      <CalendarWidget />
+    <div className={className}>
+      <AnimatePresence mode="wait" initial={false}>
+        {isLocationError && (
+          <Wrapper key="location">
+            <CalendarWidget />
+          </Wrapper>
+        )}
+
+        {isPending && (
+          <Wrapper key="loading">
+            <LoadingState />
+          </Wrapper>
+        )}
+
+        {isError && (
+          <Wrapper key="error">
+            <span>Unable to display weather information.</span>
+          </Wrapper>
+        )}
+
+        {!isLocationError && !isPending && !isError && (
+          <Wrapper key="weather" className="flex items-center gap-4">
+            <WeatherWidget
+              weatherData={weatherData}
+              area={locationData?.area}
+            />
+            <div className="h-10 w-0.5 rounded bg-black/5" />
+            <CalendarWidget />
+          </Wrapper>
+        )}
+      </AnimatePresence>
     </div>
   );
 };
