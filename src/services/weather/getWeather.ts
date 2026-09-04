@@ -1,13 +1,14 @@
-/* eslint-disable camelcase */
 import { OpenMeteoResponse } from "./types";
 import { PossiblyUndefinedLocation } from "../location/types";
 
 export const getWeather = async ({
   latitude,
   longitude,
-}: PossiblyUndefinedLocation) => {
+}: PossiblyUndefinedLocation): Promise<OpenMeteoResponse> => {
   const params = new URLSearchParams({
     current:
+      "temperature_2m,relative_humidity_2m,apparent_temperature,precipitation,rain,showers,snowfall,weather_code",
+    hourly:
       "temperature_2m,relative_humidity_2m,apparent_temperature,precipitation,rain,showers,snowfall,weather_code",
     forecast_days: "1",
     latitude: String(latitude),
@@ -15,12 +16,12 @@ export const getWeather = async ({
   });
 
   const res = await fetch(
-    `https://api.open-meteo.com/v1/forecast?${params.toString()}`
+    `https://api.open-meteo.com/v1/forecast?${params.toString()}`,
   );
 
   if (!res.ok) {
-    throw new Error();
+    throw new Error("Failed to fetch weather data");
   }
 
-  return (await res.json()) as OpenMeteoResponse;
+  return res.json();
 };
