@@ -11,7 +11,7 @@ export const getCachedReverseGeocoding = async ({
 }: Location): Promise<GeocodeResponse | void> => {
   try {
     const { cachedReverseGeocoding } = await storage.local.get(
-      "cachedReverseGeocoding"
+      "cachedReverseGeocoding",
     );
 
     if (!cachedReverseGeocoding) {

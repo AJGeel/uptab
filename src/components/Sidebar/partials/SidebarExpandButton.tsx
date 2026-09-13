@@ -9,7 +9,7 @@ export const SidebarExpandButton = ({ isExpanded, setIsExpanded }: Props) => (
   <IconButton
     className={cn(
       "absolute top-7 group mr-6 sm:mr-0",
-      isExpanded ? "-right-4" : "-right-14"
+      isExpanded ? "-right-4" : "-right-14",
     )}
     onClick={() => {
       setIsExpanded(!isExpanded);
@@ -18,7 +18,7 @@ export const SidebarExpandButton = ({ isExpanded, setIsExpanded }: Props) => (
     <ChevronRightIcon
       className={cn(
         "w-4 h-4 group-hover:text-sky-500 duration-300",
-        isExpanded ? "rotate-180" : ""
+        isExpanded ? "rotate-180" : "",
       )}
     />
   </IconButton>

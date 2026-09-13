@@ -62,8 +62,8 @@ const Modal = ({ className, onClose, isVisible, ...modalProps }: Props) => {
         <Dialog.Overlay
           className="
             fixed inset-0 z-20 bg-black/50
-            data-[state=open]:animate-overlayShow
             data-[state=closed]:animate-overlayHide
+            data-[state=open]:animate-overlayShow
           "
         />
 
@@ -74,7 +74,7 @@ const Modal = ({ className, onClose, isVisible, ...modalProps }: Props) => {
               max-h-[85vh] w-[90vw] max-w-md
               translate-x-[-50%] translate-y-[-50%]
               overflow-y-auto rounded-2xl
-              bg-white/90 p-6
+              bg-white/95 p-6
               shadow-lg backdrop-blur-lg
               backdrop-brightness-[1.9] backdrop-saturate-150
               focus:outline-none

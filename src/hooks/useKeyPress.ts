@@ -26,7 +26,7 @@ const useKeyPress = (targetKey: Hotkeys, callback: () => void) => {
       }
 
       if (isEditableElement(event.target)) {
-        return
+        return;
       }
 
       if (event.key === targetKey) {

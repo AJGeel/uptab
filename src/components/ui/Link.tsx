@@ -13,7 +13,7 @@ const Link = ({ href, className, children }: Props) => (
     href={href}
     className={cn(
       "hover:text-sky-800 active:scale-90 active:opacity-60 duration-150",
-      className
+      className,
     )}
   >
     {children}

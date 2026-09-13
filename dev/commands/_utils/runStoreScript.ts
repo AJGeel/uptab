@@ -11,7 +11,7 @@ export type Command = {
 };
 
 const promptForCommand = async (
-  commands: Command[]
+  commands: Command[],
 ): Promise<Command | string> => {
   const choices = commands.map((command, index) => ({
     name: `${index + 1}. ${command.name} - ${command.description}`,
@@ -42,7 +42,7 @@ const runCommand = async (command: Command | string) => {
   const rootDir = process.cwd();
   const commandFilePath = path.join(
     rootDir,
-    `dev/commands/${command.filename}`
+    `dev/commands/${command.filename}`,
   );
 
   console.log(commandFilePath);
@@ -58,7 +58,7 @@ const runCommand = async (command: Command | string) => {
     commandModule.run();
   } catch (error) {
     console.error(
-      `Error loading or executing command file: ${command.filename}`
+      `Error loading or executing command file: ${command.filename}`,
     );
     console.error(error);
   }

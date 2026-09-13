@@ -9,7 +9,7 @@ import {
   SidebarSettings,
 } from "../services/settings/types";
 
-const SETTINGS_QUERY_KEY = ["settings"] as const
+const SETTINGS_QUERY_KEY = ["settings"] as const;
 
 export const useSettings = () => {
   const queryClient = useQueryClient();
@@ -41,10 +41,10 @@ export const useSettings = () => {
       ...data,
       sidebar: {
         ...data.sidebar,
-        isOpen: to
+        isOpen: to,
       },
     });
-  }
+  };
 
   const toggleSidebarSetting = async (key: keyof SidebarSettings) => {
     if (!data) {

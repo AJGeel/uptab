@@ -1,12 +1,43 @@
+import { useLocationAndWeather } from "@/src/hooks/queries/useLocationAndWeather";
 import { Modals, useModalStore } from "@/src/hooks/stores/useModalStore";
+import { mapWeatherCode, Weather } from "@/src/services/weather";
+import { cn } from "@/src/utils";
 
 import Button from "../../ui/Button";
 import Modal from "../../ui/Modal";
-import { useLocationAndWeather } from "@/src/hooks/queries/useLocationAndWeather";
-import { mapWeatherCode } from "@/src/services/weather";
-import { cn } from "@/src/utils";
 
-const cellStyle = cn("w-20 text-center py-1");
+const cellStyle = cn("w-20 shrink-0 text-center py-1");
+
+const getDayLabel = (date: Date) => {
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+
+  const target = new Date(date);
+  target.setHours(0, 0, 0, 0);
+
+  const diffDays = Math.round(
+    (target.getTime() - today.getTime()) / (1000 * 60 * 60 * 24),
+  );
+
+  if (diffDays === 0) {
+    return "Today";
+  }
+  if (diffDays === 1) {
+    return "Tomorrow";
+  }
+  return "In two days";
+};
+
+const isNewDay = (forecast: Weather["hourly"], index: number) => {
+  if (index === 0) {
+    return true;
+  }
+
+  const current = new Date(forecast[index].time);
+  const previous = new Date(forecast[index - 1].time);
+
+  return current.toDateString() !== previous.toDateString();
+};
 
 const WeatherForecastModal = () => {
   const activeModal = useModalStore((state) => state.activeModal);
@@ -30,6 +61,7 @@ const WeatherForecastModal = () => {
     const dayAfterTomorrow = new Date(currentHour);
     dayAfterTomorrow.setDate(currentHour.getDate() + 2);
     dayAfterTomorrow.setHours(23, 0, 0, 0);
+
     const hourTime = new Date(hour.time);
 
     return hourTime >= currentHour && hourTime <= dayAfterTomorrow;
@@ -45,7 +77,7 @@ const WeatherForecastModal = () => {
           ? `Here's what to expect in ${locationData.area}.`
           : undefined
       }
-      className="max-w-4xl "
+      className="max-w-4xl"
     >
       {isPending && <p className="text-sm text-gray-500">Loading weather...</p>}
 
@@ -56,25 +88,30 @@ const WeatherForecastModal = () => {
       {!isPending && !isError && forecast && (
         <div className="overflow-x-auto rounded-lg py-4 outline outline-1 outline-black/5">
           <div className="min-w-max">
+            {/* Time */}
             <div className="flex">
-              {forecast.map((hour) => {
-                const isNow =
-                  new Date(hour.time).getTime() <= Date.now() &&
-                  new Date(hour.time).getTime() + 60 * 60 * 1000 > Date.now();
+              {forecast.map((hour, index) => {
+                const date = new Date(hour.time);
+                const newDay = isNewDay(forecast, index);
 
                 return (
-                  <p key={hour.time} className={cn(cellStyle, "text-black/70")}>
-                    {isNow
-                      ? "Now"
-                      : new Date(hour.time).toLocaleTimeString([], {
-                          hour: "2-digit",
-                          minute: "2-digit",
-                        })}
-                  </p>
+                  <div key={hour.time} className="w-20 shrink-0">
+                    <div className="sticky left-0 z-10 w-20 pb-4 text-center font-medium text-black/50">
+                      {newDay ? getDayLabel(date) : "\u00A0"}
+                    </div>
+
+                    <p className={cn(cellStyle, "text-black/70")}>
+                      {new Date(hour.time).toLocaleTimeString([], {
+                        hour: "2-digit",
+                        minute: "2-digit",
+                      })}
+                    </p>
+                  </div>
                 );
               })}
             </div>
 
+            {/* Temperature */}
             <div className="flex">
               {forecast.map((hour) => (
                 <p key={hour.time} className={cn(cellStyle, "font-semibold")}>
@@ -83,6 +120,7 @@ const WeatherForecastModal = () => {
               ))}
             </div>
 
+            {/* Weather icon */}
             <div className="flex">
               {forecast.map((hour) => {
                 const code = mapWeatherCode(hour.weather_code);
@@ -107,11 +145,12 @@ const WeatherForecastModal = () => {
               })}
             </div>
 
+            {/* Rain */}
             <div className="flex">
               {forecast.map((hour) => (
                 <p
                   key={hour.time}
-                  className={cn(cellStyle, "text-sky-700 text-xs")}
+                  className={cn(cellStyle, "text-xs text-sky-700")}
                 >
                   {hour.rain.toFixed(1)} mm
                 </p>

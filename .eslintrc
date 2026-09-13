@@ -12,7 +12,8 @@
     "plugin:react/recommended",
     "plugin:tailwindcss/recommended",
     "plugin:import/recommended",
-    "plugin:import/typescript"
+    "plugin:import/typescript",
+    "plugin:prettier/recommended"
   ],
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
@@ -22,16 +23,32 @@
     "ecmaVersion": "latest",
     "sourceType": "module"
   },
-  "plugins": ["react", "@typescript-eslint", "import"],
+  "plugins": [
+    "react",
+    "@typescript-eslint",
+    "import"
+  ],
   "settings": {
     "import/resolver": {
       "alias": {
         "map": [
-          ["@/assets", "./src/assets"],
-          ["@/pages", "./src/pages"],
-          ["@/src", "./src"]
+          [
+            "@/assets",
+            "./src/assets"
+          ],
+          [
+            "@/pages",
+            "./src/pages"
+          ],
+          [
+            "@/src",
+            "./src"
+          ]
         ],
-        "extensions": [".ts", ".tsx"]
+        "extensions": [
+          ".ts",
+          ".tsx"
+        ]
       }
     },
     "react": {
@@ -39,17 +56,17 @@
     }
   },
   "rules": {
-    // ESLint rules
     "arrow-body-style": "error",
     "block-scoped-var": "error",
-    "camelcase": "error",
     "curly": "error",
     "default-case-last": "error",
     "default-case": "error",
     "default-param-last": "error",
     "dot-notation": "error",
     "eqeqeq": "error",
-    "max-lines": ["error"],
+    "max-lines": [
+      "error"
+    ],
     "multiline-comment-style": "error",
     "no-console": "warn",
     "no-duplicate-imports": "error",
@@ -71,24 +88,25 @@
     "prefer-rest-params": "warn",
     "require-await": "error",
     "sort-vars": "warn",
-    // React rules
     "react/react-in-jsx-scope": "off",
-    // Import rules
     "import/order": [
       "warn",
       {
         "groups": [
-          "builtin", // Built-in imports (come from NodeJS native) go first
-          "external", // <- External imports
-          "internal", // <- Absolute imports
-          ["sibling", "parent"], // <- Relative imports, the sibling and parent types they can be mingled together
-          "index", // <- index imports
-          "unknown" // <- unknown
+          "builtin",
+          "external",
+          "internal",
+          [
+            "sibling",
+            "parent"
+          ],
+          "index",
+          "unknown"
         ],
         "newlines-between": "always",
         "alphabetize": {
-          "order": "asc", // sort in ascending order. Options: ["ignore", "asc", "desc"]
-          "caseInsensitive": true // ignore case. Options: [true, false]
+          "order": "asc",
+          "caseInsensitive": true
         }
       }
     ]
@@ -96,5 +114,8 @@
   "globals": {
     "chrome": "readonly"
   },
-  "ignorePatterns": ["watch.js", "dist/**"]
+  "ignorePatterns": [
+    "watch.js",
+    "dist/**"
+  ]
 }

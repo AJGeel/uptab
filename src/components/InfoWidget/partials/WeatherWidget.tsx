@@ -1,4 +1,3 @@
-import Link from "@/src/components/ui/Link";
 import { useModalStore } from "@/src/hooks/stores/useModalStore";
 import { Weather, mapWeatherCode } from "@/src/services/weather";
 
@@ -14,7 +13,7 @@ const WeatherWidget = ({ weatherData, area }: WeatherWidgetProps) => {
 
   return (
     <button
-      className="flex items-center gap-6 hover:text-sky-800 active:scale-90 active:opacity-60 duration-150"
+      className="flex items-center gap-6 duration-150 hover:text-sky-800 active:scale-90 active:opacity-60"
       onClick={() => setActiveModal("weatherForecast")}
     >
       <p className="text-4xl font-bold">

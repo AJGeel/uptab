@@ -1,12 +1,12 @@
 import { AnimatePresence, motion } from "motion/react";
 import { PropsWithChildren } from "react";
 
+import { useLocationAndWeather } from "@/src/hooks/queries/useLocationAndWeather";
 import { cn } from "@/src/utils";
 
 import CalendarWidget from "./partials/CalendarWidget";
 import WeatherWidget from "./partials/WeatherWidget";
 import Loader from "../ui/Loader";
-import { useLocationAndWeather } from "@/src/hooks/queries/useLocationAndWeather";
 
 type Props = {
   className?: string;

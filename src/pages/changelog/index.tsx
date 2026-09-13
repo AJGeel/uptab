@@ -21,7 +21,7 @@ const init = () => {
   root.render(
     <QueryClientProvider client={queryClient}>
       <Changelog />
-    </QueryClientProvider>
+    </QueryClientProvider>,
   );
 };
 

@@ -13,8 +13,8 @@ const ImageWithFallback = ({
   const [hasError, setHasError] = useState(false);
 
   useEffect(() => {
-    setHasError(false)
-  }, [src])
+    setHasError(false);
+  }, [src]);
 
   return (
     <img
