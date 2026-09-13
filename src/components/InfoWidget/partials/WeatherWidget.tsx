@@ -1,4 +1,5 @@
 import Link from "@/src/components/ui/Link";
+import { useModalStore } from "@/src/hooks/stores/useModalStore";
 import { Weather, mapWeatherCode } from "@/src/services/weather";
 
 interface WeatherWidgetProps {
@@ -7,14 +8,14 @@ interface WeatherWidgetProps {
 }
 
 const WeatherWidget = ({ weatherData, area }: WeatherWidgetProps) => {
-  const weatherDescription = mapWeatherCode(
-    String(weatherData.current.weather_code),
-  );
+  const setActiveModal = useModalStore((state) => state.setActiveModal);
+
+  const weatherDescription = mapWeatherCode(weatherData.current.weather_code);
 
   return (
-    <Link
-      href="https://www.google.com/search?q=weather"
-      className="flex items-center gap-6"
+    <button
+      className="flex items-center gap-6 hover:text-sky-800 active:scale-90 active:opacity-60 duration-150"
+      onClick={() => setActiveModal("weatherForecast")}
     >
       <p className="text-4xl font-bold">
         {weatherData.current.temperature_2m}°C
@@ -37,7 +38,7 @@ const WeatherWidget = ({ weatherData, area }: WeatherWidgetProps) => {
           />
         </div>
       )}
-    </Link>
+    </button>
   );
 };
 

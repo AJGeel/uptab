@@ -1,6 +1,6 @@
 import { descriptions as weatherDescriptions } from "./weatherDescriptions";
 
-export const mapWeatherCode = (code: string) => {
+export const mapWeatherCode = (code: number) => {
   const description = weatherDescriptions[code];
 
   if (description) {

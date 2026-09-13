@@ -10,7 +10,7 @@ export const getWeather = async ({
       "temperature_2m,relative_humidity_2m,apparent_temperature,precipitation,rain,showers,snowfall,weather_code",
     hourly:
       "temperature_2m,relative_humidity_2m,apparent_temperature,precipitation,rain,showers,snowfall,weather_code",
-    forecast_days: "1",
+    forecast_days: "3",
     latitude: String(latitude),
     longitude: String(longitude),
   });
