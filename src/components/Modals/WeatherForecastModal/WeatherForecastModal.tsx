@@ -1,43 +1,24 @@
+import { format, isToday } from "date-fns";
+import {
+  Bar,
+  CartesianGrid,
+  ComposedChart,
+  Line,
+  ResponsiveContainer,
+  Tooltip,
+  XAxis,
+  YAxis,
+} from "recharts";
+
 import { useLocationAndWeather } from "@/src/hooks/queries/useLocationAndWeather";
 import { Modals, useModalStore } from "@/src/hooks/stores/useModalStore";
-import { mapWeatherCode, Weather } from "@/src/services/weather";
-import { cn } from "@/src/utils";
+import { mapWeatherCode } from "@/src/services/weather";
 
 import Button from "../../ui/Button";
 import Modal from "../../ui/Modal";
 
-const cellStyle = cn("w-20 shrink-0 text-center py-1");
-
-const getDayLabel = (date: Date) => {
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
-
-  const target = new Date(date);
-  target.setHours(0, 0, 0, 0);
-
-  const diffDays = Math.round(
-    (target.getTime() - today.getTime()) / (1000 * 60 * 60 * 24),
-  );
-
-  if (diffDays === 0) {
-    return "Today";
-  }
-  if (diffDays === 1) {
-    return "Tomorrow";
-  }
-  return "In two days";
-};
-
-const isNewDay = (forecast: Weather["hourly"], index: number) => {
-  if (index === 0) {
-    return true;
-  }
-
-  const current = new Date(forecast[index].time);
-  const previous = new Date(forecast[index - 1].time);
-
-  return current.toDateString() !== previous.toDateString();
-};
+const getDayLabel = (date: Date) =>
+  isToday(date) ? "Today" : format(date, "EEEE");
 
 const WeatherForecastModal = () => {
   const activeModal = useModalStore((state) => state.activeModal);
@@ -67,6 +48,24 @@ const WeatherForecastModal = () => {
     return hourTime >= currentHour && hourTime <= dayAfterTomorrow;
   });
 
+  const chartData = forecast?.map((hour) => {
+    const date = new Date(hour.time);
+    const weatherCode = mapWeatherCode(hour.weather_code);
+
+    return {
+      time: hour.time,
+      temperature: Math.round(hour.temperature_2m),
+      rain: Number(hour.rain.toFixed(1)),
+      weatherImage: weatherCode?.image,
+      weatherDescription: weatherCode?.description,
+      timeLabel: date.toLocaleTimeString([], {
+        hour: "2-digit",
+        minute: "2-digit",
+      }),
+      dayLabel: getDayLabel(date),
+    };
+  });
+
   return (
     <Modal
       isVisible={activeModal === Modals.weather_forecast}
@@ -85,78 +84,150 @@ const WeatherForecastModal = () => {
         <p className="text-sm text-red-500">Unable to load weather data.</p>
       )}
 
-      {!isPending && !isError && forecast && (
-        <div className="overflow-x-auto rounded-lg py-4 outline outline-1 outline-black/5">
-          <div className="min-w-max">
-            {/* Time */}
-            <div className="flex">
-              {forecast.map((hour, index) => {
-                const date = new Date(hour.time);
-                const newDay = isNewDay(forecast, index);
+      {!isPending && !isError && chartData && (
+        <div className="mt-4 h-[400px] w-full">
+          <ResponsiveContainer width="100%" height="100%">
+            <ComposedChart data={chartData}>
+              <CartesianGrid
+                strokeDasharray="10 5"
+                stroke="currentColor"
+                horizontal={false}
+                className="text-black/10"
+              />
 
-                return (
-                  <div key={hour.time} className="w-20 shrink-0">
-                    <div className="sticky left-0 z-10 w-20 pb-4 text-center font-medium text-black/50">
-                      {newDay ? getDayLabel(date) : "\u00A0"}
+              <XAxis
+                dataKey="time"
+                tickLine={false}
+                axisLine={false}
+                minTickGap={60}
+                tick={{ fontSize: 12 }}
+                tickFormatter={(value) =>
+                  new Date(value).toLocaleTimeString([], {
+                    hour: "2-digit",
+                    minute: "2-digit",
+                  })
+                }
+              />
+
+              {/* Rain */}
+              <YAxis
+                yAxisId="rain"
+                orientation="right"
+                tickLine={false}
+                axisLine={false}
+                tick={{ fontSize: 12 }}
+                width={40}
+                tickFormatter={(value) => `${value} mm`}
+              />
+
+              {/* Temperature */}
+              <YAxis
+                yAxisId="temperature"
+                orientation="left"
+                tickLine={false}
+                axisLine={false}
+                tick={{ fontSize: 12 }}
+                width={40}
+                tickFormatter={(value) => `${value}°`}
+              />
+
+              <Tooltip
+                cursor={{
+                  fill: "currentColor",
+                  className: "text-black/5",
+                }}
+                content={({ active, payload, label }) => {
+                  if (!active || !payload?.length || !label) {
+                    return null;
+                  }
+
+                  const data = payload[0]?.payload;
+
+                  if (!data) {
+                    return null;
+                  }
+
+                  const date = new Date(label);
+
+                  return (
+                    <div className="rounded-xl border border-black/10 bg-white px-3 py-2 text-sm shadow-lg">
+                      <div className="mb-2 flex items-center gap-2">
+                        {data.weatherImage && (
+                          <img
+                            src={data.weatherImage}
+                            alt={data.weatherDescription ?? ""}
+                            className="size-10 shrink-0"
+                          />
+                        )}
+
+                        <div>
+                          {data.weatherDescription && (
+                            <p className="font-medium">
+                              {data.weatherDescription}
+                            </p>
+                          )}
+                          <p className="text-xs text-black/50">
+                            {getDayLabel(date)} ·{" "}
+                            {date.toLocaleTimeString([], {
+                              hour: "2-digit",
+                              minute: "2-digit",
+                            })}
+                          </p>
+                        </div>
+                      </div>
+
+                      <div className="space-y-0.5 text-black/70">
+                        <p>
+                          Temperature:{" "}
+                          <span className="font-medium text-black">
+                            {
+                              payload.find(
+                                (item) => item.dataKey === "temperature",
+                              )?.value
+                            }
+                            °
+                          </span>
+                        </p>
+
+                        <p>
+                          Rain:{" "}
+                          <span className="font-medium text-black">
+                            {
+                              payload.find((item) => item.dataKey === "rain")
+                                ?.value
+                            }{" "}
+                            mm
+                          </span>
+                        </p>
+                      </div>
                     </div>
+                  );
+                }}
+              />
 
-                    <p className={cn(cellStyle, "text-black/70")}>
-                      {new Date(hour.time).toLocaleTimeString([], {
-                        hour: "2-digit",
-                        minute: "2-digit",
-                      })}
-                    </p>
-                  </div>
-                );
-              })}
-            </div>
+              <Bar
+                yAxisId="rain"
+                dataKey="rain"
+                name="Rain"
+                fill="currentColor"
+                className="text-sky-400"
+                radius={[3, 3, 0, 0]}
+                maxBarSize={12}
+              />
 
-            {/* Temperature */}
-            <div className="flex">
-              {forecast.map((hour) => (
-                <p key={hour.time} className={cn(cellStyle, "font-semibold")}>
-                  {Math.round(hour.temperature_2m)}°
-                </p>
-              ))}
-            </div>
-
-            {/* Weather icon */}
-            <div className="flex">
-              {forecast.map((hour) => {
-                const code = mapWeatherCode(hour.weather_code);
-
-                return (
-                  <div
-                    key={hour.time}
-                    className={cn(
-                      cellStyle,
-                      "flex items-center justify-center",
-                    )}
-                  >
-                    {code && (
-                      <img
-                        className="size-12 [filter:drop-shadow(0.5px_0_0_#020E2C33)_drop-shadow(-0.5px_0_0_#020E2C33)_drop-shadow(0_0.5px_0_#020E2C33)_drop-shadow(0_-0.5px_0_#020E2C33)]"
-                        src={code.image}
-                        alt={code.description}
-                      />
-                    )}
-                  </div>
-                );
-              })}
-            </div>
-
-            {/* Rain */}
-            <div className="flex">
-              {forecast.map((hour) => (
-                <p
-                  key={hour.time}
-                  className={cn(cellStyle, "text-xs text-sky-700")}
-                >
-                  {hour.rain.toFixed(1)} mm
-                </p>
-              ))}
-            </div>
-          </div>
+              <Line
+                yAxisId="temperature"
+                type="monotone"
+                dataKey="temperature"
+                name="Temperature"
+                stroke="currentColor"
+                className="text-orange-500"
+                strokeWidth={2.5}
+                dot={false}
+                activeDot={{ r: 4 }}
+              />
+            </ComposedChart>
+          </ResponsiveContainer>
         </div>
       )}
 
