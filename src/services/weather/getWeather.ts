@@ -11,6 +11,7 @@ export const getWeather = async ({
     hourly:
       "temperature_2m,relative_humidity_2m,apparent_temperature,precipitation,rain,showers,snowfall,weather_code",
     forecast_days: "3",
+    timezone: "auto",
     latitude: String(latitude),
     longitude: String(longitude),
   });
