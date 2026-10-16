@@ -11,3 +11,8 @@
 ## Others:
 
 -
+
+## Checklist
+
+- [ ] Updated `CHANGELOG.md`
+- [ ] `bun store:submit`
