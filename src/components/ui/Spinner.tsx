@@ -10,7 +10,7 @@ const Spinner = ({ className }: Props) => (
       aria-hidden="true"
       className={cn(
         "w-8 h-8 text-black/20 animate-spin fill-sky-500",
-        className
+        className,
       )}
       viewBox="0 0 100 101"
       fill="none"

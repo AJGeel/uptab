@@ -2,7 +2,7 @@ import { Bookmarks } from "webextension-polyfill";
 
 export const mapBookmarks = (
   bookmarkNodes: Bookmarks.BookmarkTreeNode[],
-  parentId?: string
+  parentId?: string,
 ) =>
   bookmarkNodes.flatMap((node) => {
     const bookmark = {

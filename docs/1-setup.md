@@ -1,30 +1,65 @@
 # Setup <a name="setup"></a>
 
-1. Run `npm install` (check your node version >= 16)
-1. Load Extension:
-   1. Make sure you have `npm run dev` running for hot reloading.
-   1. Chrome and Edge
-      1. Change the `src/config/buildTarget.ts` file so that `buildTarget = TARGETS.CHROME`.
-      1. Open - Chrome/Edge browser.
-      1. Access - `chrome://extensions` / `edge://extensions`.
-      1. Check - Developer mode.
-      1. Find - Load unpacked extension.
-      1. Select - `dist/chromium` folder in this project (after dev or build)
-   1. Firefox:
-      1. Change the `src/config/buildTarget.ts` file so that `buildTarget = TARGETS.FIREFOX`.
-      1. run `npm run load:firefox`.
-      1. It should open a `web-ext` faux FireFox browser with the extension running.
-1. If you want to build for production, run `npm run build`. Remember to create separate builds for Firefox and Chromium by editing `src/config/buildTarget.ts`.
+You need [Bun](https://bun.sh/).
 
-Tailwind can be configured in the `tailwind.config.cjs` file. See doc link below.
+```sh
+bun install
+cp .env.example .env  # optional for development, see below
+```
+
+`.env` holds the GlitchTip DSN for error reporting, plus the store credentials used for [releasing](/docs/2-releasing.md). You can develop without it.
+
+<br/>
+
+## 1. Development
+
+### Firefox
+
+```sh
+bun dev
+```
+
+This rebuilds `dist/firefox` on every change and opens a temporary Firefox window with the extension installed. The extension reloads automatically.
+
+### Chrome and Edge
+
+```sh
+bunx nodemon
+```
+
+This rebuilds `dist/chromium` on every change. To load it:
+
+1. Open `chrome://extensions` (or `edge://extensions`).
+2. Turn on **Developer mode**.
+3. Click **Load unpacked** and select the `dist/chromium` folder.
+
+Chrome doesn't reload unpacked extensions on its own: after a change, click the reload icon on the extension's card.
+
+<br/>
+
+## 2. Tests and linting
+
+```sh
+bun run test
+bun run lint
+```
+
+<br/>
+
+## 3. Production builds
+
+```sh
+bun run build  # builds dist/chromium and dist/firefox
+bun ship       # builds and zips both, as submitted to the stores
+```
+
+See [Releasing](/docs/2-releasing.md) to submit a build to the stores.
 
 <br/>
 
 ### Tech Docs <a name="tech"></a>
 
-- [Vite Plugin](https://vitejs.dev/guide/api-plugin.html)
-- [Chrome Extension with manifest 3](https://developer.chrome.com/docs/extensions/mv3/)
+- [Vite Plugin API](https://vitejs.dev/guide/api-plugin.html)
+- [Chrome Extensions (Manifest V3)](https://developer.chrome.com/docs/extensions/mv3/)
 - [WebExtension Polyfill 🐐](https://github.com/mozilla/webextension-polyfill)
-- [Rollup](https://rollupjs.org/guide/en/)
-- [Rollup-plugin-chrome-extension](https://www.extend-chrome.dev/rollup-plugin)
 - [Tailwind CSS](https://tailwindcss.com/docs/configuration)

@@ -14,7 +14,7 @@ const SortBookmarks = ({ displayMode, sortMode, setSortMode }: SortProps) => (
   <div
     className={cn(
       "flex items-stretch border-l flex-shrink-0 relative bg-white",
-      displayMode === "Popup" && "hidden"
+      displayMode === "Popup" && "hidden",
     )}
   >
     <label

@@ -14,7 +14,7 @@ const outDir = resolve(
   __dirname,
   process.env.BUILD_TARGET === buildTargets.firefox
     ? "dist/firefox"
-    : "dist/chromium"
+    : "dist/chromium",
 );
 const publicDir = resolve(__dirname, "public");
 
@@ -28,7 +28,7 @@ export default defineConfig({
           "background",
           process.env.BUILD_TARGET === buildTargets.firefox
             ? "index.html"
-            : "index.ts"
+            : "index.ts",
         ),
         newtab: resolve(pagesDir, "newtab", "index.html"),
         popup: resolve(pagesDir, "popup", "index.html"),

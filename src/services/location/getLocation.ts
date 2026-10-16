@@ -30,7 +30,7 @@ export const getLocation = async (): Promise<Location> => {
       (error) => {
         reject(error);
       },
-      { enableHighAccuracy: false, maximumAge: 3600000, timeout: 5000 }
+      { enableHighAccuracy: false, maximumAge: 3600000, timeout: 5000 },
     );
   });
 };

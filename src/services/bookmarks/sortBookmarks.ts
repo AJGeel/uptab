@@ -11,7 +11,7 @@ export type SortMode = keyof typeof SortModes;
 
 export const sortBookmarks = (
   bookmarks: Bookmarks.BookmarkTreeNode[],
-  sortMode: SortMode
+  sortMode: SortMode,
 ) =>
   bookmarks.sort((a, b) => {
     switch (sortMode) {

@@ -1,15 +1,12 @@
-import { useQuery } from "@tanstack/react-query";
 import { AnimatePresence, motion } from "motion/react";
 import { PropsWithChildren } from "react";
 
-import { getGeocodedLocation } from "@/src/services/location";
-import { getWeather } from "@/src/services/weather";
+import { useLocationAndWeather } from "@/src/hooks/queries/useLocationAndWeather";
 import { cn } from "@/src/utils";
 
 import CalendarWidget from "./partials/CalendarWidget";
 import WeatherWidget from "./partials/WeatherWidget";
 import Loader from "../ui/Loader";
-
 
 type Props = {
   className?: string;
@@ -31,24 +28,14 @@ const Wrapper = ({ children, className }: PropsWithChildren<Props>) => (
 );
 
 const InfoWidget = ({ className }: Props) => {
-  const { isError: isLocationError, data: locationData } = useQuery({
-    queryFn: getGeocodedLocation,
-    queryKey: ["location"],
-  });
-
   const {
-    isPending,
-    isError,
-    data: weatherData,
-  } = useQuery({
-    enabled: !!locationData,
-    queryFn: () =>
-      getWeather({
-        latitude: locationData?.latitude,
-        longitude: locationData?.longitude,
-      }),
-    queryKey: ["weather", locationData?.latitude, locationData?.longitude],
-  });
+    data: { weatherData, locationData },
+    isPending: { isLocationPending, isWeatherPending },
+    isError: { isLocationError, isWeatherError },
+  } = useLocationAndWeather();
+
+  const isPending = isLocationPending || isWeatherPending;
+  const isError = isLocationError || isWeatherError;
 
   return (
     <div className={className}>
@@ -65,19 +52,27 @@ const InfoWidget = ({ className }: Props) => {
           </Wrapper>
         )}
 
-        {isError && (
+        {isError && !isLocationError && (
           <Wrapper key="error">
             <span>Unable to display weather information.</span>
           </Wrapper>
         )}
 
-        {!isLocationError && !isPending && !isError && (
+        {!isPending && !isError && weatherData && (
           <Wrapper key="weather" className="flex items-center gap-4">
             <WeatherWidget
               weatherData={weatherData}
               area={locationData?.area}
             />
+
             <div className="h-10 w-0.5 rounded bg-black/5" />
+
+            <CalendarWidget />
+          </Wrapper>
+        )}
+
+        {!isPending && !isError && !weatherData && (
+          <Wrapper key="calendar">
             <CalendarWidget />
           </Wrapper>
         )}

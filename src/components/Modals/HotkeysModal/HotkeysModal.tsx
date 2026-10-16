@@ -25,7 +25,7 @@ const HotkeysModal = () => {
         {Object.entries(hotkeyDescriptions).map(([key, item]) => (
           <div
             key={key}
-            className="mt-2 flex items-center justify-between border-t pt-2 first:mt-0 first:border-t-0"
+            className="mt-2 flex items-center justify-between border-t border-black/20 pt-2 first:mt-0 first:border-t-0"
           >
             <p className="text-gray-900">{item.description}</p>
             <Hotkey label={item.keyDisplay} size="sm" />

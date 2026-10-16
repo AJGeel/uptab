@@ -17,7 +17,7 @@ export const buttonVariants = {
 const buttonStyles = {
   primary:
     "bg-sky-500 text-white hover:brightness-110 active:brightness-100 px-4 py-3",
-  secondary: "bg-white hover:bg-gray-100 active:bg-gray-200 px-4 py-3",
+  secondary: "bg-transparent hover:bg-black/5 active:bg-gray-200 px-4 py-3",
   inline:
     "underline text-black/70 font-normal hover:text-black hover:no-underline duration-0 rounded-sm",
 };
