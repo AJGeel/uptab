@@ -2,6 +2,20 @@
 
 UpTab adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [V1.5.0] — 2026-10-16
+
+### ✨ Added
+
+- Click the weather widget to see a 3-day forecast with hourly temperature and rain, plus daily highs and lows
+
+### ♻️ Changed
+
+- Modals now have a subtle glass effect and animate when closing
+
+### 🐛 Fixed
+
+- Weather icons now show day or night based on actual daylight at your location
+
 ## [V1.4.0] — 2026-09-04
 
 ### ✨ Added
