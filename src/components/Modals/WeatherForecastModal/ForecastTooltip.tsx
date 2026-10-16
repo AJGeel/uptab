@@ -5,7 +5,6 @@ import {
   formatTime,
   getDayLabel,
 } from "./forecastChartData";
-import { getTemperatureColor } from "./temperatureColor";
 
 type TooltipRowProps = {
   label: string;
@@ -13,9 +12,10 @@ type TooltipRowProps = {
 };
 
 const TooltipRow = ({ label, children }: TooltipRowProps) => (
-  <p>
-    {label}: <span className="font-medium text-black">{children}</span>
-  </p>
+  <>
+    <dt className="text-black/50">{label}</dt>
+    <dd className="text-right tabular-nums">{children}</dd>
+  </>
 );
 
 type ForecastTooltipProps = {
@@ -32,35 +32,36 @@ const ForecastTooltip = ({ active, point }: ForecastTooltipProps) => {
   const { weather } = point;
 
   return (
-    <div className="rounded-xl border border-black/10 bg-white px-3 py-2 text-sm shadow-lg">
-      <div className="mb-2 flex items-center gap-2">
+    <div className="min-w-40 rounded-lg bg-white/95 px-3 py-2 text-xs shadow-md ring-1 ring-black/5">
+      <p className="text-black/50">
+        {getDayLabel(date)} · {formatTime(date)}
+      </p>
+
+      <div className="mb-1.5 flex items-center justify-between gap-3">
+        <p className="text-lg font-medium tabular-nums">
+          {Math.round(point.temperature)}°
+        </p>
+
         {weather?.image && (
           <img
             src={weather.image}
             alt={weather.description ?? ""}
-            className="size-10 shrink-0"
+            className="-my-2 -mr-2 size-10 drop-shadow"
           />
         )}
-
-        <div>
-          {weather?.description && (
-            <p className="font-medium">{weather.description}</p>
-          )}
-          <p className="text-xs text-black/50">
-            {getDayLabel(date)} · {formatTime(date)}
-          </p>
-        </div>
       </div>
 
-      <div className="space-y-0.5 text-black/70">
-        <TooltipRow label="Temperature">
-          <span style={{ color: getTemperatureColor(point.temperature) }}>
-            {point.temperature}°
-          </span>
-        </TooltipRow>
-
-        <TooltipRow label="Rain">{point.rain} mm</TooltipRow>
-      </div>
+      <dl className="grid grid-cols-[auto_1fr] gap-x-4 gap-y-0.5">
+        {weather?.description && (
+          <TooltipRow label="Sky">{weather.description}</TooltipRow>
+        )}
+        <TooltipRow label="Feels like">{point.apparentTemperature}°</TooltipRow>
+        <TooltipRow label="Precipitation">{point.precipitation} mm</TooltipRow>
+        {point.snowfall > 0 && (
+          <TooltipRow label="Snow">{point.snowfall} cm</TooltipRow>
+        )}
+        <TooltipRow label="Humidity">{point.humidity}%</TooltipRow>
+      </dl>
     </div>
   );
 };

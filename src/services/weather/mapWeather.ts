@@ -19,5 +19,6 @@ export const mapWeather = (data: OpenMeteoResponse): Weather => ({
     showers: data.hourly.showers[index],
     snowfall: data.hourly.snowfall[index],
     weather_code: data.hourly.weather_code[index],
+    is_day: data.hourly.is_day[index],
   })),
 });

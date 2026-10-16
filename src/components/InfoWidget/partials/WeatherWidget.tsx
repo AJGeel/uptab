@@ -9,7 +9,10 @@ interface WeatherWidgetProps {
 const WeatherWidget = ({ weatherData, area }: WeatherWidgetProps) => {
   const setActiveModal = useModalStore((state) => state.setActiveModal);
 
-  const weatherDescription = mapWeatherCode(weatherData.current.weather_code);
+  const weatherDescription = mapWeatherCode(
+    weatherData.current.weather_code,
+    weatherData.current.is_day === 1,
+  );
 
   return (
     <button

@@ -1,9 +1,19 @@
+import { ReactNode } from "react";
+
 import { useLocationAndWeather } from "@/src/hooks/queries/useLocationAndWeather";
 import { Modals, useModalStore } from "@/src/hooks/stores/useModalStore";
 
 import ForecastChart from "./ForecastChart";
 import Button from "../../ui/Button";
 import Modal from "../../ui/Modal";
+import Spinner from "../../ui/Spinner";
+
+/** Roughly the height of the summaries plus chart, so the modal doesn't jump. */
+const Placeholder = ({ children }: { children: ReactNode }) => (
+  <div className="mt-2 flex h-[350px] items-center justify-center">
+    {children}
+  </div>
+);
 
 const WeatherForecastModal = () => {
   const activeModal = useModalStore((state) => state.activeModal);
@@ -32,11 +42,15 @@ const WeatherForecastModal = () => {
       className="max-w-4xl"
     >
       {isError && (
-        <p className="text-sm text-red-500">Unable to load weather data.</p>
+        <Placeholder>
+          <p className="text-sm text-red-500">Unable to load weather data.</p>
+        </Placeholder>
       )}
 
       {!isError && isPending && (
-        <p className="text-sm text-gray-500">Loading weather...</p>
+        <Placeholder>
+          <Spinner className="size-8" />
+        </Placeholder>
       )}
 
       {!isError && !isPending && weatherData && (

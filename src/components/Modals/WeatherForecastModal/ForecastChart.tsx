@@ -1,6 +1,6 @@
 import {
   Bar,
-  CartesianGrid,
+  Cell,
   ComposedChart,
   Line,
   ReferenceLine,
@@ -10,11 +10,14 @@ import {
   YAxis,
 } from "recharts";
 
+import DailySummaries from "./DailySummaries";
 import {
+  buildDailySummaries,
   buildForecastChartData,
   ForecastChartPoint,
   formatTime,
   getDayBoundaries,
+  getTimeTicks,
   HourlyForecast,
 } from "./forecastChartData";
 import ForecastTooltip from "./ForecastTooltip";
@@ -25,11 +28,32 @@ import {
 
 const TEMPERATURE_GRADIENT_ID = "temperatureGradient";
 
-const AXIS_TICK = { fontSize: 12 };
-const Y_AXIS_WIDTH = 40;
+const MUTED_COLOR = "rgba(0, 0, 0, 0.4)";
+const HAIRLINE_COLOR = "rgba(0, 0, 0, 0.08)";
 
-const DAY_SEPARATOR_COLOR = "rgba(0, 0, 0, 0.25)";
-const DAY_LABEL_COLOR = "rgba(0, 0, 0, 0.45)";
+const AXIS_TICK = { fontSize: 11, fill: MUTED_COLOR };
+
+const TEMPERATURE_AXIS_PADDING = 2;
+const TEMPERATURE_TICK_STEP = 5;
+
+const MIN_PRECIPITATION_AXIS_MAX = 2;
+const PRECIPITATION_AXIS_HEADROOM = 1.5;
+
+const temperatureDomain = ([dataMin, dataMax]: readonly [number, number]): [
+  number,
+  number,
+] => [
+  Math.floor((dataMin - TEMPERATURE_AXIS_PADDING) / TEMPERATURE_TICK_STEP) *
+    TEMPERATURE_TICK_STEP,
+  Math.ceil((dataMax + TEMPERATURE_AXIS_PADDING) / TEMPERATURE_TICK_STEP) *
+    TEMPERATURE_TICK_STEP,
+];
+
+const precipitationDomain: [number, (dataMax: number) => number] = [
+  0,
+  (dataMax) =>
+    Math.max(dataMax, MIN_PRECIPITATION_AXIS_MAX) * PRECIPITATION_AXIS_HEADROOM,
+];
 
 type TemperatureDotProps = {
   cx?: number;
@@ -41,12 +65,20 @@ const TemperatureDot = ({ cx, cy, payload }: TemperatureDotProps) => (
   <circle
     cx={cx}
     cy={cy}
-    r={5}
+    r={4}
     fill={getTemperatureColor(payload?.temperature ?? 0)}
     stroke="white"
     strokeWidth={2}
   />
 );
+
+const dayLabel = (value: string) => ({
+  value,
+  position: "insideTopLeft" as const,
+  offset: 8,
+  fontSize: 11,
+  fill: MUTED_COLOR,
+});
 
 type ForecastChartProps = {
   hourly: HourlyForecast[];
@@ -55,6 +87,8 @@ type ForecastChartProps = {
 const ForecastChart = ({ hourly }: ForecastChartProps) => {
   const data = buildForecastChartData(hourly);
   const dayBoundaries = getDayBoundaries(data);
+  const timeTicks = getTimeTicks(data);
+  const summaries = buildDailySummaries(data);
 
   const temperatures = data.map((point) => point.temperature);
   const gradientStops = getTemperatureGradientStops(temperatures);
@@ -62,107 +96,125 @@ const ForecastChart = ({ hourly }: ForecastChartProps) => {
     ? `url(#${TEMPERATURE_GRADIENT_ID})`
     : getTemperatureColor(temperatures[0] ?? 0);
 
+  const [firstPoint] = data;
+
   return (
-    <div className="mt-4 h-[400px] w-full">
-      <ResponsiveContainer width="100%" height="100%">
-        <ComposedChart data={data}>
-          {gradientStops && (
-            <defs>
-              <linearGradient
-                id={TEMPERATURE_GRADIENT_ID}
-                x1="0"
-                y1="0"
-                x2="0"
-                y2="1"
-              >
-                {gradientStops.map(({ offset, color }) => (
-                  <stop key={offset} offset={offset} stopColor={color} />
-                ))}
-              </linearGradient>
-            </defs>
-          )}
+    <div className="mt-2 space-y-6">
+      <DailySummaries summaries={summaries} />
 
-          <CartesianGrid
-            strokeDasharray="10 5"
-            stroke="currentColor"
-            horizontal={false}
-            className="text-black/10"
-          />
-
-          <XAxis
-            dataKey="time"
-            tickLine={false}
-            axisLine={false}
-            minTickGap={30}
-            tick={AXIS_TICK}
-            tickFormatter={(value: string) => formatTime(new Date(value))}
-          />
-
-          <YAxis
-            yAxisId="rain"
-            orientation="right"
-            tickLine={false}
-            axisLine={false}
-            tick={AXIS_TICK}
-            width={Y_AXIS_WIDTH}
-            tickFormatter={(value) => `${value} mm`}
-          />
-
-          <YAxis
-            yAxisId="temperature"
-            orientation="left"
-            tickLine={false}
-            axisLine={false}
-            tick={AXIS_TICK}
-            width={Y_AXIS_WIDTH}
-            tickFormatter={(value) => `${value}°`}
-          />
-
-          {dayBoundaries.map((point) => (
-            <ReferenceLine
-              key={point.time}
-              x={point.time}
-              yAxisId="temperature"
-              stroke={DAY_SEPARATOR_COLOR}
-              strokeDasharray="4 4"
-              label={{
-                value: point.dayLabel,
-                position: "insideTopLeft",
-                fontSize: 12,
-                fill: DAY_LABEL_COLOR,
-              }}
-            />
-          ))}
-
-          <Tooltip
-            cursor={{ fill: "currentColor", className: "text-black/5" }}
-            content={({ active, payload }) => (
-              <ForecastTooltip active={active} point={payload?.[0]?.payload} />
+      <div className="h-[280px] w-full">
+        <ResponsiveContainer width="100%" height="100%">
+          <ComposedChart
+            data={data}
+            margin={{ top: 0, right: 0, bottom: 0, left: 0 }}
+          >
+            {gradientStops && (
+              <defs>
+                <linearGradient
+                  id={TEMPERATURE_GRADIENT_ID}
+                  x1="0"
+                  y1="0"
+                  x2="0"
+                  y2="1"
+                >
+                  {gradientStops.map(({ offset, color }) => (
+                    <stop key={offset} offset={offset} stopColor={color} />
+                  ))}
+                </linearGradient>
+              </defs>
             )}
-          />
 
-          <Bar
-            yAxisId="rain"
-            dataKey="rain"
-            name="Rain"
-            fill="currentColor"
-            className="text-sky-400"
-            radius={[3, 3, 0, 0]}
-            maxBarSize={12}
-          />
+            <XAxis
+              dataKey="time"
+              ticks={timeTicks}
+              interval={0}
+              tickLine={false}
+              axisLine={{ stroke: HAIRLINE_COLOR }}
+              tick={AXIS_TICK}
+              tickFormatter={(value: string) => formatTime(new Date(value))}
+            />
 
-          <Line
-            yAxisId="temperature"
-            type="monotone"
-            dataKey="temperature"
-            name="Temperature"
-            stroke={lineColor}
-            strokeWidth={2.5}
-            dot={false}
-            activeDot={TemperatureDot}
-          />
-        </ComposedChart>
-      </ResponsiveContainer>
+            <YAxis
+              yAxisId="precipitation"
+              orientation="right"
+              domain={precipitationDomain}
+              hide
+            />
+
+            <YAxis
+              yAxisId="temperature"
+              orientation="left"
+              tickLine={false}
+              axisLine={false}
+              tick={AXIS_TICK}
+              width={28}
+              domain={temperatureDomain}
+              allowDecimals={false}
+              tickFormatter={(value) => `${value}°`}
+            />
+
+            {firstPoint && (
+              <ReferenceLine
+                x={firstPoint.time}
+                yAxisId="temperature"
+                stroke="transparent"
+                label={dayLabel(firstPoint.dayLabel)}
+              />
+            )}
+
+            {dayBoundaries.map((point) => (
+              <ReferenceLine
+                key={point.time}
+                x={point.time}
+                yAxisId="temperature"
+                stroke={HAIRLINE_COLOR}
+                label={dayLabel(point.dayLabel)}
+              />
+            ))}
+
+            <Tooltip
+              cursor={{ stroke: HAIRLINE_COLOR, strokeWidth: 1 }}
+              content={({ active, payload }) => (
+                <ForecastTooltip
+                  active={active}
+                  point={payload?.[0]?.payload}
+                />
+              )}
+            />
+
+            <Bar
+              yAxisId="precipitation"
+              dataKey="precipitation"
+              name="Precipitation"
+              fill="currentColor"
+              radius={[2, 2, 0, 0]}
+              maxBarSize={6}
+            >
+              {data.map((point) => (
+                <Cell
+                  key={point.time}
+                  className={
+                    point.isSnow ? "text-indigo-300/70" : "text-sky-400/50"
+                  }
+                />
+              ))}
+            </Bar>
+
+            <Line
+              yAxisId="temperature"
+              type="monotone"
+              dataKey="temperature"
+              name="Temperature"
+              stroke={lineColor}
+              strokeWidth={2.5}
+              strokeLinecap="round"
+              dot={false}
+              activeDot={TemperatureDot}
+              isAnimationActive={false}
+            />
+          </ComposedChart>
+        </ResponsiveContainer>
+      </div>
     </div>
   );
 };

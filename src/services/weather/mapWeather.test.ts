@@ -24,6 +24,7 @@ describe("mapWeather", () => {
         showers: "mm",
         snowfall: "cm",
         weather_code: "wmo code",
+        is_day: "",
       },
       current: {
         time: "2026-09-04T12:15",
@@ -36,6 +37,7 @@ describe("mapWeather", () => {
         showers: 0,
         snowfall: 0,
         weather_code: 53,
+        is_day: 1,
       },
       hourly_units: {
         time: "iso8601",
@@ -47,6 +49,7 @@ describe("mapWeather", () => {
         showers: "mm",
         snowfall: "cm",
         weather_code: "wmo code",
+        is_day: "",
       },
       hourly: {
         time: ["2026-09-04T12:00", "2026-09-04T13:00", "2026-09-04T14:00"],
@@ -58,6 +61,7 @@ describe("mapWeather", () => {
         showers: [0, 0, 0],
         snowfall: [0, 0, 0],
         weather_code: [51, 53, 3],
+        is_day: [1, 1, 0],
       },
     };
 
@@ -81,6 +85,7 @@ describe("mapWeather", () => {
         showers: 0,
         snowfall: 0,
         weather_code: 53,
+        is_day: 1,
       },
 
       hourly: [
@@ -94,6 +99,7 @@ describe("mapWeather", () => {
           showers: 0,
           snowfall: 0,
           weather_code: 51,
+          is_day: 1,
         },
         {
           time: "2026-09-04T13:00",
@@ -105,6 +111,7 @@ describe("mapWeather", () => {
           showers: 0,
           snowfall: 0,
           weather_code: 53,
+          is_day: 1,
         },
         {
           time: "2026-09-04T14:00",
@@ -116,6 +123,7 @@ describe("mapWeather", () => {
           showers: 0,
           snowfall: 0,
           weather_code: 3,
+          is_day: 0,
         },
       ],
     });
