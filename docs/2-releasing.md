@@ -1,91 +1,74 @@
 # Releasing <a name="releasing"></a>
 
-<div style="padding: '10px', background-color: '#EFF3FA', border-radius: '4px'">
-This document will serve as a to-do: notes to implement automated releasing through the stores.
-Afterwards, it will be re-written to serve as documentation.
-</div>
+UpTab is submitted to the Chrome Web Store and Firefox Add-ons with one script:
+
+```sh
+bun store:status            # versions live and pending in each store
+bun store:submit --dry-run  # all checks and a build, without uploading
+bun store:submit            # build and submit to both stores
+bun store:submit firefox    # or only one store: chrome / firefox
+```
+
+`store:submit` stops before uploading anything if:
+
+- there are uncommitted changes, so the build and the Firefox source upload match a commit,
+- a store already has the `version` from `package.json` (live or in review),
+- a built manifest has the wrong version or is meant for the other browser.
+
+After submitting, both stores review the update. Chrome publishes it automatically once approved. Firefox does the same for listed add-ons.
 
 <br/>
 
-## 1. Chrome Web Store
+## 1. Release checklist
 
-Before you can begin making REST calls against the Chrome Web Store, you will need to enable the Chrome Web Store API, configure your OAuth consent screen, and retrieve your API access keys.
+1. Bump `version` in `package.json`.
+2. Add the release to `CHANGELOG.md`.
+3. Commit, then run `bun store:submit --dry-run`.
+4. Run `bun store:submit`.
+5. Check `bun store:status` in the following days.
 
-### 1.1 Initial Setup: Auth for Chrome Web Store API
-
-1. Follow the instructions provided on https://developer.chrome.com/docs/webstore/using-api.
-2. This should provide you with a `CHROME_CLIENT_ID` and a `CHROME_CLIENT_SECRET`. Add these to your `.env`. Add the `CHROME_SUCCESS_CODE` to your clipboard.
-3. Run the following command with your credentials
-
-```
-curl "https://accounts.google.com/o/oauth2/token" -d \ "client_id={{CLIENT_ID}}&client_secret={{CLIENT_SECRET}}&code={{CHROME_SUCCESS_CODE}}&grant_type=authorization_code&redirect_uri=urn:ietf:wg:oauth:2.0:oob"
-```
-
-4. Store the refresh_token in `.env` as `CHROME_REFRESH_TOKEN`.
-5. Optional: If your Chrome Extension is already published, store your `CHROME_EXTENSION_ID` in the `.env` too.
-
-You can now use the commands to add, update, publish and check the status of your Chrome Extension! 🚀
-
-### 1.2 Using the Chrome Web Store API
-
-These are the scripts available to use the Chrome Web Store API.
-
-`bun chrome:store`
-
-- `Init`
-  - Add your extension to the store for the first time.
-  - Requires a valid build in "/dist/chrome-extension.zip".
-- `Status`
-  - Checks the status of your extension in the store.
-  - Requires a valid `CHROME_EXTENSION_ID` to be set in the `.env`.
-- `Update`
-  - Updates your extension in the store.
-  - Requires a valid build in "/dist/chrome-extension.zip" and a valid `CHROME_EXTENSION_ID` to be set in the `.env`.
-- `Publish`
-  - Publishes your extension in the store to all users.
-  - Requires a valid build in "/dist/chrome-extension.zip" and a valid `CHROME_EXTENSION_ID` to be set in the `.env`.
-
-**Requirements**
-
-1. Requires a valid build in "/dist/chrome-extension.zip"
-2. Requires a valid `CHROME_EXTENSION_ID` to be set in the .env
+If one store fails, fix the problem and rerun for that store only, e.g. `bun store:submit chrome`. The version check stops a store from receiving the same version twice.
 
 <br/>
 
-## 2. Firefox Add-Ons
+## 2. One-time setup
 
-Before you can begin making REST calls against the Firefox Add-Ons enviromnent, you will need to generate your API access keys.
+Copy `.env.example` to `.env` and fill in the values below.
 
-### 2.1 Initial Setup: Auth for Firefox Add-Ons API
+### 2.1 Chrome Web Store
 
-1. Follow the instructions provided on https://addons-server.readthedocs.io/en/latest/topics/api/auth.html
-2. This should provide you with a `FIREFOX_JWT_ISSUER` and a `FIREFOX_JWT_SECRET`. Add these to your `.env`.
-3. Randomly generate a value and store it as the `FIREFOX_JWT_ID`.
-4. Optional: If your Firefox Extension is already published, store your `FIREFOX_EXTENSION_ID` in the `.env` too.
+The script uses the [Chrome Web Store API V2](https://developer.chrome.com/docs/webstore/api) with an OAuth refresh token.
 
-You can now use the commands to add, update, publish and check the status of your Chrome Extension! 🚀
+The OAuth client can live in any Google Cloud project, such as a free personal one. The account you sign in with in step 4 is the one the script acts as, so that must be the account that owns the Chrome Web Store listing.
 
-### 2.2 Using the Firefox Add-Ons API
+1. In the [Google Cloud Console](https://console.cloud.google.com/), create or select a project and enable the **Chrome Web Store API**.
+2. Under **Google Auth Platform**, set up the consent screen with user type **External**. Then, under **Audience**, click **Publish app** so its status is **In production**. While it's in **Testing**, refresh tokens expire after 7 days.
+3. Under **Clients**, create an OAuth client of type **Desktop app**, and copy its ID and secret to `.env`.
+4. Run `bun store:auth` and sign in. Google warns that the app isn't verified: choose **Advanced > Go to (app name)**. The refresh token is saved to `.env`.
+5. In the [Chrome Web Store Developer Dashboard](https://chrome.google.com/webstore/devconsole/), go to **Publisher > Settings** and copy the publisher ID.
 
-These are the scripts available to use the Firefox Add-Ons API.
+```sh
+CHROME_PUBLISHER_ID=<publisher ID>
+CHROME_EXTENSION_ID=dapdeiobfagcbhcpeijbhhlggopmjnlf
+CHROME_CLIENT_ID=<client ID>
+CHROME_CLIENT_SECRET=<client secret>
+CHROME_REFRESH_TOKEN=<set by bun store:auth>
+```
 
-`bun firefox:store`
+Check it with `bun store:status chrome`. If the token stops working, run `bun store:auth` again.
 
-- `Update`
-  - Update your extension in the Firefox Add-Ons Store
-  - Requires a valid build in "/dist/chrome-extension.zip".
-- `Status`
-  - Checks the status of your extension in the store.
-  - Requires a valid `FIREFOX_EXTENSION_ID` to be set in the `.env`.
-- `Publish`
-  - Publishes your extension in the store to all users.
-  - Requires a valid build in "/dist/chrome-extension.zip" and a valid `FIREFOX_EXTENSION_ID` to be set in the `.env`.
+### 2.2 Firefox Add-ons
 
-**Requirements**
+The script uses [`web-ext sign`](https://extensionworkshop.com/documentation/develop/web-ext-command-reference/#web-ext-sign) to submit a new listed version. It also uploads the committed source code (`git archive HEAD`), which AMO requires for minified builds.
 
-1. Requires a valid build in "/dist/chrome-extension.zip"
-2. Requires a valid `CHROME_EXTENSION_ID` to be set in the .env
+1. Generate API credentials at [addons.mozilla.org/developers/addon/api/key](https://addons.mozilla.org/en-US/developers/addon/api/key/).
 
-https://addons-server.readthedocs.io/en/latest/topics/api/index.html
+```sh
+FIREFOX_EXTENSION_ID=ageel@enrise.com
+FIREFOX_JWT_ISSUER=<JWT issuer>
+FIREFOX_JWT_SECRET=<JWT secret>
+```
 
-https://blog.mozilla.org/addons/2022/03/17/new-api-for-submitting-and-updating-add-ons/
+Check it with `bun store:status firefox`.
+
+> AMO reviewers rebuild the extension from the source upload. `VITE_GLITCHTIP_DSN` from `.env` isn't in it, so if a reviewer asks about the difference, explain that it's the error reporting DSN, inlined in the submitted bundle.
