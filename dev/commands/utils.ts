@@ -1,16 +1,7 @@
-/* eslint-disable no-console */
 import { resolve } from "path";
 
 export const ROOT_DIR = resolve(import.meta.dir, "..", "..");
 export const DIST_DIR = resolve(ROOT_DIR, "dist");
-
-export const log = {
-  info: (message: string) => console.log(message),
-  step: (message: string) => console.log(`\n▶ ${message}`),
-  success: (message: string) => console.log(`✅ ${message}`),
-  warn: (message: string) => console.warn(`⚠️  ${message}`),
-  error: (message: string) => console.error(`❌ ${message}`),
-};
 
 /** Reads env vars (Bun loads `.env` automatically) and fails on missing ones. */
 export const requireEnv = <T extends string>(...names: T[]) => {
@@ -38,27 +29,21 @@ export const ensureOk = async (response: Response, action: string) => {
   return response;
 };
 
-/** Runs a command in the repo root with inherited output. */
-export const run = async (cmd: string[], env: Record<string, string> = {}) => {
+/** Runs a command in the repo root and returns its trimmed stdout. */
+export const read = async (cmd: string[], env: Record<string, string> = {}) => {
   const proc = Bun.spawn(cmd, {
     cwd: ROOT_DIR,
     env: { ...process.env, ...env },
-    stdout: "inherit",
-    stderr: "inherit",
+    stdout: "pipe",
+    stderr: "pipe",
   });
+  const [output, errorOutput] = await Promise.all([
+    new Response(proc.stdout).text(),
+    new Response(proc.stderr).text(),
+  ]);
 
   if ((await proc.exited) !== 0) {
-    throw new Error(`Command failed: ${cmd.join(" ")}`);
-  }
-};
-
-/** Runs a command in the repo root and returns its trimmed stdout. */
-export const read = async (cmd: string[]) => {
-  const proc = Bun.spawn(cmd, { cwd: ROOT_DIR, stdout: "pipe" });
-  const output = await new Response(proc.stdout).text();
-
-  if ((await proc.exited) !== 0) {
-    throw new Error(`Command failed: ${cmd.join(" ")}`);
+    throw new Error(`${cmd.join(" ")} failed:\n${errorOutput.trim()}`);
   }
 
   return output.trim();

@@ -1,5 +1,6 @@
 import { StoreStatus } from "./types";
-import { ensureOk, log, requireEnv, sleep } from "./utils";
+import { p, pc, step } from "./ui";
+import { ensureOk, requireEnv, sleep } from "./utils";
 
 // API reference: https://developer.chrome.com/docs/webstore/api
 
@@ -20,6 +21,15 @@ type ItemStatus = {
   submittedItemRevisionStatus?: RevisionStatus;
   lastAsyncUploadState?: string;
 };
+
+type UploadResponse = { uploadState: string };
+
+type PublishResponse = {
+  state: string;
+  warningInfo?: { warnings: { reason: string; description: string }[] };
+};
+
+export type TokenResponse = { access_token: string; refresh_token?: string };
 
 const getEnv = () =>
   requireEnv(
@@ -57,17 +67,18 @@ const getAccessToken = async () => {
 
   await ensureOk(response, "Chrome authentication");
 
-  const { access_token: accessToken } = await response.json();
+  const { access_token: accessToken } =
+    (await response.json()) as TokenResponse;
 
-  return accessToken as string;
+  return accessToken;
 };
 
-const request = async (
+const request = async <T>(
   token: string,
   url: string,
   action: string,
   init: RequestInit = {},
-) => {
+): Promise<T> => {
   const response = await fetch(url, {
     ...init,
     headers: { ...init.headers, Authorization: `Bearer ${token}` },
@@ -75,11 +86,11 @@ const request = async (
 
   await ensureOk(response, action);
 
-  return response.json();
+  return (await response.json()) as T;
 };
 
-const fetchItemStatus = (token: string): Promise<ItemStatus> =>
-  request(
+const fetchItemStatus = (token: string) =>
+  request<ItemStatus>(
     token,
     `${API_URL}/v2/${getItemName()}:fetchStatus`,
     "Chrome status check",
@@ -102,8 +113,11 @@ export const getChromeStatus = async (): Promise<StoreStatus> => {
   };
 };
 
-const waitForUpload = async (token: string) => {
-  for (let attempt = 0; attempt < UPLOAD_POLL_ATTEMPTS; attempt++) {
+const waitForUpload = async (
+  token: string,
+  update: (message: string) => void,
+) => {
+  for (let attempt = 1; attempt <= UPLOAD_POLL_ATTEMPTS; attempt++) {
     await sleep(UPLOAD_POLL_INTERVAL_MS);
 
     const { lastAsyncUploadState } = await fetchItemStatus(token);
@@ -115,6 +129,10 @@ const waitForUpload = async (token: string) => {
     if (lastAsyncUploadState !== "IN_PROGRESS") {
       throw new Error(`Chrome upload ended with: ${lastAsyncUploadState}`);
     }
+
+    const seconds = (attempt * UPLOAD_POLL_INTERVAL_MS) / 1000;
+
+    update(`Chrome is processing the upload ${pc.dim(`${seconds}s`)}`);
   }
 
   throw new Error("Chrome upload is still processing. Check the dashboard.");
@@ -122,36 +140,49 @@ const waitForUpload = async (token: string) => {
 
 /** Uploads the zip, then submits it for review. It goes live once approved. */
 export const submitToChrome = async (zipPath: string) => {
-  const token = await getAccessToken();
+  const token = await step(
+    "Signing in to Google",
+    getAccessToken,
+    "Signed in to Google",
+  );
 
-  log.info("Uploading package...");
-  const upload = await request(
-    token,
-    `${API_URL}/upload/v2/${getItemName()}:upload`,
-    "Chrome upload",
-    { body: Bun.file(zipPath), method: "POST" },
+  const upload = await step(
+    "Uploading package",
+    () =>
+      request<UploadResponse>(
+        token,
+        `${API_URL}/upload/v2/${getItemName()}:upload`,
+        "Chrome upload",
+        { body: Bun.file(zipPath), method: "POST" },
+      ),
+    "Package uploaded",
   );
 
   if (upload.uploadState !== "SUCCEEDED") {
-    log.info("Upload is processing...");
-    await waitForUpload(token);
+    await step(
+      "Chrome is processing the upload",
+      (update) => waitForUpload(token, update),
+      "Upload processed",
+    );
   }
 
-  log.info("Submitting for review...");
-  const result = await request(
-    token,
-    `${API_URL}/v2/${getItemName()}:publish`,
-    "Chrome publish",
-    {
-      body: JSON.stringify({ publishType: "DEFAULT_PUBLISH" }),
-      headers: { "Content-Type": "application/json" },
-      method: "POST",
-    },
+  const result = await step(
+    "Submitting for review",
+    () =>
+      request<PublishResponse>(
+        token,
+        `${API_URL}/v2/${getItemName()}:publish`,
+        "Chrome publish",
+        {
+          body: JSON.stringify({ publishType: "DEFAULT_PUBLISH" }),
+          headers: { "Content-Type": "application/json" },
+          method: "POST",
+        },
+      ),
+    (response) => `Submitted for review ${pc.dim(`(${response.state})`)}`,
   );
 
   for (const warning of result.warningInfo?.warnings ?? []) {
-    log.warn(`${warning.reason}: ${warning.description}`);
+    p.log.warn(`${warning.reason}: ${warning.description}`);
   }
-
-  log.success(`Chrome: submitted (${result.state})`);
 };

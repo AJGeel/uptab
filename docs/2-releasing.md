@@ -26,8 +26,11 @@ After submitting, both stores review the update. Chrome publishes it automatical
 3. Commit, then run `bun store:submit --dry-run`.
 4. Run `bun store:submit`.
 5. Check `bun store:status` in the following days.
+6. Once the release PR is merged, check out an up-to-date `main` and run `bun tag-release`.
 
 If one store fails, fix the problem and rerun for that store only, e.g. `bun store:submit chrome`. The version check stops a store from receiving the same version twice.
+
+`bun tag-release` tags the commit as `V<version>` (e.g. `V1.5.0`), pushes the tag, and creates a GitHub release with that version's `CHANGELOG.md` section as its notes. Run `bun tag-release --dry-run` first to preview the tag and notes. It stops if you're not on `main`, there are uncommitted changes, `main` differs from `origin/main`, the tag already exists, or the changelog has no section for the version.
 
 <br/>
 

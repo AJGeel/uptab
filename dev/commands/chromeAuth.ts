@@ -10,8 +10,9 @@
 import { existsSync, readFileSync, writeFileSync } from "fs";
 import { resolve } from "path";
 
-import { SCOPE, TOKEN_URL } from "./chrome";
-import { ROOT_DIR, ensureOk, log, requireEnv, run } from "./utils";
+import { SCOPE, TOKEN_URL, TokenResponse } from "./chrome";
+import { header, p, pc, runCli, step } from "./ui";
+import { ROOT_DIR, ensureOk, read, requireEnv } from "./utils";
 
 const AUTH_URL = "https://accounts.google.com/o/oauth2/v2/auth";
 const ENV_PATH = resolve(ROOT_DIR, ".env");
@@ -37,15 +38,23 @@ const waitForAuthCode = (state: string) => {
         return new Response("Not found", { status: 404 });
       }
 
-      if (params.get("state") !== state) {
-        rejectCode(new Error("OAuth state mismatch. Try again."));
-      } else if (params.has("error")) {
-        rejectCode(new Error(`Google returned: ${params.get("error")}`));
-      } else {
+      const error =
+        params.get("state") !== state
+          ? "OAuth state mismatch. Try again."
+          : params.get("error") && `Google returned: ${params.get("error")}`;
+
+      if (!error) {
         resolveCode(params.get("code") as string);
+
+        return new Response("✨ Signed in. You can close this tab.");
       }
 
-      return new Response("Done. You can close this tab.");
+      // Give the page time to load before the script exits on the error.
+      setTimeout(() => rejectCode(new Error(error)), 200);
+
+      return new Response(`Sign-in failed: ${error} See the terminal.`, {
+        status: 400,
+      });
     },
   });
 
@@ -84,40 +93,54 @@ const main = async () => {
     state,
   })}`;
 
-  log.info("Opening Google sign-in. If it doesn't open, visit:");
-  log.info(authUrl);
-  await run(["open", authUrl]).catch(() => undefined);
+  header("UpTab · Chrome Web Store sign-in");
+  p.log.info(
+    `Sign in with the account that owns the Chrome Web Store listing.\n${pc.dim("If your browser doesn't open, visit:")}\n${pc.cyan(authUrl)}`,
+  );
+  await read(["open", authUrl]).catch(() => undefined);
 
   try {
-    const response = await fetch(TOKEN_URL, {
-      body: new URLSearchParams({
-        client_id: env.CHROME_CLIENT_ID,
-        client_secret: env.CHROME_CLIENT_SECRET,
-        code: await code,
-        grant_type: "authorization_code",
-        redirect_uri: redirectUri,
-      }),
-      method: "POST",
-    });
+    const authCode = await step(
+      "Waiting for you to sign in with Google",
+      () => code,
+      "Signed in",
+    );
 
-    await ensureOk(response, "Token exchange");
+    const refreshToken = await step(
+      "Getting a refresh token",
+      async () => {
+        const response = await fetch(TOKEN_URL, {
+          body: new URLSearchParams({
+            client_id: env.CHROME_CLIENT_ID,
+            client_secret: env.CHROME_CLIENT_SECRET,
+            code: authCode,
+            grant_type: "authorization_code",
+            redirect_uri: redirectUri,
+          }),
+          method: "POST",
+        });
 
-    const { refresh_token: refreshToken } = await response.json();
+        await ensureOk(response, "Token exchange");
 
-    if (!refreshToken) {
-      throw new Error("Google didn't return a refresh token. Try again.");
-    }
+        const { refresh_token: token } =
+          (await response.json()) as TokenResponse;
+
+        if (!token) {
+          throw new Error("Google didn't return a refresh token. Try again.");
+        }
+
+        return token;
+      },
+      "Got a refresh token",
+    );
 
     saveRefreshToken(refreshToken);
-    log.success(
-      `Saved ${ENV_KEY} to .env. Check it with: bun store:status chrome`,
+    p.outro(
+      `🔑 ${pc.green(`Saved ${ENV_KEY} to .env`)} ${pc.dim("· check it with bun store:status chrome")}`,
     );
   } finally {
     server.stop();
   }
 };
 
-main().catch((error: Error) => {
-  log.error(error.message);
-  process.exit(1);
-});
+runCli(main);

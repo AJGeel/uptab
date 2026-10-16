@@ -3,7 +3,8 @@ import { resolve } from "path";
 import jwt from "jsonwebtoken";
 
 import { StoreStatus } from "./types";
-import { DIST_DIR, ensureOk, log, read, requireEnv, run } from "./utils";
+import { runTask, step } from "./ui";
+import { DIST_DIR, ensureOk, read, requireEnv } from "./utils";
 
 // API reference: https://addons-server.readthedocs.io/en/latest/topics/api/
 
@@ -41,7 +42,7 @@ export const getFirefoxStatus = async (): Promise<StoreStatus> => {
 
   await ensureOk(response, "Firefox status check");
 
-  const { results }: { results: AmoVersion[] } = await response.json();
+  const { results } = (await response.json()) as { results: AmoVersion[] };
   const [latest] = results;
 
   return {
@@ -65,10 +66,14 @@ const createSourceArchive = async () => {
 /** Uploads the build and source code, then leaves it in AMO's review queue. */
 export const submitToFirefox = async (sourceDir: string) => {
   const env = getEnv();
-  const sourceArchive = await createSourceArchive();
+  const sourceArchive = await step(
+    "Zipping source code for reviewers",
+    createSourceArchive,
+    "Source code zipped",
+  );
 
-  log.info("Uploading package and source code...");
-  await run(
+  await runTask(
+    "Uploading package and source code",
     [
       "bunx",
       "web-ext",
@@ -91,6 +96,4 @@ export const submitToFirefox = async (sourceDir: string) => {
       WEB_EXT_API_SECRET: env.FIREFOX_JWT_SECRET,
     },
   );
-
-  log.success("Firefox: submitted for review");
 };

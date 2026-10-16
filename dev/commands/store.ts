@@ -3,7 +3,7 @@
  *
  * Usage:
  *   bun store:status [chrome|firefox]
- *   bun store:submit [chrome|firefox] [--dry-run]
+ *   bun store:submit [chrome|firefox] [--dry-run] [--yes]
  *
  * Without a store argument, both stores are used. See docs/2-releasing.md.
  */
@@ -13,7 +13,8 @@ import { resolve } from "path";
 import { getChromeStatus, submitToChrome } from "./chrome";
 import { getFirefoxStatus, submitToFirefox } from "./firefox";
 import { StoreStatus } from "./types";
-import { DIST_DIR, ROOT_DIR, compareVersions, log, read, run } from "./utils";
+import { confirmOrExit, header, p, pc, runCli, runTask, step } from "./ui";
+import { DIST_DIR, ROOT_DIR, compareVersions, read } from "./utils";
 
 type Store = {
   name: string;
@@ -52,32 +53,31 @@ const STORES: Record<string, Store> = {
 
 const readJson = <T>(path: string): T => JSON.parse(readFileSync(path, "utf8"));
 
+const NAME_WIDTH = 9;
+
 const describeStatus = ({ live, pending }: StoreStatus) =>
   [
-    `live ${live ?? "none"}`,
-    pending ? `pending ${pending.version} (${pending.state})` : undefined,
+    `live ${live ? pc.green(live) : pc.dim("none")}`,
+    pending
+      ? `${pc.dim("·")} in review ${pc.yellow(pending.version)} ${pc.dim(`(${pending.state})`)}`
+      : undefined,
   ]
     .filter(Boolean)
-    .join(", ");
+    .join(" ");
 
-/** Throws unless `version` is newer than everything the store already has. */
-const assertNewVersion = (
-  store: Store,
-  version: string,
-  status: StoreStatus,
-) => {
+const formatRow = (store: Store, details: string) =>
+  `${pc.bold(store.name.padEnd(NAME_WIDTH))}${details}`;
+
+/** The store's version that `version` doesn't beat, if any. */
+const findConflictingVersion = (version: string, status: StoreStatus) => {
   const blockingPending =
     status.pending && !RETRYABLE_STATES.includes(status.pending.state)
       ? status.pending.version
       : undefined;
 
-  for (const existing of [status.live, blockingPending]) {
-    if (existing && compareVersions(version, existing) <= 0) {
-      throw new Error(
-        `${store.name} already has ${existing}. Bump "version" in package.json.`,
-      );
-    }
-  }
+  return [status.live, blockingPending].find(
+    (existing) => existing && compareVersions(version, existing) <= 0,
+  );
 };
 
 const assertCleanWorkingTree = async () => {
@@ -103,39 +103,98 @@ const assertBuild = (store: Store, version: string) => {
 };
 
 const status = async (stores: Store[]) => {
-  for (const store of stores) {
-    log.info(`${store.name}: ${describeStatus(await store.getStatus())}`);
-  }
+  header("UpTab · Store status");
+
+  const results = await step(
+    "Asking the stores",
+    () => Promise.allSettled(stores.map((store) => store.getStatus())),
+    "Stores checked",
+  );
+
+  const rows = results.map((result, i) =>
+    formatRow(
+      stores[i],
+      result.status === "fulfilled"
+        ? describeStatus(result.value)
+        : pc.red(result.reason.message),
+    ),
+  );
+
+  p.note(rows.join("\n"), "Versions");
+  p.outro(pc.dim("Run bun store:submit to ship the next version"));
 };
 
 const submit = async (stores: Store[], isDryRun: boolean) => {
   const { version } = readJson<{ version: string }>(
     resolve(ROOT_DIR, "package.json"),
   );
+  const storeNames = stores.map((store) => store.name).join(" and ");
 
-  log.step(`Checking stores for version ${version}`);
-  await assertCleanWorkingTree();
+  header(isDryRun ? "UpTab · Store submit (dry run)" : "UpTab · Store submit");
+  p.log.info(`Shipping version ${pc.cyan(pc.bold(version))} to ${storeNames}`);
 
-  for (const store of stores) {
-    const storeStatus = await store.getStatus();
+  await step(
+    "Checking for uncommitted changes",
+    assertCleanWorkingTree,
+    "Working tree is clean",
+  );
 
-    log.info(`${store.name}: ${describeStatus(storeStatus)}`);
-    assertNewVersion(store, version, storeStatus);
+  const statuses = await step(
+    "Asking the stores",
+    () => Promise.all(stores.map((store) => store.getStatus())),
+    "Stores checked",
+  );
+  const conflicts = statuses.map((storeStatus) =>
+    findConflictingVersion(version, storeStatus),
+  );
+
+  p.note(
+    stores
+      .map((store, i) =>
+        formatRow(
+          store,
+          `${describeStatus(statuses[i])}  ${
+            conflicts[i]
+              ? pc.red(`✗ already has ${conflicts[i]}`)
+              : pc.cyan(`→ ${version}`)
+          }`,
+        ),
+      )
+      .join("\n"),
+    "Versions",
+  );
+
+  const conflict = conflicts.findIndex(Boolean);
+
+  if (conflict !== -1) {
+    throw new Error(
+      `${stores[conflict].name} already has ${conflicts[conflict]}. Bump "version" in package.json.`,
+    );
   }
 
-  log.step("Building");
-  await run(["bun", "run", "ship"]);
-  stores.forEach((store) => assertBuild(store, version));
+  await runTask("Building Chrome and Firefox packages", ["bun", "run", "ship"]);
+  await step(
+    "Checking the builds",
+    () =>
+      Promise.resolve(stores.forEach((store) => assertBuild(store, version))),
+    `Builds are version ${version}, each with the right manifest`,
+  );
 
   if (isDryRun) {
-    log.success(`Dry run passed. Ready to submit ${version}.`);
+    p.outro(pc.green(`Dry run passed · ready to submit ${version} 🚀`));
     return;
   }
 
+  await confirmOrExit(`Submit ${version} to ${storeNames}?`);
+
   for (const store of stores) {
-    log.step(`Submitting ${version} to ${store.name}`);
+    p.log.step(pc.bold(`${store.name}`));
     await store.submit();
   }
+
+  p.outro(
+    `🚀 ${pc.green(`${version} submitted to ${storeNames}`)} ${pc.dim("· track the review with bun store:status")}`,
+  );
 };
 
 const main = async () => {
@@ -164,7 +223,4 @@ const main = async () => {
   }
 };
 
-main().catch((error: Error) => {
-  log.error(error.message);
-  process.exit(1);
-});
+runCli(main);
