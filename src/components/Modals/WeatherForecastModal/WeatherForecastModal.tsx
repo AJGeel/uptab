@@ -1,12 +1,14 @@
-import { ReactNode } from "react";
+import { lazy, ReactNode, Suspense } from "react";
 
 import { useLocationAndWeather } from "@/src/hooks/queries/useLocationAndWeather";
 import { Modals, useModalStore } from "@/src/hooks/stores/useModalStore";
 
-import ForecastChart from "./ForecastChart";
+import { loadForecastChart } from "./loadForecastChart";
 import Button from "../../ui/Button";
 import Modal from "../../ui/Modal";
 import Spinner from "../../ui/Spinner";
+
+const ForecastChart = lazy(loadForecastChart);
 
 /** Roughly the height of the summaries plus chart, so the modal doesn't jump. */
 const Placeholder = ({ children }: { children: ReactNode }) => (
@@ -54,7 +56,15 @@ const WeatherForecastModal = () => {
       )}
 
       {!isError && !isPending && weatherData && (
-        <ForecastChart hourly={weatherData.hourly} />
+        <Suspense
+          fallback={
+            <Placeholder>
+              <Spinner className="size-8" />
+            </Placeholder>
+          }
+        >
+          <ForecastChart hourly={weatherData.hourly} />
+        </Suspense>
       )}
 
       <div className="mt-8 flex justify-end">

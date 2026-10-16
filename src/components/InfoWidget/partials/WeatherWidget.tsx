@@ -1,3 +1,4 @@
+import { loadForecastChart } from "@/src/components/Modals/WeatherForecastModal/loadForecastChart";
 import { useModalStore } from "@/src/hooks/stores/useModalStore";
 import { Weather, mapWeatherCode } from "@/src/services/weather";
 
@@ -18,6 +19,8 @@ const WeatherWidget = ({ weatherData, area }: WeatherWidgetProps) => {
     <button
       className="flex items-center gap-6 duration-150 hover:text-sky-800 active:scale-90 active:opacity-60"
       onClick={() => setActiveModal("weatherForecast")}
+      onFocus={loadForecastChart}
+      onPointerEnter={loadForecastChart}
     >
       <p className="text-4xl font-bold">
         {weatherData.current.temperature_2m}°C
