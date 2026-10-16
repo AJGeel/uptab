@@ -15,5 +15,5 @@
 ## Checklist
 
 - [ ] Updated `CHANGELOG.md`
-- [ ] `bun store:submit` && `bun tag-release`
-- [ ] LGTM™ 🚢✨
+- [ ] LGTM™ 🚢✨ && `bun store:submit`
+- [ ] After merge: `bun tag-release`
