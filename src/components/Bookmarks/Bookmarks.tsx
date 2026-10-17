@@ -1,5 +1,4 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { v4 as uuidv4 } from "uuid";
 import { Bookmarks, bookmarks, tabs } from "webextension-polyfill";
 
 import {
@@ -131,7 +130,7 @@ const Bookmarks = ({ displayMode = "NewTab" }: BookmarksProps) => {
                       }
 
                       await addShortlinkMutation.mutateAsync({
-                        id: uuidv4(),
+                        id: crypto.randomUUID(),
                         url: bookmark.url,
                         title: bookmark.title,
                         subtitle: "",
