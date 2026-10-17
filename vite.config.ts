@@ -38,6 +38,20 @@ export default defineConfig({
       output: {
         entryFileNames: (chunk) => `src/pages/${chunk.name}/index.js`,
       },
+      /*
+       * react-markdown's dependencies use `''` statements as JSDoc separators,
+       * which Rolldown reports as directives. They're harmless.
+       */
+      onwarn(warning, warn) {
+        if (
+          warning.code === "MODULE_LEVEL_DIRECTIVE" &&
+          warning.id?.includes("node_modules")
+        ) {
+          return;
+        }
+
+        warn(warning);
+      },
     },
     sourcemap: process.env.__DEV__ === "true",
   },
