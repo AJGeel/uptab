@@ -3,12 +3,12 @@ import * as path from "path";
 
 import { PluginOption } from "vite";
 
-import colorLog from "../log";
+import colorLog from "../log.ts";
 
 const { resolve } = path;
 
-const outDir = resolve(__dirname, "..", "..", "public");
-const changelogPath = resolve(__dirname, "..", "..", "CHANGELOG.md");
+const outDir = resolve(import.meta.dirname, "..", "..", "public");
+const changelogPath = resolve(import.meta.dirname, "..", "..", "CHANGELOG.md");
 
 export default function includeChangelog(): PluginOption {
   return {

@@ -27,7 +27,7 @@ export const Background = ({
   ...props
 }: ImageProps) => {
   const [layers, setLayers] = useState<Layer[]>([]);
-  const nextId = useRef(0);
+  const nextIdRef = useRef(0);
 
   useEffect(() => {
     let cancelled = false;
@@ -50,7 +50,7 @@ export const Background = ({
         return;
       }
 
-      const id = nextId.current++;
+      const id = nextIdRef.current++;
 
       setLayers((layers) => [...layers, { id, src }]);
     };

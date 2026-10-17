@@ -7,11 +7,10 @@ import {
   startOfHour,
 } from "date-fns";
 
-import {
-  FORECAST_DAYS,
-  HourlyWeather,
-  mapWeatherCode,
-} from "@/src/services/weather";
+// Imported per module: the weather index pulls in the extension storage API.
+import { FORECAST_DAYS } from "@/src/services/weather/constants";
+import { mapWeatherCode } from "@/src/services/weather/mapWeatherCode";
+import { HourlyWeather } from "@/src/services/weather/types";
 
 export type HourlyForecast = Pick<
   HourlyWeather,

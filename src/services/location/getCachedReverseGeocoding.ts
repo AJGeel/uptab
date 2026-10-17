@@ -10,9 +10,11 @@ export const getCachedReverseGeocoding = async ({
   longitude,
 }: Location): Promise<GeocodeResponse | void> => {
   try {
-    const { cachedReverseGeocoding } = await storage.local.get(
+    const { cachedReverseGeocoding } = (await storage.local.get(
       "cachedReverseGeocoding",
-    );
+    )) as {
+      cachedReverseGeocoding?: GeocodeResponse & { _input?: Location };
+    };
 
     if (!cachedReverseGeocoding) {
       return;
@@ -27,6 +29,8 @@ export const getCachedReverseGeocoding = async ({
 
     return cachedReverseGeocoding;
   } catch (error) {
-    throw new Error("Unable to check cached reverse geocoding.");
+    throw new Error("Unable to check cached reverse geocoding.", {
+      cause: error,
+    });
   }
 };

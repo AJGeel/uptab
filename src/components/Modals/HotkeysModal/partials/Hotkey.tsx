@@ -8,9 +8,9 @@ type Props = {
 export const Hotkey = ({ label, size = "sm" }: Props) => (
   <code
     className={cn(
-      "flex items-center justify-center border border-sky-900/30 border-b-4 bg-white font-mono font-bold text-sky-600 shadow-sm",
-      size === "sm" && "w-10 py-1.5 text-sm rounded-xl",
-      size === "lg" && "min-w-14 px-3 py-2 text-xl rounded-2xl",
+      "flex items-center justify-center border border-b-4 border-sky-900/30 bg-white font-mono font-bold text-sky-600 shadow-xs",
+      size === "sm" && "w-10 rounded-xl py-1.5 text-sm",
+      size === "lg" && "min-w-14 rounded-2xl px-3 py-2 text-xl",
     )}
   >
     {label}

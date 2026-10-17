@@ -39,15 +39,23 @@ const TEMPERATURE_TICK_STEP = 5;
 const MIN_PRECIPITATION_AXIS_MAX = 2;
 const PRECIPITATION_AXIS_HEADROOM = 1.5;
 
-const temperatureDomain = ([dataMin, dataMax]: readonly [number, number]): [
-  number,
-  number,
-] => [
-  Math.floor((dataMin - TEMPERATURE_AXIS_PADDING) / TEMPERATURE_TICK_STEP) *
-    TEMPERATURE_TICK_STEP,
-  Math.ceil((dataMax + TEMPERATURE_AXIS_PADDING) / TEMPERATURE_TICK_STEP) *
-    TEMPERATURE_TICK_STEP,
-];
+const getTemperatureTicks = (temperatures: number[]) => {
+  const snap = (value: number, round: (n: number) => number) =>
+    round(value / TEMPERATURE_TICK_STEP) * TEMPERATURE_TICK_STEP;
+  const min = snap(
+    Math.min(...temperatures) - TEMPERATURE_AXIS_PADDING,
+    Math.floor,
+  );
+  const max = snap(
+    Math.max(...temperatures) + TEMPERATURE_AXIS_PADDING,
+    Math.ceil,
+  );
+
+  return Array.from(
+    { length: (max - min) / TEMPERATURE_TICK_STEP + 1 },
+    (_, i) => min + i * TEMPERATURE_TICK_STEP,
+  );
+};
 
 const precipitationDomain: [number, (dataMax: number) => number] = [
   0,
@@ -91,6 +99,7 @@ const ForecastChart = ({ hourly }: ForecastChartProps) => {
   const summaries = buildDailySummaries(data);
 
   const temperatures = data.map((point) => point.temperature);
+  const temperatureTicks = getTemperatureTicks(temperatures);
   const gradientStops = getTemperatureGradientStops(temperatures);
   const lineColor = gradientStops
     ? `url(#${TEMPERATURE_GRADIENT_ID})`
@@ -102,7 +111,7 @@ const ForecastChart = ({ hourly }: ForecastChartProps) => {
     <div className="mt-2 space-y-6">
       <DailySummaries summaries={summaries} />
 
-      <div className="h-[280px] w-full">
+      <div className="h-70 w-full">
         <ResponsiveContainer width="100%" height="100%">
           <ComposedChart
             data={data}
@@ -148,8 +157,8 @@ const ForecastChart = ({ hourly }: ForecastChartProps) => {
               axisLine={false}
               tick={AXIS_TICK}
               width={28}
-              domain={temperatureDomain}
-              allowDecimals={false}
+              domain={[temperatureTicks[0], temperatureTicks.at(-1) ?? 0]}
+              ticks={temperatureTicks}
               tickFormatter={(value) => `${value}°`}
             />
 

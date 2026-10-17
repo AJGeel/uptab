@@ -12,11 +12,6 @@ export type Area = {
 
 export type GeocodedLocation = Location & { area: string };
 
-export type PossiblyUndefinedLocation = {
-  latitude?: number;
-  longitude?: number;
-};
-
 export type GeocodeResponse = {
   address: Area & {
     house_number: string;

@@ -1,8 +1,6 @@
+import { FORECAST_DAYS } from "./constants";
 import { OpenMeteoResponse } from "./types";
-import { PossiblyUndefinedLocation } from "../location/types";
-
-/** Number of days fetched, starting with today. */
-export const FORECAST_DAYS = 3;
+import { Location } from "../location/types";
 
 const WEATHER_FIELDS =
   "temperature_2m,relative_humidity_2m,apparent_temperature,precipitation,rain,showers,snowfall,weather_code,is_day";
@@ -10,7 +8,7 @@ const WEATHER_FIELDS =
 export const getWeather = async ({
   latitude,
   longitude,
-}: PossiblyUndefinedLocation): Promise<OpenMeteoResponse> => {
+}: Location): Promise<OpenMeteoResponse> => {
   const params = new URLSearchParams({
     current: WEATHER_FIELDS,
     hourly: WEATHER_FIELDS,

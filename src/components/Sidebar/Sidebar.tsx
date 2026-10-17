@@ -22,8 +22,8 @@ const Sidebar = ({ isExpanded, setIsExpanded }: Props) => {
   return (
     <div
       className={cn(
-        "absolute bg-white flex-1 max-w-[600px] w-full duration-500 z-20 h-screen left-0 top-0",
-        isExpanded ? "-translate-x-0" : "-translate-x-full",
+        "absolute top-0 left-0 z-20 h-screen w-full max-w-150 flex-1 bg-white duration-500",
+        isExpanded ? "translate-x-0" : "-translate-x-full",
       )}
     >
       <SidebarExpandButton

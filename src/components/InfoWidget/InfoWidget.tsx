@@ -65,7 +65,7 @@ const InfoWidget = ({ className }: Props) => {
               area={locationData?.area}
             />
 
-            <div className="h-10 w-0.5 rounded bg-black/5" />
+            <div className="h-10 w-0.5 rounded-sm bg-black/5" />
 
             <CalendarWidget />
           </Wrapper>

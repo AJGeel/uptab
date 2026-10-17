@@ -27,16 +27,17 @@ const hour = (
   ...overrides,
 });
 
+// "Today" labels depend on the clock, so every test runs on the same day.
+beforeEach(() => {
+  vi.useFakeTimers();
+  vi.setSystemTime(NOW);
+});
+
+afterEach(() => {
+  vi.useRealTimers();
+});
+
 describe("buildForecastChartData", () => {
-  beforeEach(() => {
-    vi.useFakeTimers();
-    vi.setSystemTime(NOW);
-  });
-
-  afterEach(() => {
-    vi.useRealTimers();
-  });
-
   it("keeps hours from the current hour through the last forecast day", () => {
     const hourly = [
       hour("2026-10-16T13:00"),

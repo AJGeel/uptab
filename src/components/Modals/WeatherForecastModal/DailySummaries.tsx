@@ -14,7 +14,7 @@ const DailySummaries = ({ summaries }: DailySummariesProps) => (
               src={weather.image}
               alt={weather.description ?? ""}
               title={weather.description}
-              className="-my-2 size-12 shrink-0 drop-shadow"
+              className="-my-2 size-12 shrink-0 drop-shadow-sm"
             />
           )}
 

@@ -1,8 +1,7 @@
-/* eslint-disable camelcase */
 import type { Manifest } from "webextension-polyfill";
 
-import { buildTargets } from "../buildTarget";
-import pkg from "../package.json";
+import { buildTargets } from "../buildTarget.ts";
+import pkg from "../package.json" with { type: "json" };
 
 const pages = {
   background: "src/pages/background/index.js",

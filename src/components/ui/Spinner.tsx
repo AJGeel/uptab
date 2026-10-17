@@ -9,7 +9,7 @@ const Spinner = ({ className }: Props) => (
     <svg
       aria-hidden="true"
       className={cn(
-        "w-8 h-8 text-black/20 animate-spin fill-sky-500",
+        "size-8 animate-spin fill-sky-500 text-black/20",
         className,
       )}
       viewBox="0 0 100 101"

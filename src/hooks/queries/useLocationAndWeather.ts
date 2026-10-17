@@ -1,6 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 
 import { getGeocodedLocation } from "@/src/services/location";
+import { PERSIST_DURATION } from "@/src/services/persistQueries";
 import { getWeather } from "@/src/services/weather";
 import { mapWeather } from "@/src/services/weather/mapWeather";
 
@@ -12,22 +13,21 @@ export const useLocationAndWeather = () => {
   } = useQuery({
     queryFn: getGeocodedLocation,
     queryKey: ["location"],
+    staleTime: PERSIST_DURATION,
   });
-
-  const hasLocation =
-    locationData?.latitude !== null && locationData?.longitude !== null;
 
   const {
     isPending: isWeatherPending,
     isError: isWeatherError,
     data: weatherData,
   } = useQuery({
-    enabled: hasLocation,
+    enabled: Boolean(locationData),
     queryFn: () =>
       getWeather({
         latitude: locationData!.latitude,
         longitude: locationData!.longitude,
       }),
+    staleTime: PERSIST_DURATION,
     select: mapWeather,
     queryKey: ["weather", locationData],
   });

@@ -5,22 +5,22 @@
     "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": false,
     "allowSyntheticDefaultImports": true,
-    "baseUrl": ".",
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "jsx": "react-jsx",
     "module": "esnext",
-    "moduleResolution": "node",
+    "moduleResolution": "bundler",
     "noEmit": true,
+    "allowImportingTsExtensions": true,
     "noFallthroughCasesInSwitch": true,
     "noImplicitAny": true,
     "resolveJsonModule": true,
     "skipLibCheck": true,
     "strict": true,
     "paths": {
-      "@/src/*": ["src/*"],
-      "@/assets/*": ["src/assets/*"],
-      "@/pages/*": ["src/pages/*"]
+      "@/src/*": ["./src/*"],
+      "@/assets/*": ["./src/assets/*"],
+      "@/pages/*": ["./src/pages/*"]
     }
   },
   "include": ["src", "utils", "vite.config.ts", "buildTarget.ts"]

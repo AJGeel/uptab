@@ -12,7 +12,7 @@ const Link = ({ href, className, children }: Props) => (
   <a
     href={href}
     className={cn(
-      "hover:text-sky-800 active:scale-90 active:opacity-60 duration-150",
+      "duration-150 hover:text-sky-800 active:scale-90 active:opacity-60",
       className,
     )}
   >

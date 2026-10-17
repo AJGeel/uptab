@@ -46,7 +46,7 @@ export const ActiveHotkeyIndicator = () => {
     <div
       key={animationKey}
       className={cn(
-        "fixed bottom-6 right-6 z-10 animate-hotkey",
+        "fixed right-6 bottom-6 z-10 animate-hotkey",
         !pressedKey && "pointer-events-none",
       )}
     >

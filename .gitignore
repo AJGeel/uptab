@@ -400,3 +400,6 @@ public/contentStyle.css
 
 # Dev scripts: environment secrets and variables
 /dev/env
+
+# Vite config bundling leftovers
+vite.config.ts.timestamp-*

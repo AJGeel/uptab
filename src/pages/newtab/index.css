@@ -1,5 +1,7 @@
 body {
   margin: 0;
+  /* Unlayered, so it beats the system-ui font Chrome sets on extension pages. */
+  font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   font-size: 14px;

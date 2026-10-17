@@ -2,7 +2,7 @@
 type ColorType = "success" | "info" | "error" | "warning" | keyof typeof COLORS;
 
 export default function colorLog(message: string, type?: ColorType) {
-  let color: string = type || COLORS.FgBlack;
+  let color: string;
 
   switch (type) {
     case "success":

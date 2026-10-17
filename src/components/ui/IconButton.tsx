@@ -7,8 +7,8 @@ type Props = ComponentProps<"button"> & { hideBorder?: true };
 const IconButton = ({ className, children, hideBorder, ...props }: Props) => (
   <button
     className={cn(
-      "rounded-xl p-2 bg-white shadow duration-300 hover:ring ring-sky-500 focus-within:outline-none active:ring-sky-500/0 active:scale-90 border",
-      hideBorder && "shadow-none border-none",
+      "rounded-xl border bg-white p-2 shadow-sm ring-sky-500 duration-300 focus-within:outline-hidden hover:ring-3 active:scale-90 active:ring-sky-500/0",
+      hideBorder && "border-none shadow-none",
       className,
     )}
     {...props}

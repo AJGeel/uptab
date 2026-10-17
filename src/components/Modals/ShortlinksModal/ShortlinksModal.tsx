@@ -1,7 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useMemo } from "react";
 import { SubmitHandler, useForm, useWatch } from "react-hook-form";
-import { v4 as uuidv4 } from "uuid";
 
 import { SHORTLINK_QUERY_KEY } from "@/src/hooks/queries/useShortlinks";
 import { Modals, useModalStore } from "@/src/hooks/stores/useModalStore";
@@ -97,7 +96,7 @@ const ShortlinksModal = () => {
     const mutation = selectedShortlink ? editMutation : addMutation;
 
     const payload: ShortlinkType = {
-      id: selectedShortlink?.id ?? uuidv4(),
+      id: selectedShortlink?.id ?? crypto.randomUUID(),
       subtitle: String(data.subtitle),
       title: data.title,
       url: normalizedUrl,

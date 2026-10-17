@@ -33,7 +33,7 @@ const FormField = ({
   return (
     <fieldset className="mb-4 flex items-start gap-5">
       <label
-        className="w-24 pt-2 text-right font-semibold capitalize text-gray-700"
+        className="w-24 pt-2 text-right font-semibold text-gray-700 capitalize"
         htmlFor={label}
       >
         {label}
@@ -43,7 +43,7 @@ const FormField = ({
           id={label}
           aria-invalid={!!error}
           aria-describedby={error ? `${label}-error` : undefined}
-          className={`inline-flex w-full items-center justify-center rounded-lg border px-3 py-2 leading-none shadow outline-none ring-sky-500 ring-offset-2 duration-150 focus:ring-2 ${error ? "border-red-400 focus:ring-red-400" : "border-gray-300"}`}
+          className={`inline-flex w-full items-center justify-center rounded-lg border bg-white px-3 py-2 leading-none shadow-sm ring-sky-500 outline-hidden duration-150 focus:ring-2 focus:ring-offset-2 ${error ? "border-red-400 focus:ring-red-400" : "border-gray-300"}`}
           autoFocus={autoFocus}
           {...register(label, { required, maxLength, pattern })}
         />
