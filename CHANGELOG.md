@@ -2,6 +2,19 @@
 
 UpTab adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [V1.5.1] — 2026-10-17
+
+### ♻️ Changed
+
+- New tabs open faster: UpTab now loads less at start-up, and fetches the rest only when you need it
+- Weather and location are remembered for a few minutes, so new tabs show the weather instantly
+- Updated UpTab's dependencies to their latest versions for better speed and stability
+
+### 🐛 Fixed
+
+- The weather forecast no longer jumps in size while it loads
+- The forecast's temperature scale now uses even steps
+
 ## [V1.5.0] — 2026-10-16
 
 ### ✨ Added
