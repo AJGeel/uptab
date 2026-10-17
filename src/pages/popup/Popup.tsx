@@ -1,5 +1,6 @@
 import "@/assets/styles/tailwind.css";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import type { JSX } from "react";
 
 import Bookmarks from "@/src/components/Bookmarks/Bookmarks";
 

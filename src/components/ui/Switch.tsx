@@ -5,19 +5,16 @@ import * as React from "react";
 
 import { cn } from "@/src/utils";
 
-const Switch = React.forwardRef<
-  React.ElementRef<typeof SwitchPrimitives.Root>,
-  React.ComponentPropsWithoutRef<typeof SwitchPrimitives.Root> & {
-    className?: string;
-  }
->(({ className, ...props }, ref) => (
+const Switch = ({
+  className,
+  ...props
+}: React.ComponentProps<typeof SwitchPrimitives.Root>) => (
   <SwitchPrimitives.Root
     className={cn(
       "peer inline-flex h-6 w-11 shrink-0 cursor-pointer items-center rounded-full border-2 border-transparent bg-gray-200 ring-sky-500 transition-colors focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-hidden disabled:cursor-not-allowed disabled:opacity-50 data-[state=checked]:bg-sky-500",
       className,
     )}
     {...props}
-    ref={ref}
   >
     <SwitchPrimitives.Thumb
       className={cn(
@@ -25,7 +22,6 @@ const Switch = React.forwardRef<
       )}
     />
   </SwitchPrimitives.Root>
-));
-Switch.displayName = SwitchPrimitives.Root.displayName;
+);
 
 export { Switch };
