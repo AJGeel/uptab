@@ -1,9 +1,11 @@
+import { useState } from "react";
+
 import { formatToday, formatWeekNumber } from "@/src/utils";
 
 import Link from "../../ui/Link";
 
 const CalendarWidget = () => {
-  const today = new Date();
+  const [today] = useState(() => new Date());
 
   return (
     <Link href="https://calendar.google.com" className="flex flex-col">

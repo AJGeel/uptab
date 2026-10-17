@@ -9,8 +9,8 @@ export const targetBlank = {
 } as const;
 
 const Container = ({ children }: PropsWithChildren) => (
-  <div className="min-h-screen bg-gradient-to-b from-white via-slate-200 to-slate-200">
-    <div className="prose-sm mx-auto w-full max-w-3xl px-4 py-32 text-slate-700 md:px-6">
+  <div className="min-h-screen bg-linear-to-b from-white via-slate-200 to-slate-200">
+    <div className="mx-auto prose-sm w-full max-w-3xl px-4 py-32 text-slate-700 md:px-6">
       {children}
     </div>
   </div>
@@ -60,7 +60,7 @@ const Changelog = () => {
                 width="20"
                 height="20"
                 alt="UpTab Logo"
-                className="m-0"
+                className="not-prose"
               />
               {children}
             </h2>

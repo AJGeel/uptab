@@ -23,7 +23,7 @@ const BookmarkItem = ({
 }: Props) => (
   <a
     className={cn(
-      "group flex items-center gap-3 duration-150 py-1.5 px-2 hover:bg-sky-500/10 text-gray-600 hover:text-sky-800 focus-within:outline-none outline-none",
+      "group flex items-center gap-3 px-2 py-1.5 text-gray-600 outline-hidden duration-150 focus-within:outline-hidden hover:bg-sky-500/10 hover:text-sky-800",
       isFocused && "first:bg-sky-500/10",
     )}
     onClick={(event) => {
@@ -35,7 +35,7 @@ const BookmarkItem = ({
     href={item.url ?? ""}
   >
     <ImageWithFallback
-      className="size-4 rounded-sm"
+      className="size-4 rounded-xs"
       src={getFavicon(item?.url || "")}
       fallbackSrc="/icon-34.png"
       loading="lazy"
@@ -48,7 +48,7 @@ const BookmarkItem = ({
             event.preventDefault();
             handleAddToShortlink();
           }}
-          className="size-7 shrink-0 rounded-lg border bg-white p-1 text-gray-500 shadow-sm ring-sky-500 duration-150 hover:text-sky-500 hover:ring-2"
+          className="size-7 shrink-0 rounded-lg border bg-white p-1 text-gray-500 shadow-xs ring-sky-500 duration-150 hover:text-sky-500 hover:ring-2"
         />
       )}
       <BackspaceIcon
@@ -56,7 +56,7 @@ const BookmarkItem = ({
           event.preventDefault();
           handleDelete();
         }}
-        className="size-7 shrink-0 rounded-lg border bg-white p-1 text-gray-500 shadow-sm ring-red-500 duration-150 hover:text-red-500 hover:ring-2"
+        className="size-7 shrink-0 rounded-lg border bg-white p-1 text-gray-500 shadow-xs ring-red-500 duration-150 hover:text-red-500 hover:ring-2"
       />
     </div>
   </a>

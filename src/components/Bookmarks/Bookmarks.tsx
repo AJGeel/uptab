@@ -75,8 +75,8 @@ const Bookmarks = ({ displayMode = "NewTab" }: BookmarksProps) => {
   return (
     <div
       className={cn(
-        "first:mt-0 mt-10 w-full border rounded-2xl bg-white overflow-hidden relative",
-        displayMode === "Popup" && "shadow-lg shadow-sky-800/30 flex-shrink-0",
+        "relative mt-10 w-full overflow-hidden rounded-2xl border bg-white first:mt-0",
+        displayMode === "Popup" && "shrink-0 shadow-lg shadow-sky-800/30",
       )}
     >
       <div className="relative flex items-stretch border-b">
@@ -98,8 +98,8 @@ const Bookmarks = ({ displayMode = "NewTab" }: BookmarksProps) => {
       </div>
       <div
         className={cn(
-          "flex flex-col overflow-y-auto flex-grow",
-          displayMode === "Popup" ? "h-[380px]" : "h-60",
+          "flex grow flex-col overflow-y-auto",
+          displayMode === "Popup" ? "h-95" : "h-60",
         )}
       >
         {filteredBookmarks.length === 0 && (

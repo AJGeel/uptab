@@ -13,18 +13,18 @@ type SortProps = BookmarksProps & {
 const SortBookmarks = ({ displayMode, sortMode, setSortMode }: SortProps) => (
   <div
     className={cn(
-      "flex items-stretch border-l flex-shrink-0 relative bg-white",
+      "relative flex shrink-0 items-stretch border-l bg-white",
       displayMode === "Popup" && "hidden",
     )}
   >
     <label
-      className="pointer-events-none absolute left-2 top-2 text-gray-500"
+      className="pointer-events-none absolute top-2 left-2 text-gray-500"
       htmlFor="sortSelect"
     >
       Sort by:
     </label>
     <select
-      className="cursor-pointer appearance-none bg-white pl-20 pr-8 text-right duration-150 hover:bg-sky-500/10 focus:outline-none"
+      className="cursor-pointer appearance-none bg-white pr-8 pl-20 text-right duration-150 hover:bg-sky-500/10 focus:outline-hidden"
       id="sortSelect"
       value={sortMode}
       onChange={(event) => setSortMode(event.target.value as SortMode)}
@@ -35,7 +35,7 @@ const SortBookmarks = ({ displayMode, sortMode, setSortMode }: SortProps) => (
         </option>
       ))}
     </select>
-    <ChevronUpDownIcon className="pointer-events-none absolute right-1.5 top-3 size-4 text-gray-500" />
+    <ChevronUpDownIcon className="pointer-events-none absolute top-3 right-1.5 size-4 text-gray-500" />
   </div>
 );
 

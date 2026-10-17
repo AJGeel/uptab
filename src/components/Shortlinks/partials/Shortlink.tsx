@@ -28,13 +28,13 @@ const Shortlink = ({ item, isDragging }: Props) => {
       {...hoverProps}
       href={isDragging ? undefined : item.url}
       className={cn(
-        "w-full flex cursor-pointer items-center gap-3 rounded-xl border bg-white px-3 py-2.5 shadow-sm ring-sky-500 duration-150 hover:ring focus:outline-none focus:ring group relative",
+        "group relative flex w-full cursor-pointer items-center gap-3 rounded-xl border bg-white px-3 py-2.5 shadow-xs ring-sky-500 duration-150 hover:ring-3 focus:ring-3 focus:outline-hidden",
         isDragging && "cursor-grabbing",
       )}
     >
       <div
         className={cn(
-          "pointer-events-none absolute -top-10 rounded border border-sky-900/10 bg-white px-2 py-1.5 shadow opacity-0 duration-200 flex items-center gap-0.5",
+          "pointer-events-none absolute -top-10 flex items-center gap-0.5 rounded-sm border border-sky-900/10 bg-white px-2 py-1.5 opacity-0 shadow-sm duration-200",
           isLongHovering &&
             !isDragging &&
             !isHoveringSecondary &&
@@ -49,7 +49,7 @@ const Shortlink = ({ item, isDragging }: Props) => {
       <ImageWithFallback
         src={item.icon ?? getFavicon(item.url)}
         fallbackSrc="/icon-34.png"
-        className="size-6 shrink-0 rounded"
+        className="size-6 shrink-0 rounded-sm"
       />
       <div className="flex grow flex-col truncate">
         <h2 className="truncate text-sm font-semibold">{item.title}</h2>

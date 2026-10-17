@@ -8,7 +8,7 @@ import { Props } from "../Sidebar";
 export const SidebarExpandButton = ({ isExpanded, setIsExpanded }: Props) => (
   <IconButton
     className={cn(
-      "absolute top-7 group mr-6 sm:mr-0",
+      "group absolute top-7 mr-6 sm:mr-0",
       isExpanded ? "-right-4" : "-right-14",
     )}
     onClick={() => {
@@ -17,7 +17,7 @@ export const SidebarExpandButton = ({ isExpanded, setIsExpanded }: Props) => (
   >
     <ChevronRightIcon
       className={cn(
-        "w-4 h-4 group-hover:text-sky-500 duration-300",
+        "size-4 duration-300 group-hover:text-sky-500",
         isExpanded ? "rotate-180" : "",
       )}
     />

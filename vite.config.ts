@@ -1,22 +1,23 @@
 import { resolve } from "path";
 
+import tailwindcss from "@tailwindcss/vite";
 import react from "@vitejs/plugin-react-swc";
 import { defineConfig } from "vite";
 
-import { buildTargets } from "./buildTarget";
-import includeChangelog from "./utils/plugins/include-changelog";
-import makeManifest from "./utils/plugins/make-manifest";
+import { buildTargets } from "./buildTarget.ts";
+import includeChangelog from "./utils/plugins/include-changelog.ts";
+import makeManifest from "./utils/plugins/make-manifest.ts";
 
-const root = resolve(__dirname, "src");
+const root = resolve(import.meta.dirname, "src");
 const pagesDir = resolve(root, "pages");
 const assetsDir = resolve(root, "assets");
 const outDir = resolve(
-  __dirname,
+  import.meta.dirname,
   process.env.BUILD_TARGET === buildTargets.firefox
     ? "dist/firefox"
     : "dist/chromium",
 );
-const publicDir = resolve(__dirname, "public");
+const publicDir = resolve(import.meta.dirname, "public");
 
 export default defineConfig({
   build: {
@@ -40,7 +41,7 @@ export default defineConfig({
     },
     sourcemap: process.env.__DEV__ === "true",
   },
-  plugins: [react(), makeManifest(), includeChangelog()],
+  plugins: [react(), tailwindcss(), makeManifest(), includeChangelog()],
   publicDir,
   resolve: {
     alias: {

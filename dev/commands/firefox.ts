@@ -1,6 +1,6 @@
 import { resolve } from "path";
 
-import jwt from "jsonwebtoken";
+import { sign } from "jsonwebtoken";
 
 import { StoreStatus } from "./types";
 import { runTask, step } from "./ui";
@@ -24,7 +24,7 @@ const getEnv = () =>
 
 const getAuthHeader = () => {
   const env = getEnv();
-  const token = jwt.sign({ jti: crypto.randomUUID() }, env.FIREFOX_JWT_SECRET, {
+  const token = sign({ jti: crypto.randomUUID() }, env.FIREFOX_JWT_SECRET, {
     algorithm: "HS256",
     expiresIn: "1m",
     issuer: env.FIREFOX_JWT_ISSUER,

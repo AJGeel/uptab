@@ -37,15 +37,15 @@ const Homescreen = () => {
           src={activeBg.src}
           alt={`A great photo by ${activeBg.author}`}
           className={cn(
-            "flex-1 bg-cover bg-center flex flex-col duration-500",
+            "flex flex-1 flex-col bg-cover bg-center duration-500",
             isSidebarOpen && "scale-105",
           )}
         >
           {settings?.homescreen?.showInfoWidget && (
             <InfoWidget
               className={cn(
-                "p-6 pl-20 pb-16 duration-500",
-                isSidebarOpen && "translate-x-40 pointer-events-none opacity-0",
+                "p-6 pb-16 pl-20 duration-500",
+                isSidebarOpen && "pointer-events-none translate-x-40 opacity-0",
               )}
             />
           )}
@@ -53,9 +53,9 @@ const Homescreen = () => {
             <div className="mt-auto self-start p-2">
               <p
                 className={cn(
-                  "inline-block self-start opacity-50 hover:opacity-100 p-2 px-4 duration-500 hover:bg-white rounded-2xl",
+                  "inline-block self-start rounded-2xl p-2 px-4 opacity-50 duration-500 hover:bg-white hover:opacity-100",
                   isSidebarOpen &&
-                    "opacity-0 translate-x-40 pointer-events-none",
+                    "pointer-events-none translate-x-40 opacity-0",
                 )}
               >
                 Photo by {activeBg.author}

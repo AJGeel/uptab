@@ -15,7 +15,7 @@ export const normalizeUrl = (url: string) => {
     }
 
     return parsedUrl.href;
-  } catch (error) {
+  } catch {
     return url;
   }
 };

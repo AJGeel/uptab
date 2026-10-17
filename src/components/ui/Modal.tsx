@@ -44,7 +44,10 @@ const useFreezeContentsOnClose = ({
 
   const modalContents = isVisible
     ? { title, subtitle, children }
-    : snapshotRef.current;
+    : // Deliberately read during render: keeps the last contents on screen
+      // while the close animation plays. State would re-render on every change.
+      // eslint-disable-next-line react-hooks/refs
+      snapshotRef.current;
 
   return modalContents;
 };
@@ -70,17 +73,16 @@ const Modal = ({ className, onClose, isVisible, ...modalProps }: Props) => {
         <Dialog.Content
           className={cn(
             `
-              fixed left-[50%] top-[50%] z-20
+              fixed top-[50%] left-[50%] z-20
               max-h-[85vh] w-[90vw] max-w-md
-              translate-x-[-50%] translate-y-[-50%]
-              overflow-y-auto rounded-2xl
-              bg-white/95 p-6
-              shadow-lg backdrop-blur-lg
-              backdrop-brightness-[1.9] backdrop-saturate-150
-              focus:outline-none
+              translate-[-50%] overflow-y-auto
+              rounded-2xl bg-white/95
+              p-6 shadow-lg
+              backdrop-blur-lg backdrop-brightness-190
+              backdrop-saturate-150 focus:outline-hidden
+              data-[state=closed]:animate-contentHide
 
               data-[state=open]:animate-contentShow
-              data-[state=closed]:animate-contentHide
             `,
             className,
           )}
@@ -91,7 +93,7 @@ const Modal = ({ className, onClose, isVisible, ...modalProps }: Props) => {
 
           {subtitle && (
             <Dialog.Description
-              className="mb-6 mt-3 leading-normal text-gray-800"
+              className="mt-3 mb-6 leading-normal text-gray-800"
               style={{ textWrap: "pretty" }}
             >
               {subtitle}
@@ -103,7 +105,7 @@ const Modal = ({ className, onClose, isVisible, ...modalProps }: Props) => {
           <Dialog.Close asChild onClick={onClose}>
             <IconButton
               aria-label="Close"
-              className="absolute right-5 top-5 bg-transparent hover:bg-white"
+              className="absolute top-5 right-5 bg-transparent hover:bg-white"
               hideBorder
             >
               <XMarkIcon className="size-5" />

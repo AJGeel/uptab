@@ -1,11 +1,125 @@
-@font-face {
-  font-family: "Figtree";
-  src: url("../fonts/Figtree-Variable.ttf") format("truetype");
-  font-style: normal;
-  font-weight: 100 1000;
-  font-display: swap;
+@import 'tailwindcss';
+
+@plugin '@tailwindcss/typography';
+
+@theme {
+  --font-sans: Figtree, sans-serif;
+
+  --color-sky-400: #25b1ff;
+  --color-sky-500: #138cd0;
+  --color-sky-800: #085884;
+
+  --color-black: #020e2c;
+
+  --animate-overlayShow: overlayShow 250ms cubic-bezier(0.16, 1, 0.3, 1);
+  --animate-overlayHide: overlayHide 250ms cubic-bezier(0.16, 1, 0.3, 1);
+  --animate-contentShow: contentShow 250ms cubic-bezier(0.16, 1, 0.3, 1);
+  --animate-contentHide: contentHide 250ms cubic-bezier(0.16, 1, 0.3, 1);
+  --animate-hotkey: hotkey 1s ease-out forwards;
+
+  @keyframes overlayShow {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+  @keyframes overlayHide {
+    from {
+      opacity: 1;
+    }
+    to {
+      opacity: 0;
+    }
+  }
+  /*
+    The modal is centred with the `translate` property (Tailwind v4's
+    translate-* utilities), so these only add the slide and scale on top.
+  */
+  @keyframes contentShow {
+    from {
+      opacity: 0;
+      transform: translateY(2%) scale(0.96);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+  @keyframes contentHide {
+    from {
+      opacity: 1;
+      transform: none;
+    }
+    to {
+      opacity: 0;
+      transform: translateY(2%) scale(0.96);
+    }
+  }
+  @keyframes hotkey {
+    0% {
+      opacity: 0;
+      transform: translateY(8px) scale(0.9);
+    }
+    15% {
+      opacity: 1;
+      transform: translateY(0) scale(1.05);
+    }
+    25% {
+      transform: translateY(0) scale(1);
+    }
+    75% {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+    100% {
+      opacity: 0;
+      transform: translateY(6px) scale(0.95);
+    }
+  }
 }
 
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+/*
+  The default border color has changed to `currentcolor` in Tailwind CSS v4,
+  so we've added these compatibility styles to make sure everything still
+  looks the same as it did with Tailwind CSS v3.
+
+  If we ever want to remove these styles, we need to add an explicit border
+  color utility to any element that depends on these defaults.
+*/
+@layer base {
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: var(--color-gray-200, currentcolor);
+  }
+}
+
+/*
+  Tailwind CSS v4 dropped these v3 defaults: buttons no longer get a pointer
+  cursor, and placeholders use the text colour at half opacity.
+*/
+@layer base {
+  button:not(:disabled),
+  [role="button"]:not(:disabled) {
+    cursor: pointer;
+  }
+
+  input::placeholder,
+  textarea::placeholder {
+    color: var(--color-gray-400);
+  }
+}
+
+@layer base {
+  @font-face {
+    font-family: 'Figtree';
+    src: url('../fonts/Figtree-Variable.ttf') format('truetype');
+    font-style: normal;
+    font-weight: 100 1000;
+    font-display: swap;
+  }
+}

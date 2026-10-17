@@ -97,8 +97,8 @@ const Shortlinks = () => {
           >
             <div
               className={cn(
-                "grid grid-cols-2 gap-2 p-2 -m-2 rounded-2xl duration-250 border border-dashed border-transparent transition-colors",
-                isDragging && "bg-gray-100 border-gray-200",
+                "-m-2 grid grid-cols-2 gap-2 rounded-2xl border border-dashed border-transparent p-2 transition-colors duration-250",
+                isDragging && "border-gray-200 bg-gray-100",
               )}
             >
               {data.map((item) => (

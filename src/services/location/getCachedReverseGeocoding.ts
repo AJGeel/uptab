@@ -29,6 +29,8 @@ export const getCachedReverseGeocoding = async ({
 
     return cachedReverseGeocoding;
   } catch (error) {
-    throw new Error("Unable to check cached reverse geocoding.");
+    throw new Error("Unable to check cached reverse geocoding.", {
+      cause: error,
+    });
   }
 };

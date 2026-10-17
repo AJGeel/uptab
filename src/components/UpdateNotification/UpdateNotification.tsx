@@ -1,11 +1,11 @@
 import { SparklesIcon, XMarkIcon } from "@heroicons/react/24/solid";
-import { useMemo } from "react";
+import { useState } from "react";
 
 import { useUpdateNotification } from "../../hooks/useUpdateNotification";
 
 const UpdateNotification = () => {
   const { isVisible, onOpen, onHide } = useUpdateNotification();
-  const RNG = useMemo(() => Math.random(), []);
+  const [RNG] = useState(() => Math.random());
 
   if (!isVisible) {
     return <></>;

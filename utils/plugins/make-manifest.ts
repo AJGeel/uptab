@@ -3,12 +3,12 @@ import * as path from "path";
 
 import { PluginOption } from "vite";
 
-import manifest from "../../src/manifest";
-import colorLog from "../log";
+import manifest from "../../src/manifest.ts";
+import colorLog from "../log.ts";
 
 const { resolve } = path;
 
-const outDir = resolve(__dirname, "..", "..", "public");
+const outDir = resolve(import.meta.dirname, "..", "..", "public");
 
 export default function makeManifest(): PluginOption {
   return {
