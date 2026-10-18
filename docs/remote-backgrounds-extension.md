@@ -41,7 +41,7 @@ Follows this repo's conventions: `services/<area>/`, `hooks/queries/use*.ts`, te
 ## 4. Fallback and cleanup
 
 - One small built-in WebP for the first run, offline use, and when the site is unreachable.
-- Delete `public/images/backgrounds/` (24 MB) and `useRandomBackground/backgrounds.ts`. Keep `public/images/store-listing/`.
+- Delete `public/images/backgrounds/` (24 MB) and `useRandomBackground/backgrounds.ts`. The store-listing screenshots now live in `docs/store-listing/`, outside the package.
 
 → verify: nothing references the old paths; the zipped builds shrink accordingly.
 
