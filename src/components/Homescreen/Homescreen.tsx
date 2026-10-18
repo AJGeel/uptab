@@ -10,10 +10,11 @@ import { ActiveHotkeyIndicator } from "../Modals/HotkeysModal/partials/ActiveHot
 import Modals from "../Modals/Modals";
 import Sidebar from "../Sidebar/Sidebar";
 import { Background } from "../ui/Background";
+import Link from "../ui/Link";
 
 const Homescreen = () => {
   const { data: settings, isPending, toggleSidebarSetting } = useSettings();
-  const { activeBg } = useRandomBackground();
+  const { activeBg, onError } = useRandomBackground();
 
   const isSidebarOpen = settings?.sidebar?.isOpen;
 
@@ -34,8 +35,14 @@ const Homescreen = () => {
           setIsExpanded={() => toggleSidebarSetting("isOpen")}
         />
         <Background
-          src={activeBg.src}
-          alt={`A great photo by ${activeBg.author}`}
+          src={activeBg?.src}
+          color={activeBg?.color}
+          onError={onError}
+          alt={
+            activeBg?.author
+              ? `A great photo by ${activeBg.author}`
+              : "Background photo"
+          }
           className={cn(
             "flex flex-1 flex-col bg-cover bg-center duration-500",
             isSidebarOpen && "scale-105",
@@ -49,7 +56,7 @@ const Homescreen = () => {
               )}
             />
           )}
-          {settings?.homescreen.showPhotoCredit && (
+          {settings?.homescreen.showPhotoCredit && activeBg?.author && (
             <div className="mt-auto self-start p-2">
               <p
                 className={cn(
@@ -58,7 +65,12 @@ const Homescreen = () => {
                     "pointer-events-none translate-x-40 opacity-0",
                 )}
               >
-                Photo by {activeBg.author}
+                Photo by{" "}
+                {activeBg.link ? (
+                  <Link href={activeBg.link}>{activeBg.author}</Link>
+                ) : (
+                  activeBg.author
+                )}
               </p>
             </div>
           )}

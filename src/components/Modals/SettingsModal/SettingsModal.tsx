@@ -1,3 +1,4 @@
+import { useCatalogue } from "@/src/hooks/queries/useCatalogue";
 import { Modals, useModalStore } from "@/src/hooks/stores/useModalStore";
 import useKeyPress from "@/src/hooks/useKeyPress";
 import { useSettings } from "@/src/hooks/useSettings";
@@ -14,9 +15,11 @@ const SettingsModal = () => {
     data: settings,
     toggleSidebarSetting,
     toggleHomescreenSetting,
+    toggleBackgroundTheme,
     resetDefaultSettings,
     setSidebarOpen,
   } = useSettings();
+  const { catalogue } = useCatalogue();
 
   const activeModal = useModalStore((state) => state.activeModal);
   const setActiveModal = useModalStore((state) => state.setActiveModal);
@@ -73,6 +76,38 @@ const SettingsModal = () => {
                     </>
                   ),
                 },
+                {
+                  label: "Backgrounds",
+                  content: (
+                    <>
+                      {catalogue?.themes.map((theme) => {
+                        const count = catalogue.images.filter(
+                          (image) => image.theme === theme.id,
+                        ).length;
+
+                        return (
+                          <SettingsRow
+                            key={theme.id}
+                            title={theme.name}
+                            description={`${count} ${count === 1 ? "photo" : "photos"}`}
+                            isActive={settings.backgrounds.themes.includes(
+                              theme.id,
+                            )}
+                            onClick={() => {
+                              toggleBackgroundTheme(theme.id);
+                            }}
+                          />
+                        );
+                      })}
+                      {!catalogue && (
+                        <p className="py-3 text-sm text-gray-700">
+                          Backgrounds couldn&apos;t be loaded. Check your
+                          connection and try again.
+                        </p>
+                      )}
+                    </>
+                  ),
+                },
               ]}
               onTabChange={(id) => {
                 if (id === "Sidebar") {
@@ -80,7 +115,7 @@ const SettingsModal = () => {
                   return;
                 }
 
-                if (id === "Homescreen") {
+                if (id === "Homescreen" || id === "Backgrounds") {
                   setSidebarOpen(false);
                   return;
                 }

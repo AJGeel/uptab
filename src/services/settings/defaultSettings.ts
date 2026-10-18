@@ -1,4 +1,5 @@
 import { Settings } from "./types";
+import { DEFAULT_THEME } from "../backgrounds/pickDailyImage";
 
 export const defaultSettings: Settings = {
   sidebar: {
@@ -12,5 +13,8 @@ export const defaultSettings: Settings = {
   homescreen: {
     showInfoWidget: true,
     showPhotoCredit: true,
+  },
+  backgrounds: {
+    themes: [DEFAULT_THEME],
   },
 };

@@ -1,11 +1,21 @@
 import { AnimatePresence, motion, Variants } from "motion/react";
-import { HTMLAttributes, useEffect, useRef, useState } from "react";
+import {
+  HTMLAttributes,
+  useEffect,
+  useEffectEvent,
+  useRef,
+  useState,
+} from "react";
 
 import { cn } from "@/src/utils";
 
-interface ImageProps extends HTMLAttributes<HTMLDivElement> {
-  src: string;
+interface ImageProps extends Omit<HTMLAttributes<HTMLDivElement>, "onError"> {
+  /** Nothing is shown until there's a src. */
+  src?: string;
   alt: string;
+  /** Shown while the photo loads. */
+  color?: string;
+  onError?: () => void;
   className?: string;
 }
 
@@ -23,17 +33,32 @@ export const Background = ({
   className,
   src,
   alt,
+  color,
+  onError,
   children,
+  style,
   ...props
 }: ImageProps) => {
   const [layers, setLayers] = useState<Layer[]>([]);
   const nextIdRef = useRef(0);
+  // Calls the latest onError without reloading the image when it changes.
+  const handleError = useEffectEvent(() => onError?.());
 
   useEffect(() => {
+    if (!src) {
+      return;
+    }
+
     let cancelled = false;
 
     const image = new Image();
     image.src = src;
+
+    image.onerror = () => {
+      if (!cancelled) {
+        handleError();
+      }
+    };
 
     image.onload = async () => {
       if (cancelled) {
@@ -71,6 +96,7 @@ export const Background = ({
       role="img"
       aria-label={alt}
       className={cn("relative overflow-hidden", className)}
+      style={{ backgroundColor: color, ...style }}
       {...props}
     >
       <AnimatePresence initial={false}>

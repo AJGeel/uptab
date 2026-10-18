@@ -13,5 +13,8 @@ export const getSettings = async (): Promise<Settings> => {
     return defaultSettings;
   }
 
-  return deepmerge(defaultSettings, data.settings);
+  // Saved arrays replace the defaults; deepmerge would concatenate them.
+  return deepmerge(defaultSettings, data.settings, {
+    arrayMerge: (_defaults, saved) => saved,
+  });
 };

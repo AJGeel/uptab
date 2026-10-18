@@ -12,7 +12,13 @@ export type HomescreenSettings = {
   showPhotoCredit: boolean;
 };
 
+export type BackgroundSettings = {
+  /** Enabled theme IDs from the backgrounds catalogue. */
+  themes: string[];
+};
+
 export type Settings = {
   sidebar: SidebarSettings;
   homescreen: HomescreenSettings;
+  backgrounds: BackgroundSettings;
 };

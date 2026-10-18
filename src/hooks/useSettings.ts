@@ -21,6 +21,8 @@ export const useSettings = () => {
       return settings;
     },
     queryKey: SETTINGS_QUERY_KEY,
+    // Reads local storage only, so don't pause while the browser is offline.
+    networkMode: "always",
   });
 
   const editMutation = useMutation({
@@ -74,6 +76,24 @@ export const useSettings = () => {
     });
   };
 
+  const toggleBackgroundTheme = async (themeId: string) => {
+    if (!data) {
+      return;
+    }
+
+    const { themes } = data.backgrounds;
+
+    await editMutation.mutateAsync({
+      ...data,
+      backgrounds: {
+        ...data.backgrounds,
+        themes: themes.includes(themeId)
+          ? themes.filter((id) => id !== themeId)
+          : [...themes, themeId],
+      },
+    });
+  };
+
   const resetDefaultSettings = async () => {
     await editMutation.mutateAsync(defaultSettings);
   };
@@ -84,6 +104,7 @@ export const useSettings = () => {
     data,
     toggleSidebarSetting,
     toggleHomescreenSetting,
+    toggleBackgroundTheme,
     setSidebarOpen,
     resetDefaultSettings,
   };
