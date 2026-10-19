@@ -38,6 +38,11 @@ type Theme = {
   id: string;
   /** Display name, e.g. "Holland". */
   name: string;
+  /**
+   * Optional: up to 4 image IDs that represent the theme, in order. Missing,
+   * or IDs not in the catalogue: use the theme's first images.
+   */
+  coverImageIds?: string[];
 };
 
 type BackgroundImage = {
@@ -58,6 +63,8 @@ type BackgroundImage = {
    * source (no upscaling), so a small source may only have 1920.
    */
   sources: { width: number; url: string }[];
+  /** Optional: a 240 px preview for the theme picker. Never a background, so not in `sources`. */
+  thumbnail?: { width: number; url: string };
 };
 ```
 
@@ -296,6 +303,7 @@ This is implemented in the `uptab` repo after the website is live. It's listed h
 - **Choosing a photo:** a daily pick from the enabled themes; arrow keys move to the next or previous photo. The default theme is `holland`, so existing users see the same kind of photos.
 - **Rendition:** the extension picks the smallest `source` with `width ≥ screen.width × devicePixelRatio`, falling back to the largest one. `color` is the background until the image has loaded.
 - **Missing images:** a stored image ID that's no longer in the catalogue is skipped, since images can be removed or renamed (§1).
+- **Theme picker:** a "Backgrounds" modal with a card per theme, showing up to 4 cover thumbnails as a mosaic (§7).
 - **Fallback:** one small built-in WebP for the first run, offline use, or when the site is unreachable. The 17 bundled JPEGs are removed from the extension.
 - **Later in 2.0.0:** user uploads, stored in IndexedDB, appear as a "My photos" theme. They don't involve this website.
 
@@ -334,3 +342,15 @@ Decided:
 
 - **Theme IDs:** `holland`, `safari`, `underwater` and `abstract` for now. They can be renamed later (see §1).
 - **Widths:** up to 3840. Larger sizes, such as 5120 for 5K screens, can be added later without affecting existing extensions.
+
+---
+
+## 7. Thumbnails for the theme picker
+
+The extension's theme picker shows one card per theme, about 200 × 96 px, with up to 4 photos as a mosaic.
+
+- **Build script:** also writes a 240 px WebP per published image (`<id>-240-<hash>.webp`, the same immutable cache headers), about 5 KB each.
+- **Catalogue:** `thumbnail` on each image and `coverImageIds` on each theme (§1), both optional and additive. Only published photos are listed as covers; a theme without any has no `coverImageIds`.
+- **Admin:** "Add to cover" per photo on a theme's page, up to 4, in the order picked. Renaming a cover photo keeps it in the cover; moving it to another theme or removing it takes it out.
+
+The extension shows the covers' thumbnails, topped up with the theme's other photos when there are fewer than 4. Each cell shows the photo's `color` while its thumbnail loads, or when it has no `thumbnail`. Older extensions ignore both fields.

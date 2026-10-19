@@ -24,7 +24,7 @@ const catalogue = (overrides: Record<string, unknown> = {}) => ({
 describe("parseCatalogue", () => {
   it("reads a valid catalogue", () => {
     expect(parseCatalogue(catalogue())).toEqual({
-      themes: [{ id: "holland", name: "Holland" }],
+      themes: [{ id: "holland", name: "Holland", coverImageIds: [] }],
       images: [
         {
           id: "koppelpoort",
@@ -35,9 +35,39 @@ describe("parseCatalogue", () => {
           sources: [
             { width: 1920, url: "https://example.com/koppelpoort-1920.webp" },
           ],
+          thumbnail: null,
         },
       ],
     });
+  });
+
+  it("reads thumbnails and cover images", () => {
+    const parsed = parseCatalogue(
+      catalogue({
+        themes: [
+          {
+            id: "holland",
+            name: "Holland",
+            coverImageIds: ["koppelpoort", 42, null],
+          },
+        ],
+        images: [
+          image({
+            thumbnail: {
+              width: 240,
+              url: "https://example.com/koppelpoort-240.webp",
+            },
+          }),
+          image({ id: "broken-thumb", thumbnail: { width: "small" } }),
+        ],
+      }),
+    );
+
+    expect(parsed?.themes[0].coverImageIds).toEqual(["koppelpoort"]);
+    expect(parsed?.images.map((i) => i.thumbnail)).toEqual([
+      { width: 240, url: "https://example.com/koppelpoort-240.webp" },
+      null,
+    ]);
   });
 
   it("ignores unknown fields", () => {
@@ -49,7 +79,9 @@ describe("parseCatalogue", () => {
       }),
     );
 
-    expect(parsed?.themes).toEqual([{ id: "holland", name: "Holland" }]);
+    expect(parsed?.themes).toEqual([
+      { id: "holland", name: "Holland", coverImageIds: [] },
+    ]);
     expect(parsed?.images[0]).not.toHaveProperty("blurhash");
     expect(parsed?.images[0]).not.toHaveProperty("aspectRatio");
   });

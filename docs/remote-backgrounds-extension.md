@@ -45,7 +45,18 @@ Follows this repo's conventions: `services/<area>/`, `hooks/queries/use*.ts`, te
 
 → verify: nothing references the old paths; the zipped builds shrink accordingly.
 
-## 5. Checks before release
+## 5. Backgrounds picker
+
+Making the feature visible, instead of three levels deep in Edit Preferences.
+
+- **On the homescreen:** the photo credit (bottom left) is now a pill with the credit plus `‹ ›` (browse, like the arrow keys) and a "Backgrounds" button. It shows even when the credit is turned off, so the entry point never disappears.
+- **Picker** (`components/Modals/BackgroundsModal/`): a card per theme with name, photo count and a check mark. Cards show a 2×2 mosaic of the theme's cover thumbnails (`coverImageIds`, topped up with its other photos when there are fewer than 4), with each photo's colour behind its thumbnail while it loads ([remote-backgrounds.md](remote-backgrounds.md) §7). "All themes" selects everything; the last selected theme can't be turned off, replacing the silent fallback to Holland. Changes show behind the modal straight away.
+- **Hotkey:** `B` opens and closes the picker, and is listed in the hotkeys modal.
+- **Settings:** the Backgrounds tab is a single "Choose backgrounds" button that opens the picker.
+- **2.0 notice:** for 2.0.x, the update notification says "New: choose your own backgrounds!" and opens the picker (closing the sidebar) instead of the changelog.
+- **Modals:** they now close on outside clicks (`onPointerDownOutside`) instead of any outside interaction, so focus left in a modal that's animating out doesn't close the next one.
+
+## 6. Checks before release
 
 - Chrome and Firefox: the catalogue and images load without adding host permissions. A new one would disable UpTab on update until each user approves it.
 - DevTools offline: the saved catalogue and cached photos keep working; a first run offline shows the fallback.

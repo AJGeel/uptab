@@ -87,7 +87,11 @@ const Modal = ({ className, onClose, isVisible, ...modalProps }: Props) => {
             className,
           )}
           onEscapeKeyDown={onClose}
-          onInteractOutside={onClose}
+          /*
+           * Clicks only: "interact outside" also counts focus left behind in a
+           * modal that's still animating out, which would close the next one.
+           */
+          onPointerDownOutside={onClose}
         >
           <Dialog.Title className="m-0 text-lg font-bold">{title}</Dialog.Title>
 

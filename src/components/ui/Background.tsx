@@ -13,8 +13,6 @@ interface ImageProps extends Omit<HTMLAttributes<HTMLDivElement>, "onError"> {
   /** Nothing is shown until there's a src. */
   src?: string;
   alt: string;
-  /** Shown while the photo loads. */
-  color?: string;
   onError?: () => void;
   className?: string;
 }
@@ -33,7 +31,6 @@ export const Background = ({
   className,
   src,
   alt,
-  color,
   onError,
   children,
   style,
@@ -96,7 +93,7 @@ export const Background = ({
       role="img"
       aria-label={alt}
       className={cn("relative overflow-hidden", className)}
-      style={{ backgroundColor: color, ...style }}
+      style={style}
       {...props}
     >
       <AnimatePresence initial={false}>

@@ -6,23 +6,27 @@ export const DEFAULT_THEME = "holland";
 export type DailyPick = { date: string; imageId: string };
 
 /**
- * Photos from the enabled themes. Theme IDs that are no longer in the
- * catalogue are ignored. If nothing is left, falls back to the default
- * theme, or else to every photo.
+ * The themes in use: the enabled ones that are still in the catalogue and have
+ * photos. If none are left, the default theme, or else every theme.
  */
-export const getEnabledImages = (catalogue: Catalogue, themes: string[]) => {
-  const byThemes = (ids: string[]) =>
-    catalogue.images.filter((image) => ids.includes(image.theme));
-
-  const enabled = byThemes(themes);
+export const getEnabledThemes = (catalogue: Catalogue, themes: string[]) => {
+  const available = catalogue.themes
+    .map((theme) => theme.id)
+    .filter((id) => catalogue.images.some((image) => image.theme === id));
+  const enabled = available.filter((id) => themes.includes(id));
 
   if (enabled.length > 0) {
     return enabled;
   }
 
-  const defaults = byThemes([DEFAULT_THEME]);
+  return available.includes(DEFAULT_THEME) ? [DEFAULT_THEME] : available;
+};
 
-  return defaults.length > 0 ? defaults : catalogue.images;
+/** Photos from the themes in use (see getEnabledThemes). */
+export const getEnabledImages = (catalogue: Catalogue, themes: string[]) => {
+  const enabled = getEnabledThemes(catalogue, themes);
+
+  return catalogue.images.filter((image) => enabled.includes(image.theme));
 };
 
 /** A well-mixed hash, so consecutive dates don't pick neighbouring photos. */

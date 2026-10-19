@@ -1,6 +1,10 @@
 import { describe, expect, it } from "vitest";
 
-import { getEnabledImages, pickDailyImage } from "./pickDailyImage";
+import {
+  getEnabledImages,
+  getEnabledThemes,
+  pickDailyImage,
+} from "./pickDailyImage";
 import { BackgroundImage, Catalogue } from "./types";
 
 const image = (id: string, theme = "holland"): BackgroundImage => ({
@@ -10,6 +14,7 @@ const image = (id: string, theme = "holland"): BackgroundImage => ({
   link: null,
   color: "#000000",
   sources: [{ width: 1920, url: `https://example.com/${id}.webp` }],
+  thumbnail: null,
 });
 
 const images = Array.from({ length: 20 }, (_, i) => image(`photo-${i}`));
@@ -61,8 +66,8 @@ describe("pickDailyImage", () => {
 describe("getEnabledImages", () => {
   const catalogue: Catalogue = {
     themes: [
-      { id: "holland", name: "Holland" },
-      { id: "safari", name: "Safari" },
+      { id: "holland", name: "Holland", coverImageIds: [] },
+      { id: "safari", name: "Safari", coverImageIds: [] },
     ],
     images: [image("windmill"), image("lion", "safari")],
   };
@@ -94,5 +99,36 @@ describe("getEnabledImages", () => {
     expect(getEnabledImages(noHolland, ["removed"]).map((i) => i.id)).toEqual([
       "lion",
     ]);
+  });
+});
+
+describe("getEnabledThemes", () => {
+  const catalogue: Catalogue = {
+    themes: [
+      { id: "holland", name: "Holland", coverImageIds: [] },
+      { id: "safari", name: "Safari", coverImageIds: [] },
+      { id: "empty", name: "Empty", coverImageIds: [] },
+    ],
+    images: [image("windmill"), image("lion", "safari")],
+  };
+
+  it("keeps enabled themes that have photos, in catalogue order", () => {
+    expect(getEnabledThemes(catalogue, ["safari", "holland"])).toEqual([
+      "holland",
+      "safari",
+    ]);
+  });
+
+  it("drops themes without photos or no longer in the catalogue", () => {
+    expect(getEnabledThemes(catalogue, ["empty", "removed", "safari"])).toEqual(
+      ["safari"],
+    );
+  });
+
+  it("falls back to holland, or else every theme with photos", () => {
+    expect(getEnabledThemes(catalogue, [])).toEqual(["holland"]);
+    expect(
+      getEnabledThemes({ ...catalogue, images: [image("lion", "safari")] }, []),
+    ).toEqual(["safari"]);
   });
 });

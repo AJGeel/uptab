@@ -5,6 +5,7 @@ export const Modals = {
   shortlink: "shortlink",
   settings: "settings",
   weather_forecast: "weatherForecast",
+  backgrounds: "backgrounds",
 } as const;
 
 export type Modals = (typeof Modals)[keyof typeof Modals];

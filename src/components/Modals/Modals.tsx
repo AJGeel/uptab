@@ -1,3 +1,4 @@
+import BackgroundsModal from "./BackgroundsModal/BackgroundsModal";
 import HotkeysModal from "./HotkeysModal/HotkeysModal";
 import SettingsModal from "./SettingsModal/SettingsModal";
 import ShortlinksModal from "./ShortlinksModal/ShortlinksModal";
@@ -9,6 +10,7 @@ const Modals = () => (
     <HotkeysModal />
     <SettingsModal />
     <WeatherForecastModal />
+    <BackgroundsModal />
   </>
 );
 

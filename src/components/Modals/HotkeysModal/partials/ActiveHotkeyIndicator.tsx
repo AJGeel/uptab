@@ -46,7 +46,8 @@ export const ActiveHotkeyIndicator = () => {
     <div
       key={animationKey}
       className={cn(
-        "fixed right-6 bottom-6 z-10 animate-hotkey",
+        // Above the background's content layer (z-10), which holds the bottom gradient.
+        "fixed right-6 bottom-6 z-20 animate-hotkey",
         !pressedKey && "pointer-events-none",
       )}
     >

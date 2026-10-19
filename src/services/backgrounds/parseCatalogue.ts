@@ -9,9 +9,20 @@ const isObject = (value: unknown): value is Unknown =>
 
 const isString = (value: unknown): value is string => typeof value === "string";
 
+type Rendition = { width: number; url: string };
+
+const isRendition = (value: unknown): value is Rendition =>
+  isObject(value) && typeof value.width === "number" && isString(value.url);
+
 const parseTheme = (raw: unknown): CatalogueTheme | undefined =>
   isObject(raw) && isString(raw.id) && isString(raw.name)
-    ? { id: raw.id, name: raw.name }
+    ? {
+        id: raw.id,
+        name: raw.name,
+        coverImageIds: Array.isArray(raw.coverImageIds)
+          ? raw.coverImageIds.filter(isString)
+          : [],
+      }
     : undefined;
 
 const parseImage = (raw: unknown): BackgroundImage | undefined => {
@@ -20,12 +31,7 @@ const parseImage = (raw: unknown): BackgroundImage | undefined => {
   }
 
   const sources = (Array.isArray(raw.sources) ? raw.sources : [])
-    .filter(
-      (source): source is { width: number; url: string } =>
-        isObject(source) &&
-        typeof source.width === "number" &&
-        isString(source.url),
-    )
+    .filter(isRendition)
     .map(({ width, url }) => ({ width, url }))
     .sort((a, b) => a.width - b.width);
 
@@ -40,6 +46,9 @@ const parseImage = (raw: unknown): BackgroundImage | undefined => {
     link: isString(raw.link) ? raw.link : null,
     color: isString(raw.color) ? raw.color : "#000000",
     sources,
+    thumbnail: isRendition(raw.thumbnail)
+      ? { width: raw.thumbnail.width, url: raw.thumbnail.url }
+      : null,
   };
 };
 

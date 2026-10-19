@@ -76,21 +76,14 @@ export const useSettings = () => {
     });
   };
 
-  const toggleBackgroundTheme = async (themeId: string) => {
+  const setBackgroundThemes = async (themes: string[]) => {
     if (!data) {
       return;
     }
 
-    const { themes } = data.backgrounds;
-
     await editMutation.mutateAsync({
       ...data,
-      backgrounds: {
-        ...data.backgrounds,
-        themes: themes.includes(themeId)
-          ? themes.filter((id) => id !== themeId)
-          : [...themes, themeId],
-      },
+      backgrounds: { ...data.backgrounds, themes },
     });
   };
 
@@ -104,7 +97,7 @@ export const useSettings = () => {
     data,
     toggleSidebarSetting,
     toggleHomescreenSetting,
-    toggleBackgroundTheme,
+    setBackgroundThemes,
     setSidebarOpen,
     resetDefaultSettings,
   };

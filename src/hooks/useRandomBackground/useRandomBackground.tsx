@@ -23,6 +23,7 @@ const FALLBACK_IMAGE: BackgroundImage = {
   link: "https://unsplash.com/photos/body-of-water-beside-green-trees-and-wind-mills-x2XDMf-rirc",
   color: "#d8e8f8",
   sources: [{ width: 1920, url: "/images/fallback-background.webp" }],
+  thumbnail: null,
 };
 
 const getSrc = (image: BackgroundImage) =>
@@ -89,10 +90,10 @@ export const useRandomBackground = () => {
   return {
     activeBg: activeBg && {
       src: getSrc(activeBg),
-      color: activeBg.color,
       author: activeBg.author,
       link: activeBg.link,
     },
     onError,
+    browse,
   };
 };
