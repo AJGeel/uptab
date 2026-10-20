@@ -123,6 +123,60 @@ const LocalPhotosModal = () => {
       title="My photos"
       subtitle="Add photos from your computer to show them alongside the themes. They're kept in this browser only."
       className="max-w-2xl"
+      footer={
+        <div className="flex items-center justify-between gap-2">
+          {selected.length > 0 ? (
+            <>
+              <p className="text-sm text-gray-700">
+                {selected.length} selected
+                {selected.length < localPhotos.length && (
+                  <>
+                    {" · "}
+                    <Button
+                      label="Select all"
+                      variant={buttonVariants.inline}
+                      onClick={() =>
+                        setSelected(localPhotos.map((photo) => photo.id))
+                      }
+                    />
+                  </>
+                )}
+              </p>
+              <div className="flex items-center gap-2">
+                <Button
+                  label="Cancel"
+                  variant={buttonVariants.secondary}
+                  onClick={() => setSelected([])}
+                />
+                <Button
+                  label={`Remove ${photos(selected.length)}`}
+                  className="bg-red-500 ring-red-500"
+                  onClick={removeSelected}
+                />
+              </div>
+            </>
+          ) : (
+            <>
+              <p className="text-sm text-gray-700">
+                {localPhotos.length > 0
+                  ? `${photos(localPhotos.length)} · Click photos to select them`
+                  : "Photos you add show up here"}
+              </p>
+              <div className="flex items-center gap-2">
+                {localPhotos.length > 0 && (
+                  <Button
+                    label={isConfirmingClear ? "Remove all?" : "Remove all"}
+                    variant={buttonVariants.secondary}
+                    className={cn(isConfirmingClear && "text-red-600")}
+                    onClick={clear}
+                  />
+                )}
+                <Button label="Done" onClick={back} />
+              </div>
+            </>
+          )}
+        </div>
+      }
     >
       <DropZone
         status={status}
@@ -163,59 +217,6 @@ const LocalPhotosModal = () => {
           })}
         </div>
       )}
-
-      <div className="mt-8 flex items-center justify-between gap-2">
-        {selected.length > 0 ? (
-          <>
-            <p className="text-sm text-gray-700">
-              {selected.length} selected
-              {selected.length < localPhotos.length && (
-                <>
-                  {" · "}
-                  <Button
-                    label="Select all"
-                    variant={buttonVariants.inline}
-                    onClick={() =>
-                      setSelected(localPhotos.map((photo) => photo.id))
-                    }
-                  />
-                </>
-              )}
-            </p>
-            <div className="flex items-center gap-2">
-              <Button
-                label="Cancel"
-                variant={buttonVariants.secondary}
-                onClick={() => setSelected([])}
-              />
-              <Button
-                label={`Remove ${photos(selected.length)}`}
-                className="bg-red-500 ring-red-500"
-                onClick={removeSelected}
-              />
-            </div>
-          </>
-        ) : (
-          <>
-            <p className="text-sm text-gray-700">
-              {localPhotos.length > 0
-                ? `${photos(localPhotos.length)} · Click photos to select them`
-                : "Photos you add show up here"}
-            </p>
-            <div className="flex items-center gap-2">
-              {localPhotos.length > 0 && (
-                <Button
-                  label={isConfirmingClear ? "Remove all?" : "Remove all"}
-                  variant={buttonVariants.secondary}
-                  className={cn(isConfirmingClear && "text-red-600")}
-                  onClick={clear}
-                />
-              )}
-              <Button label="Done" onClick={back} />
-            </div>
-          </>
-        )}
-      </div>
     </Modal>
   );
 };

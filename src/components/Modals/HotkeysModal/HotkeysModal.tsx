@@ -20,6 +20,14 @@ const HotkeysModal = () => {
       onClose={() => setActiveModal(null)}
       title="Keyboard Shortcuts"
       subtitle="Speed up your UpTab game with hotkeys. So much time for activities."
+      footer={
+        <div className="flex justify-end gap-2">
+          <Button
+            label="Got it, thanks."
+            onClick={() => setActiveModal(null)}
+          />
+        </div>
+      }
     >
       <div className="flex flex-col">
         {Object.entries(hotkeyDescriptions).map(([key, item]) => (
@@ -31,12 +39,6 @@ const HotkeysModal = () => {
             <Hotkey label={item.keyDisplay} size="sm" />
           </div>
         ))}
-        <div className="mt-8 flex justify-end gap-2">
-          <Button
-            label="Got it, thanks."
-            onClick={() => setActiveModal(null)}
-          />
-        </div>
       </div>
     </Modal>
   );

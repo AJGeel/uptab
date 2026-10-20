@@ -31,6 +31,16 @@ const SettingsModal = () => {
       onClose={() => setActiveModal(null)}
       title="Edit Preferences"
       className="max-w-xl"
+      footer={
+        <div className="flex items-center justify-end gap-2">
+          <Button
+            label="Reset defaults"
+            variant={buttonVariants.secondary}
+            onClick={resetDefaultSettings}
+          />
+          <Button label="Close" onClick={() => setActiveModal(null)} />
+        </div>
+      }
     >
       <div className="mt-4 space-y-4">
         {!!settings && (
@@ -102,15 +112,6 @@ const SettingsModal = () => {
             />
           </div>
         )}
-
-        <div className="flex items-center justify-end gap-2">
-          <Button
-            label="Reset defaults"
-            variant={buttonVariants.secondary}
-            onClick={resetDefaultSettings}
-          />
-          <Button label="Close" onClick={() => setActiveModal(null)} />
-        </div>
       </div>
     </Modal>
   );

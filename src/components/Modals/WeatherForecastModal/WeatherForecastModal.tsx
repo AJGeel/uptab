@@ -60,6 +60,11 @@ const WeatherForecastModal = () => {
           : undefined
       }
       className="max-w-4xl"
+      footer={
+        <div className="flex justify-end">
+          <Button label="Got it, thanks." onClick={closeModal} />
+        </div>
+      }
     >
       {isError && (
         <Placeholder>
@@ -84,10 +89,6 @@ const WeatherForecastModal = () => {
           <ForecastChart hourly={weatherData.hourly} />
         </Suspense>
       )}
-
-      <div className="mt-8 flex justify-end">
-        <Button label="Got it, thanks." onClick={closeModal} />
-      </div>
     </Modal>
   );
 };

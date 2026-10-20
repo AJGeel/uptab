@@ -109,7 +109,7 @@ const ThemeCard = ({
           </p>
         </div>
       </button>
-      {onManage && (
+      {!isNudging && onManage && (
         <button
           type="button"
           onClick={onManage}

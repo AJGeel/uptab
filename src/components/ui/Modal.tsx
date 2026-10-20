@@ -1,6 +1,13 @@
 import { XMarkIcon } from "@heroicons/react/24/solid";
 import * as Dialog from "@radix-ui/react-dialog";
-import { PropsWithChildren, ReactNode, useLayoutEffect, useRef } from "react";
+import {
+  PropsWithChildren,
+  ReactNode,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from "react";
 
 import { cn } from "@/src/utils";
 
@@ -11,12 +18,15 @@ type Props = PropsWithChildren<{
   onClose: () => void;
   title: string;
   subtitle?: string;
+  /** Buttons, kept in view below the scrolling contents. */
+  footer?: ReactNode;
   className?: string;
 }>;
 
 type ModalSnapshot = {
   title: string;
   subtitle?: string;
+  footer?: ReactNode;
   children: ReactNode;
 };
 
@@ -24,11 +34,13 @@ const useFreezeContentsOnClose = ({
   isVisible,
   title,
   subtitle,
+  footer,
   children,
 }: Props) => {
   const snapshotRef = useRef<ModalSnapshot>({
     title,
     subtitle,
+    footer,
     children,
   });
 
@@ -37,27 +49,53 @@ const useFreezeContentsOnClose = ({
       snapshotRef.current = {
         title,
         subtitle,
+        footer,
         children,
       };
     }
-  }, [isVisible, title, subtitle, children]);
+  }, [isVisible, title, subtitle, footer, children]);
 
   const modalContents = isVisible
-    ? { title, subtitle, children }
+    ? { title, subtitle, footer, children }
     : // Deliberately read during render: keeps the last contents on screen
-      // while the close animation plays. State would re-render on every change.
-      // eslint-disable-next-line react-hooks/refs
-      snapshotRef.current;
+    // while the close animation plays. State would re-render on every change.
+    // eslint-disable-next-line react-hooks/refs
+    snapshotRef.current;
 
   return modalContents;
 };
 
+/** Whether the element's contents are taller than the element itself. */
+const useIsOverflowing = (element: HTMLElement | null) => {
+  const [isOverflowing, setIsOverflowing] = useState(false);
+
+  useEffect(() => {
+    if (!element) {
+      return;
+    }
+
+    const update = () =>
+      setIsOverflowing(element.scrollHeight > element.clientHeight);
+    const observer = new ResizeObserver(update);
+
+    // The element itself and its single wrapper, which grows with the contents.
+    observer.observe(element);
+    [...element.children].forEach((child) => observer.observe(child));
+
+    return () => observer.disconnect();
+  }, [element]);
+
+  return isOverflowing;
+};
+
 const Modal = ({ className, onClose, isVisible, ...modalProps }: Props) => {
-  const { title, subtitle, children } = useFreezeContentsOnClose({
+  const { title, subtitle, footer, children } = useFreezeContentsOnClose({
     isVisible,
     onClose,
     ...modalProps,
   });
+  const [body, setBody] = useState<HTMLDivElement | null>(null);
+  const isOverflowing = useIsOverflowing(body);
 
   return (
     <Dialog.Root open={isVisible}>
@@ -74,10 +112,10 @@ const Modal = ({ className, onClose, isVisible, ...modalProps }: Props) => {
           className={cn(
             `
               fixed top-[50%] left-[50%] z-20
-              max-h-[85vh] w-[90vw] max-w-md
-              translate-[-50%] overflow-y-auto
+              flex max-h-[85vh] w-[90vw] max-w-md
+              translate-[-50%] flex-col
               rounded-2xl bg-white/95
-              p-6 shadow-lg
+              shadow-lg
               backdrop-blur-lg backdrop-brightness-190
               backdrop-saturate-150 focus:outline-hidden
               data-[state=closed]:animate-contentHide
@@ -87,24 +125,44 @@ const Modal = ({ className, onClose, isVisible, ...modalProps }: Props) => {
             className,
           )}
           onEscapeKeyDown={onClose}
-          /*
-           * Clicks only: "interact outside" also counts focus left behind in a
-           * modal that's still animating out, which would close the next one.
-           */
           onPointerDownOutside={onClose}
         >
-          <Dialog.Title className="m-0 text-lg font-bold">{title}</Dialog.Title>
+          {/* The title and footer stay in view; only the part between scrolls. */}
+          <Dialog.Title className="m-0 shrink-0 px-6 pt-6 pr-16 text-lg font-bold">
+            {title}
+          </Dialog.Title>
 
-          {subtitle && (
-            <Dialog.Description
-              className="mt-3 mb-6 leading-normal text-gray-800"
-              style={{ textWrap: "pretty" }}
+          <div
+            ref={setBody}
+            className={cn(
+              "min-h-0 flex-1 overflow-y-auto px-6 pb-6",
+              footer && isOverflowing && "border-b border-black/10",
+            )}
+          >
+            <div>
+              {subtitle && (
+                <Dialog.Description
+                  className="mt-3 mb-6 leading-normal text-gray-800"
+                  style={{ textWrap: "pretty" }}
+                >
+                  {subtitle}
+                </Dialog.Description>
+              )}
+
+              {children}
+            </div>
+          </div>
+
+          {footer && (
+            <div
+              className={cn(
+                "shrink-0 px-6 pb-6",
+                isOverflowing ? "pt-4" : "pt-2",
+              )}
             >
-              {subtitle}
-            </Dialog.Description>
+              {footer}
+            </div>
           )}
-
-          {children}
 
           <Dialog.Close asChild onClick={onClose}>
             <IconButton

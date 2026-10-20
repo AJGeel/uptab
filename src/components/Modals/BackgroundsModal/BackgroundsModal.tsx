@@ -82,6 +82,25 @@ const BackgroundsModal = () => {
       title="Backgrounds"
       subtitle="Pick the themes you'd like to see. You get a different photo every day, or browse them with the ← and → arrow keys."
       className="max-w-2xl"
+      footer={
+        <div className="flex items-center justify-between gap-2">
+          <p className="text-sm text-gray-700">
+            {catalogue && `Showing ${photoCount} photos`}
+          </p>
+          <div className="flex items-center gap-2">
+            {catalogue && selected.length < themes.length && (
+              <Button
+                label="All themes"
+                variant={buttonVariants.secondary}
+                onClick={() =>
+                  setBackgroundThemes(themes.map((theme) => theme.id))
+                }
+              />
+            )}
+            <Button label="Done" onClick={() => setActiveModal(null)} />
+          </div>
+        </div>
+      }
     >
       {!remoteCatalogue && (
         <p className="mb-4 text-sm text-gray-700">
@@ -116,24 +135,6 @@ const BackgroundsModal = () => {
             }
           />
         ))}
-      </div>
-
-      <div className="mt-8 flex items-center justify-between gap-2">
-        <p className="text-sm text-gray-700">
-          {catalogue && `Showing ${photoCount} photos`}
-        </p>
-        <div className="flex items-center gap-2">
-          {catalogue && selected.length < themes.length && (
-            <Button
-              label="All themes"
-              variant={buttonVariants.secondary}
-              onClick={() =>
-                setBackgroundThemes(themes.map((theme) => theme.id))
-              }
-            />
-          )}
-          <Button label="Done" onClick={() => setActiveModal(null)} />
-        </div>
       </div>
     </Modal>
   );
