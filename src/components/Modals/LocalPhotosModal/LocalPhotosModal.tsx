@@ -64,11 +64,8 @@ const LocalPhotosModal = () => {
       return;
     }
 
-    // What's shown now, so turning on local photos doesn't drop the fallback.
-    const themes =
-      catalogue && settings
-        ? getEnabledThemes(catalogue, settings.backgrounds.themes)
-        : (settings?.backgrounds.themes ?? []);
+    const saved = settings?.backgrounds.themes ?? [];
+    const themes = catalogue ? getEnabledThemes(catalogue, saved) : saved;
 
     try {
       const onProgress = (done: number) => {
@@ -83,7 +80,12 @@ const LocalPhotosModal = () => {
 
       setStatus(describeResult(result));
 
-      if (result.added > 0 && !themes.includes(LOCAL_THEME)) {
+      // With none picked, every theme is shown, local photos included.
+      if (
+        result.added > 0 &&
+        saved.length > 0 &&
+        !themes.includes(LOCAL_THEME)
+      ) {
         await setBackgroundThemes([...themes, LOCAL_THEME]);
       }
     } catch {

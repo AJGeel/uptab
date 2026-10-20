@@ -58,9 +58,9 @@ const useFreezeContentsOnClose = ({
   const modalContents = isVisible
     ? { title, subtitle, footer, children }
     : // Deliberately read during render: keeps the last contents on screen
-    // while the close animation plays. State would re-render on every change.
-    // eslint-disable-next-line react-hooks/refs
-    snapshotRef.current;
+      // while the close animation plays. State would re-render on every change.
+      // eslint-disable-next-line react-hooks/refs
+      snapshotRef.current;
 
   return modalContents;
 };

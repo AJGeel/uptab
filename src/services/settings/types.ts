@@ -13,7 +13,7 @@ export type HomescreenSettings = {
 };
 
 export type BackgroundSettings = {
-  /** Enabled theme IDs from the backgrounds catalogue. */
+  /** Enabled theme IDs from the backgrounds catalogue. Empty: all of them. */
   themes: string[];
 };
 

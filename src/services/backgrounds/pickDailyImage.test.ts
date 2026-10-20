@@ -58,6 +58,16 @@ describe("pickDailyImage", () => {
     );
   });
 
+  it("keeps the pick when other photos are added or removed", () => {
+    const pick = pickDailyImage(images, "2026-10-18")!;
+    const others = images.filter((image) => image !== pick);
+
+    expect(pickDailyImage([image("local-1"), ...images], "2026-10-18")).toBe(
+      pick,
+    );
+    expect(pickDailyImage([...others.slice(5), pick], "2026-10-18")).toBe(pick);
+  });
+
   it("returns nothing without photos", () => {
     expect(pickDailyImage([], "2026-10-18")).toBeUndefined();
   });
@@ -84,19 +94,13 @@ describe("getEnabledImages", () => {
     ).toEqual(["lion"]);
   });
 
-  it("falls back to holland when no enabled theme is left", () => {
+  it("returns every photo when no enabled theme is left", () => {
     expect(getEnabledImages(catalogue, ["removed"]).map((i) => i.id)).toEqual([
       "windmill",
+      "lion",
     ]);
     expect(getEnabledImages(catalogue, []).map((i) => i.id)).toEqual([
       "windmill",
-    ]);
-  });
-
-  it("falls back to every photo without holland", () => {
-    const noHolland = { ...catalogue, images: [image("lion", "safari")] };
-
-    expect(getEnabledImages(noHolland, ["removed"]).map((i) => i.id)).toEqual([
       "lion",
     ]);
   });
@@ -125,10 +129,11 @@ describe("getEnabledThemes", () => {
     );
   });
 
-  it("falls back to holland, or else every theme with photos", () => {
-    expect(getEnabledThemes(catalogue, [])).toEqual(["holland"]);
-    expect(
-      getEnabledThemes({ ...catalogue, images: [image("lion", "safari")] }, []),
-    ).toEqual(["safari"]);
+  it("uses every theme with photos when none is enabled", () => {
+    expect(getEnabledThemes(catalogue, [])).toEqual(["holland", "safari"]);
+    expect(getEnabledThemes(catalogue, ["removed"])).toEqual([
+      "holland",
+      "safari",
+    ]);
   });
 });

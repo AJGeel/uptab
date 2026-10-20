@@ -39,6 +39,7 @@ export const useRandomBackground = () => {
   const [stored, setStored, isHydrated] = usePersistedState<DailyPick | null>(
     "dailyBackground",
     null,
+    { area: "sync" },
   );
   // Fixed per tab, so the photo doesn't change at midnight.
   const [date] = useState(() => format(new Date(), "yyyy-MM-dd"));

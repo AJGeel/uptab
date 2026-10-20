@@ -4,11 +4,15 @@ import { defaultSettings } from "./defaultSettings";
 import { getSettings } from "./getSettings";
 
 const store: Record<string, unknown> = {};
+const syncStore: Record<string, unknown> = {};
 
 vi.mock("webextension-polyfill", () => ({
   storage: {
     local: {
       get: (key: string) => Promise.resolve({ [key]: store[key] }),
+    },
+    sync: {
+      get: (key: string) => Promise.resolve({ [key]: syncStore[key] }),
     },
   },
 }));
@@ -16,6 +20,7 @@ vi.mock("webextension-polyfill", () => ({
 describe("getSettings", () => {
   beforeEach(() => {
     delete store.settings;
+    delete syncStore.backgroundSettings;
   });
 
   it("returns the defaults when nothing is saved", async () => {
@@ -37,6 +42,13 @@ describe("getSettings", () => {
     const settings = await getSettings();
 
     expect(settings.sidebar.isOpen).toBe(true);
-    expect(settings.backgrounds.themes).toEqual(["holland"]);
+    expect(settings.backgrounds.themes).toEqual([]);
+  });
+
+  it("prefers the synced background settings", async () => {
+    store.settings = { backgrounds: { themes: ["safari"] } };
+    syncStore.backgroundSettings = { themes: ["holland"] };
+
+    expect((await getSettings()).backgrounds.themes).toEqual(["holland"]);
   });
 });

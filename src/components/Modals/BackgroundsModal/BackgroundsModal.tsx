@@ -93,7 +93,7 @@ const BackgroundsModal = () => {
                 label="All themes"
                 variant={buttonVariants.secondary}
                 onClick={() =>
-                  setBackgroundThemes(themes.map((theme) => theme.id))
+                  setBackgroundThemes([])
                 }
               />
             )}
