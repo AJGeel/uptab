@@ -6,6 +6,7 @@ export const Modals = {
   settings: "settings",
   weather_forecast: "weatherForecast",
   backgrounds: "backgrounds",
+  localPhotos: "localPhotos",
 } as const;
 
 export type Modals = (typeof Modals)[keyof typeof Modals];

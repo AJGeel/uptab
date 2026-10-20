@@ -1,7 +1,10 @@
-import { useCatalogue } from "@/src/hooks/queries/useCatalogue";
+import { PlusIcon } from "@heroicons/react/24/outline";
+
+import { useBackgroundCatalogue } from "@/src/hooks/queries/useBackgroundCatalogue";
 import { Modals, useModalStore } from "@/src/hooks/stores/useModalStore";
 import useKeyPress from "@/src/hooks/useKeyPress";
 import { useSettings } from "@/src/hooks/useSettings";
+import { LOCAL_THEME } from "@/src/services/backgrounds/localPhotos";
 import { getEnabledThemes } from "@/src/services/backgrounds/pickDailyImage";
 import { BackgroundImage } from "@/src/services/backgrounds/types";
 import { hotkeys } from "@/src/services/hotkeys/hotkeys";
@@ -31,7 +34,7 @@ const getCovers = (
 
 const BackgroundsModal = () => {
   const { data: settings, setBackgroundThemes } = useSettings();
-  const { catalogue } = useCatalogue();
+  const { catalogue, remoteCatalogue } = useBackgroundCatalogue();
   const activeModal = useModalStore((state) => state.activeModal);
   const setActiveModal = useModalStore((state) => state.setActiveModal);
 
@@ -80,26 +83,40 @@ const BackgroundsModal = () => {
       subtitle="Pick the themes you'd like to see. You get a different photo every day, or browse them with the ← and → arrow keys."
       className="max-w-2xl"
     >
-      {catalogue ? (
-        <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
-          {themes.map((theme) => (
-            <ThemeCard
-              key={theme.id}
-              name={theme.name}
-              count={theme.count}
-              covers={theme.covers}
-              isSelected={selected.includes(theme.id)}
-              isLocked={selected.length === 1 && selected[0] === theme.id}
-              onClick={() => toggle(theme.id)}
-            />
-          ))}
-        </div>
-      ) : (
-        <p className="text-sm text-gray-700">
+      {!remoteCatalogue && (
+        <p className="mb-4 text-sm text-gray-700">
           Backgrounds couldn&apos;t be loaded. Check your connection and try
           again.
         </p>
       )}
+      <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
+        {!themes.some((theme) => theme.id === LOCAL_THEME) && (
+          <button
+            type="button"
+            onClick={() => setActiveModal(Modals.localPhotos)}
+            className="flex min-h-40 flex-col items-center justify-center gap-2 rounded-xl border border-dashed border-black/20 p-3 text-center text-sm text-gray-700 ring-sky-500 duration-150 hover:border-sky-500 hover:bg-sky-50 hover:text-sky-700 focus-visible:ring-2 focus-visible:outline-hidden"
+          >
+            <PlusIcon className="size-6" />
+            Add your own photos
+          </button>
+        )}
+        {themes.map((theme) => (
+          <ThemeCard
+            key={theme.id}
+            name={theme.name}
+            count={theme.count}
+            covers={theme.covers}
+            isSelected={selected.includes(theme.id)}
+            isLocked={selected.length === 1 && selected[0] === theme.id}
+            onClick={() => toggle(theme.id)}
+            onManage={
+              theme.id === LOCAL_THEME
+                ? () => setActiveModal(Modals.localPhotos)
+                : undefined
+            }
+          />
+        ))}
+      </div>
 
       <div className="mt-8 flex items-center justify-between gap-2">
         <p className="text-sm text-gray-700">

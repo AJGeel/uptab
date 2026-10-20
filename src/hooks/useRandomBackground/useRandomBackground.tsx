@@ -9,8 +9,9 @@ import {
 } from "@/src/services/backgrounds/pickDailyImage";
 import { pickRendition } from "@/src/services/backgrounds/pickRendition";
 import { BackgroundImage, Catalogue } from "@/src/services/backgrounds/types";
+import { withLocalPhotos } from "@/src/services/backgrounds/withLocalPhotos";
 
-import { useCatalogue } from "../queries/useCatalogue";
+import { useBackgroundCatalogue } from "../queries/useBackgroundCatalogue";
 import useKeyPress from "../useKeyPress";
 import { usePersistedState } from "../usePersistedState";
 import { useSettings } from "../useSettings";
@@ -34,7 +35,7 @@ const getSrc = (image: BackgroundImage) =>
 
 export const useRandomBackground = () => {
   const { data: settings } = useSettings();
-  const { catalogue, isPending } = useCatalogue();
+  const { catalogue, localPhotos, isPending } = useBackgroundCatalogue();
   const [stored, setStored, isHydrated] = usePersistedState<DailyPick | null>(
     "dailyBackground",
     null,
@@ -45,7 +46,9 @@ export const useRandomBackground = () => {
   const [reloaded, setReloaded] = useState<Catalogue | null>(null);
   const [useFallback, setUseFallback] = useState(false);
 
-  const activeCatalogue = reloaded ?? catalogue;
+  const activeCatalogue = reloaded
+    ? withLocalPhotos(reloaded, localPhotos)
+    : catalogue;
   const images =
     activeCatalogue && settings
       ? getEnabledImages(activeCatalogue, settings.backgrounds.themes)

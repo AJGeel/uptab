@@ -16,6 +16,7 @@
   --animate-contentShow: contentShow 250ms cubic-bezier(0.16, 1, 0.3, 1);
   --animate-contentHide: contentHide 250ms cubic-bezier(0.16, 1, 0.3, 1);
   --animate-hotkey: hotkey 1s ease-out forwards;
+  --animate-shake: shake 400ms ease-in-out;
 
   @keyframes overlayShow {
     from {
@@ -55,6 +56,20 @@
     to {
       opacity: 0;
       transform: translateY(2%) scale(0.96);
+    }
+  }
+  @keyframes shake {
+    0%,
+    100% {
+      translate: 0;
+    }
+    20%,
+    60% {
+      translate: -4px;
+    }
+    40%,
+    80% {
+      translate: 4px;
     }
   }
   @keyframes hotkey {
