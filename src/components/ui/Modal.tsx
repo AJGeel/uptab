@@ -17,7 +17,7 @@ type Props = PropsWithChildren<{
   isVisible: boolean;
   onClose: () => void;
   title: string;
-  subtitle?: string;
+  subtitle?: ReactNode;
   /** Buttons, kept in view below the scrolling contents. */
   footer?: ReactNode;
   className?: string;
@@ -25,7 +25,7 @@ type Props = PropsWithChildren<{
 
 type ModalSnapshot = {
   title: string;
-  subtitle?: string;
+  subtitle?: ReactNode;
   footer?: ReactNode;
   children: ReactNode;
 };

@@ -13,7 +13,7 @@ export const getSettings = async (): Promise<Settings> => {
       [SYNCED_BACKGROUNDS_KEY]?: BackgroundSettings;
     }>,
   ]);
-  
+
   const backgrounds =
     synced[SYNCED_BACKGROUNDS_KEY] ?? local.settings?.backgrounds;
   const saved = { ...local.settings, ...(backgrounds && { backgrounds }) };

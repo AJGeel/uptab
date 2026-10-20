@@ -80,7 +80,18 @@ const BackgroundsModal = () => {
       isVisible={activeModal === Modals.backgrounds}
       onClose={() => setActiveModal(null)}
       title="Backgrounds"
-      subtitle="Pick the themes you'd like to see. You get a different photo every day, or browse them with the ← and → arrow keys."
+      subtitle={
+        <>
+          Pick the themes you&apos;d like to see. You get a different photo
+          every day, or browse them with the ← and → arrow keys.{" "}
+          <a
+            href="https://uptab.vercel.app/backgrounds"
+            className="underline duration-150 hover:text-sky-800 hover:no-underline"
+          >
+            See all photos
+          </a>
+        </>
+      }
       className="max-w-2xl"
       footer={
         <div className="flex items-center justify-between gap-2">
@@ -92,9 +103,7 @@ const BackgroundsModal = () => {
               <Button
                 label="All themes"
                 variant={buttonVariants.secondary}
-                onClick={() =>
-                  setBackgroundThemes([])
-                }
+                onClick={() => setBackgroundThemes([])}
               />
             )}
             <Button label="Done" onClick={() => setActiveModal(null)} />
