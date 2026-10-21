@@ -2,6 +2,23 @@
 
 UpTab adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [V2.0.0] — 2026-10-21
+
+### ✨ Added
+
+- Choose your backgrounds: pick from themes like Holland, Mountains and Safari. Press B or click "Backgrounds" in the bottom bar
+- Add your own photos, or a whole folder, and mix them in with the themes
+- Browse photos with the arrows in the bottom bar, or with the ← and → keys
+- Your themes and today's photo follow you to your other browsers when browser sync is on
+- New photos are added to the themes over time, without an update. Check for them in the Backgrounds window
+
+### ♻️ Changed
+
+- All themes are on by default
+- UpTab is much smaller to download, now that the photos are no longer built in
+- Windows keep their title and buttons in view when their content scrolls
+- Softer hover effects in the top and bottom bars, with tooltips on the bottom bar buttons
+
 ## [V1.5.1] — 2026-10-17
 
 ### ♻️ Changed
