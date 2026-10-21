@@ -6,6 +6,9 @@
  *   bun store:shots:setup          check the catalogue, build, download photos
  *   bun store:shots                capture and frame every scene
  *   bun store:shots --only picker  one scene (see dev/screenshots/scenes.ts)
+ *   bun store:shots:upload         replace the Firefox screenshots, then open
+ *                                  the Chrome dashboard to upload them by hand
+ *                                  (--dry-run to only show the plan, --yes to skip the prompt)
  */
 import { mkdir } from "fs/promises";
 import { resolve } from "path";
@@ -32,6 +35,7 @@ import {
   PHOTOS_DIR,
   routeFavicons,
   routeFixtures,
+  OUTPUT_DIR,
   SCREENSHOTS_DIR,
   seedStorage,
   type Stage,
@@ -39,11 +43,11 @@ import {
   waitForImages,
   withDeadline,
 } from "../screenshots/seed";
+import { upload } from "../screenshots/upload";
 
 const RAW_DIR = resolve(SCREENSHOTS_DIR, "raw");
 const rawFile = (scene: Scene) =>
   resolve(RAW_DIR, `${scenes.indexOf(scene) + 1}-${scene.id}.png`);
-const OUTPUT_DIR = resolve(ROOT_DIR, "docs/store-listing/screenshots");
 const FRAME_URL = pathToFileURL(
   resolve(ROOT_DIR, "dev/screenshots/frame.html"),
 ).href;
@@ -274,4 +278,6 @@ const shots = async () => {
   );
 };
 
-runCli(process.argv[2] === "setup" ? setup : shots);
+const COMMANDS: Record<string, () => Promise<void>> = { setup, upload };
+
+runCli(COMMANDS[process.argv[2]] ?? shots);

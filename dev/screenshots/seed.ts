@@ -12,9 +12,11 @@ import {
 } from "playwright";
 
 import { geocode, LOCATION, TIME_ZONE, weather } from "./fixtures";
-import { DIST_DIR } from "../commands/utils";
+import { DIST_DIR, ROOT_DIR } from "../commands/utils";
 
 export const SCREENSHOTS_DIR = resolve(DIST_DIR, "screenshots");
+/** Where the framed screenshots go, ready for the stores. */
+export const OUTPUT_DIR = resolve(ROOT_DIR, "docs/store-listing/screenshots");
 export const EXTENSION_DIR = resolve(SCREENSHOTS_DIR, "extension");
 export const PHOTOS_DIR = resolve(SCREENSHOTS_DIR, "photos");
 

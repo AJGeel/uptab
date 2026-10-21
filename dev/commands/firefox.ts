@@ -97,3 +97,74 @@ export const submitToFirefox = async (sourceDir: string) => {
     },
   );
 };
+
+type AmoPreview = { id: number; position: number };
+
+const getAddonUrl = () =>
+  `${API_URL}/addons/addon/${encodeURIComponent(getEnv().FIREFOX_EXTENSION_ID)}`;
+
+/** The listing's current screenshots ("previews" in AMO's API). */
+export const getFirefoxPreviews = async () => {
+  const response = await fetch(`${getAddonUrl()}/`, {
+    headers: getAuthHeader(),
+    signal: AbortSignal.timeout(30_000),
+  });
+
+  await ensureOk(response, "Loading the Firefox listing");
+
+  const { previews } = (await response.json()) as { previews: AmoPreview[] };
+
+  return previews;
+};
+
+/**
+ * Replaces the listing's screenshots with `screenshots`, in order. The new ones
+ * are added before the old ones are removed, so the listing is never empty.
+ */
+export const replaceFirefoxPreviews = async (
+  screenshots: { path: string; caption: string }[],
+  onProgress: (message: string) => void,
+) => {
+  const old = await getFirefoxPreviews();
+
+  for (const [index, { path, caption }] of screenshots.entries()) {
+    onProgress(`Uploading screenshot ${index + 1}/${screenshots.length}`);
+
+    const form = new FormData();
+
+    form.append("image", Bun.file(path));
+    form.append("position", String(index));
+
+    const created = await fetch(`${getAddonUrl()}/previews/`, {
+      method: "POST",
+      headers: getAuthHeader(),
+      body: form,
+      signal: AbortSignal.timeout(60_000),
+    });
+
+    await ensureOk(created, `Uploading ${path}`);
+
+    const { id } = (await created.json()) as AmoPreview;
+    // Captions can only be set after the upload.
+    const captioned = await fetch(`${getAddonUrl()}/previews/${id}/`, {
+      method: "PATCH",
+      headers: { ...getAuthHeader(), "Content-Type": "application/json" },
+      body: JSON.stringify({ caption: { "en-US": caption } }),
+      signal: AbortSignal.timeout(30_000),
+    });
+
+    await ensureOk(captioned, `Captioning ${path}`);
+  }
+
+  for (const [index, { id }] of old.entries()) {
+    onProgress(`Removing old screenshot ${index + 1}/${old.length}`);
+
+    const removed = await fetch(`${getAddonUrl()}/previews/${id}/`, {
+      method: "DELETE",
+      headers: getAuthHeader(),
+      signal: AbortSignal.timeout(30_000),
+    });
+
+    await ensureOk(removed, "Removing an old screenshot");
+  }
+};

@@ -20,6 +20,7 @@
     "store:submit": "bun dev/commands/store.ts submit",
     "store:shots": "bun dev/commands/screenshots.ts",
     "store:shots:setup": "bun dev/commands/screenshots.ts setup",
+    "store:shots:upload": "bun dev/commands/screenshots.ts upload",
     "tag-release": "bun dev/commands/release.ts"
   },
   "type": "module",

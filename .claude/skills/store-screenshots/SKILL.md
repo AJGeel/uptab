@@ -27,7 +27,8 @@ Output: `docs/store-listing/screenshots/1.jpg`…`5.jpg` (1280×800, the size Ch
    - the UI is readable over the photo, and the photo suits the scene;
    - the modal or sidebar the scene is about is fully in view.
 5. Fix issues in the scene config or the template, rerun only the affected scenes, and look again.
-6. Report what changed, with the image paths. Never upload: listing images are updated by hand in the Chrome dashboard and on AMO.
+6. Report what changed, with the image paths.
+7. Uploading changes the live listings, so only do it when the user asks. Run `bun store:shots:upload --dry-run` first and show the plan. The real run replaces the Firefox screenshots and opens the Chrome dashboard for the user to finish by hand.
 
 ## Gotchas
 

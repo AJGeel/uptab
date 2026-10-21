@@ -41,9 +41,13 @@ bunx playwright install chromium   # once
 bun store:shots:setup              # check the catalogue, build, download sample photos
 bun store:shots                    # capture and frame all scenes (~20 s)
 bun store:shots --only picker      # one scene
+bun store:shots:upload --dry-run   # show what the upload would change
+bun store:shots:upload             # replace the Firefox screenshots, then open the Chrome dashboard
 ```
 
-Scenes, headlines and photos live in `dev/screenshots/scenes.ts`, and the frame in `dev/screenshots/frame.html`. Photos come from the catalogue in `VITE_CATALOGUE_URL`, so a local uptab-website must be running if that points to localhost. Upload the images by hand in the Chrome dashboard and on AMO. In Claude Code, the `store-screenshots` skill runs this and reviews the results.
+Scenes, headlines and photos live in `dev/screenshots/scenes.ts`, and the frame in `dev/screenshots/frame.html`. Photos come from the catalogue in `VITE_CATALOGUE_URL`, so a local uptab-website must be running if that points to localhost. In Claude Code, the `store-screenshots` skill runs this and reviews the results.
+
+`store:shots:upload` replaces the Firefox listing's screenshots through AMO's API, captioned with their headlines, using the `FIREFOX_*` credentials below. It adds the new ones before removing the old ones. Chrome's API can't change listing images, so it then opens the dashboard and the screenshots folder: under **Store listing**, swap the screenshots by hand and save.
 
 <br/>
 
