@@ -15,11 +15,11 @@ export const getSavedCatalogue = async (): Promise<Catalogue | null> => {
 };
 
 /**
- * Fetches the catalogue and saves it for next time. When offline, when the
- * site is down, or for an unsupported version, returns the saved copy.
- * `reload` skips the HTTP cache, e.g. after an image URL stopped working.
+ * Fetches the catalogue and saves it for next time. Null when offline, when
+ * the site is down, or for an unsupported version. `reload` skips the HTTP
+ * cache, e.g. after an image URL stopped working.
  */
-export const getCatalogue = async ({
+export const fetchCatalogue = async ({
   reload = false,
 } = {}): Promise<Catalogue | null> => {
   try {
@@ -40,8 +40,12 @@ export const getCatalogue = async ({
       }
     }
   } catch {
-    // Offline, timed out or not JSON: fall back to the saved copy below.
+    // Offline, timed out or not JSON.
   }
 
-  return getSavedCatalogue();
+  return null;
 };
+
+/** The fetched catalogue, or the saved copy if fetching fails. */
+export const getCatalogue = async (options?: { reload?: boolean }) =>
+  (await fetchCatalogue(options)) ?? getSavedCatalogue();

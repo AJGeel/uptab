@@ -4,7 +4,7 @@ import { useCatalogue } from "./useCatalogue";
 import { useLocalPhotos } from "./useLocalPhotos";
 
 export const useBackgroundCatalogue = () => {
-  const { catalogue, isPending } = useCatalogue();
+  const { catalogue, isPending, refresh, isRefreshing } = useCatalogue();
   const local = useLocalPhotos();
 
   return {
@@ -12,5 +12,7 @@ export const useBackgroundCatalogue = () => {
     remoteCatalogue: catalogue,
     localPhotos: local.photos,
     isPending: isPending || local.isPending,
+    refresh,
+    isRefreshing,
   };
 };

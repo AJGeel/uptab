@@ -1,4 +1,5 @@
 import { PlusIcon } from "@heroicons/react/24/outline";
+import { useState } from "react";
 
 import { useBackgroundCatalogue } from "@/src/hooks/queries/useBackgroundCatalogue";
 import { Modals, useModalStore } from "@/src/hooks/stores/useModalStore";
@@ -34,7 +35,10 @@ const getCovers = (
 
 const BackgroundsModal = () => {
   const { data: settings, setBackgroundThemes } = useSettings();
-  const { catalogue, remoteCatalogue } = useBackgroundCatalogue();
+  const { catalogue, remoteCatalogue, refresh, isRefreshing } =
+    useBackgroundCatalogue();
+  // What the last check found, shown briefly in place of the button label.
+  const [refreshResult, setRefreshResult] = useState<string | null>(null);
   const activeModal = useModalStore((state) => state.activeModal);
   const setActiveModal = useModalStore((state) => state.setActiveModal);
 
@@ -68,6 +72,25 @@ const BackgroundsModal = () => {
     .filter((theme) => selected.includes(theme.id))
     .reduce((sum, theme) => sum + theme.count, 0);
 
+  const checkForNewPhotos = async () => {
+    const known = new Set(remoteCatalogue?.images.map((image) => image.id));
+    const fresh = await refresh();
+    const added =
+      fresh?.images.filter((image) => !known.has(image.id)).length ?? 0;
+
+    if (!fresh) {
+      setRefreshResult("Couldn't connect");
+    } else {
+      setRefreshResult(
+        added > 0
+          ? `${added} new ${added === 1 ? "photo" : "photos"}`
+          : "Up to date",
+      );
+    }
+
+    setTimeout(() => setRefreshResult(null), 4000);
+  };
+
   const toggle = (id: string) =>
     setBackgroundThemes(
       selected.includes(id)
@@ -96,7 +119,17 @@ const BackgroundsModal = () => {
       footer={
         <div className="flex items-center justify-between gap-2">
           <p className="text-sm text-gray-700">
-            {catalogue && `Showing ${photoCount} photos`}
+            {catalogue && `Showing ${photoCount} photos · `}
+            <Button
+              label={
+                isRefreshing
+                  ? "Checking…"
+                  : (refreshResult ?? "Check for new photos")
+              }
+              variant={buttonVariants.inline}
+              disabled={isRefreshing}
+              onClick={checkForNewPhotos}
+            />
           </p>
           <div className="flex items-center gap-2">
             {catalogue && selected.length < themes.length && (
