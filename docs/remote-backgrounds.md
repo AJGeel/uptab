@@ -34,7 +34,7 @@ type Catalogue = {
 };
 
 type Theme = {
-  /** Slug, e.g. "holland". Stored in users' settings: renaming one resets those users to the default theme. */
+  /** Slug, e.g. "holland". Stored in users' settings: renaming one drops it from those users' themes, leaving their other themes, or all of them. */
   id: string;
   /** Display name, e.g. "Holland". */
   name: string;
@@ -105,7 +105,7 @@ Example:
 ### Rules for v1
 
 - **Prefer additive changes.** New optional fields, themes and images never affect existing extensions.
-- **Images and themes come and go.** An image can be removed from `images`, or renamed, which counts as removing it and adding a new one. The extension copes with a stored image or theme ID that's no longer in the catalogue, by picking another image or falling back to the default theme.
+- **Images and themes come and go.** An image can be removed from `images`, or renamed, which counts as removing it and adding a new one. The extension copes with a stored image or theme ID that's no longer in the catalogue, by picking another image, or by using the user's other themes, or all of them.
 - **Image files are immutable.** `<hash>` comes from the file's contents, so a re-encoded photo gets a new URL. Never overwrite a file at an existing URL: it's cached for a year, so users would keep the old photo.
 - **Breaking changes are allowed.** Removing or renaming a field, or renaming a theme ID, is fine. For a change to the catalogue's shape, bump `version`: extensions that don't recognise it keep using their saved catalogue, or the built-in photo. Keeping the old catalogue served for a while is nice for users on older versions, but not required.
 - URLs in `sources` are absolute, so the extension never needs to know the domain.
@@ -245,7 +245,7 @@ const nextConfig = {
 
 A local-only admin at `/admin` manages `assets/backgrounds/` and `backgrounds.json`. Its files are named `page.dev.tsx` and `route.dev.ts`, which only `next dev` treats as routes, so it doesn't exist in production builds. It answers requests to localhost only.
 
-- **Themes:** create one, and rename its display name or ID. Renaming an ID resets users who had it enabled to the default theme.
+- **Themes:** create one, and rename its display name or ID. Renaming an ID turns it off for users who picked it; if it was their only theme, they get all themes.
 - **Photos:** upload into a theme; edit ID, theme, author and link; remove. A photo is published as soon as it has an author. Clearing the author takes it out of the catalogue. Invalid values, such as a bad link or a duplicate ID, refuse the save instead.
 - **Find source:** for pending photos, reverse image search links (Google Lens, TinEye) using the photo's URL on the live site, or a download of the original to search by hand.
 - **Rebuild:** runs the build script and shows its log.

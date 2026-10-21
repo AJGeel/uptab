@@ -7,8 +7,9 @@ Follows this repo's conventions: `services/<area>/`, `hooks/queries/use*.ts`, te
 ## Decisions
 
 - **Catalogue storage:** keep the last good catalogue in `storage.local` (`backgroundCatalogue`), not in `PERSISTED_QUERIES`, whose 3-minute `maxAge` and per-version buster rule out first paint and offline use. Render from the saved copy at once, refresh in the background, and never swap the photo mid-tab.
-- **Daily pick:** store `{ date, imageId }`, replacing `random-bg-offset`. A new day picks a new photo, seeded by the full date (today's seed is day-of-month only). Arrow keys browse for the rest of the day.
-- **Themes setting:** `backgrounds.themes: string[]`, default `["holland"]`. New themes start off. Theme IDs missing from the catalogue are ignored; if nothing valid remains, use `holland`, or else every photo.
+- **Daily pick:** store `{ date, imageId }`, replacing `random-bg-offset`. Each photo is scored by hashing the date with its ID, and the highest score wins. The pick doesn't depend on list order, so devices with slightly different photos (local ones, an older catalogue) agree whenever they share the winner. Arrow keys browse for the rest of the day.
+- **Themes setting:** `backgrounds.themes: string[]`, default `[]`, meaning every theme, including ones added later. Theme IDs missing from the catalogue are ignored; if nothing valid remains, every theme is used.
+- **Sync:** the themes setting (`backgroundSettings`) and the daily pick (`dailyBackground`) live in `storage.sync`, so they follow the user to their other browsers of the same kind. Everything else, including local photos, stays on the device. Sync allows about 120 writes a minute in Chrome, so settings are only written when they change.
 - **Leniency:** check `version === 1` and the fields we use; ignore unknown fields, so additive changes never break the extension. An unknown `version` is a breaking change: keep using the saved catalogue, or the fallback photo.
 
 ## 1. Catalogue
@@ -33,10 +34,10 @@ Follows this repo's conventions: `services/<area>/`, `hooks/queries/use*.ts`, te
 ## 3. Theme setting
 
 - Add `backgrounds.themes` to `Settings` and `defaultSettings`.
-- `getSettings`: give `deepmerge` an overwrite `arrayMerge`, since the default concatenates arrays, so `holland` would always stay enabled.
+- `getSettings`: give `deepmerge` an overwrite `arrayMerge`, since the default concatenates saved arrays onto the defaults. It reads `backgrounds` from `storage.sync`, falling back to the local copy older builds saved; `editSettings` writes it back to sync.
 - A "Backgrounds" section in the settings modal, built from the catalogue (`settingsRows` only covers boolean toggles). Show names and photo counts, not image thumbnails.
 
-→ verify: a test that saved `["safari"]` merges to `["safari"]`.
+→ verify: a test that saved `["safari"]` merges to `["safari"]`, and that the synced value wins over the local one.
 
 ## 4. Fallback and cleanup
 
@@ -50,11 +51,22 @@ Follows this repo's conventions: `services/<area>/`, `hooks/queries/use*.ts`, te
 Making the feature visible, instead of three levels deep in Edit Preferences.
 
 - **On the homescreen:** the photo credit (bottom left) is now a pill with the credit plus `‹ ›` (browse, like the arrow keys) and a "Backgrounds" button. It shows even when the credit is turned off, so the entry point never disappears.
-- **Picker** (`components/Modals/BackgroundsModal/`): a card per theme with name, photo count and a check mark. Cards show a 2×2 mosaic of the theme's cover thumbnails (`coverImageIds`, topped up with its other photos when there are fewer than 4), with each photo's colour behind its thumbnail while it loads ([remote-backgrounds.md](remote-backgrounds.md) §7). "All themes" selects everything; the last selected theme can't be turned off, replacing the silent fallback to Holland. Changes show behind the modal straight away.
+- **Picker** (`components/Modals/BackgroundsModal/`): a card per theme with name, photo count and a check mark. Cards show a 2×2 mosaic of the theme's cover thumbnails (`coverImageIds`, topped up with its other photos when there are fewer than 4), with each photo's colour behind its thumbnail while it loads ([remote-backgrounds.md](remote-backgrounds.md) §7). "All themes" saves `[]`, so later themes are included too. The last selected theme can't be turned off: clicking it shakes the card and says "Keep one theme on". Changes show behind the modal straight away. The subtitle links to all photos on the website, and the footer has "Check for new photos", which refetches the catalogue bypassing the HTTP cache and reports what it found.
 - **Hotkey:** `B` opens and closes the picker, and is listed in the hotkeys modal.
 - **Settings:** the Backgrounds tab is a single "Choose backgrounds" button that opens the picker.
 - **2.0 notice:** for 2.0.x, the update notification says "New: choose your own backgrounds!" and opens the picker (closing the sidebar) instead of the changelog.
-- **Modals:** they now close on outside clicks (`onPointerDownOutside`) instead of any outside interaction, so focus left in a modal that's animating out doesn't close the next one.
+- **Modals:** they now close on outside clicks (`onPointerDownOutside`) instead of any outside interaction, so focus left in a modal that's animating out doesn't close the next one. The title and the `footer` slot stay in view; only the part between them scrolls.
+
+## 7. My photos
+
+Users can add photos from their computer, mixed in with the curated themes.
+
+- **Storage** (`services/backgrounds/localPhotos.ts`): IndexedDB (`localPhotos`). On import, each photo is scaled to at most 3840 px as WebP, with a 240 px thumbnail and its average colour. Files already added (same name, size and date) are skipped, so adding a folder again only adds its new photos. The `unlimitedStorage` permission keeps the database from being evicted when the disk fills up; neither browser shows a warning for it.
+- **Mixing** (`withLocalPhotos.ts`): local photos join the catalogue as the `local` theme, listed first, so picking, browsing and the themes setting treat them like any other theme. They work without a catalogue, and show no credit.
+- **Picker:** an "Add your own photos" card until there are photos, then a "My photos" theme card with a "Manage" button.
+- **Manager** (`components/Modals/LocalPhotosModal/`): drop photos, or choose files or a folder, with a progress bar while adding. Click photos to select them, then remove them; "Remove all" asks for a second click. Adding the first photos turns on `local` if the user picked specific themes.
+
+→ verify: tests for `withLocalPhotos` (mixing, no catalogue, fallback once local photos are gone).
 
 ## 6. Checks before release
 
@@ -66,6 +78,6 @@ Making the feature visible, instead of three levels deep in Edit Preferences.
 ## Decided
 
 - **Domain:** `uptab.vercel.app` for now. A new domain later needs an extension update; until users have updated, older versions fall back to their saved catalogue, so keeping `uptab.vercel.app` up for a while is kinder but not required.
-- **New themes:** off by default. An option to enable new themes can be added later; it needs no catalogue change.
+- **New themes:** on for users with all themes selected (the default), off for users who picked specific themes.
 
-Out of scope: user uploads ("My photos"), the later 2.0.0 item in the spec.
+Out of scope: syncing local photos, and watching a folder for new photos. Firefox doesn't support the File System Access API, and Chrome asks for permission again in most sessions.

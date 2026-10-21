@@ -1,0 +1,182 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <!-- Store screenshot template, filled in by dev/commands/screenshots.ts. -->
+    <style>
+      @font-face {
+        font-family: "Figtree";
+        src: url("../../src/assets/fonts/Figtree-Variable.ttf") format("truetype");
+        font-weight: 100 1000;
+      }
+
+      :root {
+        --ink: #020e2c;
+        --accent: #138cd0;
+        --tab-strip: #dee3eb;
+        --toolbar: #ffffff;
+        --omnibox: #eef1f6;
+      }
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+      }
+
+      html,
+      body {
+        width: 1280px;
+        height: 800px;
+        overflow: hidden;
+        font-family: "Figtree", sans-serif;
+        background: #f4f7fb;
+      }
+
+      /* The scene's photo, faint and barely blurred, fading out towards the top. */
+      .backdrop {
+        position: absolute;
+        inset: -80px;
+        background-size: cover;
+        background-position: center bottom;
+        filter: blur(2px);
+        opacity: 1;
+        mask-image: linear-gradient(to top, black 0%, transparent 60%);
+      }
+
+      h1 {
+        position: absolute;
+        top: 44px;
+        left: 0;
+        right: 0;
+        text-align: center;
+        color: var(--ink);
+        font-size: 50px;
+        font-weight: 700;
+        line-height: 1.08;
+        letter-spacing: -0.02em;
+      }
+
+      h1 span {
+        display: block;
+        color: var(--accent);
+      }
+
+      .window {
+        position: absolute;
+        top: 176px;
+        left: 100px;
+        width: 1080px;
+        border-radius: 14px;
+        overflow: hidden;
+        background: var(--toolbar);
+        box-shadow:
+          0 1px 2px rgb(2 14 44 / 0.08),
+          0 24px 60px -12px rgb(2 14 44 / 0.35);
+        outline: 1px solid rgb(2 14 44 / 0.08);
+      }
+
+      .tabs {
+        display: flex;
+        align-items: flex-end;
+        gap: 10px;
+        height: 34px;
+        padding: 0 10px;
+        background: var(--tab-strip);
+      }
+
+      .dots {
+        display: flex;
+        gap: 7px;
+        align-self: center;
+        margin-right: 8px;
+      }
+
+      .dots i {
+        width: 11px;
+        height: 11px;
+        border-radius: 50%;
+        background: var(--accent);
+      }
+
+      .tab {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        width: 210px;
+        height: 28px;
+        padding: 0 12px;
+        border-radius: 9px 9px 0 0;
+        background: var(--toolbar);
+        color: #1f2937;
+        font-size: 12px;
+      }
+
+      .tab img {
+        width: 14px;
+        height: 14px;
+      }
+
+      .toolbar {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        height: 34px;
+        padding: 0 14px;
+        color: #6b7280;
+        font-size: 13px;
+      }
+
+      .omnibox {
+        flex: 1;
+        height: 24px;
+        padding: 0 14px;
+        border-radius: 12px;
+        background: var(--omnibox);
+        line-height: 24px;
+        font-size: 12px;
+      }
+
+      .screen {
+        display: block;
+        width: 1080px;
+        height: 540px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="backdrop"></div>
+        <h1></h1>
+    <div class="window">
+      <div class="tabs">
+        <div class="dots"><i></i><i></i><i></i></div>
+        <div class="tab"><img src="../../public/icon-34.png" alt="" />UpTab</div>
+      </div>
+      <div class="toolbar">
+        <span>←</span><span>→</span><span>↻</span>
+        <div class="omnibox">Extension (UpTab)</div>
+      </div>
+      <img class="screen" alt="" />
+    </div>
+    <script>
+      /** Called by the script with the headline and the captured UI. */
+      window.render = ({ headline: [first, second], screen, photo }) => {
+        const accent = document.createElement("span");
+
+        accent.textContent = second;
+        document.querySelector("h1").replaceChildren(first, accent);
+        document.querySelector(".screen").src = screen;
+        document.querySelector(".backdrop").style.backgroundImage = `url("${photo}")`;
+
+        const backdrop = new Image();
+
+        backdrop.src = photo;
+
+        return Promise.all([
+          document.fonts.ready,
+          document.querySelector(".screen").decode(),
+          backdrop.decode(),
+        ]);
+      };
+    </script>
+  </body>
+</html>

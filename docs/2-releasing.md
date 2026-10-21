@@ -32,6 +32,19 @@ If one store fails, fix the problem and rerun for that store only, e.g. `bun sto
 
 `bun tag-release` tags the commit as `V<version>` (e.g. `V1.5.0`), pushes the tag, and creates a GitHub release with that version's `CHANGELOG.md` section as its notes. Run `bun tag-release --dry-run` first to preview the tag and notes. It stops if you're not on `main`, there are uncommitted changes, `main` differs from `origin/main`, the tag already exists, or the changelog has no section for the version.
 
+### Store screenshots
+
+The listing screenshots in `docs/store-listing/screenshots/` are rendered from the real extension, with a fixed date, time and weather:
+
+```sh
+bunx playwright install chromium   # once
+bun store:shots:setup              # check the catalogue, build, download sample photos
+bun store:shots                    # capture and frame all scenes (~20 s)
+bun store:shots --only picker      # one scene
+```
+
+Scenes, headlines and photos live in `dev/screenshots/scenes.ts`, and the frame in `dev/screenshots/frame.html`. Photos come from the catalogue in `VITE_CATALOGUE_URL`, so a local uptab-website must be running if that points to localhost. Upload the images by hand in the Chrome dashboard and on AMO. In Claude Code, the `store-screenshots` skill runs this and reviews the results.
+
 <br/>
 
 ## 2. One-time setup
