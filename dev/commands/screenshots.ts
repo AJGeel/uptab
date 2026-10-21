@@ -111,7 +111,11 @@ const setup = async () => {
   await runTask(
     "Building the Chrome extension",
     ["bunx", "vite", "build", "--outDir", EXTENSION_DIR, "--emptyOutDir"],
-    { BUILD_TARGET: "chrome", VITE_CATALOGUE_URL: CATALOGUE_URL },
+    {
+      BUILD_TARGET: "chrome",
+      __DEV__: "true",
+      VITE_CATALOGUE_URL: CATALOGUE_URL,
+    },
   );
 
   await step(

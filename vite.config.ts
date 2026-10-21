@@ -18,6 +18,7 @@ const outDir = resolve(
     : "dist/chromium",
 );
 const publicDir = resolve(import.meta.dirname, "public");
+const isDev = process.env.__DEV__ === "true";
 
 export default defineConfig({
   build: {
@@ -53,8 +54,9 @@ export default defineConfig({
         warn(warning);
       },
     },
-    sourcemap: process.env.__DEV__ === "true",
+    sourcemap: isDev,
   },
+  define: isDev ? {} : { "import.meta.env.VITE_CATALOGUE_URL": "undefined" },
   plugins: [react(), tailwindcss(), makeManifest(), includeChangelog()],
   publicDir,
   resolve: {
