@@ -24,7 +24,7 @@ export const getEnabledImages = (catalogue: Catalogue, themes: string[]) => {
 };
 
 /** A well-mixed hash, so similar inputs give unrelated results. */
-const hash = (value: string) => {
+export const hash = (value: string) => {
   let result = [...value].reduce(
     (acc, char) => Math.imul(acc ^ char.charCodeAt(0), 0x01000193),
     0x811c9dc5,

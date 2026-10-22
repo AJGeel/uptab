@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { parseReleaseNotes } from "./parseReleaseNotes";
+import { parseChangelog, parseReleaseNotes } from "./parseChangelog";
 
 const changelog = `# Changelog
 
@@ -52,5 +52,34 @@ describe("parseReleaseNotes", () => {
     expect(
       parseReleaseNotes("## [1.2.3]\r\n\r\n- Something\r\n", "1.2.3"),
     ).toEqual({ date: null, body: "- Something" });
+  });
+});
+
+describe("parseChangelog", () => {
+  it("splits the changelog into its intro and releases, newest first", () => {
+    const { intro, releases } = parseChangelog(changelog);
+
+    expect(intro).toBe(
+      "UpTab adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).",
+    );
+    expect(releases.map(({ version, date }) => [version, date])).toEqual([
+      ["2.0.0", "2026-10-21"],
+      ["1.5.1", "2026-10-17"],
+    ]);
+    expect(releases[1].body).toBe(
+      "### 🐛 Fixed\n\n- The forecast no longer jumps in size",
+    );
+  });
+
+  it("skips releases without notes and other sections", () => {
+    const { releases } = parseChangelog(
+      "# Changelog\n\n## [V1.0.0] — 2026-01-01\n\n## Something else\n\n- text\n\n## [V0.9.0]\n\n- Early\n",
+    );
+
+    expect(releases.map((release) => release.version)).toEqual(["0.9.0"]);
+  });
+
+  it("has no intro when the file starts with a release", () => {
+    expect(parseChangelog("## [V1.0.0]\n\n- First\n").intro).toBe("");
   });
 });

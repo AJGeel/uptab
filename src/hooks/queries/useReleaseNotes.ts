@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { runtime } from "webextension-polyfill";
 
-import { parseReleaseNotes } from "@/src/services/changelog/parseReleaseNotes";
+import { parseReleaseNotes } from "@/src/services/changelog/parseChangelog";
 
 export const useReleaseNotes = (enabled: boolean) =>
   useQuery({

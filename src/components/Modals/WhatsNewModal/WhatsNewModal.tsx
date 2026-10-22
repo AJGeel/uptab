@@ -6,13 +6,13 @@ import { useReleaseNotes } from "@/src/hooks/queries/useReleaseNotes";
 import { Modals, useModalStore } from "@/src/hooks/stores/useModalStore";
 import { useRandomBackground } from "@/src/hooks/useRandomBackground/useRandomBackground";
 
-import Banner from "./partials/Banner";
 import AnimatedHeight from "../../ui/AnimatedHeight";
+import Banner from "../../ui/Banner";
 import Button from "../../ui/Button";
 import Modal from "../../ui/Modal";
 import Spinner from "../../ui/Spinner";
 
-const ReleaseNotes = lazy(() => import("./partials/ReleaseNotes"));
+const ChangelogMarkdown = lazy(() => import("../../ui/ChangelogMarkdown"));
 
 const CHANGELOG_URL = "/src/pages/changelog/index.html";
 
@@ -49,7 +49,7 @@ const WhatsNewModal = () => {
             rel="noopener noreferrer"
             className="text-sm text-gray-700 underline duration-150 hover:no-underline"
           >
-            Full changelog
+            View full changelog
           </a>
           <Button label="Okie dokie!" onClick={close} />
         </div>
@@ -67,7 +67,7 @@ const WhatsNewModal = () => {
 
         {notes && (
           <Suspense fallback={<Spinner className="mx-auto my-8 size-8" />}>
-            <ReleaseNotes markdown={notes.body} />
+            <ChangelogMarkdown markdown={notes.body} />
           </Suspense>
         )}
       </AnimatedHeight>

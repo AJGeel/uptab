@@ -4,10 +4,12 @@ import ReactMarkdown, { Components } from "react-markdown";
 import { remarkKbd } from "@/src/services/changelog/remarkKbd";
 import { cn } from "@/src/utils";
 
-import Kbd from "../../../ui/Kbd";
+import Kbd from "./Kbd";
 
 type Props = {
   markdown: string;
+  /** Replaces the styling of some elements, e.g. a page's own headings. */
+  components?: Components;
 };
 
 /** How many lists this one is inside of, so nested bullets can be set apart. */
@@ -61,11 +63,17 @@ const components: Components = {
   ),
 };
 
-/** A release's sections and bullets. Kept apart so react-markdown loads on demand. */
-const ReleaseNotes = ({ markdown }: Props) => (
-  <ReactMarkdown remarkPlugins={[remarkKbd]} components={components}>
+/**
+ * Changelog Markdown in the app's style. Kept apart from the new tab's code,
+ * so react-markdown loads on demand.
+ */
+const ChangelogMarkdown = ({ markdown, components: overrides }: Props) => (
+  <ReactMarkdown
+    remarkPlugins={[remarkKbd]}
+    components={{ ...components, ...overrides }}
+  >
     {markdown}
   </ReactMarkdown>
 );
 
-export default ReleaseNotes;
+export default ChangelogMarkdown;

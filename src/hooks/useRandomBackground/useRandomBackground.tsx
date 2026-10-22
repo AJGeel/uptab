@@ -2,11 +2,11 @@ import { format } from "date-fns";
 import { useState } from "react";
 
 import { getCatalogue } from "@/src/services/backgrounds/getCatalogue";
+import { getImageSrc } from "@/src/services/backgrounds/getImageSrc";
 import {
   getEnabledImages,
   pickDailyImage,
 } from "@/src/services/backgrounds/pickDailyImage";
-import { pickRendition } from "@/src/services/backgrounds/pickRendition";
 import { BackgroundImage, Catalogue } from "@/src/services/backgrounds/types";
 import { withLocalPhotos } from "@/src/services/backgrounds/withLocalPhotos";
 
@@ -24,12 +24,6 @@ const FALLBACK_IMAGE: BackgroundImage = {
   sources: [{ width: 1920, url: "/images/fallback-background.webp" }],
   thumbnail: null,
 };
-
-const getSrc = (image: BackgroundImage) =>
-  pickRendition(
-    image.sources,
-    Math.round(window.screen.width * window.devicePixelRatio),
-  )?.url;
 
 /**
  * Today's photo, and a way to browse from it. Safe to call from several
@@ -79,7 +73,11 @@ export const useRandomBackground = () => {
     const fresh = await getCatalogue({ reload: true });
     const freshImage = fresh?.images.find((image) => image.id === picked.id);
 
-    if (fresh && freshImage && getSrc(freshImage) !== getSrc(picked)) {
+    if (
+      fresh &&
+      freshImage &&
+      getImageSrc(freshImage) !== getImageSrc(picked)
+    ) {
       setReloaded(fresh);
     } else {
       setUseFallback(true);
@@ -88,7 +86,7 @@ export const useRandomBackground = () => {
 
   return {
     activeBg: activeBg && {
-      src: getSrc(activeBg),
+      src: getImageSrc(activeBg),
       author: activeBg.author,
       link: activeBg.link,
     },

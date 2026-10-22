@@ -193,7 +193,7 @@ const Modal = ({ className, onClose, isVisible, ...modalProps }: Props) => {
             <IconButton
               aria-label="Close"
               className={cn(
-                "absolute top-5 right-5 bg-transparent hover:bg-white",
+                "absolute top-5 right-5 z-20 bg-transparent hover:bg-white",
                 banner && "bg-white/70 backdrop-blur-sm",
               )}
               hideBorder

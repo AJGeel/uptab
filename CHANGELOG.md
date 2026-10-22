@@ -2,18 +2,18 @@
 
 UpTab adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [V2.0.0] — 2026-10-21
+## [V2.0.0] — 2026-10-22
 
 ### ✨ Added
 
-- Pick your backgrounds from curated themes. Press <kbd>B</kbd>
-  - Browse photos with <kbd>←</kbd> and <kbd>→</kbd>
+- Pick your backgrounds from curated themes. Press <kbd>B</kbd> to manage themes.
+  - Browse photos with <kbd>←</kbd> and <kbd>→</kbd>.
 - Don't like the themes? You can also upload your own!  
-- Themes and today's photo sync between your browsers
+- Themes and today's photo sync between your browsers.
 
 ### ♻️ Changed
 
-- UpTab now has a much, much smaller download size!
+- UpTab now has a 97% smaller intial download size: from 27MB to under 1MB.
 
 ## [V1.5.1] — 2026-10-17
 
