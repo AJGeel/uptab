@@ -1,5 +1,6 @@
 import { ReactElement, useState } from "react";
 
+import AnimatedHeight from "../AnimatedHeight";
 import Tab from "./partials/Tab";
 
 type TabItem<T> = {
@@ -34,8 +35,8 @@ const Tabs = <T extends string>({ tabs, onTabChange }: Props<T>) => {
           />
         ))}
       </div>
-
-      {activeContent}
+      {/* Side room, so the clipping wrapper doesn't cut off focus rings. */}
+      <AnimatedHeight className="-mx-2 px-2">{activeContent}</AnimatedHeight>
     </>
   );
 };

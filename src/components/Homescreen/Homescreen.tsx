@@ -27,6 +27,8 @@ const Homescreen = () => {
   const isSidebarOpen = settings?.sidebar?.isOpen;
 
   useKeyPress(hotkeys.backslash, () => toggleSidebarSetting("isOpen"));
+  useKeyPress("ArrowRight", () => browse(1));
+  useKeyPress("ArrowLeft", () => browse(-1));
   useEasterEggs();
 
   if (isPending) {

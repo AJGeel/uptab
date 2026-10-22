@@ -3,6 +3,9 @@ import { useQuery } from "@tanstack/react-query";
 import { PropsWithChildren } from "react";
 import ReactMarkdown from "react-markdown";
 
+import Kbd from "@/src/components/ui/Kbd";
+import { remarkKbd } from "@/src/services/changelog/remarkKbd";
+
 export const targetBlank = {
   target: "_blank",
   rel: "noopener noreferrer",
@@ -46,7 +49,9 @@ const Changelog = () => {
   return (
     <Container>
       <ReactMarkdown
+        remarkPlugins={[remarkKbd]}
         components={{
+          kbd: ({ children }) => <Kbd>{children}</Kbd>,
           h1: () => (
             <h1 className="text-2xl font-bold lg:text-3xl">
               <ArrowPathIcon className="-mt-1 mr-2 inline size-6 text-sky-500" />

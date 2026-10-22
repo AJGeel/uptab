@@ -54,7 +54,7 @@ Making the feature visible, instead of three levels deep in Edit Preferences.
 - **Picker** (`components/Modals/BackgroundsModal/`): a card per theme with name, photo count and a check mark. Cards show a 2×2 mosaic of the theme's cover thumbnails (`coverImageIds`, topped up with its other photos when there are fewer than 4), with each photo's colour behind its thumbnail while it loads ([remote-backgrounds.md](remote-backgrounds.md) §7). "All themes" saves `[]`, so later themes are included too. The last selected theme can't be turned off: clicking it shakes the card and says "Keep one theme on". Changes show behind the modal straight away. The subtitle links to all photos on the website, and the footer has "Check for new photos", which refetches the catalogue bypassing the HTTP cache and reports what it found.
 - **Hotkey:** `B` opens and closes the picker, and is listed in the hotkeys modal.
 - **Settings:** the Backgrounds tab is a single "Choose backgrounds" button that opens the picker.
-- **2.0 notice:** for 2.0.x, the update notification says "New: choose your own backgrounds!" and opens the picker (closing the sidebar) instead of the changelog.
+- **Update notice:** after an update, the sidebar notice opens a "What's new" modal with that version's section of `CHANGELOG.md` (`services/changelog/parseReleaseNotes.ts`), and a link to the full changelog page. `react-markdown` loads only when the modal opens.
 - **Modals:** they now close on outside clicks (`onPointerDownOutside`) instead of any outside interaction, so focus left in a modal that's animating out doesn't close the next one. The title and the `footer` slot stay in view; only the part between them scrolls.
 
 ## 7. My photos

@@ -6,11 +6,6 @@ import { setUpdateNotification } from "@/src/services/updateNotification/setUpda
 export const useUpdateNotification = () => {
   const [isVisible, setIsVisible] = useState(false);
 
-  const onOpen = () => {
-    window.open("/src/pages/changelog/index.html");
-    setIsVisible(false);
-  };
-
   const onHide = () => {
     setIsVisible(false);
     setUpdateNotification(false);
@@ -28,7 +23,6 @@ export const useUpdateNotification = () => {
 
   return {
     isVisible,
-    onOpen,
     onHide,
   };
 };

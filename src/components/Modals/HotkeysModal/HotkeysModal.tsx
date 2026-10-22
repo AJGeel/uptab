@@ -2,8 +2,8 @@ import { Modals, useModalStore } from "@/src/hooks/stores/useModalStore";
 import useKeyPress from "@/src/hooks/useKeyPress";
 import { hotkeyDescriptions, hotkeys } from "@/src/services/hotkeys/hotkeys";
 
-import { Hotkey } from "./partials/Hotkey";
 import Button from "../../ui/Button";
+import Kbd from "../../ui/Kbd";
 import Modal from "../../ui/Modal";
 
 const HotkeysModal = () => {
@@ -36,7 +36,7 @@ const HotkeysModal = () => {
             className="mt-2 flex items-center justify-between border-t border-black/20 pt-2 first:mt-0 first:border-t-0"
           >
             <p className="text-gray-900">{item.description}</p>
-            <Hotkey label={item.keyDisplay} size="sm" />
+            <Kbd size="sm">{item.keyDisplay}</Kbd>
           </div>
         ))}
       </div>

@@ -22,7 +22,7 @@ After submitting, both stores review the update. Chrome publishes it automatical
 ## 1. Release checklist
 
 1. Bump `version` in `package.json`.
-2. Add the release to `CHANGELOG.md`.
+2. Add the release to `CHANGELOG.md`. Keep it short: a handful of bullets in a few words each, for what users notice. The "What's new" window shows this section as is. Mark keyboard keys as `<kbd>B</kbd>`: the window and the changelog page show them as keys, and so does GitHub.
 3. Commit, then run `bun store:submit --dry-run`.
 4. Run `bun store:submit`.
 5. Check `bun store:status` in the following days.

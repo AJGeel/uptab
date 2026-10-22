@@ -5,7 +5,7 @@ import { hotkeyDescriptions, hotkeys } from "@/src/services/hotkeys/hotkeys";
 import { Hotkeys } from "@/src/services/hotkeys/types";
 import { cn } from "@/src/utils";
 
-import { Hotkey } from "./Hotkey";
+import Kbd from "../../../ui/Kbd";
 
 export const ActiveHotkeyIndicator = () => {
   const [pressedKey, setPressedKey] = useState<Hotkeys | null>(null);
@@ -52,7 +52,7 @@ export const ActiveHotkeyIndicator = () => {
       )}
     >
       {pressedKey && (
-        <Hotkey label={hotkeyDescriptions[pressedKey].keyDisplay} size="lg" />
+        <Kbd size="lg">{hotkeyDescriptions[pressedKey].keyDisplay}</Kbd>
       )}
     </div>
   );

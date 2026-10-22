@@ -14,12 +14,6 @@ type PersistedStateOptions<T> = {
    * Optional function to transform the stored value back into T.
    */
   deserialize?: (value: unknown) => T;
-
-  /**
-   * Where to keep it: "sync" follows the user to their other browsers, but
-   * allows fewer writes (Chrome: 120 a minute), so it suits rare changes.
-   */
-  area?: "local" | "sync";
 };
 
 export function usePersistedState<T>(
@@ -27,7 +21,7 @@ export function usePersistedState<T>(
   initialValue: T | (() => T),
   options: PersistedStateOptions<T> = {},
 ) {
-  const { serialize, deserialize, area = "local" } = options;
+  const { serialize, deserialize } = options;
 
   const getInitialValue = useCallback(
     () => (initialValue instanceof Function ? initialValue() : initialValue),
@@ -41,7 +35,7 @@ export function usePersistedState<T>(
     let cancelled = false;
 
     const load = async () => {
-      const result = await storage[area].get(key);
+      const result = await storage.local.get(key);
 
       if (cancelled) {
         return;
@@ -63,7 +57,7 @@ export function usePersistedState<T>(
     return () => {
       cancelled = true;
     };
-  }, [key, deserialize, area]);
+  }, [key, deserialize]);
 
   const setPersistedState = useCallback(
     (value: SetStateAction<T>) => {
@@ -72,13 +66,14 @@ export function usePersistedState<T>(
 
         const valueToStore = serialize ? serialize(nextState) : nextState;
 
-        // Over sync's write limit, the change stays in this tab only.
-        storage[area].set({ [key]: valueToStore }).catch(() => {});
+        void storage.local.set({
+          [key]: valueToStore,
+        });
 
         return nextState;
       });
     },
-    [key, serialize, area],
+    [key, serialize],
   );
 
   return [state, setPersistedState, isHydrated] as const;

@@ -3,7 +3,6 @@ import { useState } from "react";
 
 import { getCatalogue } from "@/src/services/backgrounds/getCatalogue";
 import {
-  DailyPick,
   getEnabledImages,
   pickDailyImage,
 } from "@/src/services/backgrounds/pickDailyImage";
@@ -12,8 +11,7 @@ import { BackgroundImage, Catalogue } from "@/src/services/backgrounds/types";
 import { withLocalPhotos } from "@/src/services/backgrounds/withLocalPhotos";
 
 import { useBackgroundCatalogue } from "../queries/useBackgroundCatalogue";
-import useKeyPress from "../useKeyPress";
-import { usePersistedState } from "../usePersistedState";
+import { useDailyPick } from "../queries/useDailyPick";
 import { useSettings } from "../useSettings";
 
 /** Built in, for the first run offline or when the site is unreachable. */
@@ -33,14 +31,14 @@ const getSrc = (image: BackgroundImage) =>
     Math.round(window.screen.width * window.devicePixelRatio),
   )?.url;
 
+/**
+ * Today's photo, and a way to browse from it. Safe to call from several
+ * components: they share the pick, and keys are handled by the caller.
+ */
 export const useRandomBackground = () => {
   const { data: settings } = useSettings();
   const { catalogue, localPhotos, isPending } = useBackgroundCatalogue();
-  const [stored, setStored, isHydrated] = usePersistedState<DailyPick | null>(
-    "dailyBackground",
-    null,
-    { area: "sync" },
-  );
+  const { pick: stored, isHydrated, setPick } = useDailyPick();
   // Fixed per tab, so the photo doesn't change at midnight.
   const [date] = useState(() => format(new Date(), "yyyy-MM-dd"));
   // A catalogue fetched again after an image failed to load.
@@ -68,11 +66,8 @@ export const useRandomBackground = () => {
     const next = images[(index + step + images.length) % images.length];
 
     setUseFallback(false);
-    setStored({ date, imageId: next.id });
+    setPick({ date, imageId: next.id });
   };
-
-  useKeyPress("ArrowRight", () => browse(1));
-  useKeyPress("ArrowLeft", () => browse(-1));
 
   /** First failure: refetch the catalogue, skipping the HTTP cache. Then: fallback. */
   const onError = async () => {
