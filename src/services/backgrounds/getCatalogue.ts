@@ -16,15 +16,18 @@ export const getSavedCatalogue = async (): Promise<Catalogue | null> => {
 
 /**
  * Fetches the catalogue and saves it for next time. Null when offline, when
- * the site is down, or for an unsupported version. `reload` skips the HTTP
- * cache, e.g. after an image URL stopped working.
+ * the site is down, or for an unsupported version. The browser's HTTP cache
+ * must revalidate (a cheap 304 at most): the site allows caching it for an
+ * hour, so a plain fetch could hand back, and then save, a copy that still
+ * lists removed themes. `reload` skips the cache entirely, e.g. after an image
+ * URL stopped working.
  */
 export const fetchCatalogue = async ({
   reload = false,
 } = {}): Promise<Catalogue | null> => {
   try {
     const response = await fetch(CATALOGUE_URL, {
-      cache: reload ? "reload" : "default",
+      cache: reload ? "reload" : "no-cache",
       signal: AbortSignal.timeout(TIMEOUT_MS),
     });
 
