@@ -1,25 +1,25 @@
-import { useEffect, useState } from "react";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 
 import { getUpdateNotification } from "@/src/services/updateNotification/getUpdateNotification";
 import { setUpdateNotification } from "@/src/services/updateNotification/setUpdateNotification";
 
+const queryKey = ["updateNotification"];
+
 export const useUpdateNotification = () => {
-  const [isVisible, setIsVisible] = useState(false);
+  const queryClient = useQueryClient();
+
+  // Shared, so hiding the notification in one place hides it everywhere.
+  const { data: isVisible = false } = useQuery({
+    queryKey,
+    queryFn: async () => !!(await getUpdateNotification()).newUpdate,
+    staleTime: Infinity,
+    networkMode: "always",
+  });
 
   const onHide = () => {
-    setIsVisible(false);
+    queryClient.setQueryData(queryKey, false);
     setUpdateNotification(false);
   };
-
-  useEffect(() => {
-    const fetchData = async () => {
-      const data = await getUpdateNotification();
-
-      setIsVisible(!!data.newUpdate);
-    };
-
-    fetchData();
-  }, []);
 
   return {
     isVisible,

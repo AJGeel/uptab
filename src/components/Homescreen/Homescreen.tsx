@@ -17,6 +17,7 @@ import Modals from "../Modals/Modals";
 import BarButton from "./partials/BarButton";
 import Sidebar from "../Sidebar/Sidebar";
 import { Background } from "../ui/Background";
+import UpdateNotification from "../UpdateNotification/UpdateNotification";
 
 const Homescreen = () => {
   const { data: settings, isPending, toggleSidebarSetting } = useSettings();
@@ -64,6 +65,16 @@ const Homescreen = () => {
                 isSidebarOpen && "pointer-events-none translate-x-40 opacity-0",
               )}
             />
+          )}
+          {settings?.sidebar.showUpdates && (
+            <div
+              className={cn(
+                "absolute top-6 right-6 w-max max-w-md duration-500",
+                isSidebarOpen && "pointer-events-none translate-x-40 opacity-0",
+              )}
+            >
+              <UpdateNotification variant="floating" />
+            </div>
           )}
           <div
             className={cn(
