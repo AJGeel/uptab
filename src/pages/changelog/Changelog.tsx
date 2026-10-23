@@ -1,95 +1,147 @@
-import { ArrowPathIcon } from "@heroicons/react/24/solid";
 import { useQuery } from "@tanstack/react-query";
-import { PropsWithChildren } from "react";
-import ReactMarkdown from "react-markdown";
+import { format, isValid, parseISO } from "date-fns";
+import { useInView } from "motion/react";
+import { useRef, useState } from "react";
+import { Components } from "react-markdown";
 
-export const targetBlank = {
-  target: "_blank",
-  rel: "noopener noreferrer",
-} as const;
+import { Background } from "@/src/components/ui/Background";
+import Banner from "@/src/components/ui/Banner";
+import ChangelogMarkdown from "@/src/components/ui/ChangelogMarkdown";
+import { useCatalogue } from "@/src/hooks/queries/useCatalogue";
+import { getImageSrc } from "@/src/services/backgrounds/getImageSrc";
+import { hash } from "@/src/services/backgrounds/pickDailyImage";
+import { pickRendition } from "@/src/services/backgrounds/pickRendition";
+import { BackgroundImage } from "@/src/services/backgrounds/types";
+import {
+  parseChangelog,
+  Release,
+} from "@/src/services/changelog/parseChangelog";
 
-const Container = ({ children }: PropsWithChildren) => (
-  <div className="min-h-screen bg-linear-to-b from-white via-slate-200 to-slate-200">
-    <div className="mx-auto prose-sm w-full max-w-3xl px-4 py-32 text-slate-700 md:px-6">
+/** The cards are narrower than the screen, so they don't need its full size. */
+const CARD_WIDTH = 768;
+
+/** The intro sits on the dark photo, not on a card. */
+const introComponents: Components = {
+  p: ({ children }) => <p className="text-white/85">{children}</p>,
+  a: ({ href, children }) => (
+    <a
+      href={href}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="font-medium text-white underline duration-150 hover:no-underline"
+    >
       {children}
-    </div>
-  </div>
-);
+    </a>
+  ),
+};
+
+/** The catalogue's photos in an order that's random for each visit, but stable during it. */
+const useShuffledPhotos = () => {
+  const { catalogue } = useCatalogue();
+  const [seed] = useState(() => Math.random());
+
+  return [...(catalogue?.images ?? [])].sort(
+    (a, b) => hash(`${seed}:${a.id}`) - hash(`${seed}:${b.id}`),
+  );
+};
+
+const ReleaseCard = ({
+  release,
+  photo,
+}: {
+  release: Release;
+  photo?: BackgroundImage;
+}) => {
+  const ref = useRef<HTMLElement>(null);
+  // Photos only load for cards that are near the screen.
+  const isNear = useInView(ref, { once: true, margin: "400px 0px" });
+  const date = release.date ? parseISO(release.date) : null;
+
+  return (
+    <article
+      ref={ref}
+      className="overflow-hidden rounded-2xl bg-white/95 text-base text-gray-800 shadow-lg backdrop-blur-lg backdrop-brightness-190 backdrop-saturate-150"
+    >
+      <Banner
+        photoSrc={
+          isNear && photo
+            ? pickRendition(
+                photo.sources,
+                Math.round(CARD_WIDTH * window.devicePixelRatio),
+              )?.url
+            : undefined
+        }
+        title={`UpTab ${release.version}`}
+        subtitle={
+          date && isValid(date)
+            ? `Released ${format(date, "d MMMM yyyy")}`
+            : undefined
+        }
+        className="h-36"
+      />
+
+      <div className="p-8 md:px-10">
+        <ChangelogMarkdown markdown={release.body} />
+      </div>
+    </article>
+  );
+};
 
 const Changelog = () => {
+  const photos = useShuffledPhotos();
   const { data, isError, isPending } = useQuery({
     queryFn: async () => {
       const response = await fetch("/CHANGELOG.md");
-      const content = await response.text();
 
-      return content;
+      if (!response.ok) {
+        throw new Error("Couldn't read the changelog");
+      }
+
+      return response.text();
     },
     queryKey: ["changelog"],
+    // A file inside the extension, so don't pause while the browser is offline.
+    networkMode: "always",
   });
-
-  if (isPending) {
-    return (
-      <Container>
-        <p>Loading...</p>
-      </Container>
-    );
-  }
-
-  if (isError) {
-    return (
-      <Container>
-        <p>Something has gone wrong.</p>
-      </Container>
-    );
-  }
+  const changelog = data ? parseChangelog(data) : null;
 
   return (
-    <Container>
-      <ReactMarkdown
-        components={{
-          h1: () => (
-            <h1 className="text-2xl font-bold lg:text-3xl">
-              <ArrowPathIcon className="-mt-1 mr-2 inline size-6 text-sky-500" />
-              <span>UpTab Changelog</span>
-            </h1>
-          ),
-          h2: ({ children }) => (
-            <h2 className="mt-40 flex items-center gap-2">
-              <img
-                src="/icon-128.png"
-                width="20"
-                height="20"
-                alt="UpTab Logo"
-                className="not-prose"
+    <div className="min-h-screen px-4 py-12">
+      <Background
+        src={photos[0] && getImageSrc(photos[0])}
+        alt=""
+        className="fixed inset-0 bg-linear-to-b from-sky-500 to-sky-800"
+      />
+      <div className="fixed inset-0 bg-black/50" />
+
+      <div className="relative mx-auto max-w-3xl">
+        <header className="mb-8 text-base text-white text-shadow-black/30 text-shadow-md">
+          <h1 className="text-3xl font-bold">UpTab Changelog</h1>
+
+          <div className="mt-2">
+            {isPending && <p>Loading...</p>}
+            {isError && <p>Something has gone wrong.</p>}
+            {changelog && (
+              <ChangelogMarkdown
+                markdown={changelog.intro}
+                components={introComponents}
               />
-              {children}
-            </h2>
-          ),
-          h3: ({ children }) => (
-            <h3 className="bg-black bg-clip-text font-semibold text-transparent">
-              {children}
-            </h3>
-          ),
-          a: ({ href, children }) => (
-            <a
-              className="font-bold text-sky-500 no-underline duration-150 hover:text-black"
-              {...targetBlank}
-              href={href}
-            >
-              {children}
-            </a>
-          ),
-          ul: ({ children }) => <ul className="list-disc pl-8">{children}</ul>,
-          code: ({ children }) => (
-            <code className="rounded-md border border-black/20 bg-white px-1.5 py-1 shadow-[0px_2px_rgba(0,0,0,.1)]">
-              {children}
-            </code>
-          ),
-        }}
-      >
-        {data}
-      </ReactMarkdown>
-    </Container>
+            )}
+          </div>
+        </header>
+
+        <div className="space-y-8">
+          {changelog?.releases.map((release, index) => (
+            <ReleaseCard
+              key={release.version}
+              release={release}
+              // The first photo is behind the page.
+              photo={photos[index + 1]}
+            />
+          ))}
+        </div>
+      </div>
+    </div>
   );
 };
 

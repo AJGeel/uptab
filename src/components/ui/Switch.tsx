@@ -5,6 +5,10 @@ import * as React from "react";
 
 import { cn } from "@/src/utils";
 
+/**
+ * @deprecated Built on Radix, which is being phased out. Use Base UI for new
+ * components. It'll be refactored later.
+ */
 const Switch = ({
   className,
   ...props

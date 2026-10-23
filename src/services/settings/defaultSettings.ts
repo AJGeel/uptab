@@ -13,4 +13,11 @@ export const defaultSettings: Settings = {
     showInfoWidget: true,
     showPhotoCredit: true,
   },
+  backgrounds: {
+    themes: [],
+  },
+  location: {
+    active: "gps",
+    saved: [],
+  },
 };

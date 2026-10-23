@@ -5,7 +5,7 @@ import { hotkeyDescriptions, hotkeys } from "@/src/services/hotkeys/hotkeys";
 import { Hotkeys } from "@/src/services/hotkeys/types";
 import { cn } from "@/src/utils";
 
-import { Hotkey } from "./Hotkey";
+import Kbd from "../../../ui/Kbd";
 
 export const ActiveHotkeyIndicator = () => {
   const [pressedKey, setPressedKey] = useState<Hotkeys | null>(null);
@@ -46,12 +46,13 @@ export const ActiveHotkeyIndicator = () => {
     <div
       key={animationKey}
       className={cn(
-        "fixed right-6 bottom-6 z-10 animate-hotkey",
+        // Above the background's content layer (z-10), which holds the bottom gradient.
+        "fixed right-6 bottom-6 z-20 animate-hotkey",
         !pressedKey && "pointer-events-none",
       )}
     >
       {pressedKey && (
-        <Hotkey label={hotkeyDescriptions[pressedKey].keyDisplay} size="lg" />
+        <Kbd size="lg">{hotkeyDescriptions[pressedKey].keyDisplay}</Kbd>
       )}
     </div>
   );

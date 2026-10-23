@@ -16,7 +16,8 @@ export const getCachedReverseGeocoding = async ({
       cachedReverseGeocoding?: GeocodeResponse & { _input?: Location };
     };
 
-    if (!cachedReverseGeocoding) {
+    // Entries cached before errors were rejected may lack an address.
+    if (!cachedReverseGeocoding?.address) {
       return;
     }
 

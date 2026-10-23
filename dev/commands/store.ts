@@ -12,6 +12,7 @@ import { resolve } from "path";
 
 import { getChromeStatus, submitToChrome } from "./chrome";
 import { getFirefoxStatus, submitToFirefox } from "./firefox";
+import { findLocalUrlInBuild } from "./localUrls";
 import { StoreStatus } from "./types";
 import { confirmOrExit, header, p, pc, runCli, runTask, step } from "./ui";
 import { DIST_DIR, ROOT_DIR, compareVersions, read } from "./utils";
@@ -100,6 +101,15 @@ const assertBuild = (store: Store, version: string) => {
   if (!store.isExpectedManifest(manifest)) {
     throw new Error(`${store.name} build has the wrong manifest.`);
   }
+
+  // A development setting, such as a local catalogue, must never ship.
+  const localUrl = findLocalUrlInBuild(store.buildDir);
+
+  if (localUrl) {
+    throw new Error(
+      `${store.name} build links to localhost in ${localUrl.file}: "...${localUrl.context}...". Check your .env.`,
+    );
+  }
 };
 
 const status = async (stores: Store[]) => {
@@ -177,7 +187,7 @@ const submit = async (stores: Store[], isDryRun: boolean) => {
     "Checking the builds",
     () =>
       Promise.resolve(stores.forEach((store) => assertBuild(store, version))),
-    `Builds are version ${version}, each with the right manifest`,
+    `Builds are version ${version}, with the right manifest and no localhost links`,
   );
 
   if (isDryRun) {

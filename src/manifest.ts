@@ -39,7 +39,7 @@ const manifest: Manifest.WebExtensionManifest = {
   },
   manifest_version: 3,
   name: "UpTab",
-  permissions: ["storage", "geolocation", "bookmarks"],
+  permissions: ["storage", "unlimitedStorage", "geolocation", "bookmarks"],
   version: pkg.version,
   web_accessible_resources: [
     {

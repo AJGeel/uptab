@@ -41,13 +41,12 @@ const WeatherForecastModal = () => {
   const closeModal = () => setActiveModal(null);
 
   const {
+    status,
     data: { weatherData, locationData },
-    isPending: { isLocationPending, isWeatherPending },
-    isError: { isLocationError, isWeatherError },
   } = useLocationAndWeather();
 
-  const isPending = isLocationPending || isWeatherPending;
-  const isError = isLocationError || isWeatherError;
+  const isPending = status === "loading";
+  const isError = status === "locationError" || status === "weatherError";
 
   return (
     <Modal
@@ -60,6 +59,11 @@ const WeatherForecastModal = () => {
           : undefined
       }
       className="max-w-4xl"
+      footer={
+        <div className="flex justify-end">
+          <Button label="Got it, thanks." onClick={closeModal} />
+        </div>
+      }
     >
       {isError && (
         <Placeholder>
@@ -84,10 +88,6 @@ const WeatherForecastModal = () => {
           <ForecastChart hourly={weatherData.hourly} />
         </Suspense>
       )}
-
-      <div className="mt-8 flex justify-end">
-        <Button label="Got it, thanks." onClick={closeModal} />
-      </div>
     </Modal>
   );
 };

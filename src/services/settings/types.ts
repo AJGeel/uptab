@@ -1,3 +1,5 @@
+import { LocationSettings } from "../location/types";
+
 export type SidebarSettings = {
   showShortlinks: boolean;
   showBookmarks: boolean;
@@ -12,7 +14,14 @@ export type HomescreenSettings = {
   showPhotoCredit: boolean;
 };
 
+export type BackgroundSettings = {
+  /** Enabled theme IDs from the backgrounds catalogue. Empty: all of them. */
+  themes: string[];
+};
+
 export type Settings = {
   sidebar: SidebarSettings;
   homescreen: HomescreenSettings;
+  backgrounds: BackgroundSettings;
+  location: LocationSettings;
 };
