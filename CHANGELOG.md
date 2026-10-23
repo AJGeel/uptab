@@ -13,7 +13,7 @@ UpTab adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### ♻️ Changed
 
-- UpTab now has a 97% smaller intial download size: from 27MB to under 1MB.
+- UpTab now has a 97% smaller initial download size: from 27MB to under 1MB.
 
 ## [V1.5.1] — 2026-10-17
 

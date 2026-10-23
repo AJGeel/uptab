@@ -190,14 +190,14 @@ const LocalPhotosModal = () => {
 
       {localPhotos.length > 0 && (
         <div className="mt-4 grid grid-cols-3 gap-2 sm:grid-cols-5">
-          {localPhotos.map((photo) => {
+          {localPhotos.map((photo, index) => {
             const isSelected = selected.includes(photo.id);
 
             return (
               <button
                 key={photo.id}
                 type="button"
-                aria-label="Photo"
+                aria-label={`Photo ${index + 1} of ${localPhotos.length}`}
                 aria-pressed={isSelected}
                 onClick={() => toggle(photo.id)}
                 className={cn(
