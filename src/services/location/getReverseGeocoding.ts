@@ -20,13 +20,18 @@ export const getReverseGeocoding = async ({
     `https://nominatim.openstreetmap.org/reverse?lat=${latitude}&lon=${longitude}&format=json`,
   );
 
-  const data = (await res.json()) as GeocodeResponse;
-
-  if (!data) {
-    return { city: "Unknown location" };
+  if (!res.ok) {
+    throw new Error("Failed to reverse geocode the location.");
   }
 
-  storage.local.set({
+  const data = (await res.json()) as Partial<GeocodeResponse>;
+
+  // Nominatim reports some failures, like coordinates at sea, as a 200.
+  if (!data.address) {
+    throw new Error("No address found for the location.");
+  }
+
+  await storage.local.set({
     cachedReverseGeocoding: {
       _input: {
         longitude,
@@ -36,5 +41,5 @@ export const getReverseGeocoding = async ({
     },
   });
 
-  return data.address as Area;
+  return data.address;
 };

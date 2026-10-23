@@ -8,8 +8,9 @@ UpTab adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 - Pick your backgrounds from curated themes. Press <kbd>B</kbd> to manage themes.
   - Browse photos with <kbd>←</kbd> and <kbd>→</kbd>.
-- Don't like the themes? You can also upload your own!  
-- Themes and today's photo sync between your browsers.
+  - Don't like the themes? You can also upload your own!  
+  - Themes and today's photo sync between your browsers.
+- You can now get weather forecasts for locations beyond your current location.
 
 ### ♻️ Changed
 

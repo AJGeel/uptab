@@ -10,7 +10,7 @@ export type Area = {
   city: string;
 };
 
-export type GeocodedLocation = Location & { area: string };
+export type GeocodedLocation = Location & { area?: string };
 
 export type GeocodeResponse = {
   address: Area & {
@@ -22,3 +22,17 @@ export type GeocodeResponse = {
     country_code: string;
   };
 };
+
+/** A place the user added by hand. */
+export type SavedLocation = Location & {
+  id: string;
+  label: string;
+};
+
+export type LocationSettings = {
+  /** `"gps"` for the current location, otherwise a saved location's id. */
+  active: string;
+  saved: SavedLocation[];
+};
+
+export type GpsFailure = "denied" | "timeout" | "unavailable";

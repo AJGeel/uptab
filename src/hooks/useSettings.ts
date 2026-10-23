@@ -1,5 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
+import { LocationSettings } from "../services/location/types";
 import { defaultSettings } from "../services/settings/defaultSettings";
 import { editSettings } from "../services/settings/editSettings";
 import { getSettings } from "../services/settings/getSettings";
@@ -87,6 +88,14 @@ export const useSettings = () => {
     });
   };
 
+  const setLocationSettings = async (location: LocationSettings) => {
+    if (!data) {
+      return;
+    }
+
+    await editMutation.mutateAsync({ ...data, location });
+  };
+
   const resetDefaultSettings = async () => {
     await editMutation.mutateAsync(defaultSettings);
   };
@@ -98,6 +107,7 @@ export const useSettings = () => {
     toggleSidebarSetting,
     toggleHomescreenSetting,
     setBackgroundThemes,
+    setLocationSettings,
     setSidebarOpen,
     resetDefaultSettings,
   };

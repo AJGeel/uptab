@@ -1,5 +1,7 @@
 import { cn } from "@/src/utils";
 
+import { inlineLinkStyles } from "./Button";
+
 type Props = {
   className?: string;
 };
@@ -12,7 +14,7 @@ const FeedbackPrompt = ({ className }: Props) => {
     <p className={cn("text-black/70", className)}>
       Got feedback?{" "}
       <a
-        className="underline hover:text-black hover:no-underline"
+        className={cn("inline-block", inlineLinkStyles)}
         href={formUrl}
         target="_blank"
         rel="noopener noreferrer"

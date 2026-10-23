@@ -22,7 +22,7 @@ const Sidebar = ({ isExpanded, setIsExpanded }: Props) => {
   return (
     <div
       className={cn(
-        "absolute top-0 left-0 z-20 h-screen w-full max-w-150 flex-1 bg-white duration-500",
+        "absolute top-0 left-0 z-20 h-screen w-full max-w-150 flex-1 bg-white duration-500 [--widget-hover:rgb(0_0_0/0.05)]",
         isExpanded ? "translate-x-0" : "-translate-x-full",
       )}
     >

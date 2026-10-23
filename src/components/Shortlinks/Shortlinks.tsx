@@ -26,6 +26,7 @@ import { cn } from "@/src/utils";
 
 import EmptyState from "./partials/EmptyState";
 import SortableShortlink from "./partials/SortableShortlink";
+import Button, { buttonVariants } from "../ui/Button";
 
 const Shortlinks = () => {
   const queryClient = useQueryClient();
@@ -110,15 +111,15 @@ const Shortlinks = () => {
               ))}
             </div>
             <div className="col-span-2 mt-4">
-              <button
-                className="inline cursor-pointer underline hover:text-black hover:no-underline"
+              <Button
+                className="leading-normal first:mt-0"
+                variant={buttonVariants.inline}
                 onClick={() => {
                   setSelectedShortlink(null);
                   setActiveModal(Modals.shortlink);
                 }}
-              >
-                Add a link
-              </button>
+                label="Add a link"
+              />
             </div>
           </SortableContext>
         </DndContext>

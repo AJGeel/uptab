@@ -4,6 +4,7 @@ import { useSettings } from "@/src/hooks/useSettings";
 import { hotkeys } from "@/src/services/hotkeys/hotkeys";
 import { settingsRows } from "@/src/services/settings/settingsRows";
 
+import LocationTab from "./partials/LocationTab";
 import SettingsRow from "./partials/SettingsRow";
 import Button, { buttonVariants } from "../../ui/Button";
 import Modal from "../../ui/Modal";
@@ -20,6 +21,7 @@ const SettingsModal = () => {
 
   const activeModal = useModalStore((state) => state.activeModal);
   const setActiveModal = useModalStore((state) => state.setActiveModal);
+  const settingsTab = useModalStore((state) => state.settingsTab);
 
   useKeyPress(hotkeys.slash, () => {
     setActiveModal(activeModal === Modals.settings ? null : Modals.settings);
@@ -46,6 +48,7 @@ const SettingsModal = () => {
         {!!settings && (
           <div className="flex flex-col">
             <Tabs
+              defaultTab={settingsTab ?? undefined}
               tabs={[
                 {
                   label: "Sidebar",
@@ -97,6 +100,10 @@ const SettingsModal = () => {
                     </div>
                   ),
                 },
+                {
+                  label: "Location",
+                  content: <LocationTab />,
+                },
               ]}
               onTabChange={(id) => {
                 if (id === "Sidebar") {
@@ -104,7 +111,11 @@ const SettingsModal = () => {
                   return;
                 }
 
-                if (id === "Homescreen" || id === "Backgrounds") {
+                if (
+                  id === "Homescreen" ||
+                  id === "Backgrounds" ||
+                  id === "Location"
+                ) {
                   setSidebarOpen(false);
                   return;
                 }

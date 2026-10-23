@@ -16,4 +16,8 @@ export const defaultSettings: Settings = {
   backgrounds: {
     themes: [],
   },
+  location: {
+    active: "gps",
+    saved: [],
+  },
 };

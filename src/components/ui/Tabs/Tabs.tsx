@@ -10,11 +10,19 @@ type TabItem<T> = {
 
 type Props<T> = {
   tabs: TabItem<T>[];
+  /** The tab shown first, instead of the first tab. */
+  defaultTab?: T;
   onTabChange?: (id: T) => void;
 };
 
-const Tabs = <T extends string>({ tabs, onTabChange }: Props<T>) => {
-  const [activeTab, setActiveTab] = useState<T | undefined>(tabs[0]?.label);
+const Tabs = <T extends string>({
+  tabs,
+  defaultTab,
+  onTabChange,
+}: Props<T>) => {
+  const [activeTab, setActiveTab] = useState<T | undefined>(
+    defaultTab ?? tabs[0]?.label,
+  );
 
   const handleTabChange = (id: T) => {
     setActiveTab(id);

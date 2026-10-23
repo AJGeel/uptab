@@ -97,6 +97,10 @@ const useIsOverflowing = (element: HTMLElement | null) => {
   return isOverflowing;
 };
 
+/**
+ * @deprecated Built on Radix, which is being phased out. Use Base UI for new
+ * components. It'll be refactored later.
+ */
 const Modal = ({ className, onClose, isVisible, ...modalProps }: Props) => {
   const { title, subtitle, banner, footer, children } =
     useFreezeContentsOnClose({

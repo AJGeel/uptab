@@ -64,6 +64,12 @@ Strong success criteria let you loop independently. Weak criteria ("make it work
 
 **These guidelines are working if:** fewer unnecessary changes in diffs, fewer rewrites due to overcomplication, and clarifying questions come before implementation rather than after mistakes.
 
+## UI components
+
+Base UI (`@base-ui/react`) is the preferred component library. Radix (`@radix-ui/*`) is deprecated and will be refactored later: don't build new components on it, and leave the existing ones (`ui/Modal`, `ui/Switch`) alone until then.
+
+Phosphor (`@phosphor-icons/react`) is the preferred icon library. Heroicons (`@heroicons/react`) is deprecated and will be replaced later: use Phosphor for new icons, and leave existing Heroicons usages alone until then.
+
 ## Agent skills
 
 ### Issue tracker
