@@ -1,13 +1,14 @@
 import { resolve } from "path";
 
-import { scenes } from "./scenes";
-import { OUTPUT_DIR } from "./seed";
 import {
   getFirefoxPreviews,
   replaceFirefoxPreviews,
-} from "../commands/firefox";
-import { confirmOrExit, header, p, pc, step } from "../commands/ui";
-import { read, requireEnv } from "../commands/utils";
+} from "@ajgeel/ext-store/firefox";
+import { confirmOrExit, header, p, pc, step } from "@ajgeel/ext-store/ui";
+import { read, requireEnv } from "@ajgeel/ext-store/utils";
+
+import { scenes } from "./scenes";
+import { OUTPUT_DIR } from "./seed";
 
 /**
  * Replaces the Firefox listing's screenshots through AMO's API. Chrome's API

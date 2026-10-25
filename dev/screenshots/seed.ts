@@ -4,6 +4,7 @@ import { mkdtemp } from "fs/promises";
 import { tmpdir } from "os";
 import { join, resolve } from "path";
 
+import { DIST_DIR, ROOT_DIR } from "@ajgeel/ext-store/utils";
 import {
   type BrowserContext,
   chromium,
@@ -12,7 +13,6 @@ import {
 } from "playwright";
 
 import { geocode, LOCATION, TIME_ZONE, weather } from "./fixtures";
-import { DIST_DIR, ROOT_DIR } from "../commands/utils";
 
 export const SCREENSHOTS_DIR = resolve(DIST_DIR, "screenshots");
 /** Where the framed screenshots go, ready for the stores. */

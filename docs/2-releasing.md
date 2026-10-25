@@ -1,6 +1,6 @@
 # Releasing <a name="releasing"></a>
 
-UpTab is submitted to the Chrome Web Store and Firefox Add-ons with one script:
+UpTab is submitted to the Chrome Web Store and Firefox Add-ons with [ext-store](https://github.com/AJGeel/ext-store), which is shared with other extensions. Its README describes the credentials and what each check does. The commands are wired up as package scripts:
 
 ```sh
 bun store:status            # versions live and pending in each store

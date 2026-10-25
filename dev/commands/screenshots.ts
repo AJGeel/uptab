@@ -14,10 +14,10 @@ import { mkdir } from "fs/promises";
 import { resolve } from "path";
 import { pathToFileURL } from "url";
 
+import { header, p, pc, runCli, runTask, step } from "@ajgeel/ext-store/ui";
+import { ROOT_DIR } from "@ajgeel/ext-store/utils";
 import { chromium } from "playwright";
 
-import { header, p, pc, runCli, runTask, step } from "./ui";
-import { ROOT_DIR } from "./utils";
 import { NOW, TODAY } from "../screenshots/fixtures";
 import {
   LOCAL_PHOTOS,
