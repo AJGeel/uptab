@@ -2,6 +2,12 @@
 
 UpTab adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [V2.0.1] — 2026-10-24
+
+### ♻️ Changed
+
+- Behind the scenes: a maintenance release, nothing changes for you.
+
 ## [V2.0.0] — 2026-10-22
 
 ### ✨ Added

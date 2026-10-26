@@ -1,6 +1,7 @@
+import { type Stage, waitForImages } from "@ajgeel/ext-store/screenshots";
 import type { Page } from "playwright";
 
-import { addLocalPhotos, type Stage, waitForImages } from "./seed";
+import { addLocalPhotos } from "./seed";
 
 export type Scene = {
   id: string;
@@ -71,7 +72,7 @@ export const scenes: Scene[] = [
     photo: "mads-schmidt-rasmussen-xfngap-dtoe-unsplash",
     setup: async (page, stage) => {
       await stage("opening the forecast", async () => {
-        await page.getByRole("button", { name: /°C/ }).last().click();
+        await page.locator("[data-forecast]").last().click();
         await page.locator(".recharts-surface").first().waitFor();
       });
     },

@@ -1,9 +1,11 @@
 import { defineConfig } from "@ajgeel/ext-store";
 
 import { findLocalUrlInBuild } from "./dev/commands/localUrls";
+import { screenshots } from "./dev/screenshots/config";
 
 export default defineConfig({
   name: "UpTab",
+  screenshots,
   checkBuild: ({ dir }) => {
     // A development setting, such as a local catalogue, must never ship.
     const localUrl = findLocalUrlInBuild(dir);

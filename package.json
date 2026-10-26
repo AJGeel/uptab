@@ -20,9 +20,9 @@
     "store:auth": "ext-store auth",
     "store:status": "ext-store status",
     "store:submit": "ext-store submit",
-    "store:shots": "bun dev/commands/screenshots.ts",
-    "store:shots:setup": "bun dev/commands/screenshots.ts setup",
-    "store:shots:upload": "bun dev/commands/screenshots.ts upload"
+    "store:shots": "ext-store screenshots",
+    "store:shots:setup": "ext-store screenshots setup",
+    "store:shots:upload": "ext-store screenshots upload"
   },
   "type": "module",
   "dependencies": {
@@ -53,7 +53,7 @@
     "zustand": "^5.0.15"
   },
   "devDependencies": {
-    "@ajgeel/ext-store": "0.1.2",
+    "@ajgeel/ext-store": "file:../ext-store",
     "@eslint-react/eslint-plugin": "^5.23.3",
     "@eslint/js": "^10.0.1",
     "@tailwindcss/typography": "^0.5.20",
