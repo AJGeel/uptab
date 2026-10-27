@@ -1,4 +1,4 @@
-import { ChevronUpDownIcon } from "@heroicons/react/24/solid";
+import { CaretUpDownIcon } from "@phosphor-icons/react";
 
 import { SortMode, SortModes } from "@/src/services/bookmarks/sortBookmarks";
 import { cn } from "@/src/utils";
@@ -35,7 +35,7 @@ const SortBookmarks = ({ displayMode, sortMode, setSortMode }: SortProps) => (
         </option>
       ))}
     </select>
-    <ChevronUpDownIcon className="pointer-events-none absolute top-3 right-1.5 size-4 text-gray-500" />
+    <CaretUpDownIcon className="pointer-events-none absolute top-3 right-1.5 size-4 text-gray-500" />
   </div>
 );
 

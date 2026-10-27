@@ -1,4 +1,4 @@
-import { XMarkIcon } from "@heroicons/react/24/solid";
+import { XIcon } from "@phosphor-icons/react";
 import { motion } from "motion/react";
 import { useState } from "react";
 
@@ -92,7 +92,7 @@ const UpdateNotification = ({ variant = "sidebar" }: Props) => {
         }}
       >
         {RNG >= 0.95 ? "Shut UpTab" : "Close"}
-        <XMarkIcon className="size-4" />
+        <XIcon className="size-4" />
       </button>
     </button>
   );

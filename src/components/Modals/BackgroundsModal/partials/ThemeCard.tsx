@@ -1,4 +1,4 @@
-import { CheckCircleIcon } from "@heroicons/react/24/solid";
+import { CheckCircleIcon } from "@phosphor-icons/react";
 import { useEffect, useState } from "react";
 
 import { cn } from "@/src/utils";
@@ -91,7 +91,10 @@ const ThemeCard = ({
             />
           ))}
           {isSelected && (
-            <CheckCircleIcon className="absolute top-2 right-2 size-6 rounded-full bg-white text-sky-500 shadow-sm" />
+            <CheckCircleIcon
+              weight="fill"
+              className="absolute top-2 right-2 size-6 rounded-full bg-white text-sky-500 shadow-sm"
+            />
           )}
         </div>
         <div className="relative bg-white px-3 py-2">

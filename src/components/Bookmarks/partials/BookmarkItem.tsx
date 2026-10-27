@@ -1,4 +1,4 @@
-import { BackspaceIcon, PlusIcon } from "@heroicons/react/24/solid";
+import { BackspaceIcon, PlusIcon } from "@phosphor-icons/react";
 import { Bookmarks, tabs } from "webextension-polyfill";
 
 import { cn } from "@/src/utils";
@@ -44,6 +44,7 @@ const BookmarkItem = ({
     <div className="flex scale-90 items-center gap-1 opacity-0 duration-200 group-hover:scale-100 group-hover:opacity-100">
       {handleAddToShortlink && (
         <PlusIcon
+          weight="bold"
           onClick={(event) => {
             event.preventDefault();
             handleAddToShortlink();
@@ -52,6 +53,7 @@ const BookmarkItem = ({
         />
       )}
       <BackspaceIcon
+        weight="fill"
         onClick={(event) => {
           event.preventDefault();
           handleDelete();

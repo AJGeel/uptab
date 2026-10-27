@@ -1,5 +1,5 @@
-import { XMarkIcon } from "@heroicons/react/24/solid";
-import * as Dialog from "@radix-ui/react-dialog";
+import { Dialog } from "@base-ui/react/dialog";
+import { XIcon } from "@phosphor-icons/react";
 import {
   PropsWithChildren,
   ReactNode,
@@ -97,10 +97,6 @@ const useIsOverflowing = (element: HTMLElement | null) => {
   return isOverflowing;
 };
 
-/**
- * @deprecated Built on Radix, which is being phased out. Use Base UI for new
- * components. It'll be refactored later.
- */
 const Modal = ({ className, onClose, isVisible, ...modalProps }: Props) => {
   const { title, subtitle, banner, footer, children } =
     useFreezeContentsOnClose({
@@ -112,17 +108,24 @@ const Modal = ({ className, onClose, isVisible, ...modalProps }: Props) => {
   const isOverflowing = useIsOverflowing(body);
 
   return (
-    <Dialog.Root open={isVisible}>
+    <Dialog.Root
+      open={isVisible}
+      onOpenChange={(open) => {
+        if (!open) {
+          onClose();
+        }
+      }}
+    >
       <Dialog.Portal>
-        <Dialog.Overlay
+        <Dialog.Backdrop
           className="
             fixed inset-0 z-20 bg-black/50
-            data-[state=closed]:animate-overlayHide
-            data-[state=open]:animate-overlayShow
+            data-closed:animate-overlayHide
+            data-open:animate-overlayShow
           "
         />
 
-        <Dialog.Content
+        <Dialog.Popup
           className={cn(
             `
               fixed top-[50%] left-[50%] z-20
@@ -132,14 +135,12 @@ const Modal = ({ className, onClose, isVisible, ...modalProps }: Props) => {
               shadow-lg
               backdrop-blur-lg backdrop-brightness-190
               backdrop-saturate-150 focus:outline-hidden
-              data-[state=closed]:animate-contentHide
+              data-closed:animate-contentHide
 
-              data-[state=open]:animate-contentShow
+              data-open:animate-contentShow
             `,
             className,
           )}
-          onEscapeKeyDown={onClose}
-          onPointerDownOutside={onClose}
         >
           {/* The title and footer stay in view; only the part between scrolls. */}
           {banner && (
@@ -193,19 +194,21 @@ const Modal = ({ className, onClose, isVisible, ...modalProps }: Props) => {
             </div>
           )}
 
-          <Dialog.Close asChild onClick={onClose}>
-            <IconButton
-              aria-label="Close"
-              className={cn(
-                "absolute top-5 right-5 z-20 bg-transparent hover:bg-white",
-                banner && "bg-white/70 backdrop-blur-sm",
-              )}
-              hideBorder
-            >
-              <XMarkIcon className="size-5" />
-            </IconButton>
+          <Dialog.Close
+            aria-label="Close"
+            render={
+              <IconButton
+                className={cn(
+                  "absolute top-5 right-5 z-20 bg-transparent hover:bg-white",
+                  banner && "bg-white/70 backdrop-blur-sm",
+                )}
+                hideBorder
+              />
+            }
+          >
+            <XIcon className="size-5" />
           </Dialog.Close>
-        </Dialog.Content>
+        </Dialog.Popup>
       </Dialog.Portal>
     </Dialog.Root>
   );

@@ -1,4 +1,4 @@
-import { PencilIcon } from "@heroicons/react/24/solid";
+import { PencilSimpleIcon } from "@phosphor-icons/react";
 import { useState } from "react";
 
 import { Modals, useModalStore } from "@/src/hooks/stores/useModalStore";
@@ -59,7 +59,7 @@ const Shortlink = ({ item, isDragging }: Props) => {
             setActiveModal(Modals.shortlink);
           }}
         >
-          <PencilIcon className="size-4 text-gray-600" />
+          <PencilSimpleIcon weight="fill" className="size-4 text-gray-600" />
         </IconButton>
       </a>
     </Tooltip>

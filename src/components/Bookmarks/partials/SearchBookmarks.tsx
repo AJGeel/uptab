@@ -1,4 +1,4 @@
-import { MagnifyingGlassIcon } from "@heroicons/react/24/solid";
+import { MagnifyingGlassIcon } from "@phosphor-icons/react";
 
 type SearchBarProps = {
   searchQuery: string;
@@ -30,7 +30,7 @@ const SearchBookmarks = ({
       }}
     />
     <div className="pointer-events-none absolute top-0 left-0 flex items-center justify-center p-2.5">
-      <MagnifyingGlassIcon className="size-4 text-gray-600" />
+      <MagnifyingGlassIcon weight="bold" className="size-4 text-gray-600" />
     </div>
   </>
 );

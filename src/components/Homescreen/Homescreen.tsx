@@ -1,4 +1,4 @@
-import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
+import { CaretLeftIcon, CaretRightIcon } from "@phosphor-icons/react";
 
 import {
   Modals as ModalIds,
@@ -12,9 +12,9 @@ import { hotkeys } from "@/src/services/hotkeys/hotkeys";
 import { cn } from "@/src/utils";
 
 import InfoWidget from "../InfoWidget/InfoWidget";
+import BarButton from "./partials/BarButton";
 import { ActiveHotkeyIndicator } from "../Modals/HotkeysModal/partials/ActiveHotkeyIndicator";
 import Modals from "../Modals/Modals";
-import BarButton from "./partials/BarButton";
 import Sidebar from "../Sidebar/Sidebar";
 import { Background } from "../ui/Background";
 import UpdateNotification from "../UpdateNotification/UpdateNotification";
@@ -95,7 +95,7 @@ const Homescreen = () => {
                 className="active:scale-90"
                 onClick={() => browse(-1)}
               >
-                <ChevronLeftIcon className="size-4 drop-shadow-md drop-shadow-black/20" />
+                <CaretLeftIcon className="size-4 drop-shadow-md drop-shadow-black/20" />
               </BarButton>
               <BarButton
                 tooltip="Choose themes (B)"
@@ -110,7 +110,7 @@ const Homescreen = () => {
                 className="active:scale-90"
                 onClick={() => browse(1)}
               >
-                <ChevronRightIcon className="size-4 drop-shadow-md drop-shadow-black/20" />
+                <CaretRightIcon className="size-4 drop-shadow-md drop-shadow-black/20" />
               </BarButton>
               {showCredit &&
                 (activeBg.link ? (

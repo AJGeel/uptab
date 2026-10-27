@@ -1,31 +1,21 @@
-"use client";
-
-import * as SwitchPrimitives from "@radix-ui/react-switch";
-import * as React from "react";
+import { Switch as BaseSwitch } from "@base-ui/react/switch";
+import { ComponentProps } from "react";
 
 import { cn } from "@/src/utils";
 
-/**
- * @deprecated Built on Radix, which is being phased out. Use Base UI for new
- * components. It'll be refactored later.
- */
 const Switch = ({
   className,
   ...props
-}: React.ComponentProps<typeof SwitchPrimitives.Root>) => (
-  <SwitchPrimitives.Root
+}: ComponentProps<typeof BaseSwitch.Root>) => (
+  <BaseSwitch.Root
     className={cn(
-      "peer inline-flex h-6 w-11 shrink-0 cursor-pointer items-center rounded-full border-2 border-transparent bg-gray-200 ring-sky-500 transition-colors focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-hidden disabled:cursor-not-allowed disabled:opacity-50 data-[state=checked]:bg-sky-500",
+      "peer inline-flex h-6 w-11 shrink-0 cursor-pointer items-center rounded-full border-2 border-transparent bg-gray-200 ring-sky-500 transition-colors focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-hidden data-checked:bg-sky-500 data-disabled:cursor-not-allowed data-disabled:opacity-50",
       className,
     )}
     {...props}
   >
-    <SwitchPrimitives.Thumb
-      className={cn(
-        "pointer-events-none block size-5 rounded-full bg-white shadow-lg ring-0 transition-transform data-[state=checked]:translate-x-5 data-[state=unchecked]:translate-x-0",
-      )}
-    />
-  </SwitchPrimitives.Root>
+    <BaseSwitch.Thumb className="pointer-events-none block size-5 translate-x-0 rounded-full bg-white shadow-lg ring-0 transition-transform data-checked:translate-x-5" />
+  </BaseSwitch.Root>
 );
 
 export { Switch };

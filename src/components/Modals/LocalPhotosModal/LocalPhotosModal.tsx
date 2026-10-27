@@ -1,4 +1,4 @@
-import { CheckCircleIcon } from "@heroicons/react/24/solid";
+import { CheckCircleIcon } from "@phosphor-icons/react";
 import { useState } from "react";
 
 import { useBackgroundCatalogue } from "@/src/hooks/queries/useBackgroundCatalogue";
@@ -212,7 +212,10 @@ const LocalPhotosModal = () => {
                 }}
               >
                 {isSelected && (
-                  <CheckCircleIcon className="absolute top-1.5 right-1.5 size-6 rounded-full bg-white text-sky-500 shadow-sm" />
+                  <CheckCircleIcon
+                    weight="fill"
+                    className="absolute top-1.5 right-1.5 size-6 rounded-full bg-white text-sky-500 shadow-sm"
+                  />
                 )}
               </button>
             );
