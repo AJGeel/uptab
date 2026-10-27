@@ -10,6 +10,10 @@ type Option = {
   value: string;
   label: string;
   icon?: ReactNode;
+  /** Small, muted text after the label. */
+  hint?: string;
+  /** Runs on every click on the option, also when it's the one already chosen. */
+  onClick?: () => void;
 };
 
 type Action = {
@@ -84,6 +88,7 @@ const Select = ({
                 <BaseSelect.Item
                   key={option.value}
                   value={option.value}
+                  onClick={option.onClick}
                   className="flex cursor-pointer items-center gap-2 rounded-lg px-3 py-2 text-sm select-none data-highlighted:bg-sky-500/10 data-highlighted:text-sky-800"
                 >
                   <BaseSelect.ItemIndicator className="w-4">
@@ -93,6 +98,11 @@ const Select = ({
                     {option.label}
                   </BaseSelect.ItemText>
                   {option.icon}
+                  {option.hint && (
+                    <span className="ml-auto pl-4 text-xs text-gray-500">
+                      {option.hint}
+                    </span>
+                  )}
                 </BaseSelect.Item>
               ))}
             </BaseSelect.List>

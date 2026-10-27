@@ -40,6 +40,8 @@ const manifest: Manifest.WebExtensionManifest = {
   manifest_version: 3,
   name: "UpTab",
   permissions: ["storage", "unlimitedStorage", "geolocation", "bookmarks"],
+  // Asked for when someone first sorts bookmarks by their visits.
+  optional_permissions: ["history"],
   version: pkg.version,
   web_accessible_resources: [
     {

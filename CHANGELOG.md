@@ -6,13 +6,15 @@ UpTab adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### ✨ Added
 
+- Pick a bookmark from the search results with <kbd>↑</kbd> <kbd>↓</kbd> and <kbd>Enter</kbd>.
+- Sort bookmarks by **Recently visited** or **Most visited**. UpTab asks for access to your browsing history the first time you choose one, and only uses it for sorting.
 - Press <kbd>Enter</kbd> in the city search to add the top result.
 
 ### ♻️ Changed
 
 - Clearer help when your location can't be detected, with a friendlier warning and visible feedback on "try again".
 - Friendlier wording for loading and error messages.
-- "Sort by" bookmarks is now a dropdown that matches the rest of UpTab.
+- Sorting bookmarks is now a compact dropdown. Choose Name or Date added again to flip its direction.
 - Clearer focus outlines when you navigate with the keyboard.
 - Modals fade instead of sliding if your system prefers reduced motion.
 - Behind the scenes: updated the building blocks UpTab is made of.
