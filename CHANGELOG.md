@@ -2,16 +2,25 @@
 
 UpTab adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [V2.0.1] — 2026-10-27
+## [V2.1.0] — 2026-10-27
+
+### ✨ Added
+
+- Press <kbd>Enter</kbd> in the city search to add the top result.
 
 ### ♻️ Changed
 
 - Clearer help when your location can't be detected, with a friendlier warning and visible feedback on "try again".
-- Behind the scenes: maintenance.
+- Friendlier wording for loading and error messages.
+- "Sort by" bookmarks is now a dropdown that matches the rest of UpTab.
+- Clearer focus outlines when you navigate with the keyboard.
+- Modals fade instead of sliding if your system prefers reduced motion.
+- Behind the scenes: updated the building blocks UpTab is made of.
 
 ### 🐛 Fixed
 
 - The weather no longer jumps around when it finishes loading.
+- Pressing <kbd>Tab</kbd> skips the sidebar when it's closed, and the background when the sidebar is open.
 
 ## [V2.0.0] — 2026-10-22
 
