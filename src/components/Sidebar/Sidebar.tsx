@@ -30,7 +30,11 @@ const Sidebar = ({ isExpanded, setIsExpanded }: Props) => {
         isExpanded={isExpanded}
         setIsExpanded={setIsExpanded}
       />
-      <div className="flex h-full flex-col overflow-y-auto p-6">
+      {/* Off-screen while collapsed, so it's skipped by the keyboard and screen readers. */}
+      <div
+        inert={!isExpanded}
+        className="flex h-full flex-col overflow-y-auto p-6"
+      >
         {settings?.sidebar.showUpdates && <UpdateNotification />}
         {settings?.sidebar.showInfoWidget && <InfoWidget />}
         {settings?.sidebar.showShortlinks && <Shortlinks />}

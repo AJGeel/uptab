@@ -1,8 +1,7 @@
-import { CaretUpDownIcon } from "@phosphor-icons/react";
-
 import { SortMode, SortModes } from "@/src/services/bookmarks/sortBookmarks";
 import { cn } from "@/src/utils";
 
+import Select from "../../ui/Select";
 import { BookmarksProps } from "../Bookmarks";
 
 type SortProps = BookmarksProps & {
@@ -10,32 +9,31 @@ type SortProps = BookmarksProps & {
   setSortMode: (value: SortMode) => void;
 };
 
+const options = Object.values(SortModes).map((mode) => ({
+  value: mode,
+  label: mode,
+}));
+
 const SortBookmarks = ({ displayMode, sortMode, setSortMode }: SortProps) => (
   <div
     className={cn(
-      "relative flex shrink-0 items-stretch border-l bg-white",
+      "flex shrink-0 items-center border-l bg-white px-1",
       displayMode === "Popup" && "hidden",
     )}
   >
-    <label
-      className="pointer-events-none absolute top-2 left-2 text-gray-500"
-      htmlFor="sortSelect"
-    >
-      Sort by:
-    </label>
-    <select
-      className="cursor-pointer appearance-none bg-white pr-8 pl-20 text-right duration-150 hover:bg-sky-500/10 focus:outline-hidden"
-      id="sortSelect"
+    <Select
+      ariaLabel="Sort by"
       value={sortMode}
-      onChange={(event) => setSortMode(event.target.value as SortMode)}
-    >
-      {Object.keys(SortModes).map((mode) => (
-        <option key={mode} value={mode as SortMode}>
-          {SortModes[mode as SortMode]}
-        </option>
-      ))}
-    </select>
-    <CaretUpDownIcon className="pointer-events-none absolute top-3 right-1.5 size-4 text-gray-500" />
+      options={options}
+      triggerLabel={
+        <>
+          <span className="font-normal text-gray-500">Sort by:</span>{" "}
+          {SortModes[sortMode]}
+        </>
+      }
+      className="py-1"
+      onValueChange={(value) => setSortMode(value as SortMode)}
+    />
   </div>
 );
 

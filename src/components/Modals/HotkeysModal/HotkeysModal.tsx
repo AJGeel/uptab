@@ -23,7 +23,7 @@ const HotkeysModal = () => {
       footer={
         <div className="flex justify-end gap-2">
           <Button
-            label="Got it, thanks."
+            label="Time to go fast!"
             onClick={() => setActiveModal(null)}
           />
         </div>

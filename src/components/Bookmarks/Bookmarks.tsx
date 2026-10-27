@@ -65,7 +65,7 @@ const Bookmarks = ({ displayMode = "NewTab" }: BookmarksProps) => {
   }
 
   if (isError) {
-    return <p>Unable to display your bookmarks.</p>;
+    return <p>Couldn&apos;t load your bookmarks.</p>;
   }
 
   const sortedBookmarks = sortBookmarks(data, sortMode);
@@ -102,7 +102,9 @@ const Bookmarks = ({ displayMode = "NewTab" }: BookmarksProps) => {
         )}
       >
         {filteredBookmarks.length === 0 && (
-          <p className="px-2 py-1.5 text-gray-600">No results found...</p>
+          <p className="px-2 py-1.5 text-gray-600">
+            Nothing matches that. Try another word?
+          </p>
         )}
 
         {filteredBookmarks.map((bookmark) => {

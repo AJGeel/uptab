@@ -61,13 +61,15 @@ const WeatherForecastModal = () => {
       className="max-w-4xl"
       footer={
         <div className="flex justify-end">
-          <Button label="Got it, thanks." onClick={closeModal} />
+          <Button label="Looking good!" onClick={closeModal} />
         </div>
       }
     >
       {isError && (
         <Placeholder>
-          <p className="text-sm text-red-500">Unable to load weather data.</p>
+          <p className="text-sm text-red-500">
+            Couldn&apos;t fetch the weather. Check your connection?
+          </p>
         </Placeholder>
       )}
 

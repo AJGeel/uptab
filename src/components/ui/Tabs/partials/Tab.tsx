@@ -9,7 +9,7 @@ type TabProps = {
 const Tab = ({ isActive, label, onClick }: TabProps) => (
   <button
     className={cn(
-      "grow rounded-lg px-3 py-2 text-center font-medium duration-150",
+      "grow rounded-lg px-3 py-2 text-center font-medium ring-sky-500 duration-150 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-hidden",
       isActive
         ? "bg-white text-black shadow-xs outline-1 outline-black/5 outline-solid"
         : "text-gray-500 active:bg-gray-200",

@@ -78,13 +78,13 @@ const Select = ({
           alignItemWithTrigger={false}
           className="z-50"
         >
-          <BaseSelect.Popup className="min-w-48 origin-(--transform-origin) rounded-xl border bg-white p-1 text-black shadow-lg outline-hidden transition-[opacity,scale,translate] duration-150 ease-out data-ending-style:-translate-y-1 data-ending-style:scale-95 data-ending-style:opacity-0 data-starting-style:-translate-y-1 data-starting-style:scale-95 data-starting-style:opacity-0">
+          <BaseSelect.Popup className="min-w-48 origin-(--transform-origin) rounded-xl border bg-white p-1 text-black shadow-lg outline-hidden transition-[opacity,translate] duration-150 ease-out data-ending-style:-translate-y-1 data-ending-style:opacity-0 data-starting-style:-translate-y-1 data-starting-style:opacity-0">
             <BaseSelect.List>
               {options.map((option) => (
                 <BaseSelect.Item
                   key={option.value}
                   value={option.value}
-                  className="flex cursor-default items-center gap-2 rounded-lg px-3 py-2 text-sm select-none data-highlighted:bg-sky-500/10 data-highlighted:text-sky-800"
+                  className="flex cursor-pointer items-center gap-2 rounded-lg px-3 py-2 text-sm select-none data-highlighted:bg-sky-500/10 data-highlighted:text-sky-800"
                 >
                   <BaseSelect.ItemIndicator className="w-4">
                     <CheckIcon className="size-4" />

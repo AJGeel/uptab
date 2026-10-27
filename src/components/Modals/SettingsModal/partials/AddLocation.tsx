@@ -64,13 +64,18 @@ const AddLocation = ({ location, onChange }: Props) => {
 
   return (
     <div className="space-y-2 pt-3">
-      <div className="relative overflow-hidden rounded-xl border bg-white">
+      <div className="relative rounded-xl border bg-white ring-sky-500 duration-150 focus-within:ring-2 focus-within:ring-offset-2">
         <input
-          className="w-full bg-white px-3 py-2 pl-9 font-sans focus-within:outline-hidden"
+          className="w-full rounded-xl bg-white px-3 py-2 pl-9 font-sans focus-within:outline-hidden"
           placeholder="Search for a city..."
           type="search"
           aria-label="Add a location"
           value={query}
+          onKeyDown={(event) => {
+            if (event.key === "Enter" && isSearching && places?.length) {
+              handleAdd(places[0]);
+            }
+          }}
           onChange={(event) => {
             setQuery(event.target.value);
             setNotice(undefined);

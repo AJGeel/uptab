@@ -135,9 +135,9 @@ const Modal = ({ className, onClose, isVisible, ...modalProps }: Props) => {
               shadow-lg
               backdrop-blur-lg backdrop-brightness-190
               backdrop-saturate-150 focus:outline-hidden
-              data-closed:animate-contentHide
+              data-closed:animate-contentHide data-open:animate-contentShow
 
-              data-open:animate-contentShow
+              motion-reduce:data-closed:animate-overlayHide motion-reduce:data-open:animate-overlayShow
             `,
             className,
           )}

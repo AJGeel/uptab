@@ -23,7 +23,7 @@ const BookmarkItem = ({
 }: Props) => (
   <a
     className={cn(
-      "group flex items-center gap-3 px-2 py-1.5 text-gray-600 outline-hidden duration-150 focus-within:outline-hidden hover:bg-sky-500/10 hover:text-sky-800",
+      "group flex items-center gap-3 px-2 py-1.5 text-gray-600 outline-hidden duration-150 focus-within:outline-hidden hover:bg-sky-500/10 hover:text-sky-800 focus-visible:bg-sky-500/10 focus-visible:text-sky-800",
       isFocused && "first:bg-sky-500/10",
     )}
     onClick={(event) => {

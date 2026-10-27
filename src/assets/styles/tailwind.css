@@ -115,17 +115,55 @@
 
 /*
   Tailwind CSS v4 dropped these v3 defaults: buttons no longer get a pointer
-  cursor, and placeholders use the text colour at half opacity.
+  cursor, and placeholders use the text colour at half opacity. Every other
+  interactive element gets the pointer too.
 */
 @layer base {
   button:not(:disabled),
-  [role="button"]:not(:disabled) {
+  a[href],
+  select:not(:disabled),
+  summary,
+  label[for],
+  input:is([type="checkbox"], [type="radio"], [type="file"], [type="submit"]):not(:disabled),
+  :is(
+      [role="button"],
+      [role="checkbox"],
+      [role="combobox"],
+      [role="menuitem"],
+      [role="option"],
+      [role="radio"],
+      [role="switch"],
+      [role="tab"]
+    ):not(:disabled, [aria-disabled="true"], [data-disabled]) {
     cursor: pointer;
   }
 
   input::placeholder,
   textarea::placeholder {
     color: var(--color-gray-400);
+  }
+}
+
+/*
+  The focus ring for keyboard users, for anything without a ring of its own.
+  Elements that draw their own use `focus-visible:outline-hidden`, which wins.
+*/
+@layer base {
+  :is(
+      a[href],
+      button,
+      input,
+      select,
+      summary,
+      textarea,
+      [role="checkbox"],
+      [role="combobox"],
+      [role="radio"],
+      [role="switch"],
+      [role="tab"]
+    ):focus-visible {
+    outline: 2px solid var(--color-sky-500);
+    outline-offset: 2px;
   }
 }
 

@@ -78,7 +78,7 @@ const Shortlinks = () => {
   }
 
   if (isError) {
-    return <p>Unable to display your shortlinks.</p>;
+    return <p>Couldn&apos;t load your shortlinks.</p>;
   }
 
   return (

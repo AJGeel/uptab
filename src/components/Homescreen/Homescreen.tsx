@@ -60,6 +60,7 @@ const Homescreen = () => {
         >
           {settings?.homescreen?.showInfoWidget && (
             <InfoWidget
+              inert={isSidebarOpen}
               className={cn(
                 "p-6 pb-16 pl-20 duration-500",
                 isSidebarOpen && "pointer-events-none translate-x-40 opacity-0",
@@ -68,6 +69,7 @@ const Homescreen = () => {
           )}
           {settings?.sidebar.showUpdates && (
             <div
+              inert={isSidebarOpen}
               className={cn(
                 "absolute top-6 right-6 w-max max-w-md duration-500",
                 isSidebarOpen && "pointer-events-none translate-x-40 opacity-0",
@@ -84,6 +86,7 @@ const Homescreen = () => {
           />
           <div className="relative mt-auto self-start p-2">
             <div
+              inert={isSidebarOpen}
               className={cn(
                 "flex items-center gap-1 rounded-2xl p-1 text-white opacity-100 duration-500 text-shadow-black/20 text-shadow-md focus-within:bg-black/30 focus-within:opacity-100 hover:bg-black/30 hover:opacity-100",
                 isSidebarOpen && "pointer-events-none translate-x-40 opacity-0",

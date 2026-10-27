@@ -13,6 +13,7 @@ import Loader from "../ui/Loader";
 
 type Props = {
   className?: string;
+  inert?: boolean;
 };
 
 const Wrapper = ({ children, className }: PropsWithChildren<Props>) => (
@@ -30,7 +31,7 @@ const Wrapper = ({ children, className }: PropsWithChildren<Props>) => (
   </motion.div>
 );
 
-const InfoWidget = ({ className }: Props) => {
+const InfoWidget = ({ className, inert }: Props) => {
   const {
     status,
     data: { weatherData, locationData },
@@ -39,7 +40,7 @@ const InfoWidget = ({ className }: Props) => {
   const openSettingsTab = useModalStore((state) => state.openSettingsTab);
 
   return (
-    <div className={className}>
+    <div className={className} inert={inert}>
       <AnimatePresence mode="wait" initial={false}>
         {status === "locationError" && (
           <Wrapper key="location" className="flex items-center gap-4">
@@ -67,13 +68,13 @@ const InfoWidget = ({ className }: Props) => {
 
         {status === "loading" && (
           <Wrapper key="loading">
-            <Loader label="Checking the weather..." className="h-10.5" />
+            <Loader label="Looking out the window..." className="h-10.5" />
           </Wrapper>
         )}
 
         {status === "weatherError" && (
           <Wrapper key="error">
-            <span>Unable to display weather information.</span>
+            <span>Couldn&apos;t fetch the weather. Check your connection?</span>
           </Wrapper>
         )}
 

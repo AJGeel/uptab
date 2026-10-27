@@ -47,7 +47,7 @@ const WeatherWidget = ({ weatherData, area }: WeatherWidgetProps) => {
           <Tooltip label="See the weather forecast" side="bottom">
             <button
               data-forecast
-              className="rounded-xs text-left text-xs opacity-70 ring-sky-500 after:absolute after:inset-0 after:rounded-lg focus-visible:outline-hidden focus-visible:after:ring-2"
+              className="rounded-xs text-left text-xs opacity-70 after:absolute after:inset-0 after:rounded-2xl focus-visible:outline-hidden focus-visible:after:outline-2 focus-visible:after:outline-offset-2 focus-visible:after:outline-sky-500"
               onClick={() => setActiveModal("weatherForecast")}
               onFocus={loadForecastChart}
               onPointerEnter={loadForecastChart}
