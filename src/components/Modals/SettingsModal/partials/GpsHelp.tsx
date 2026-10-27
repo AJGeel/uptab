@@ -1,4 +1,4 @@
-import { WarningCircleIcon } from "@phosphor-icons/react";
+import { WarningIcon } from "@phosphor-icons/react";
 
 import {
   getFailureHelp,
@@ -7,44 +7,51 @@ import {
 import { GpsFailure } from "@/src/services/location/types";
 
 import Button, { buttonVariants } from "../../../ui/Button";
+import Loader from "../../../ui/Loader";
 
 type Props = {
   failure: GpsFailure;
+  isRetrying: boolean;
   onRetry: () => void;
 };
 
 const isFirefox = navigator.userAgent.includes("Firefox");
 
 /** Why the current location isn't working, and what to try. */
-const GpsHelp = ({ failure, onRetry }: Props) => (
-  <div
-    role="alert"
-    className="space-y-2 rounded-xl bg-red-50 p-3 text-sm text-red-950"
-  >
-    <p className="flex items-center gap-2 font-semibold">
-      <WarningCircleIcon
-        weight="fill"
-        className="size-5 shrink-0 text-red-600"
-      />
-      {getFailureReason(failure)}
-    </p>
+const GpsHelp = ({ failure, isRetrying, onRetry }: Props) => {
+  return (
+    <div
+      role="status"
+      className="space-y-2 rounded-xl bg-amber-50 p-3 text-sm text-amber-950"
+    >
+      <p className="flex items-center gap-2 font-semibold">
+        <WarningIcon weight="fill" className="size-5 shrink-0 text-amber-500" />
+        We couldn&apos;t detect your location automatically.
+      </p>
 
-    <ul className="list-disc space-y-1 pl-9">
-      {getFailureHelp(failure, isFirefox).map((step) => (
-        <li key={step}>{step}</li>
-      ))}
-    </ul>
+      <p className="pl-7">{getFailureReason(failure)} To fix this:</p>
 
-    <p className="pl-7">
-      Then{" "}
-      <Button
-        label="try again"
-        variant={buttonVariants.inline}
-        onClick={onRetry}
-      />
-      , or pick a saved place below.
-    </p>
-  </div>
-);
+      <ul className="list-disc space-y-1 pl-12">
+        {getFailureHelp(failure, isFirefox).map((step) => (
+          <li key={step}>{step}</li>
+        ))}
+      </ul>
+
+      {isRetrying ? (
+        <Loader label="Trying again..." className="pl-7" />
+      ) : (
+        <p className="pl-7">
+          Then{" "}
+          <Button
+            label="try again"
+            variant={buttonVariants.inline}
+            onClick={onRetry}
+          />
+          . Or skip this and add a city yourself below.
+        </p>
+      )}
+    </div>
+  );
+};
 
 export default GpsHelp;

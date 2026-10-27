@@ -98,15 +98,18 @@ const Select = ({
             </BaseSelect.List>
 
             {action && (
-              <button
-                className="mt-1 w-full rounded-lg border-t border-black/10 px-3 py-2 text-left text-sm text-sky-800 duration-150 hover:bg-sky-500/10 focus-visible:bg-sky-500/10 focus-visible:outline-hidden"
-                onClick={() => {
-                  setIsOpen(false);
-                  action.onClick();
-                }}
-              >
-                {action.label}
-              </button>
+              <>
+                <hr className="mt-1 border-t border-black/10" />
+                <button
+                  className="mt-1 w-full rounded-lg px-3 py-2 text-left text-sm text-sky-800 duration-150 hover:bg-sky-500/10 focus-visible:bg-sky-500/10 focus-visible:outline-hidden"
+                  onClick={() => {
+                    setIsOpen(false);
+                    action.onClick();
+                  }}
+                >
+                  {action.label}
+                </button>
+              </>
             )}
           </BaseSelect.Popup>
         </BaseSelect.Positioner>

@@ -11,20 +11,11 @@ type Props = {
   icon?: ReactNode;
   isActive: boolean;
   onSelect: () => void;
-  /** Shown under the label, as part of the same item. */
-  details?: ReactNode;
   /** Without this, the row can't be deleted: it's GPS. */
   onDelete?: () => void;
 };
 
-const LocationRow = ({
-  label,
-  icon,
-  isActive,
-  onSelect,
-  details,
-  onDelete,
-}: Props) => (
+const LocationRow = ({ label, icon, isActive, onSelect, onDelete }: Props) => (
   <div
     className="group flex cursor-pointer items-center gap-3 border-b border-b-black/10 py-3 last:border-b-0"
     onClick={onSelect}
@@ -46,12 +37,6 @@ const LocationRow = ({
         {label}
         {icon}
       </p>
-
-      {details && (
-        <div className="cursor-default" onClick={(e) => e.stopPropagation()}>
-          {details}
-        </div>
-      )}
     </div>
 
     {onDelete && (

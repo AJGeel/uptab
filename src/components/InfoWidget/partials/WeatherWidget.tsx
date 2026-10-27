@@ -40,7 +40,7 @@ const WeatherWidget = ({ weatherData, area }: WeatherWidgetProps) => {
 
       <div className="flex items-center gap-2">
         <div className="flex-col">
-          <div className="relative z-10">
+          <div className="relative z-10 -mb-0.5">
             <LocationSwitcher area={area ?? "Unknown location"} />
           </div>
 
@@ -59,7 +59,7 @@ const WeatherWidget = ({ weatherData, area }: WeatherWidgetProps) => {
 
         {weatherDescription && (
           <img
-            className="w-10"
+            className="size-10"
             src={weatherDescription.image}
             alt={weatherDescription.description}
           />

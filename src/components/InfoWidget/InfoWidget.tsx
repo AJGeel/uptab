@@ -67,7 +67,7 @@ const InfoWidget = ({ className }: Props) => {
 
         {status === "loading" && (
           <Wrapper key="loading">
-            <Loader label="Checking the weather..." className="h-10" />
+            <Loader label="Checking the weather..." className="h-10.5" />
           </Wrapper>
         )}
 
