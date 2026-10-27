@@ -63,3 +63,4 @@ See [Releasing](/docs/2-releasing.md) to submit a build to the stores.
 - [Chrome Extensions (Manifest V3)](https://developer.chrome.com/docs/extensions/mv3/)
 - [WebExtension Polyfill 🐐](https://github.com/mozilla/webextension-polyfill)
 - [Tailwind CSS](https://tailwindcss.com/docs/configuration)
+- [Base UI](https://base-ui.com/react/overview/quick-start) for components and [Phosphor](https://phosphoricons.com/) for icons

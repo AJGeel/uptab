@@ -2,11 +2,16 @@
 
 UpTab adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [V2.0.1] — 2026-10-24
+## [V2.0.1] — 2026-10-27
 
 ### ♻️ Changed
 
-- Behind the scenes: a maintenance release, nothing changes for you.
+- Clearer help when your location can't be detected, with a friendlier warning and visible feedback on "try again".
+- Behind the scenes: maintenance.
+
+### 🐛 Fixed
+
+- The weather no longer jumps around when it finishes loading.
 
 ## [V2.0.0] — 2026-10-22
 
