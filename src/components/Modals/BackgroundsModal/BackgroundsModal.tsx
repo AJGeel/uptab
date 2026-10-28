@@ -13,6 +13,7 @@ import { hotkeys } from "@/src/services/hotkeys/hotkeys";
 import ThemeCard, { Cover } from "./partials/ThemeCard";
 import Button, { buttonVariants } from "../../ui/Button";
 import Modal from "../../ui/Modal";
+import QuickSettings from "../SettingsModal/partials/QuickSettings";
 
 const COVER_COUNT = 4;
 
@@ -41,6 +42,9 @@ const BackgroundsModal = () => {
   const [refreshResult, setRefreshResult] = useState<string | null>(null);
   const activeModal = useModalStore((state) => state.activeModal);
   const setActiveModal = useModalStore((state) => state.setActiveModal);
+  const openSettingsSection = useModalStore(
+    (state) => state.openSettingsSection,
+  );
 
   useKeyPress(hotkeys.b, () => {
     setActiveModal(
@@ -105,8 +109,8 @@ const BackgroundsModal = () => {
       title="Backgrounds"
       subtitle={
         <>
-          Pick the themes you&apos;d like to see. You get a different photo
-          every day, or browse them with the ← and → arrow keys.{" "}
+          Pick the themes you&apos;d like to see, or browse them with the ← and
+          → arrow keys.{" "}
           <a
             href="https://uptab.vercel.app/backgrounds"
             className="underline duration-150 hover:text-sky-800 hover:no-underline"
@@ -150,6 +154,10 @@ const BackgroundsModal = () => {
           again.
         </p>
       )}
+      <QuickSettings
+        ids={["photos.photoChange"]}
+        onOpenAll={() => openSettingsSection("photos")}
+      />
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
         {!themes.some((theme) => theme.id === LOCAL_THEME) && (
           <button

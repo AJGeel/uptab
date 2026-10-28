@@ -18,9 +18,13 @@ export type Props = {
 const Sidebar = ({ isExpanded, setIsExpanded }: Props) => {
   const { data: settings } = useSettings();
   const setActiveModal = useModalStore((state) => state.setActiveModal);
+  const openSettingsSection = useModalStore(
+    (state) => state.openSettingsSection,
+  );
 
   return (
     <div
+      data-setting="sidebar.isOpen"
       className={cn(
         "absolute top-0 left-0 z-20 h-screen w-full max-w-150 flex-1 bg-white duration-500 [--widget-hover:rgb(0_0_0/0.05)]",
         isExpanded ? "translate-x-0" : "-translate-x-full",
@@ -36,14 +40,16 @@ const Sidebar = ({ isExpanded, setIsExpanded }: Props) => {
         className="flex h-full flex-col overflow-y-auto p-6"
       >
         {settings?.sidebar.showUpdates && <UpdateNotification />}
-        {settings?.sidebar.showInfoWidget && <InfoWidget />}
+        {settings?.sidebar.showInfoWidget && (
+          <InfoWidget settingId="sidebar.showInfoWidget" />
+        )}
         {settings?.sidebar.showShortlinks && <Shortlinks />}
         {settings?.sidebar.showBookmarks && <Bookmarks />}
         <div className="mt-auto flex items-center gap-2 pt-6 first:mt-0">
           <Button
             className="leading-normal first:mt-0"
             variant={buttonVariants.inline}
-            onClick={() => setActiveModal(Modals.settings)}
+            onClick={() => openSettingsSection("sidebar")}
             label="Edit preferences"
           />
           <p>&middot;</p>

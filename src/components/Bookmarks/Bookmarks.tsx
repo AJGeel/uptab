@@ -134,6 +134,7 @@ const Bookmarks = ({ displayMode = "NewTab" }: BookmarksProps) => {
 
   return (
     <div
+      data-setting="sidebar.showBookmarks"
       className={cn(
         "relative mt-10 w-full overflow-hidden rounded-2xl border bg-white first:mt-0",
         displayMode === "Popup" && "shrink-0 shadow-lg shadow-sky-800/30",

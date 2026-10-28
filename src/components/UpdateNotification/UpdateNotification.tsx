@@ -67,6 +67,7 @@ const UpdateNotification = ({ variant = "sidebar" }: Props) => {
 
   return (
     <button
+      data-setting="sidebar.showUpdates"
       className={cn(
         "flex w-full items-center gap-2 rounded-2xl p-2 pl-4 duration-150",
         variant === "sidebar"

@@ -17,7 +17,9 @@ type Props = {
 /** Quick-switches between the current location and the saved ones. */
 const LocationSwitcher = ({ area }: Props) => {
   const { data: settings, setLocationSettings } = useSettings();
-  const openSettingsTab = useModalStore((state) => state.openSettingsTab);
+  const openSettingsSection = useModalStore(
+    (state) => state.openSettingsSection,
+  );
 
   if (!settings) {
     return <p className="font-medium">{getShortAreaName(area)}</p>;
@@ -43,7 +45,7 @@ const LocationSwitcher = ({ area }: Props) => {
       triggerLabel={getShortAreaName(area)}
       action={{
         label: "Manage locations",
-        onClick: () => openSettingsTab("Location"),
+        onClick: () => openSettingsSection("weather"),
       }}
       onValueChange={(value) =>
         setLocationSettings(setActiveLocation(location, value))

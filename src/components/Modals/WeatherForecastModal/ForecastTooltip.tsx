@@ -1,5 +1,12 @@
 import { ReactNode } from "react";
 
+import { useSettings } from "@/src/hooks/useSettings";
+import { toDisplayTemperature } from "@/src/services/weather/temperature";
+import {
+  toDisplayWindSpeed,
+  windSymbol,
+} from "@/src/services/weather/windSpeed";
+
 import {
   ForecastChartPoint,
   formatTime,
@@ -24,6 +31,10 @@ type ForecastTooltipProps = {
 };
 
 const ForecastTooltip = ({ active, point }: ForecastTooltipProps) => {
+  const { data: settings } = useSettings();
+  const unit = settings?.units.temperature ?? "celsius";
+  const windUnit = settings?.units.wind ?? "kmh";
+
   if (!active || !point) {
     return null;
   }
@@ -34,12 +45,12 @@ const ForecastTooltip = ({ active, point }: ForecastTooltipProps) => {
   return (
     <div className="min-w-40 rounded-lg bg-white/95 px-3 py-2 text-xs shadow-md ring-1 ring-black/5">
       <p className="text-black/50">
-        {getDayLabel(date)} · {formatTime(date)}
+        {getDayLabel(date)} · {formatTime(date, settings?.dateTime.timeFormat)}
       </p>
 
       <div className="mb-1.5 flex items-center justify-between gap-3">
         <p className="text-lg font-medium tabular-nums">
-          {Math.round(point.temperature)}°
+          {Math.round(toDisplayTemperature(point.temperature, unit))}°
         </p>
 
         {weather?.image && (
@@ -55,11 +66,18 @@ const ForecastTooltip = ({ active, point }: ForecastTooltipProps) => {
         {weather?.description && (
           <TooltipRow label="Sky">{weather.description}</TooltipRow>
         )}
-        <TooltipRow label="Feels like">{point.apparentTemperature}°</TooltipRow>
+        {settings?.forecast.showFeelsLike && (
+          <TooltipRow label="Feels like">
+            {toDisplayTemperature(point.apparentTemperature, unit)}°
+          </TooltipRow>
+        )}
         <TooltipRow label="Precipitation">{point.precipitation} mm</TooltipRow>
         {point.snowfall > 0 && (
           <TooltipRow label="Snow">{point.snowfall} cm</TooltipRow>
         )}
+        <TooltipRow label="Wind">
+          {toDisplayWindSpeed(point.windSpeed, windUnit)} {windSymbol(windUnit)}
+        </TooltipRow>
         <TooltipRow label="Humidity">{point.humidity}%</TooltipRow>
       </dl>
     </div>

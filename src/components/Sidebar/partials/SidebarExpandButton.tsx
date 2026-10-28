@@ -7,6 +7,7 @@ import { Props } from "../Sidebar";
 
 export const SidebarExpandButton = ({ isExpanded, setIsExpanded }: Props) => (
   <IconButton
+    data-setting="sidebar.isOpen"
     className={cn(
       "group absolute top-7 mr-6 sm:mr-0",
       isExpanded ? "-right-4" : "-right-14",

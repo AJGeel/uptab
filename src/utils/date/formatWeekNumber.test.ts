@@ -23,4 +23,10 @@ describe("formatWeekNumber", () => {
     expect(result1).toBe(`Week ${getISOWeek(date1)}`);
     expect(result2).toBe(`Week ${getISOWeek(date2)}`);
   });
+
+  it("counts weeks that start on Sunday the US way", () => {
+    // Saturday 31 Dec 2022 is in week 53 by the US count, and a Sunday starts week 1.
+    expect(formatWeekNumber(new Date(2022, 11, 31), "sunday")).toBe("Week 53");
+    expect(formatWeekNumber(new Date(2023, 0, 1), "sunday")).toBe("Week 1");
+  });
 });

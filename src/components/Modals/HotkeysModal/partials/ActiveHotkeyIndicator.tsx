@@ -52,7 +52,9 @@ export const ActiveHotkeyIndicator = () => {
       )}
     >
       {pressedKey && (
-        <Kbd size="lg">{hotkeyDescriptions[pressedKey].keyDisplay}</Kbd>
+        <Kbd size="lg" hint={false}>
+          {hotkeyDescriptions[pressedKey].keyDisplay}
+        </Kbd>
       )}
     </div>
   );

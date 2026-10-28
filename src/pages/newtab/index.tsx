@@ -4,8 +4,10 @@ import Newtab from "@/pages/newtab/Newtab";
 import "@/assets/styles/tailwind.css";
 import "@/pages/newtab/index.css";
 import { initSentry } from "@/src/services/initSentry";
+import { restoreAccent } from "@/src/services/settings/accents";
 
 initSentry();
+restoreAccent();
 
 function init() {
   const rootContainer = document.querySelector("#__root");

@@ -4,6 +4,7 @@ import {
   Modals as ModalIds,
   useModalStore,
 } from "@/src/hooks/stores/useModalStore";
+import { useAccent } from "@/src/hooks/useAccent";
 import { useEasterEggs } from "@/src/hooks/useEasterEggs";
 import useKeyPress from "@/src/hooks/useKeyPress";
 import { useRandomBackground } from "@/src/hooks/useRandomBackground/useRandomBackground";
@@ -23,6 +24,9 @@ const Homescreen = () => {
   const { data: settings, isPending, toggleSidebarSetting } = useSettings();
   const { activeBg, onError, browse } = useRandomBackground();
   const setActiveModal = useModalStore((state) => state.setActiveModal);
+  const openSettingsSection = useModalStore(
+    (state) => state.openSettingsSection,
+  );
   const showCredit = settings?.homescreen.showPhotoCredit && activeBg?.author;
 
   const isSidebarOpen = settings?.sidebar?.isOpen;
@@ -31,6 +35,7 @@ const Homescreen = () => {
   useKeyPress("ArrowRight", () => browse(1));
   useKeyPress("ArrowLeft", () => browse(-1));
   useEasterEggs();
+  useAccent();
 
   if (isPending) {
     return <></>;
@@ -60,6 +65,7 @@ const Homescreen = () => {
         >
           {settings?.homescreen?.showInfoWidget && (
             <InfoWidget
+              settingId="homescreen.showInfoWidget"
               inert={isSidebarOpen}
               className={cn(
                 "p-6 pb-16 pl-20 duration-500",
@@ -101,6 +107,7 @@ const Homescreen = () => {
                 <CaretLeftIcon className="size-4 drop-shadow-md drop-shadow-black/20" />
               </BarButton>
               <BarButton
+                data-setting="photos.themes photos.photoChange"
                 tooltip="Choose themes (B)"
                 className="flex items-center gap-2 px-3 text-shadow-black/20 text-shadow-md active:scale-95"
                 onClick={() => setActiveModal(ModalIds.backgrounds)}
@@ -119,17 +126,42 @@ const Homescreen = () => {
                 (activeBg.link ? (
                   <a
                     href={activeBg.link}
+                    data-setting="homescreen.showPhotoCredit"
                     className="mr-1 ml-3 rounded-xl p-2 px-3 duration-150 text-shadow-black/20 text-shadow-md hover:bg-white/15 active:scale-95"
                   >
                     Photo by {activeBg.author}
                   </a>
                 ) : (
-                  <p className="mr-1 ml-3 p-2 px-3 text-shadow-black/20 text-shadow-md">
+                  <p
+                    data-setting="homescreen.showPhotoCredit"
+                    className="mr-1 ml-3 p-2 px-3 text-shadow-black/20 text-shadow-md"
+                  >
                     Photo by {activeBg.author}
                   </p>
                 ))}
             </div>
           </div>
+          {settings?.homescreen.showPreferencesButton && (
+            <div className="absolute right-0 bottom-0 p-2">
+              <div
+                inert={isSidebarOpen}
+                data-setting="homescreen.showPreferencesButton"
+                className={cn(
+                  "rounded-2xl p-1 text-white duration-500 text-shadow-black/20 text-shadow-md focus-within:bg-black/30 hover:bg-black/30",
+                  isSidebarOpen &&
+                    "pointer-events-none translate-x-40 opacity-0",
+                )}
+              >
+                <BarButton
+                  tooltip="Edit preferences (/)"
+                  className="flex items-center gap-2 px-3 text-shadow-black/20 text-shadow-md active:scale-95"
+                  onClick={() => openSettingsSection("homescreen")}
+                >
+                  Edit preferences
+                </BarButton>
+              </div>
+            </div>
+          )}
         </Background>
       </div>
     </>

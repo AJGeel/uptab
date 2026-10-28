@@ -4,7 +4,9 @@ import {
   buildDailySummaries,
   buildForecastChartData,
   getDayBoundaries,
+  formatHour,
   getTimeTicks,
+  hasRoomForFirstDayLabel,
   HourlyForecast,
 } from "./forecastChartData";
 
@@ -24,6 +26,7 @@ const hour = (
   snowfall: 0,
   weather_code: 0,
   is_day: 1,
+  wind_speed_10m: 12,
   ...overrides,
 });
 
@@ -38,6 +41,18 @@ afterEach(() => {
 });
 
 describe("buildForecastChartData", () => {
+  it("stops after the number of days asked for", () => {
+    const hourly = [
+      hour("2026-10-16T15:00"),
+      hour("2026-10-17T15:00"),
+      hour("2026-10-18T15:00"),
+    ];
+
+    expect(buildForecastChartData(hourly, NOW, 1)).toHaveLength(1);
+    expect(buildForecastChartData(hourly, NOW, 2)).toHaveLength(2);
+    expect(buildForecastChartData(hourly, NOW, 7)).toHaveLength(3);
+  });
+
   it("keeps hours from the current hour through the last forecast day", () => {
     const hourly = [
       hour("2026-10-16T13:00"),
@@ -179,5 +194,55 @@ describe("buildDailySummaries", () => {
 
   it("returns nothing for no points", () => {
     expect(buildDailySummaries([])).toEqual([]);
+  });
+});
+
+describe("getTimeTicks with several days", () => {
+  it("only ticks at noon beyond three days", () => {
+    const hourly = Array.from({ length: 4 }, (_, day) =>
+      [6, 12, 18].map((h) => hour(`2026-10-${17 + day}T${h}:00`)),
+    ).flat();
+    const points = buildForecastChartData(hourly, NOW, 7);
+
+    expect(getTimeTicks(points)).toEqual([
+      "2026-10-17T12:00",
+      "2026-10-18T12:00",
+      "2026-10-19T12:00",
+      "2026-10-20T12:00",
+    ]);
+  });
+});
+
+describe("formatHour", () => {
+  it("is short in both formats", () => {
+    const date = new Date(2026, 9, 16, 18, 0);
+
+    expect(formatHour(date)).toBe("18:00");
+    expect(formatHour(date, "12h")).toBe("6 PM");
+  });
+});
+
+describe("hasRoomForFirstDayLabel", () => {
+  it("is false when the first day is nearly over", () => {
+    const hourly = [
+      hour("2026-10-16T23:00"),
+      ...Array.from({ length: 24 }, (_, h) =>
+        hour(`2026-10-17T${String(h).padStart(2, "0")}:00`),
+      ),
+    ];
+
+    expect(
+      hasRoomForFirstDayLabel(buildForecastChartData(hourly, NOW, 2)),
+    ).toBe(false);
+  });
+
+  it("is true when there are hours enough left", () => {
+    const hourly = ["15", "18", "21", "23"].map((h) =>
+      hour(`2026-10-16T${h}:00`),
+    );
+
+    expect(
+      hasRoomForFirstDayLabel(buildForecastChartData(hourly, NOW, 2)),
+    ).toBe(true);
   });
 });

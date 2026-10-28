@@ -12,23 +12,24 @@ export const Modals = {
 
 export type Modals = (typeof Modals)[keyof typeof Modals];
 
-export type SettingsTab = "Sidebar" | "Homescreen" | "Backgrounds" | "Location";
+export type SettingsSection =
+  "sidebar" | "homescreen" | "photos" | "weather" | "time" | "appearance";
 
 type State = {
   activeModal: Modals | null;
-  /** The tab the settings modal opens on, instead of the first. */
-  settingsTab: SettingsTab | null;
+  /** The section the settings modal opens on, instead of the first. */
+  settingsSection: SettingsSection | null;
 };
 
 type Actions = {
   setActiveModal: (to: Modals | null) => void;
-  openSettingsTab: (tab: SettingsTab) => void;
+  openSettingsSection: (section: SettingsSection) => void;
 };
 
 export const useModalStore = create<State & Actions>()((set) => ({
   activeModal: null,
-  settingsTab: null,
-  setActiveModal: (value) => set({ activeModal: value, settingsTab: null }),
-  openSettingsTab: (tab) =>
-    set({ activeModal: Modals.settings, settingsTab: tab }),
+  settingsSection: null,
+  setActiveModal: (value) => set({ activeModal: value, settingsSection: null }),
+  openSettingsSection: (section) =>
+    set({ activeModal: Modals.settings, settingsSection: section }),
 }));

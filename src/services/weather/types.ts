@@ -26,6 +26,7 @@ type WeatherUnits = {
   snowfall: "cm";
   weather_code: "wmo code";
   is_day: "";
+  wind_speed_10m: "km/h";
 };
 
 type CurrentUnits = WeatherUnits & {
@@ -47,6 +48,8 @@ export type CurrentWeather = {
   weather_code: number;
   /** 1 during daylight at the location, 0 at night. */
   is_day: number;
+  /** In km/h. */
+  wind_speed_10m: number;
 };
 
 export type OpenMeteoHourlyWeather = {
@@ -60,6 +63,7 @@ export type OpenMeteoHourlyWeather = {
   snowfall: number[];
   weather_code: number[];
   is_day: number[];
+  wind_speed_10m: number[];
 };
 
 /**
@@ -96,6 +100,8 @@ export type HourlyWeather = {
   weather_code: number;
   /** 1 during daylight at the location, 0 at night. */
   is_day: number;
+  /** In km/h. */
+  wind_speed_10m: number;
 };
 
 /**

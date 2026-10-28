@@ -25,6 +25,8 @@ type Props = PropsWithChildren<{
   banner?: ReactNode;
   /** Buttons, kept in view below the scrolling contents. */
   footer?: ReactNode;
+  /** Return true when Escape was used up by something inside, so the modal stays open. */
+  onEscape?: () => boolean;
   className?: string;
 }>;
 
@@ -97,7 +99,13 @@ const useIsOverflowing = (element: HTMLElement | null) => {
   return isOverflowing;
 };
 
-const Modal = ({ className, onClose, isVisible, ...modalProps }: Props) => {
+const Modal = ({
+  className,
+  onClose,
+  isVisible,
+  onEscape,
+  ...modalProps
+}: Props) => {
   const { title, subtitle, banner, footer, children } =
     useFreezeContentsOnClose({
       isVisible,
@@ -110,14 +118,24 @@ const Modal = ({ className, onClose, isVisible, ...modalProps }: Props) => {
   return (
     <Dialog.Root
       open={isVisible}
-      onOpenChange={(open) => {
-        if (!open) {
-          onClose();
+      onOpenChange={(open, eventDetails) => {
+        if (open) {
+          return;
         }
+
+        if (eventDetails.reason === "escape-key" && onEscape?.()) {
+          eventDetails.cancel();
+
+          return;
+        }
+
+        onClose();
       }}
     >
       <Dialog.Portal>
         <Dialog.Backdrop
+          // Also when this modal sits on top of another, so the one below is dimmed too.
+          forceRender
           className="
             fixed inset-0 z-20 bg-black/50
             data-closed:animate-overlayHide
@@ -161,7 +179,8 @@ const Modal = ({ className, onClose, isVisible, ...modalProps }: Props) => {
           <div
             ref={setBody}
             className={cn(
-              "min-h-0 flex-1 overflow-y-auto px-6 pb-6",
+              // Keeps room for the scrollbar, so contents growing past the edge don't get narrower.
+              "min-h-0 flex-1 scrollbar-gutter-stable overflow-y-auto px-6 pb-6",
               banner && "pt-6",
               footer && isOverflowing && "border-b border-black/10",
             )}

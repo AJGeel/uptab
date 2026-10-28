@@ -14,6 +14,8 @@ import Loader from "../ui/Loader";
 type Props = {
   className?: string;
   inert?: boolean;
+  /** The setting that shows this widget, outlined when it's hovered in the preferences. */
+  settingId?: string;
 };
 
 const Wrapper = ({ children, className }: PropsWithChildren<Props>) => (
@@ -31,16 +33,18 @@ const Wrapper = ({ children, className }: PropsWithChildren<Props>) => (
   </motion.div>
 );
 
-const InfoWidget = ({ className, inert }: Props) => {
+const InfoWidget = ({ className, inert, settingId }: Props) => {
   const {
     status,
     data: { weatherData, locationData },
   } = useLocationAndWeather();
 
-  const openSettingsTab = useModalStore((state) => state.openSettingsTab);
+  const openSettingsSection = useModalStore(
+    (state) => state.openSettingsSection,
+  );
 
   return (
-    <div className={className} inert={inert}>
+    <div className={className} inert={inert} data-setting={settingId}>
       <AnimatePresence mode="wait" initial={false}>
         {status === "locationError" && (
           <Wrapper key="location" className="flex items-center gap-4">
@@ -50,7 +54,7 @@ const InfoWidget = ({ className, inert }: Props) => {
                 widgetHover,
                 widgetPress,
               )}
-              onClick={() => openSettingsTab("Location")}
+              onClick={() => openSettingsSection("weather")}
             >
               <CloudSunIcon className="size-8" />
 

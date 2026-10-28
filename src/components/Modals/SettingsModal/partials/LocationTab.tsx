@@ -1,8 +1,9 @@
-import { CrosshairIcon } from "@phosphor-icons/react";
+import { CrosshairIcon, MapPinIcon } from "@phosphor-icons/react";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 
 import { useLocationAndWeather } from "@/src/hooks/queries/useLocationAndWeather";
+import { useSettingHighlight } from "@/src/hooks/useSettingHighlight";
 import { useSettings } from "@/src/hooks/useSettings";
 import { getGeocodedLocation } from "@/src/services/location";
 import {
@@ -18,6 +19,7 @@ import LocationRow from "./LocationRow";
 const MIN_RETRY_MS = 800;
 
 const LocationTab = () => {
+  const highlightProps = useSettingHighlight("weather.location");
   const { data: settings, setLocationSettings } = useSettings();
   const { gpsFailure, retryLocation } = useLocationAndWeather();
   // Only reads the cached GPS lookup, which useLocationAndWeather fetches.
@@ -53,13 +55,26 @@ const LocationTab = () => {
   const { location } = settings;
 
   return (
-    <div role="radiogroup" aria-label="Active location">
-      <p className="my-4 text-sm text-gray-700">
-        Your weather follows the location you select here. Use your current
-        location, or save places to switch between them.
-      </p>
+    <div
+      role="radiogroup"
+      aria-label="Active location"
+      className="rounded-xl border bg-white"
+      {...highlightProps}
+    >
+      <div className="flex items-center gap-3 p-3">
+        <span className="flex size-9 shrink-0 items-center justify-center rounded-xl bg-sky-500/10 text-sky-800">
+          <MapPinIcon weight="duotone" className="size-5" />
+        </span>
+        <div className="flex flex-col">
+          <h3 className="font-semibold">Location</h3>
+          <p className="text-sm text-gray-700">
+            Your weather follows the location you select here. Use your current
+            location, or save places to switch between them.
+          </p>
+        </div>
+      </div>
 
-      <div>
+      <div className="border-t px-3">
         {failure ? (
           <div className="py-3">
             <GpsHelp
@@ -98,7 +113,9 @@ const LocationTab = () => {
         ))}
       </div>
 
-      <AddLocation location={location} onChange={setLocationSettings} />
+      <div className="rounded-b-xl border-t bg-black/2 px-3 pb-3">
+        <AddLocation location={location} onChange={setLocationSettings} />
+      </div>
     </div>
   );
 };

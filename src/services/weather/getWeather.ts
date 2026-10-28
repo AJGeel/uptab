@@ -1,9 +1,9 @@
-import { FORECAST_DAYS } from "./constants";
+import { MAX_FORECAST_DAYS } from "./constants";
 import { OpenMeteoResponse } from "./types";
 import { Location } from "../location/types";
 
 const WEATHER_FIELDS =
-  "temperature_2m,relative_humidity_2m,apparent_temperature,precipitation,rain,showers,snowfall,weather_code,is_day";
+  "temperature_2m,relative_humidity_2m,apparent_temperature,precipitation,rain,showers,snowfall,weather_code,is_day,wind_speed_10m";
 
 export const getWeather = async ({
   latitude,
@@ -12,7 +12,7 @@ export const getWeather = async ({
   const params = new URLSearchParams({
     current: WEATHER_FIELDS,
     hourly: WEATHER_FIELDS,
-    forecast_days: String(FORECAST_DAYS),
+    forecast_days: String(MAX_FORECAST_DAYS),
     timezone: "auto",
     latitude: String(latitude),
     longitude: String(longitude),
