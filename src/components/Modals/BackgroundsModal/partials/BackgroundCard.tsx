@@ -16,14 +16,14 @@ type Props = {
   /** Up to 4 photos, shown as a mosaic. */
   covers: Cover[];
   isSelected: boolean;
-  /** The last selected theme can't be turned off. */
+  /** The last selected background can't be turned off. */
   isLocked: boolean;
   onClick: () => void;
   /** Shows a "Manage" button on the card. */
   onManage?: () => void;
 };
 
-const ThemeCard = ({
+const BackgroundCard = ({
   name,
   count,
   covers,
@@ -107,7 +107,7 @@ const ThemeCard = ({
             )}
           >
             {isNudging
-              ? "Keep one theme on"
+              ? "Keep one background on"
               : `${count} ${count === 1 ? "photo" : "photos"}`}
           </p>
         </div>
@@ -125,4 +125,4 @@ const ThemeCard = ({
   );
 };
 
-export default ThemeCard;
+export default BackgroundCard;

@@ -10,14 +10,14 @@ import { getEnabledThemes } from "@/src/services/backgrounds/pickDailyImage";
 import { BackgroundImage } from "@/src/services/backgrounds/types";
 import { hotkeys } from "@/src/services/hotkeys/hotkeys";
 
-import ThemeCard, { Cover } from "./partials/ThemeCard";
+import BackgroundCard, { Cover } from "./partials/BackgroundCard";
 import Button, { buttonVariants } from "../../ui/Button";
 import Modal from "../../ui/Modal";
 import QuickSettings from "../SettingsModal/partials/QuickSettings";
 
 const COVER_COUNT = 4;
 
-/** The theme's cover photos, topped up with its other photos if there are fewer. */
+/** The background's cover photos, topped up with its other photos if there are fewer. */
 const getCovers = (
   coverImageIds: string[],
   images: BackgroundImage[],
@@ -42,14 +42,18 @@ const BackgroundsModal = () => {
   const [refreshResult, setRefreshResult] = useState<string | null>(null);
   const activeModal = useModalStore((state) => state.activeModal);
   const setActiveModal = useModalStore((state) => state.setActiveModal);
+  const openModal = useModalStore((state) => state.openModal);
+  const closeModal = useModalStore((state) => state.closeModal);
   const openSettingsSection = useModalStore(
     (state) => state.openSettingsSection,
   );
 
   useKeyPress(hotkeys.b, () => {
-    setActiveModal(
-      activeModal === Modals.backgrounds ? null : Modals.backgrounds,
-    );
+    if (activeModal === Modals.backgrounds) {
+      closeModal();
+    } else {
+      setActiveModal(Modals.backgrounds);
+    }
   });
 
   const themes =
@@ -105,12 +109,12 @@ const BackgroundsModal = () => {
   return (
     <Modal
       isVisible={activeModal === Modals.backgrounds}
-      onClose={() => setActiveModal(null)}
+      onClose={closeModal}
       title="Backgrounds"
       subtitle={
         <>
-          Pick the themes you&apos;d like to see, or browse them with the ← and
-          → arrow keys.{" "}
+          Pick the backgrounds you&apos;d like to see, or browse them with the ←
+          and → arrow keys.{" "}
           <a
             href="https://uptab.vercel.app/backgrounds"
             className="underline duration-150 hover:text-sky-800 hover:no-underline"
@@ -138,12 +142,12 @@ const BackgroundsModal = () => {
           <div className="flex items-center gap-2">
             {catalogue && selected.length < themes.length && (
               <Button
-                label="All themes"
+                label="All backgrounds"
                 variant={buttonVariants.secondary}
                 onClick={() => setBackgroundThemes([])}
               />
             )}
-            <Button label="Done" onClick={() => setActiveModal(null)} />
+            <Button label="Done" onClick={closeModal} />
           </div>
         </div>
       }
@@ -162,7 +166,7 @@ const BackgroundsModal = () => {
         {!themes.some((theme) => theme.id === LOCAL_THEME) && (
           <button
             type="button"
-            onClick={() => setActiveModal(Modals.localPhotos)}
+            onClick={() => openModal(Modals.localPhotos)}
             className="flex min-h-40 flex-col items-center justify-center gap-2 rounded-xl border border-dashed border-black/20 p-3 text-center text-sm text-gray-700 ring-sky-500 duration-150 hover:border-sky-500 hover:bg-sky-50 hover:text-sky-700 focus-visible:ring-2 focus-visible:outline-hidden"
           >
             <PlusIcon className="size-6" />
@@ -170,7 +174,7 @@ const BackgroundsModal = () => {
           </button>
         )}
         {themes.map((theme) => (
-          <ThemeCard
+          <BackgroundCard
             key={theme.id}
             name={theme.name}
             count={theme.count}
@@ -180,7 +184,7 @@ const BackgroundsModal = () => {
             onClick={() => toggle(theme.id)}
             onManage={
               theme.id === LOCAL_THEME
-                ? () => setActiveModal(Modals.localPhotos)
+                ? () => openModal(Modals.localPhotos)
                 : undefined
             }
           />

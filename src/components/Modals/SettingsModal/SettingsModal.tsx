@@ -31,6 +31,7 @@ const SettingsModal = () => {
 
   const activeModal = useModalStore((state) => state.activeModal);
   const setActiveModal = useModalStore((state) => state.setActiveModal);
+  const closeModal = useModalStore((state) => state.closeModal);
   const requestedSection = useModalStore((state) => state.settingsSection);
 
   const [query, setQuery] = useState("");
@@ -58,7 +59,7 @@ const SettingsModal = () => {
   const close = () => {
     setQuery("");
     setChosenSection(undefined);
-    setActiveModal(null);
+    closeModal();
   };
 
   useKeyPress(hotkeys.slash, () => {
@@ -193,7 +194,7 @@ const SettingsModal = () => {
         isVisible={isConfirmingReset}
         onClose={() => setIsConfirmingReset(false)}
         title="Reset everything?"
-        subtitle="Every preference goes back to how UpTab came, including your saved locations and chosen themes. Your shortlinks and photos stay."
+        subtitle="Every preference goes back to how UpTab came, including your saved locations and chosen backgrounds. Your shortlinks and photos stay."
         footer={
           <div className="flex items-center justify-end gap-2">
             <Button

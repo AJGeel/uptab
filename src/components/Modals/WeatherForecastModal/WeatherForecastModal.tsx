@@ -58,11 +58,10 @@ const Placeholder = ({
 
 const WeatherForecastModal = () => {
   const activeModal = useModalStore((state) => state.activeModal);
-  const setActiveModal = useModalStore((state) => state.setActiveModal);
+  const closeModal = useModalStore((state) => state.closeModal);
   const openSettingsSection = useModalStore(
     (state) => state.openSettingsSection,
   );
-  const closeModal = () => setActiveModal(null);
   const { data: settings } = useSettings();
   const days = settings?.dateTime.forecastDays ?? DEFAULT_FORECAST_DAYS;
   const [isTweaking, setIsTweaking] = useState(false);

@@ -98,30 +98,36 @@ const Homescreen = () => {
                 isSidebarOpen && "pointer-events-none translate-x-40 opacity-0",
               )}
             >
-              <BarButton
-                aria-label="Previous background"
-                tooltip="Previous photo (←)"
-                className="active:scale-90"
-                onClick={() => browse(-1)}
-              >
-                <CaretLeftIcon className="size-4 drop-shadow-md drop-shadow-black/20" />
-              </BarButton>
-              <BarButton
-                data-setting="photos.themes photos.photoChange"
-                tooltip="Choose themes (B)"
-                className="flex items-center gap-2 px-3 text-shadow-black/20 text-shadow-md active:scale-95"
-                onClick={() => setActiveModal(ModalIds.backgrounds)}
-              >
-                Backgrounds
-              </BarButton>
-              <BarButton
-                aria-label="Next background"
-                tooltip="Next photo (→)"
-                className="active:scale-90"
-                onClick={() => browse(1)}
-              >
-                <CaretRightIcon className="size-4 drop-shadow-md drop-shadow-black/20" />
-              </BarButton>
+              {settings?.homescreen.showBackgroundsButton && (
+                <div
+                  data-setting="photos.backgrounds photos.photoChange homescreen.showBackgroundsButton"
+                  className="flex items-center gap-1 rounded-xl"
+                >
+                  <BarButton
+                    aria-label="Previous background"
+                    tooltip="Previous photo (←)"
+                    className="active:scale-90"
+                    onClick={() => browse(-1)}
+                  >
+                    <CaretLeftIcon className="size-4 drop-shadow-md drop-shadow-black/20" />
+                  </BarButton>
+                  <BarButton
+                    tooltip="Choose backgrounds (B)"
+                    className="flex items-center gap-2 px-3 text-shadow-black/20 text-shadow-md active:scale-95"
+                    onClick={() => setActiveModal(ModalIds.backgrounds)}
+                  >
+                    Backgrounds
+                  </BarButton>
+                  <BarButton
+                    aria-label="Next background"
+                    tooltip="Next photo (→)"
+                    className="active:scale-90"
+                    onClick={() => browse(1)}
+                  >
+                    <CaretRightIcon className="size-4 drop-shadow-md drop-shadow-black/20" />
+                  </BarButton>
+                </div>
+              )}
               {showCredit &&
                 (activeBg.link ? (
                   <a

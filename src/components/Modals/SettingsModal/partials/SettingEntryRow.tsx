@@ -21,7 +21,7 @@ const hotkeyOf = (entry: SettingEntry) =>
 
 /** One setting, with the control that fits it. */
 const SettingEntryRow = ({ entry, settings, query, onChange }: Props) => {
-  const setActiveModal = useModalStore((state) => state.setActiveModal);
+  const openModal = useModalStore((state) => state.openModal);
 
   if (entry.kind === "switch") {
     return (
@@ -80,8 +80,8 @@ const SettingEntryRow = ({ entry, settings, query, onChange }: Props) => {
     return <LocationTab />;
   }
 
-  const isThemes = entry.content === "themes";
-  const themeCount = settings.backgrounds.themes.length;
+  const isBackgrounds = entry.content === "backgrounds";
+  const backgroundCount = settings.backgrounds.themes.length;
 
   return (
     <SettingRow
@@ -90,19 +90,19 @@ const SettingEntryRow = ({ entry, settings, query, onChange }: Props) => {
       icon={entry.icon}
       title={entry.title}
       description={
-        isThemes
-          ? `${entry.description} Now showing ${themeCount === 0 ? "all of them" : `${themeCount} of them`}.`
+        isBackgrounds
+          ? `${entry.description} Now showing ${backgroundCount === 0 ? "all of them" : `${backgroundCount} of them`}.`
           : entry.description
       }
       query={query}
       hotkey={hotkeyOf(entry)}
     >
       <Button
-        label={isThemes ? "Choose themes" : "Open my photos"}
+        label={isBackgrounds ? "Choose backgrounds" : "Open my photos"}
         variant={buttonVariants.secondary}
         className="shrink-0 border bg-white"
         onClick={() =>
-          setActiveModal(isThemes ? Modals.backgrounds : Modals.localPhotos)
+          openModal(isBackgrounds ? Modals.backgrounds : Modals.localPhotos)
         }
       />
     </SettingRow>

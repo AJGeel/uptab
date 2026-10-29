@@ -14,6 +14,7 @@ export const defaultSettings: Settings = {
   homescreen: {
     showInfoWidget: true,
     showPhotoCredit: true,
+    showBackgroundsButton: true,
     showPreferencesButton: true,
   },
   backgrounds: {

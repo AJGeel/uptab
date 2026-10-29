@@ -13,6 +13,8 @@ export type SidebarSettings = {
 export type HomescreenSettings = {
   showInfoWidget: boolean;
   showPhotoCredit: boolean;
+  /** The button that opens the backgrounds picker, next to the arrows. */
+  showBackgroundsButton: boolean;
   /** A shortcut to the preferences, in the bottom right corner. */
   showPreferencesButton: boolean;
 };

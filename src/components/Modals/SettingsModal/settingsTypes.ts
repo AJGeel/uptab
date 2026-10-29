@@ -45,7 +45,7 @@ export type SwatchesEntry = Base & {
 /** Has its own contents, which the modal knows how to render. */
 export type CustomEntry = Base & {
   kind: "custom";
-  content: "themes" | "localPhotos" | "location";
+  content: "backgrounds" | "localPhotos" | "location";
 };
 
 export type SettingEntry =
