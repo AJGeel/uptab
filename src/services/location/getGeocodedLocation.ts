@@ -15,7 +15,11 @@ export const getGeocodedLocation = async (): Promise<GeocodedLocation> => {
       area?.residential ??
       area?.municipality ??
       area?.city_district ??
-      area?.city,
+      area?.city ??
+      area?.town ??
+      area?.village ??
+      area?.hamlet ??
+      area?.suburb,
     latitude,
     longitude,
   };

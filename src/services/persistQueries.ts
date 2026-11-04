@@ -19,9 +19,16 @@ const extensionStorage = {
   removeItem: (key: string) => storage.local.remove(key),
 };
 
+/** A GPS fix without a name isn't kept, so the next tab looks the name up again. */
+const isNamelessGpsFix = ({ queryKey, state }: Query) =>
+  queryKey[0] === "location" &&
+  queryKey[1] === "gps" &&
+  !(state.data as { area?: string } | undefined)?.area;
+
 const shouldPersistQuery = (query: Query) =>
   query.state.status === "success" &&
-  PERSISTED_QUERIES.includes(String(query.queryKey[0]));
+  PERSISTED_QUERIES.includes(String(query.queryKey[0])) &&
+  !isNamelessGpsFix(query);
 
 export const persistOptions: Omit<PersistQueryClientOptions, "queryClient"> = {
   persister: createAsyncStoragePersister({

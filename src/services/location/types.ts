@@ -7,7 +7,11 @@ export type Area = {
   residential?: string;
   city_district?: string;
   municipality?: string;
-  city: string;
+  city?: string;
+  town?: string;
+  village?: string;
+  hamlet?: string;
+  suburb?: string;
 };
 
 export type GeocodedLocation = Location & { area?: string };
