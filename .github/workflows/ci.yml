@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: 👀 Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
       - name: 🍞 Setup Bun
         uses: oven-sh/setup-bun@v2
         with:
@@ -27,7 +27,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: 👀 Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
       - name: 🍞 Setup Bun
         uses: oven-sh/setup-bun@v2
         with:
@@ -41,7 +41,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: 👀 Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
       - name: 🍞 Setup Bun
         uses: oven-sh/setup-bun@v2
         with:
@@ -55,7 +55,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: 👀 Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
       - name: 🍞 Setup Bun
         uses: oven-sh/setup-bun@v2
         with:
@@ -66,7 +66,7 @@ jobs:
         run: bun ship
       - name: 🚀 Upload Artifacts
         if: github.ref == 'refs/heads/main'
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: build-artifacts
           path: |
