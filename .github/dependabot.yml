@@ -1,0 +1,22 @@
+version: 2
+updates:
+  - package-ecosystem: bun
+    directory: /
+    schedule:
+      interval: weekly
+    # Like minimumReleaseAge in bunfig.toml: a fresh release waits 14 days.
+    cooldown:
+      default-days: 14
+    groups:
+      dependencies:
+        patterns: ["*"]
+
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+    cooldown:
+      default-days: 14
+    groups:
+      github-actions:
+        patterns: ["*"]
