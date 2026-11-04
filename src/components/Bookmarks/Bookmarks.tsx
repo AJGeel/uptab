@@ -25,6 +25,9 @@ import { addShortlink } from "@/src/services/shortlinks";
 import { cn } from "@/src/utils";
 
 import BookmarkItem from "./partials/BookmarkItem";
+import EditBookmarkModal, {
+  BookmarkChanges,
+} from "./partials/EditBookmarkModal";
 import SearchBookmarks from "./partials/SearchBookmarks";
 import SortBookmarks from "./partials/SortBookmarks";
 import Button, { buttonVariants } from "../ui/Button";
@@ -48,6 +51,8 @@ const Bookmarks = ({ displayMode = "NewTab" }: BookmarksProps) => {
   );
 
   const [notice, setNotice] = useState<string>();
+  const [bookmarkToEdit, setBookmarkToEdit] =
+    useState<BookmarksApi.BookmarkTreeNode>();
   const [bookmarkToRemove, setBookmarkToRemove] =
     useState<BookmarksApi.BookmarkTreeNode>();
   // A new tab is a fresh page, so the times only need to be right when it opens.
@@ -80,6 +85,19 @@ const Bookmarks = ({ displayMode = "NewTab" }: BookmarksProps) => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: BOOKMARKS_QUERY_KEY });
+    },
+  });
+
+  const editMutation = useMutation({
+    mutationFn: async ({
+      id,
+      ...changes
+    }: BookmarkChanges & { id: string }) => {
+      await bookmarks.update(id, changes);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: BOOKMARKS_QUERY_KEY });
+      setBookmarkToEdit(undefined);
     },
   });
 
@@ -204,6 +222,7 @@ const Bookmarks = ({ displayMode = "NewTab" }: BookmarksProps) => {
                     now,
                   )}
                   displayMode={displayMode}
+                  handleEdit={() => setBookmarkToEdit(bookmark)}
                   handleDelete={() => setBookmarkToRemove(bookmark)}
                   handleAddToShortlink={
                     isAlreadyShortlink
@@ -226,6 +245,19 @@ const Bookmarks = ({ displayMode = "NewTab" }: BookmarksProps) => {
             })}
         </div>
       </div>
+
+      <EditBookmarkModal
+        bookmark={bookmarkToEdit}
+        // Hidden behind the removal prompt, which brings it back if you keep the bookmark.
+        isVisible={!!bookmarkToEdit && !bookmarkToRemove}
+        isSaving={editMutation.isPending}
+        onSave={(changes) =>
+          bookmarkToEdit &&
+          editMutation.mutate({ id: bookmarkToEdit.id, ...changes })
+        }
+        onDelete={() => setBookmarkToRemove(bookmarkToEdit)}
+        onClose={() => setBookmarkToEdit(undefined)}
+      />
 
       <Modal
         isVisible={!!bookmarkToRemove}
@@ -254,6 +286,7 @@ const Bookmarks = ({ displayMode = "NewTab" }: BookmarksProps) => {
                 }
 
                 setBookmarkToRemove(undefined);
+                setBookmarkToEdit(undefined);
               }}
             />
           </div>

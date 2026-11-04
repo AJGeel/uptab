@@ -1,4 +1,8 @@
-import { BackspaceIcon, PlusIcon } from "@phosphor-icons/react";
+import {
+  BackspaceIcon,
+  PencilSimpleIcon,
+  PlusIcon,
+} from "@phosphor-icons/react";
 import { Bookmarks, tabs } from "webextension-polyfill";
 
 import { cn } from "@/src/utils";
@@ -14,6 +18,7 @@ type Props = {
   /** Light grey on the right, until the actions show on hover: when they last visited. */
   detail?: string;
   displayMode: string;
+  handleEdit: () => void;
   handleDelete: () => void;
   handleAddToShortlink?: () => Promise<void>;
 };
@@ -24,6 +29,7 @@ const BookmarkItem = ({
   isHighlighted,
   detail,
   displayMode,
+  handleEdit,
   handleDelete,
   handleAddToShortlink,
 }: Props) => (
@@ -68,6 +74,16 @@ const BookmarkItem = ({
           />
         </Tooltip>
       )}
+      <Tooltip label="Edit bookmark">
+        <PencilSimpleIcon
+          weight="fill"
+          onClick={(event) => {
+            event.preventDefault();
+            handleEdit();
+          }}
+          className="size-7 shrink-0 rounded-lg border bg-white p-1 text-gray-500 shadow-xs ring-sky-500 duration-150 hover:text-sky-500 hover:ring-2"
+        />
+      </Tooltip>
       <Tooltip label="Remove bookmark">
         <BackspaceIcon
           weight="fill"
