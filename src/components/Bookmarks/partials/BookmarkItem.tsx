@@ -5,7 +5,7 @@ import {
 } from "@phosphor-icons/react";
 import { Bookmarks, tabs } from "webextension-polyfill";
 
-import { cn } from "@/src/utils";
+import { cn, safeHref } from "@/src/utils";
 
 import Favicon from "../../ui/Favicon";
 import Tooltip from "../../ui/Tooltip";
@@ -49,7 +49,7 @@ const BookmarkItem = ({
         tabs.create({ url: item.url });
       }
     }}
-    href={item.url ?? ""}
+    href={safeHref(item.url)}
   >
     <Favicon
       className="size-4 rounded-xs"
