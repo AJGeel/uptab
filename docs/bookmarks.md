@@ -31,3 +31,13 @@ The dropdown offers four fields: Name, Date added, Recently visited and Most vis
 Headless browsers can't answer the permission prompt, so accepting and declining it needs a manual check in Chrome and Firefox. To test the sorting itself, load a build whose manifest lists `history` under `permissions`.
 
 For the store listings, see [store-listing/history-permission.md](store-listing/history-permission.md).
+
+## Icons
+
+A row shows the browser's cached icon for its page (`utils/getFavicon.ts`): Chrome's `_favicon` API, or the site's own `/favicon.ico` on Firefox. Both then try the site's own `/favicon.ico`, `/favicon.png`, `/favicon.svg` and apple-touch-icons, and last DuckDuckGo's favicon service (the only step that sends a domain to a third party). For an unknown site it answers 404 with a grey 48x48 stand-in that an `<img>` still shows, so a 48x48 image from there is treated as not found (`isDuckDuckGoPlaceholder`); reading its status instead would need a host permission. When nothing loads, it shows the UpTab logo.
+
+So icons don't pop in, the source that worked for each page is remembered in `localStorage` (`services/faviconCache.ts`), where a new tab can read it before its first frame. A page with no icon is looked at again after a day. Until an icon has loaded, its box stays empty at the same size, and a new one fades in. Chrome's generic globe is never shown, as that answer is checked for before the image is used.
+
+A bookmark can also get a custom icon in the edit modal (shortlinks have the same field, `components/IconField/IconField.tsx`): paste an image URL, pick one of the 10 latest used (`services/recentIcons.ts`), or choose an emoji with emoji-mart. The picker is loaded lazily, as its emoji data is about 500 KB, and it focuses its search box when it opens. An icon is either an image URL or a single emoji (`utils/icon.ts`).
+
+The browser has no place to store a bookmark's icon, so UpTab keeps them itself in `storage.local`, by bookmark id (`services/bookmarks/bookmarkIcons.ts`), and they only show in UpTab. Deleting a bookmark through UpTab removes its icon too; one deleted in the browser leaves a small leftover entry behind.

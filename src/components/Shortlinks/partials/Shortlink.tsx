@@ -5,10 +5,9 @@ import { Modals, useModalStore } from "@/src/hooks/stores/useModalStore";
 import { useShortlinkStore } from "@/src/hooks/stores/useShortlinkStore";
 import { Shortlink } from "@/src/services/shortlinks";
 import { cn } from "@/src/utils";
-import { getFavicon } from "@/src/utils/getFavicon";
 
+import Favicon from "../../ui/Favicon";
 import IconButton from "../../ui/IconButton";
-import ImageWithFallback from "../../ui/ImageWithFallback";
 import Tooltip from "../../ui/Tooltip";
 
 type Props = {
@@ -34,9 +33,9 @@ const Shortlink = ({ item, isDragging }: Props) => {
           isDragging && "cursor-grabbing",
         )}
       >
-        <ImageWithFallback
-          src={item.icon ?? getFavicon(item.url)}
-          fallbackSrc="/icon-34.png"
+        <Favicon
+          icon={item.icon}
+          url={item.url}
           className="size-6 shrink-0 rounded-sm"
         />
         <div className="flex grow flex-col truncate">

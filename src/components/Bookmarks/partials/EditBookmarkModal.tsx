@@ -2,19 +2,23 @@ import { useEffect } from "react";
 import { useForm, useWatch } from "react-hook-form";
 import { Bookmarks } from "webextension-polyfill";
 
+import { usePreviewUrl } from "@/src/hooks/usePreviewUrl";
 import { normalizeUrl } from "@/src/utils/normalizeUrl";
 
 import BookmarkItem from "./BookmarkItem";
+import IconField from "../../IconField/IconField";
 import Button, { buttonVariants } from "../../ui/Button";
 import Modal from "../../ui/Modal";
 
 export type BookmarkChanges = {
   title: string;
   url: string;
+  icon: string;
 };
 
 type Props = {
   bookmark?: Bookmarks.BookmarkTreeNode;
+  icon?: string;
   isVisible: boolean;
   isSaving: boolean;
   onSave: (changes: BookmarkChanges) => void;
@@ -35,6 +39,7 @@ const inputClassName = (hasError: boolean) =>
 
 const EditBookmarkModal = ({
   bookmark,
+  icon,
   isVisible,
   isSaving,
   onSave,
@@ -50,14 +55,20 @@ const EditBookmarkModal = ({
   } = useForm<BookmarkChanges>();
 
   const previewValues = useWatch({ control });
+  const previewUrl = usePreviewUrl(previewValues.url, bookmark?.url);
 
   useEffect(() => {
-    reset({ title: bookmark?.title ?? "", url: bookmark?.url ?? "" });
-  }, [bookmark, reset]);
+    reset({
+      title: bookmark?.title ?? "",
+      url: bookmark?.url ?? "",
+      icon: icon ?? "",
+    });
+  }, [bookmark, icon, reset]);
 
-  const submit = ({ title, url }: BookmarkChanges) =>
+  const submit = ({ title, url, icon }: BookmarkChanges) =>
     onSave({
       title: title.trim(),
+      icon: icon.trim(),
       // Only a changed URL is tidied up, so odd ones (like browser pages) survive.
       url: url.trim() === bookmark?.url ? url.trim() : normalizeUrl(url.trim()),
     });
@@ -79,8 +90,9 @@ const EditBookmarkModal = ({
                 item={{
                   ...bookmark,
                   title: previewValues.title || "…",
-                  url: previewValues.url ?? "",
+                  url: previewUrl,
                 }}
+                icon={(previewValues.icon ?? icon)?.trim()}
                 id="bookmark-preview"
                 isHighlighted={false}
                 displayMode="NewTab"
@@ -133,6 +145,16 @@ const EditBookmarkModal = ({
                 Please enter a valid URL
               </p>
             )}
+          </div>
+          <div className="flex flex-col gap-1">
+            <label
+              className="font-semibold text-gray-700"
+              htmlFor="bookmark-icon"
+            >
+              Custom icon
+            </label>
+            <IconField id="bookmark-icon" control={control} name="icon" />
+            <p className="text-xs text-gray-500">Only used inside UpTab.</p>
           </div>
           <div className="mt-2 flex items-center justify-end gap-2">
             <Button

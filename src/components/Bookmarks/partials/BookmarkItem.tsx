@@ -6,13 +6,14 @@ import {
 import { Bookmarks, tabs } from "webextension-polyfill";
 
 import { cn } from "@/src/utils";
-import { getFavicon } from "@/src/utils/getFavicon";
 
-import ImageWithFallback from "../../ui/ImageWithFallback";
+import Favicon from "../../ui/Favicon";
 import Tooltip from "../../ui/Tooltip";
 
 type Props = {
   item: Bookmarks.BookmarkTreeNode;
+  /** Replaces the site's own icon. */
+  icon?: string;
   id: string;
   isHighlighted: boolean;
   /** Light grey on the right, until the actions show on hover: when they last visited. */
@@ -25,6 +26,7 @@ type Props = {
 
 const BookmarkItem = ({
   item,
+  icon,
   id,
   isHighlighted,
   detail,
@@ -49,10 +51,10 @@ const BookmarkItem = ({
     }}
     href={item.url ?? ""}
   >
-    <ImageWithFallback
+    <Favicon
       className="size-4 rounded-xs"
-      src={getFavicon(item?.url || "")}
-      fallbackSrc="/icon-34.png"
+      icon={icon}
+      url={item?.url}
       loading="lazy"
     />
     <p className="grow truncate">{item.title}</p>

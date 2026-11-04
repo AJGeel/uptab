@@ -1,16 +1,15 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
-import { bookmarks, Bookmarks as BookmarksApi } from "webextension-polyfill";
+import { Bookmarks as BookmarksApi } from "webextension-polyfill";
 
-import {
-  BOOKMARKS_QUERY_KEY,
-  useBookmarks,
-} from "@/src/hooks/queries/useBookmarks";
+import { useBookmarkIcons } from "@/src/hooks/queries/useBookmarkIcons";
+import { useBookmarks } from "@/src/hooks/queries/useBookmarks";
 import { useBookmarkVisits } from "@/src/hooks/queries/useBookmarkVisits";
 import {
   SHORTLINK_QUERY_KEY,
   useShortlinks,
 } from "@/src/hooks/queries/useShortlinks";
+import { useBookmarkMutations } from "@/src/hooks/useBookmarkMutations";
 import { useBookmarkNavigation } from "@/src/hooks/useBookmarkNavigation";
 import { useHistoryAccess } from "@/src/hooks/useHistoryAccess";
 import { usePersistedState } from "@/src/hooks/usePersistedState";
@@ -25,9 +24,7 @@ import { addShortlink } from "@/src/services/shortlinks";
 import { cn } from "@/src/utils";
 
 import BookmarkItem from "./partials/BookmarkItem";
-import EditBookmarkModal, {
-  BookmarkChanges,
-} from "./partials/EditBookmarkModal";
+import EditBookmarkModal from "./partials/EditBookmarkModal";
 import SearchBookmarks from "./partials/SearchBookmarks";
 import SortBookmarks from "./partials/SortBookmarks";
 import Button, { buttonVariants } from "../ui/Button";
@@ -78,28 +75,11 @@ const Bookmarks = ({ displayMode = "NewTab" }: BookmarksProps) => {
     });
 
   const { data: shortlinks } = useShortlinks();
+  const { data: icons, isPending: isLoadingIcons } = useBookmarkIcons();
 
-  const deleteMutation = useMutation({
-    mutationFn: async (id: string) => {
-      await bookmarks.remove(id);
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: BOOKMARKS_QUERY_KEY });
-    },
-  });
-
-  const editMutation = useMutation({
-    mutationFn: async ({
-      id,
-      ...changes
-    }: BookmarkChanges & { id: string }) => {
-      await bookmarks.update(id, changes);
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: BOOKMARKS_QUERY_KEY });
-      setBookmarkToEdit(undefined);
-    },
-  });
+  const { deleteMutation, editMutation } = useBookmarkMutations(() =>
+    setBookmarkToEdit(undefined),
+  );
 
   const addShortlinkMutation = useMutation({
     mutationFn: addShortlink,
@@ -148,6 +128,7 @@ const Bookmarks = ({ displayMode = "NewTab" }: BookmarksProps) => {
     isSortHydrated &&
     isSearchHydrated &&
     hasAccess !== undefined &&
+    !isLoadingIcons &&
     !(isVisitSort(sortBy) && isLoadingVisits);
 
   return (
@@ -214,6 +195,7 @@ const Bookmarks = ({ displayMode = "NewTab" }: BookmarksProps) => {
                 <BookmarkItem
                   key={bookmark.id}
                   item={bookmark}
+                  icon={icons?.[bookmark.id]}
                   id={getEntryId(bookmark)}
                   isHighlighted={bookmark === activeEntry}
                   detail={getVisitDetail(
@@ -248,6 +230,7 @@ const Bookmarks = ({ displayMode = "NewTab" }: BookmarksProps) => {
 
       <EditBookmarkModal
         bookmark={bookmarkToEdit}
+        icon={bookmarkToEdit && icons?.[bookmarkToEdit.id]}
         // Hidden behind the removal prompt, which brings it back if you keep the bookmark.
         isVisible={!!bookmarkToEdit && !bookmarkToRemove}
         isSaving={editMutation.isPending}
