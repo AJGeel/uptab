@@ -10,6 +10,9 @@ import {
 import { Place, searchPlaces } from "@/src/services/location/searchPlaces";
 import { LocationSettings } from "@/src/services/location/types";
 
+/** Lets the settings modal focus the search when it opens. */
+export const CITY_SEARCH_ID = "city-search";
+
 const SEARCH_DELAY = 300;
 const MIN_QUERY_LENGTH = 2;
 
@@ -72,6 +75,7 @@ const AddLocation = ({ location, onChange }: Props) => {
         <div className="relative rounded-xl border bg-white ring-sky-500 duration-150 focus-within:ring-2 focus-within:ring-offset-2">
           <input
             className="w-full rounded-xl bg-white px-3 py-2 pl-9 font-sans focus-within:outline-hidden"
+            id={CITY_SEARCH_ID}
             placeholder="Search for a city..."
             type="search"
             aria-label="Add a location"

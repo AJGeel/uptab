@@ -9,6 +9,7 @@ import useKeyPress from "@/src/hooks/useKeyPress";
 import { useSettings } from "@/src/hooks/useSettings";
 import { hotkeys } from "@/src/services/hotkeys/hotkeys";
 
+import { CITY_SEARCH_ID } from "./partials/AddLocation";
 import SettingEntryRow from "./partials/SettingEntryRow";
 import SettingsNav from "./partials/SettingsNav";
 import { searchSettings } from "./searchSettings";
@@ -33,6 +34,7 @@ const SettingsModal = () => {
   const setActiveModal = useModalStore((state) => state.setActiveModal);
   const closeModal = useModalStore((state) => state.closeModal);
   const requestedSection = useModalStore((state) => state.settingsSection);
+  const requestedFocus = useModalStore((state) => state.settingsFocus);
 
   const [query, setQuery] = useState("");
   const [chosenSection, setChosenSection] = useState<SettingsSection>();
@@ -144,6 +146,17 @@ const SettingsModal = () => {
         searchRef.current?.focus();
 
         return true;
+      }}
+      initialFocus={() => {
+        const citySearch =
+          requestedFocus === "citySearch"
+            ? document.getElementById(CITY_SEARCH_ID)
+            : null;
+
+        // Below the location help, so it's brought into view as well.
+        citySearch?.scrollIntoView({ block: "nearest" });
+
+        return citySearch ?? true;
       }}
       title="Edit Preferences"
       className="h-[min(39rem,calc(100dvh-2rem))] w-[calc(100vw-2rem)] max-w-208"

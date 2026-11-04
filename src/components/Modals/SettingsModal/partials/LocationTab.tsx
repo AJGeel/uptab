@@ -2,7 +2,10 @@ import { CrosshairIcon, MapPinIcon } from "@phosphor-icons/react";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 
-import { useLocationAndWeather } from "@/src/hooks/queries/useLocationAndWeather";
+import {
+  MIN_RETRY_MS,
+  useLocationAndWeather,
+} from "@/src/hooks/queries/useLocationAndWeather";
 import { useSettingHighlight } from "@/src/hooks/useSettingHighlight";
 import { useSettings } from "@/src/hooks/useSettings";
 import { getGeocodedLocation } from "@/src/services/location";
@@ -14,9 +17,6 @@ import {
 import AddLocation from "./AddLocation";
 import GpsHelp from "./GpsHelp";
 import LocationRow from "./LocationRow";
-
-/** Long enough to notice that something happened, as a retry can be instant. */
-const MIN_RETRY_MS = 800;
 
 const LocationTab = () => {
   const highlightProps = useSettingHighlight("weather.location");

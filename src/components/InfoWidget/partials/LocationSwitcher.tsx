@@ -45,7 +45,7 @@ const LocationSwitcher = ({ area }: Props) => {
       triggerLabel={getShortAreaName(area)}
       action={{
         label: "Manage locations",
-        onClick: () => openSettingsSection("weather"),
+        onClick: () => openSettingsSection("weather", "citySearch"),
       }}
       onValueChange={(value) =>
         setLocationSettings(setActiveLocation(location, value))

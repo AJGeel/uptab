@@ -12,6 +12,9 @@ export const Modals = {
 
 export type Modals = (typeof Modals)[keyof typeof Modals];
 
+/** Something in the settings modal to focus when it opens, instead of the first field. */
+export type SettingsFocus = "citySearch";
+
 export type SettingsSection =
   "sidebar" | "homescreen" | "photos" | "weather" | "time" | "appearance";
 
@@ -19,6 +22,7 @@ type State = {
   activeModal: Modals | null;
   /** The section the settings modal opens on, instead of the first. */
   settingsSection: SettingsSection | null;
+  settingsFocus: SettingsFocus | null;
   /** The modals to go back to, nearest last, when the current one is closed. */
   trail: Modals[];
 };
@@ -29,15 +33,24 @@ type Actions = {
   openModal: (modal: Modals) => void;
   /** Closes the current modal, returning to the one it was opened from. */
   closeModal: () => void;
-  openSettingsSection: (section: SettingsSection) => void;
+  openSettingsSection: (
+    section: SettingsSection,
+    focus?: SettingsFocus,
+  ) => void;
 };
 
 export const useModalStore = create<State & Actions>()((set) => ({
   activeModal: null,
   settingsSection: null,
+  settingsFocus: null,
   trail: [],
   setActiveModal: (value) =>
-    set({ activeModal: value, settingsSection: null, trail: [] }),
+    set({
+      activeModal: value,
+      settingsSection: null,
+      settingsFocus: null,
+      trail: [],
+    }),
   openModal: (modal) =>
     set((state) => ({
       activeModal: modal,
@@ -48,8 +61,9 @@ export const useModalStore = create<State & Actions>()((set) => ({
       activeModal: state.trail.at(-1) ?? null,
       trail: state.trail.slice(0, -1),
       settingsSection: state.trail.length > 0 ? state.settingsSection : null,
+      settingsFocus: state.trail.length > 0 ? state.settingsFocus : null,
     })),
-  openSettingsSection: (section) =>
+  openSettingsSection: (section, focus) =>
     set((state) => {
       const { activeModal, trail } = state;
       const settingsAt = trail.indexOf(Modals.settings);
@@ -63,6 +77,7 @@ export const useModalStore = create<State & Actions>()((set) => ({
       return {
         activeModal: Modals.settings,
         settingsSection: section,
+        settingsFocus: focus ?? null,
         trail: next,
       };
     }),

@@ -10,6 +10,9 @@ import { getWeather } from "@/src/services/weather";
 import { MAX_FORECAST_DAYS } from "@/src/services/weather/constants";
 import { mapWeather } from "@/src/services/weather/mapWeather";
 
+/** Long enough to notice that something happened, as a retry can be instant. */
+export const MIN_RETRY_MS = 800;
+
 type Status = "loading" | "ready" | "locationError" | "weatherError";
 
 export const useLocationAndWeather = () => {
@@ -93,5 +96,6 @@ export const useLocationAndWeather = () => {
     /** Why GPS failed, when `status` is `locationError`. */
     gpsFailure: getGpsFailure(),
     retryLocation: () => gpsQuery.refetch(),
+    retryWeather: () => weatherQuery.refetch(),
   };
 };

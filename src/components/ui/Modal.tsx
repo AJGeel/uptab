@@ -1,6 +1,7 @@
 import { Dialog } from "@base-ui/react/dialog";
 import { XIcon } from "@phosphor-icons/react";
 import {
+  ComponentProps,
   PropsWithChildren,
   ReactNode,
   useEffect,
@@ -27,6 +28,8 @@ type Props = PropsWithChildren<{
   footer?: ReactNode;
   /** Return true when Escape was used up by something inside, so the modal stays open. */
   onEscape?: () => boolean;
+  /** What to focus when it opens, instead of the first field. */
+  initialFocus?: ComponentProps<typeof Dialog.Popup>["initialFocus"];
   className?: string;
 }>;
 
@@ -104,6 +107,7 @@ const Modal = ({
   onClose,
   isVisible,
   onEscape,
+  initialFocus,
   ...modalProps
 }: Props) => {
   const { title, subtitle, banner, footer, children } =
@@ -144,6 +148,7 @@ const Modal = ({
         />
 
         <Dialog.Popup
+          initialFocus={initialFocus}
           className={cn(
             `
               fixed top-[50%] left-[50%] z-20
