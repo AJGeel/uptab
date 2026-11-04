@@ -2,6 +2,12 @@
 
 UpTab adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [V2.1.1] — 2026-11-04
+
+### 🐛 Fixed
+
+- Bookmarks and shortlinks now only open web addresses, for extra safety.
+
 ## [V2.1.0] — 2026-11-04
 
 ### ✨ Added
