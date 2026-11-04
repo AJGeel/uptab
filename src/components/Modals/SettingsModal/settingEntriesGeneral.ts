@@ -12,7 +12,7 @@ import {
 
 import { ACCENTS } from "@/src/services/settings/accents";
 import { AccentId } from "@/src/services/settings/types";
-import { MAX_FORECAST_DAYS } from "@/src/services/weather/constants";
+import { MAX_EXTRA_FORECAST_DAYS } from "@/src/services/weather/constants";
 
 import { asString, field, SettingEntry } from "./settingsTypes";
 
@@ -91,10 +91,10 @@ export const generalEntries: SettingEntry[] = [
     section: "time",
     ...asString(field("dateTime", "forecastDays"), Number),
     title: "Forecast length",
-    description: "How many days the weather forecast shows, today included.",
+    description: "How many days after today the weather forecast shows.",
     keywords: ["weather", "days", "week", "long", "far ahead"],
     icon: CalendarCheckIcon,
-    options: Array.from({ length: MAX_FORECAST_DAYS }, (_, index) => ({
+    options: Array.from({ length: MAX_EXTRA_FORECAST_DAYS }, (_, index) => ({
       value: String(index + 1),
       label: String(index + 1),
     })),

@@ -1,5 +1,5 @@
 import { Settings } from "./types";
-import { DEFAULT_FORECAST_DAYS } from "../weather/constants";
+import { DEFAULT_EXTRA_FORECAST_DAYS } from "../weather/constants";
 
 export const defaultSettings: Settings = {
   sidebar: {
@@ -33,7 +33,7 @@ export const defaultSettings: Settings = {
     timeFormat: "24h",
     showWeekNumber: true,
     weekStartsOn: "monday",
-    forecastDays: DEFAULT_FORECAST_DAYS,
+    forecastDays: DEFAULT_EXTRA_FORECAST_DAYS,
   },
   forecast: {
     showFeelsLike: true,

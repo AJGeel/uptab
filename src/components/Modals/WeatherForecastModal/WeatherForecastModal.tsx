@@ -4,7 +4,7 @@ import { lazy, ReactNode, Suspense, useState } from "react";
 import { useLocationAndWeather } from "@/src/hooks/queries/useLocationAndWeather";
 import { Modals, useModalStore } from "@/src/hooks/stores/useModalStore";
 import { useSettings } from "@/src/hooks/useSettings";
-import { DEFAULT_FORECAST_DAYS } from "@/src/services/weather/constants";
+import { DEFAULT_EXTRA_FORECAST_DAYS } from "@/src/services/weather/constants";
 import { cn } from "@/src/utils";
 
 import DailySummaries from "./DailySummaries";
@@ -63,7 +63,8 @@ const WeatherForecastModal = () => {
     (state) => state.openSettingsSection,
   );
   const { data: settings } = useSettings();
-  const days = settings?.dateTime.forecastDays ?? DEFAULT_FORECAST_DAYS;
+  const days =
+    (settings?.dateTime.forecastDays ?? DEFAULT_EXTRA_FORECAST_DAYS) + 1;
   const [isTweaking, setIsTweaking] = useState(false);
 
   const {

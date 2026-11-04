@@ -9,7 +9,10 @@ import {
 
 // Imported per module: the weather index pulls in the extension storage API.
 import { TimeFormat } from "@/src/services/settings/types";
-import { DEFAULT_FORECAST_DAYS } from "@/src/services/weather/constants";
+import {
+  DEFAULT_EXTRA_FORECAST_DAYS,
+  MAX_EXTRA_FORECAST_DAYS,
+} from "@/src/services/weather/constants";
 import { mapWeatherCode } from "@/src/services/weather/mapWeatherCode";
 import { HourlyWeather } from "@/src/services/weather/types";
 
@@ -69,15 +72,16 @@ export const formatTime = (date: Date, timeFormat: TimeFormat = "24h") =>
 export const formatHour = (date: Date, timeFormat: TimeFormat = "24h") =>
   format(date, timeFormat === "12h" ? "h a" : "HH:mm");
 
-/** Hourly points from the current hour through the last day shown. */
+/** Hourly points from the current hour through the end of today plus `extraDays`. */
 export const buildForecastChartData = (
   hourly: HourlyForecast[],
   now = new Date(),
-  days = DEFAULT_FORECAST_DAYS,
+  extraDays = DEFAULT_EXTRA_FORECAST_DAYS,
 ): ForecastChartPoint[] => {
   const range = {
     start: startOfHour(now),
-    end: endOfDay(addDays(now, days - 1)),
+    // A setting saved when the limit was higher can exceed what's fetched.
+    end: endOfDay(addDays(now, Math.min(extraDays, MAX_EXTRA_FORECAST_DAYS))),
   };
 
   return hourly

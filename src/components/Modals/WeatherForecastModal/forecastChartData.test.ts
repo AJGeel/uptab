@@ -41,15 +41,15 @@ afterEach(() => {
 });
 
 describe("buildForecastChartData", () => {
-  it("stops after the number of days asked for", () => {
+  it("stops after today plus the extra days asked for", () => {
     const hourly = [
       hour("2026-10-16T15:00"),
       hour("2026-10-17T15:00"),
       hour("2026-10-18T15:00"),
     ];
 
-    expect(buildForecastChartData(hourly, NOW, 1)).toHaveLength(1);
-    expect(buildForecastChartData(hourly, NOW, 2)).toHaveLength(2);
+    expect(buildForecastChartData(hourly, NOW, 0)).toHaveLength(1);
+    expect(buildForecastChartData(hourly, NOW, 1)).toHaveLength(2);
     expect(buildForecastChartData(hourly, NOW, 7)).toHaveLength(3);
   });
 
