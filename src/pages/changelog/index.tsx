@@ -5,8 +5,10 @@ import Changelog from "@/pages/changelog/Changelog";
 import "@/assets/styles/tailwind.css";
 import "@/pages/newtab/index.css";
 import { initSentry } from "@/src/services/initSentry";
+import { restoreAccent } from "@/src/services/settings/accents";
 
 initSentry();
+restoreAccent();
 
 const queryClient = new QueryClient();
 

@@ -39,7 +39,15 @@ const manifest: Manifest.WebExtensionManifest = {
   },
   manifest_version: 3,
   name: "UpTab",
-  permissions: ["storage", "unlimitedStorage", "geolocation", "bookmarks"],
+  permissions: [
+    "storage",
+    "unlimitedStorage",
+    "geolocation",
+    "bookmarks",
+    ...(process.env.BUILD_TARGET === buildTargets.firefox ? [] : ["favicon"]),
+  ],
+  // Asked for when someone first sorts bookmarks by their visits.
+  optional_permissions: ["history"],
   version: pkg.version,
   web_accessible_resources: [
     {

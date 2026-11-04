@@ -9,8 +9,10 @@ type Props = {
 
 const Loader = ({ label, className }: Props) => (
   <div className={cn("flex items-center gap-2.5", className)}>
-    <Spinner className="size-4" />
-    <p>{label}</p>
+    <div aria-hidden>
+      <Spinner className="size-4" />
+    </div>
+    <p role="status">{label}</p>
   </div>
 );
 

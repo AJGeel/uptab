@@ -4,11 +4,7 @@ import { LocationSettings } from "../services/location/types";
 import { defaultSettings } from "../services/settings/defaultSettings";
 import { editSettings } from "../services/settings/editSettings";
 import { getSettings } from "../services/settings/getSettings";
-import {
-  HomescreenSettings,
-  Settings,
-  SidebarSettings,
-} from "../services/settings/types";
+import { Settings, SidebarSettings } from "../services/settings/types";
 
 const SETTINGS_QUERY_KEY = ["settings"] as const;
 
@@ -24,11 +20,22 @@ export const useSettings = () => {
     queryKey: SETTINGS_QUERY_KEY,
     // Reads local storage only, so don't pause while the browser is offline.
     networkMode: "always",
+    /*
+     * Every change goes through this hook, which updates the cache itself.
+     * Without this, each component that shows up reads the settings again.
+     */
+    staleTime: Infinity,
   });
 
   const editMutation = useMutation({
     mutationFn: async (newSettings: Settings) => {
       await editSettings(newSettings);
+    },
+    // Shown straight away, so that quick changes in a row build on each other.
+    onMutate: async (newSettings) => {
+      // A read that started before this change would land after it, and undo it.
+      await queryClient.cancelQueries({ queryKey: SETTINGS_QUERY_KEY });
+      queryClient.setQueryData(SETTINGS_QUERY_KEY, newSettings);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: SETTINGS_QUERY_KEY });
@@ -63,20 +70,6 @@ export const useSettings = () => {
     });
   };
 
-  const toggleHomescreenSetting = async (key: keyof HomescreenSettings) => {
-    if (!data) {
-      return;
-    }
-
-    await editMutation.mutateAsync({
-      ...data,
-      homescreen: {
-        ...data.homescreen,
-        [key]: !data.homescreen[key],
-      },
-    });
-  };
-
   const setBackgroundThemes = async (themes: string[]) => {
     if (!data) {
       return;
@@ -96,6 +89,10 @@ export const useSettings = () => {
     await editMutation.mutateAsync({ ...data, location });
   };
 
+  const updateSettings = async (newSettings: Settings) => {
+    await editMutation.mutateAsync(newSettings);
+  };
+
   const resetDefaultSettings = async () => {
     await editMutation.mutateAsync(defaultSettings);
   };
@@ -105,10 +102,10 @@ export const useSettings = () => {
     isError,
     data,
     toggleSidebarSetting,
-    toggleHomescreenSetting,
     setBackgroundThemes,
     setLocationSettings,
     setSidebarOpen,
+    updateSettings,
     resetDefaultSettings,
   };
 };

@@ -2,11 +2,12 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <!-- Store screenshot template, filled in by dev/commands/screenshots.ts. -->
+    <!-- Store screenshot template, filled in by `ext-store screenshots` (see screenshots.frame in ext-store.config.ts). -->
     <style>
       @font-face {
         font-family: "Figtree";
-        src: url("../../src/assets/fonts/Figtree-Variable.ttf") format("truetype");
+        src: url("../../src/assets/fonts/Figtree-Variable.ttf")
+          format("truetype");
         font-weight: 100 1000;
       }
 
@@ -145,11 +146,13 @@
   </head>
   <body>
     <div class="backdrop"></div>
-        <h1></h1>
+    <h1></h1>
     <div class="window">
       <div class="tabs">
         <div class="dots"><i></i><i></i><i></i></div>
-        <div class="tab"><img src="../../public/icon-34.png" alt="" />UpTab</div>
+        <div class="tab">
+          <img src="../../public/icon-34.png" alt="" />UpTab
+        </div>
       </div>
       <div class="toolbar">
         <span>←</span><span>→</span><span>↻</span>
@@ -159,13 +162,18 @@
     </div>
     <script>
       /** Called by the script with the headline and the captured UI. */
-      window.render = ({ headline: [first, second], screen, photo }) => {
+      window.render = ({
+        headline: [first, second],
+        screen,
+        backdrop: photo,
+      }) => {
         const accent = document.createElement("span");
 
         accent.textContent = second;
         document.querySelector("h1").replaceChildren(first, accent);
         document.querySelector(".screen").src = screen;
-        document.querySelector(".backdrop").style.backgroundImage = `url("${photo}")`;
+        document.querySelector(".backdrop").style.backgroundImage =
+          `url("${photo}")`;
 
         const backdrop = new Image();
 

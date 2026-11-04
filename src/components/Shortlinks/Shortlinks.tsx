@@ -20,6 +20,7 @@ import {
 } from "@/src/hooks/queries/useShortlinks";
 import { Modals, useModalStore } from "@/src/hooks/stores/useModalStore";
 import { useShortlinkStore } from "@/src/hooks/stores/useShortlinkStore";
+import { useSettings } from "@/src/hooks/useSettings";
 import { reorderShortlinks } from "@/src/services/shortlinks/reorderShortlinks";
 import { Shortlink as ShortlinkType } from "@/src/services/shortlinks/types";
 import { cn } from "@/src/utils";
@@ -32,6 +33,7 @@ const Shortlinks = () => {
   const queryClient = useQueryClient();
 
   const { isPending, isError, data } = useShortlinks();
+  const { data: settings } = useSettings();
   const reorderMutation = useMutation({ mutationFn: reorderShortlinks });
 
   const setActiveModal = useModalStore((state) => state.setActiveModal);
@@ -78,11 +80,14 @@ const Shortlinks = () => {
   }
 
   if (isError) {
-    return <p>Unable to display your shortlinks.</p>;
+    return <p>Couldn&apos;t load your shortlinks.</p>;
   }
 
   return (
-    <div className="mt-10 first:mt-0">
+    <div
+      data-setting="sidebar.showShortlinks sidebar.shortlinkColumns"
+      className="mt-10 first:mt-0"
+    >
       {data.length === 0 ? (
         <EmptyState />
       ) : (
@@ -98,7 +103,10 @@ const Shortlinks = () => {
           >
             <div
               className={cn(
-                "-m-2 grid grid-cols-2 gap-2 rounded-2xl border border-dashed border-transparent p-2 transition-colors duration-250",
+                "-m-2 grid gap-2 rounded-2xl border border-dashed border-transparent p-2 transition-colors duration-250",
+                settings?.sidebar.shortlinkColumns === 1
+                  ? "grid-cols-1"
+                  : "grid-cols-2",
                 isDragging && "border-gray-200 bg-gray-100",
               )}
             >

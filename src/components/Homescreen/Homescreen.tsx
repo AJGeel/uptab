@@ -1,9 +1,10 @@
-import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
+import { CaretLeftIcon, CaretRightIcon } from "@phosphor-icons/react";
 
 import {
   Modals as ModalIds,
   useModalStore,
 } from "@/src/hooks/stores/useModalStore";
+import { useAccent } from "@/src/hooks/useAccent";
 import { useEasterEggs } from "@/src/hooks/useEasterEggs";
 import useKeyPress from "@/src/hooks/useKeyPress";
 import { useRandomBackground } from "@/src/hooks/useRandomBackground/useRandomBackground";
@@ -12,9 +13,9 @@ import { hotkeys } from "@/src/services/hotkeys/hotkeys";
 import { cn } from "@/src/utils";
 
 import InfoWidget from "../InfoWidget/InfoWidget";
+import BarButton from "./partials/BarButton";
 import { ActiveHotkeyIndicator } from "../Modals/HotkeysModal/partials/ActiveHotkeyIndicator";
 import Modals from "../Modals/Modals";
-import BarButton from "./partials/BarButton";
 import Sidebar from "../Sidebar/Sidebar";
 import { Background } from "../ui/Background";
 import UpdateNotification from "../UpdateNotification/UpdateNotification";
@@ -23,6 +24,9 @@ const Homescreen = () => {
   const { data: settings, isPending, toggleSidebarSetting } = useSettings();
   const { activeBg, onError, browse } = useRandomBackground();
   const setActiveModal = useModalStore((state) => state.setActiveModal);
+  const openSettingsSection = useModalStore(
+    (state) => state.openSettingsSection,
+  );
   const showCredit = settings?.homescreen.showPhotoCredit && activeBg?.author;
 
   const isSidebarOpen = settings?.sidebar?.isOpen;
@@ -31,6 +35,7 @@ const Homescreen = () => {
   useKeyPress("ArrowRight", () => browse(1));
   useKeyPress("ArrowLeft", () => browse(-1));
   useEasterEggs();
+  useAccent();
 
   if (isPending) {
     return <></>;
@@ -60,6 +65,8 @@ const Homescreen = () => {
         >
           {settings?.homescreen?.showInfoWidget && (
             <InfoWidget
+              settingId="homescreen.showInfoWidget"
+              inert={isSidebarOpen}
               className={cn(
                 "p-6 pb-16 pl-20 duration-500",
                 isSidebarOpen && "pointer-events-none translate-x-40 opacity-0",
@@ -68,6 +75,7 @@ const Homescreen = () => {
           )}
           {settings?.sidebar.showUpdates && (
             <div
+              inert={isSidebarOpen}
               className={cn(
                 "absolute top-6 right-6 w-max max-w-md duration-500",
                 isSidebarOpen && "pointer-events-none translate-x-40 opacity-0",
@@ -84,49 +92,82 @@ const Homescreen = () => {
           />
           <div className="relative mt-auto self-start p-2">
             <div
+              inert={isSidebarOpen}
               className={cn(
                 "flex items-center gap-1 rounded-2xl p-1 text-white opacity-100 duration-500 text-shadow-black/20 text-shadow-md focus-within:bg-black/30 focus-within:opacity-100 hover:bg-black/30 hover:opacity-100",
                 isSidebarOpen && "pointer-events-none translate-x-40 opacity-0",
               )}
             >
-              <BarButton
-                aria-label="Previous background"
-                tooltip="Previous photo (←)"
-                className="active:scale-90"
-                onClick={() => browse(-1)}
-              >
-                <ChevronLeftIcon className="size-4 drop-shadow-md drop-shadow-black/20" />
-              </BarButton>
-              <BarButton
-                tooltip="Choose themes (B)"
-                className="flex items-center gap-2 px-3 text-shadow-black/20 text-shadow-md active:scale-95"
-                onClick={() => setActiveModal(ModalIds.backgrounds)}
-              >
-                Backgrounds
-              </BarButton>
-              <BarButton
-                aria-label="Next background"
-                tooltip="Next photo (→)"
-                className="active:scale-90"
-                onClick={() => browse(1)}
-              >
-                <ChevronRightIcon className="size-4 drop-shadow-md drop-shadow-black/20" />
-              </BarButton>
+              {settings?.homescreen.showBackgroundsButton && (
+                <div
+                  data-setting="photos.backgrounds photos.photoChange homescreen.showBackgroundsButton"
+                  className="flex items-center gap-1 rounded-xl"
+                >
+                  <BarButton
+                    aria-label="Previous background"
+                    tooltip="Previous photo (←)"
+                    className="active:scale-90"
+                    onClick={() => browse(-1)}
+                  >
+                    <CaretLeftIcon className="size-4 drop-shadow-md drop-shadow-black/20" />
+                  </BarButton>
+                  <BarButton
+                    tooltip="Choose backgrounds (B)"
+                    className="flex items-center gap-2 px-3 text-shadow-black/20 text-shadow-md active:scale-95"
+                    onClick={() => setActiveModal(ModalIds.backgrounds)}
+                  >
+                    Backgrounds
+                  </BarButton>
+                  <BarButton
+                    aria-label="Next background"
+                    tooltip="Next photo (→)"
+                    className="active:scale-90"
+                    onClick={() => browse(1)}
+                  >
+                    <CaretRightIcon className="size-4 drop-shadow-md drop-shadow-black/20" />
+                  </BarButton>
+                </div>
+              )}
               {showCredit &&
                 (activeBg.link ? (
                   <a
                     href={activeBg.link}
+                    data-setting="homescreen.showPhotoCredit"
                     className="mr-1 ml-3 rounded-xl p-2 px-3 duration-150 text-shadow-black/20 text-shadow-md hover:bg-white/15 active:scale-95"
                   >
                     Photo by {activeBg.author}
                   </a>
                 ) : (
-                  <p className="mr-1 ml-3 p-2 px-3 text-shadow-black/20 text-shadow-md">
+                  <p
+                    data-setting="homescreen.showPhotoCredit"
+                    className="mr-1 ml-3 p-2 px-3 text-shadow-black/20 text-shadow-md"
+                  >
                     Photo by {activeBg.author}
                   </p>
                 ))}
             </div>
           </div>
+          {settings?.homescreen.showPreferencesButton && (
+            <div className="absolute right-0 bottom-0 p-2">
+              <div
+                inert={isSidebarOpen}
+                data-setting="homescreen.showPreferencesButton"
+                className={cn(
+                  "rounded-2xl p-1 text-white duration-500 text-shadow-black/20 text-shadow-md focus-within:bg-black/30 hover:bg-black/30",
+                  isSidebarOpen &&
+                    "pointer-events-none translate-x-40 opacity-0",
+                )}
+              >
+                <BarButton
+                  tooltip="Edit preferences (/)"
+                  className="flex items-center gap-2 px-3 text-shadow-black/20 text-shadow-md active:scale-95"
+                  onClick={() => openSettingsSection("homescreen")}
+                >
+                  Edit preferences
+                </BarButton>
+              </div>
+            </div>
+          )}
         </Background>
       </div>
     </>

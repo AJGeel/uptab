@@ -1,4 +1,4 @@
-import { CheckCircleIcon } from "@heroicons/react/24/solid";
+import { CheckCircleIcon } from "@phosphor-icons/react";
 import { useState } from "react";
 
 import { useBackgroundCatalogue } from "@/src/hooks/queries/useBackgroundCatalogue";
@@ -36,7 +36,7 @@ const LocalPhotosModal = () => {
   const { catalogue } = useBackgroundCatalogue();
   const { data: settings, setBackgroundThemes } = useSettings();
   const activeModal = useModalStore((state) => state.activeModal);
-  const setActiveModal = useModalStore((state) => state.setActiveModal);
+  const closeModal = useModalStore((state) => state.closeModal);
   const [selected, setSelected] = useState<string[]>([]);
   const [status, setStatus] = useState<string | null>(null);
   // Share of the files done while adding, from 0 to 1.
@@ -51,7 +51,7 @@ const LocalPhotosModal = () => {
 
   const back = () => {
     reset();
-    setActiveModal(Modals.backgrounds);
+    closeModal();
   };
 
   const add = async (files: File[]) => {
@@ -123,7 +123,7 @@ const LocalPhotosModal = () => {
       isVisible={activeModal === Modals.localPhotos}
       onClose={back}
       title="My photos"
-      subtitle="Add photos from your computer to show them alongside the themes. They're kept in this browser only."
+      subtitle="Add photos from your computer to show them alongside the backgrounds. They're kept in this browser only."
       className="max-w-2xl"
       footer={
         <div className="flex items-center justify-between gap-2">
@@ -212,7 +212,10 @@ const LocalPhotosModal = () => {
                 }}
               >
                 {isSelected && (
-                  <CheckCircleIcon className="absolute top-1.5 right-1.5 size-6 rounded-full bg-white text-sky-500 shadow-sm" />
+                  <CheckCircleIcon
+                    weight="fill"
+                    className="absolute top-1.5 right-1.5 size-6 rounded-full bg-white text-sky-500 shadow-sm"
+                  />
                 )}
               </button>
             );

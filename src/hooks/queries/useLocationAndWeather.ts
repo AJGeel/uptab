@@ -7,7 +7,11 @@ import { getActiveSavedLocation } from "@/src/services/location/resolveLocation"
 import { GpsFailure } from "@/src/services/location/types";
 import { PERSIST_DURATION } from "@/src/services/persistQueries";
 import { getWeather } from "@/src/services/weather";
+import { MAX_FORECAST_DAYS } from "@/src/services/weather/constants";
 import { mapWeather } from "@/src/services/weather/mapWeather";
+
+/** Long enough to notice that something happened, as a retry can be instant. */
+export const MIN_RETRY_MS = 800;
 
 type Status = "loading" | "ready" | "locationError" | "weatherError";
 
@@ -45,7 +49,12 @@ export const useLocationAndWeather = () => {
     select: mapWeather,
     queryKey: [
       "weather",
-      { latitude: locationData?.latitude, longitude: locationData?.longitude },
+      {
+        latitude: locationData?.latitude,
+        longitude: locationData?.longitude,
+        // A forecast saved with fewer days or fields isn't reused.
+        days: MAX_FORECAST_DAYS,
+      },
     ],
     retry: 1,
     // Fail when offline, rather than showing the loader indefinitely.
@@ -87,5 +96,6 @@ export const useLocationAndWeather = () => {
     /** Why GPS failed, when `status` is `locationError`. */
     gpsFailure: getGpsFailure(),
     retryLocation: () => gpsQuery.refetch(),
+    retryWeather: () => weatherQuery.refetch(),
   };
 };

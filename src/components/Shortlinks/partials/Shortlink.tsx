@@ -1,14 +1,13 @@
-import { PencilIcon } from "@heroicons/react/24/solid";
+import { PencilSimpleIcon } from "@phosphor-icons/react";
 import { useState } from "react";
 
 import { Modals, useModalStore } from "@/src/hooks/stores/useModalStore";
 import { useShortlinkStore } from "@/src/hooks/stores/useShortlinkStore";
 import { Shortlink } from "@/src/services/shortlinks";
-import { cn } from "@/src/utils";
-import { getFavicon } from "@/src/utils/getFavicon";
+import { cn, safeHref } from "@/src/utils";
 
+import Favicon from "../../ui/Favicon";
 import IconButton from "../../ui/IconButton";
-import ImageWithFallback from "../../ui/ImageWithFallback";
 import Tooltip from "../../ui/Tooltip";
 
 type Props = {
@@ -28,15 +27,15 @@ const Shortlink = ({ item, isDragging }: Props) => {
       disabled={isDragging || isHoveringSecondary}
     >
       <a
-        href={isDragging ? undefined : item.url}
+        href={isDragging ? undefined : safeHref(item.url)}
         className={cn(
           "group relative flex w-full cursor-pointer items-center gap-3 rounded-xl border bg-white px-3 py-2.5 shadow-xs ring-sky-500 duration-150 hover:ring-3 focus:ring-3 focus:outline-hidden",
           isDragging && "cursor-grabbing",
         )}
       >
-        <ImageWithFallback
-          src={item.icon ?? getFavicon(item.url)}
-          fallbackSrc="/icon-34.png"
+        <Favicon
+          icon={item.icon}
+          url={item.url}
           className="size-6 shrink-0 rounded-sm"
         />
         <div className="flex grow flex-col truncate">
@@ -59,7 +58,7 @@ const Shortlink = ({ item, isDragging }: Props) => {
             setActiveModal(Modals.shortlink);
           }}
         >
-          <PencilIcon className="size-4 text-gray-600" />
+          <PencilSimpleIcon weight="fill" className="size-4 text-gray-600" />
         </IconButton>
       </a>
     </Tooltip>

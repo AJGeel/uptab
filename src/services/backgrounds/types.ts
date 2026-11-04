@@ -1,4 +1,4 @@
-/** The fields of the remote catalogue (docs/remote-backgrounds.md) that UpTab uses. */
+/** The fields of the remote catalogue that UpTab uses. */
 export type Catalogue = {
   themes: CatalogueTheme[];
   images: BackgroundImage[];

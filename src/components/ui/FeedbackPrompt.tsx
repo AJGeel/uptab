@@ -11,7 +11,10 @@ const FeedbackPrompt = ({ className }: Props) => {
     "https://docs.google.com/forms/d/e/1FAIpQLSfvi2jV7AlzGamcSzMUlXT74HAisrrjUiKFZ4-rmQKeG41oHA/viewform?usp=sf_link";
 
   return (
-    <p className={cn("text-black/70", className)}>
+    <p
+      data-setting="sidebar.showFeedbackPrompt"
+      className={cn("text-black/70", className)}
+    >
       Got feedback?{" "}
       <a
         className={cn("inline-block", inlineLinkStyles)}

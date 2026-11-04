@@ -3,19 +3,13 @@
     "target": "esnext",
     "module": "esnext",
     "moduleResolution": "bundler",
-    "lib": [
-      "esnext"
-    ],
-    "types": [
-      "bun"
-    ],
+    "lib": ["esnext"],
+    "types": ["bun"],
     "strict": true,
     "noEmit": true,
     "skipLibCheck": true,
     "esModuleInterop": true,
     "resolveJsonModule": true
   },
-  "include": [
-    "**/*.ts"
-  ]
+  "include": ["**/*.ts", "../ext-store.config.ts"]
 }

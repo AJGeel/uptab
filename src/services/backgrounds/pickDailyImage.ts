@@ -1,6 +1,6 @@
 import { BackgroundImage, Catalogue } from "./types";
 
-/** The photo shown on `date` (yyyy-MM-dd), stored so arrow-key browsing sticks. */
+/** The photo shown for a stretch of time (`date`: see getPhotoPeriod), stored so arrow-key browsing sticks. */
 export type DailyPick = { date: string; imageId: string };
 
 /**

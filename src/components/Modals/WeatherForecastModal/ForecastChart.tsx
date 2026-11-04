@@ -1,3 +1,4 @@
+import { useState } from "react";
 import {
   Bar,
   Cell,
@@ -10,14 +11,18 @@ import {
   YAxis,
 } from "recharts";
 
+import { useSettings } from "@/src/hooks/useSettings";
+import { toDisplayTemperature } from "@/src/services/weather/temperature";
+
 import DailySummaries from "./DailySummaries";
 import {
   buildDailySummaries,
   buildForecastChartData,
   ForecastChartPoint,
-  formatTime,
+  formatHour,
   getDayBoundaries,
   getTimeTicks,
+  hasRoomForFirstDayLabel,
   HourlyForecast,
 } from "./forecastChartData";
 import ForecastTooltip from "./ForecastTooltip";
@@ -25,6 +30,7 @@ import {
   getTemperatureColor,
   getTemperatureGradientStops,
 } from "./temperatureColor";
+import AnimatedHeight from "../../ui/AnimatedHeight";
 
 const TEMPERATURE_GRADIENT_ID = "temperatureGradient";
 
@@ -93,7 +99,15 @@ type ForecastChartProps = {
 };
 
 const ForecastChart = ({ hourly }: ForecastChartProps) => {
-  const data = buildForecastChartData(hourly);
+  const { data: settings } = useSettings();
+  const unit = settings?.units.temperature ?? "celsius";
+  // The chart starts at the hour the modal was opened in.
+  const [now] = useState(() => new Date());
+  const data = buildForecastChartData(
+    hourly,
+    now,
+    settings?.dateTime.forecastDays,
+  );
   const dayBoundaries = getDayBoundaries(data);
   const timeTicks = getTimeTicks(data);
   const summaries = buildDailySummaries(data);
@@ -109,7 +123,10 @@ const ForecastChart = ({ hourly }: ForecastChartProps) => {
 
   return (
     <div className="mt-2 space-y-6">
-      <DailySummaries summaries={summaries} />
+      {/* More or fewer days change the rows: the space follows smoothly. */}
+      <AnimatedHeight>
+        <DailySummaries summaries={summaries} />
+      </AnimatedHeight>
 
       <div className="h-70 w-full">
         <ResponsiveContainer width="100%" height="100%">
@@ -140,7 +157,9 @@ const ForecastChart = ({ hourly }: ForecastChartProps) => {
               tickLine={false}
               axisLine={{ stroke: HAIRLINE_COLOR }}
               tick={AXIS_TICK}
-              tickFormatter={(value: string) => formatTime(new Date(value))}
+              tickFormatter={(value: string) =>
+                formatHour(new Date(value), settings?.dateTime.timeFormat)
+              }
             />
 
             <YAxis
@@ -159,10 +178,12 @@ const ForecastChart = ({ hourly }: ForecastChartProps) => {
               width={28}
               domain={[temperatureTicks[0], temperatureTicks.at(-1) ?? 0]}
               ticks={temperatureTicks}
-              tickFormatter={(value) => `${value}°`}
+              tickFormatter={(value) =>
+                `${Math.round(toDisplayTemperature(value, unit))}°`
+              }
             />
 
-            {firstPoint && (
+            {firstPoint && hasRoomForFirstDayLabel(data) && (
               <ReferenceLine
                 x={firstPoint.time}
                 yAxisId="temperature"

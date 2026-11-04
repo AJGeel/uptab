@@ -1,22 +1,13 @@
 /* Parts of this file run in the browser through page.evaluate. */
 /// <reference lib="dom" />
-import { mkdtemp } from "fs/promises";
-import { tmpdir } from "os";
-import { join, resolve } from "path";
+import { resolve } from "path";
 
-import {
-  type BrowserContext,
-  chromium,
-  type Page,
-  type Worker,
-} from "playwright";
+import { DIST_DIR } from "@ajgeel/ext-store/utils";
+import type { BrowserContext, Page, Worker } from "playwright";
 
-import { geocode, LOCATION, TIME_ZONE, weather } from "./fixtures";
-import { DIST_DIR, ROOT_DIR } from "../commands/utils";
+import { geocode, weather } from "./fixtures";
 
 export const SCREENSHOTS_DIR = resolve(DIST_DIR, "screenshots");
-/** Where the framed screenshots go, ready for the stores. */
-export const OUTPUT_DIR = resolve(ROOT_DIR, "docs/store-listing/screenshots");
 export const EXTENSION_DIR = resolve(SCREENSHOTS_DIR, "extension");
 export const PHOTOS_DIR = resolve(SCREENSHOTS_DIR, "photos");
 
@@ -24,33 +15,6 @@ export const PHOTOS_DIR = resolve(SCREENSHOTS_DIR, "photos");
 export const CATALOGUE_URL =
   process.env.VITE_CATALOGUE_URL ??
   "https://uptab.vercel.app/backgrounds/v1/catalogue.json";
-
-/** The browser window the UI is captured in, before it's framed. */
-export const VIEWPORT = { width: 1280, height: 640 };
-
-/** Reports what a scene is doing, and fails it if a stage takes too long. */
-export type Stage = <T>(
-  label: string,
-  task: () => Promise<T>,
-  timeoutMs?: number,
-) => Promise<T>;
-
-/** Rejects with `label` once `ms` have passed, so nothing can wait forever. */
-export const withDeadline = <T>(
-  task: Promise<T>,
-  ms: number,
-  label: string,
-) => {
-  let timer: ReturnType<typeof setTimeout> | undefined;
-  const deadline = new Promise<never>((_, reject) => {
-    timer = setTimeout(
-      () => reject(new Error(`Timed out after ${ms / 1000}s: ${label}`)),
-      ms,
-    );
-  });
-
-  return Promise.race([task, deadline]).finally(() => clearTimeout(timer));
-};
 
 /** `fetch` that gives up after `ms`, with the URL in the error. */
 export const fetchWithTimeout = async (url: string, ms = 15_000) => {
@@ -73,32 +37,6 @@ type Catalogue = {
 
 export const getCatalogue = async () =>
   (await (await fetchWithTimeout(CATALOGUE_URL)).json()) as Catalogue;
-
-/** A fresh browser profile with the built extension, and its background worker. */
-export const launchExtension = async () => {
-  const profile = await mkdtemp(join(tmpdir(), "uptab-shots-"));
-  const context = await chromium.launchPersistentContext(profile, {
-    // Full Chromium: the headless shell can't load extensions.
-    channel: "chromium",
-    headless: true,
-    args: [
-      `--disable-extensions-except=${EXTENSION_DIR}`,
-      `--load-extension=${EXTENSION_DIR}`,
-    ],
-    viewport: VIEWPORT,
-    deviceScaleFactor: 2,
-    geolocation: LOCATION,
-    permissions: ["geolocation"],
-    timezoneId: TIME_ZONE,
-    locale: "en-GB",
-  });
-  const worker =
-    context.serviceWorkers()[0] ??
-    (await context.waitForEvent("serviceworker", { timeout: 15_000 }));
-  const newTabUrl = `chrome-extension://${new URL(worker.url()).host}/src/pages/newtab/index.html`;
-
-  return { context, worker, newTabUrl };
-};
 
 const FAVICONS_DIR = resolve(SCREENSHOTS_DIR, "favicons");
 
@@ -221,49 +159,11 @@ export const seedStorage = (
     { date, photo, themes, shortlinks: SHORTLINKS, bookmarks: BOOKMARKS },
   );
 
-/**
- * Waits for fonts and every image on the page, including CSS backgrounds.
- * An image that hasn't loaded after `ms` fails the scene, with its URL.
- */
-export const waitForImages = async (page: Page, ms = 20_000) => {
-  const stalled = await page.evaluate(async (ms) => {
-    await document.fonts.ready;
-
-    const urls = [...document.querySelectorAll<HTMLElement>("*")]
-      .flatMap((element) => [
-        ...getComputedStyle(element).backgroundImage.matchAll(
-          /url\("(.+?)"\)/g,
-        ),
-      ])
-      .map((match) => match[1]);
-    const images = [...document.images].map((image) => image.src);
-    const results = await Promise.all(
-      [...new Set([...urls, ...images])].map(
-        (src) =>
-          new Promise<string | null>((done) => {
-            const image = new Image();
-            const timer = setTimeout(() => done(src), ms);
-
-            image.onload = image.onerror = () => {
-              clearTimeout(timer);
-              done(null);
-            };
-            image.src = src;
-          }),
-      ),
-    );
-
-    return results.filter((src) => src !== null);
-  }, ms);
-
-  if (stalled.length > 0) {
-    throw new Error(
-      `Images still loading after ${ms / 1000}s: ${stalled.join(", ")}`,
-    );
-  }
-};
-
 export const photoFile = (id: string) => resolve(PHOTOS_DIR, `${id}.webp`);
+
+/** The largest catalogue size of a scene's photo, shown behind the framed screenshot. */
+export const backdropFile = (id: string) =>
+  resolve(PHOTOS_DIR, `${id}.backdrop.webp`);
 
 /** Adds photos from setup as local photos, through the real file picker input. */
 export const addLocalPhotos = async (page: Page, ids: string[]) => {

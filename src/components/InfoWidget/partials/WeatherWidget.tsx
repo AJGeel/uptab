@@ -1,6 +1,11 @@
 import { loadForecastChart } from "@/src/components/Modals/WeatherForecastModal/loadForecastChart";
 import { useModalStore } from "@/src/hooks/stores/useModalStore";
+import { useSettings } from "@/src/hooks/useSettings";
 import { Weather, mapWeatherCode } from "@/src/services/weather";
+import {
+  temperatureSymbol,
+  toDisplayTemperature,
+} from "@/src/services/weather/temperature";
 import { cn } from "@/src/utils";
 
 import LocationSwitcher from "./LocationSwitcher";
@@ -14,6 +19,7 @@ interface WeatherWidgetProps {
 
 const WeatherWidget = ({ weatherData, area }: WeatherWidgetProps) => {
   const setActiveModal = useModalStore((state) => state.setActiveModal);
+  const unit = useSettings().data?.units.temperature ?? "celsius";
 
   const weatherDescription = mapWeatherCode(
     weatherData.current.weather_code,
@@ -34,20 +40,32 @@ const WeatherWidget = ({ weatherData, area }: WeatherWidgetProps) => {
         "has-[[role=combobox]:hover]:bg-transparent! has-[[role=combobox]:hover]:backdrop-blur-none!",
       )}
     >
-      <p className="text-4xl font-bold">
-        {weatherData.current.temperature_2m}°C
+      <p data-setting="weather.temperature" className="text-4xl font-bold">
+        {toDisplayTemperature(weatherData.current.temperature_2m, unit)}
+        {/* °C is wider than °F: both are as wide as the widest, so nothing next to it shifts. */}
+        <span className="inline-grid">
+          <span className="col-start-1 row-start-1">
+            {temperatureSymbol(unit)}
+          </span>
+          <span aria-hidden className="invisible col-start-1 row-start-1">
+            °C
+          </span>
+        </span>
       </p>
 
       <div className="flex items-center gap-2">
         <div className="flex-col">
-          <div className="relative z-10">
+          <div
+            data-setting="weather.location"
+            className="relative z-10 -mb-0.5"
+          >
             <LocationSwitcher area={area ?? "Unknown location"} />
           </div>
 
           <Tooltip label="See the weather forecast" side="bottom">
             <button
               data-forecast
-              className="rounded-xs text-left text-xs opacity-70 ring-sky-500 after:absolute after:inset-0 after:rounded-lg focus-visible:outline-hidden focus-visible:after:ring-2"
+              className="rounded-xs text-left text-xs opacity-70 after:absolute after:inset-0 after:rounded-2xl focus-visible:outline-hidden focus-visible:after:outline-2 focus-visible:after:outline-offset-2 focus-visible:after:outline-sky-500"
               onClick={() => setActiveModal("weatherForecast")}
               onFocus={loadForecastChart}
               onPointerEnter={loadForecastChart}
@@ -59,7 +77,7 @@ const WeatherWidget = ({ weatherData, area }: WeatherWidgetProps) => {
 
         {weatherDescription && (
           <img
-            className="w-10"
+            className="size-10"
             src={weatherDescription.image}
             alt={weatherDescription.description}
           />

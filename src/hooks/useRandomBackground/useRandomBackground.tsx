@@ -1,8 +1,8 @@
-import { format } from "date-fns";
 import { useState } from "react";
 
 import { getCatalogue } from "@/src/services/backgrounds/getCatalogue";
 import { getImageSrc } from "@/src/services/backgrounds/getImageSrc";
+import { getPhotoPeriod } from "@/src/services/backgrounds/photoPeriod";
 import {
   getEnabledImages,
   pickDailyImage,
@@ -33,8 +33,17 @@ export const useRandomBackground = () => {
   const { data: settings } = useSettings();
   const { catalogue, localPhotos, isPending } = useBackgroundCatalogue();
   const { pick: stored, isHydrated, setPick } = useDailyPick();
-  // Fixed per tab, so the photo doesn't change at midnight.
-  const [date] = useState(() => format(new Date(), "yyyy-MM-dd"));
+  /*
+   * Fixed per tab, so the photo doesn't change while it's open. A new tab gets
+   * a seed of its own, so nothing stored matches and the photo is a new one.
+   */
+  const [openedAt] = useState(() => new Date());
+  const [tabSeed] = useState(() => crypto.randomUUID());
+  const date = getPhotoPeriod(
+    settings?.backgrounds.photoChange ?? "daily",
+    openedAt,
+    tabSeed,
+  );
   // A catalogue fetched again after an image failed to load.
   const [reloaded, setReloaded] = useState<Catalogue | null>(null);
   const [useFallback, setUseFallback] = useState(false);

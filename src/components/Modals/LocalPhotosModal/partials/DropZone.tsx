@@ -1,4 +1,4 @@
-import { ArrowUpTrayIcon } from "@heroicons/react/24/outline";
+import { UploadSimpleIcon } from "@phosphor-icons/react";
 import { DragEvent, useRef, useState } from "react";
 
 import { cn } from "@/src/utils";
@@ -58,7 +58,7 @@ const DropZone = ({ status, progress, isBusy, isEmpty, onFiles }: Props) => {
         isDragging && "border-sky-500 bg-sky-50",
       )}
     >
-      {isEmpty && <ArrowUpTrayIcon className="size-8 text-gray-500" />}
+      {isEmpty && <UploadSimpleIcon className="size-8 text-gray-500" />}
       <p className="text-sm text-gray-700" aria-live="polite">
         {status ?? "Drop photos here, or"}
       </p>

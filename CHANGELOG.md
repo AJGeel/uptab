@@ -2,6 +2,20 @@
 
 UpTab adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [V2.1.0] — 2026-11-04
+
+### ✨ Added
+
+- A redesigned preferences menu, with new options like accent colour.
+- Sort bookmarks by **Recently visited** or **Most visited**.
+- Set your own icon or emoji on bookmarks and shortlinks.
+- Pick a bookmark from the search results with <kbd>↑</kbd> <kbd>↓</kbd> and <kbd>Enter</kbd>.
+
+### 🐛 Fixed
+
+- The weather no longer jumps around when it finishes loading.
+- Pressing <kbd>Tab</kbd> skips the sidebar when it's closed, and the background when the sidebar is open.
+
 ## [V2.0.0] — 2026-10-22
 
 ### ✨ Added
