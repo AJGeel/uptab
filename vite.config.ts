@@ -22,6 +22,8 @@ const isDev = process.env.__DEV__ === "true";
 
 export default defineConfig({
   build: {
+    // Extension bundles load from disk, so the web-oriented 500 kB default is noise.
+    chunkSizeWarningLimit: 1000,
     outDir,
     rollupOptions: {
       input: {
@@ -34,7 +36,6 @@ export default defineConfig({
         ),
         newtab: resolve(pagesDir, "newtab", "index.html"),
         popup: resolve(pagesDir, "popup", "index.html"),
-        changelog: resolve(pagesDir, "changelog", "index.html"),
       },
       output: {
         entryFileNames: (chunk) => `src/pages/${chunk.name}/index.js`,
@@ -56,7 +57,10 @@ export default defineConfig({
     },
     sourcemap: isDev,
   },
-  define: isDev ? {} : { "import.meta.env.VITE_CATALOGUE_URL": "undefined" },
+  define: {
+    "import.meta.env.VITE_IS_DEV": JSON.stringify(String(isDev)),
+    ...(isDev ? {} : { "import.meta.env.VITE_CATALOGUE_URL": "undefined" }),
+  },
   plugins: [react(), tailwindcss(), makeManifest(), includeChangelog()],
   publicDir,
   resolve: {

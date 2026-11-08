@@ -2,6 +2,7 @@ import { Modals, useModalStore } from "@/src/hooks/stores/useModalStore";
 import { hotkeyDescriptions } from "@/src/services/hotkeys/hotkeys";
 import { Settings } from "@/src/services/settings/types";
 
+import AboutTab from "./AboutTab";
 import LocationTab from "./LocationTab";
 import SettingRow from "./SettingRow";
 import Button, { buttonVariants } from "../../../ui/Button";
@@ -21,6 +22,7 @@ const hotkeyOf = (entry: SettingEntry) =>
 
 /** One setting, with the control that fits it. */
 const SettingEntryRow = ({ entry, settings, query, onChange }: Props) => {
+  const isDisabled = entry.isDisabled?.(settings) ?? false;
   const openModal = useModalStore((state) => state.openModal);
 
   if (entry.kind === "switch") {
@@ -33,6 +35,7 @@ const SettingEntryRow = ({ entry, settings, query, onChange }: Props) => {
         query={query}
         hotkey={hotkeyOf(entry)}
         isActive={entry.get(settings)}
+        isDisabled={isDisabled}
         onToggle={() => onChange(entry.set(settings, !entry.get(settings)))}
       />
     );
@@ -46,9 +49,11 @@ const SettingEntryRow = ({ entry, settings, query, onChange }: Props) => {
         title={entry.title}
         description={entry.description}
         query={query}
+        isDisabled={isDisabled}
       >
         <SegmentedControl
           ariaLabel={entry.title}
+          disabled={isDisabled}
           value={entry.get(settings)}
           options={entry.options}
           onValueChange={(value) => onChange(entry.set(settings, value))}
@@ -74,6 +79,10 @@ const SettingEntryRow = ({ entry, settings, query, onChange }: Props) => {
         />
       </SettingRow>
     );
+  }
+
+  if (entry.content === "about") {
+    return <AboutTab />;
   }
 
   if (entry.content === "location") {

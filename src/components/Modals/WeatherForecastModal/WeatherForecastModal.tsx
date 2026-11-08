@@ -92,7 +92,7 @@ const WeatherForecastModal = () => {
             {isTweaking && (
               <QuickSettings
                 ids={FORECAST_SETTING_IDS}
-                onOpenAll={() => openSettingsSection("time")}
+                onOpenAll={() => openSettingsSection("weather")}
               />
             )}
           </AnimatedHeight>

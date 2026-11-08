@@ -44,7 +44,7 @@ describe("opening the settings from another modal", () => {
 
   it("returns to that modal when the settings close", () => {
     store().setActiveModal(Modals.weather_forecast);
-    store().openSettingsSection("time");
+    store().openSettingsSection("weather");
 
     expect(store().activeModal).toBe(Modals.settings);
 

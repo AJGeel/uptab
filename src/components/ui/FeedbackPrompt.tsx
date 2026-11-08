@@ -1,3 +1,6 @@
+import { runtime } from "webextension-polyfill";
+
+import { buildFeedbackUrl } from "@/src/services/feedback/feedbackUrl";
 import { cn } from "@/src/utils";
 
 import { inlineLinkStyles } from "./Button";
@@ -7,8 +10,10 @@ type Props = {
 };
 
 const FeedbackPrompt = ({ className }: Props) => {
-  const formUrl =
-    "https://docs.google.com/forms/d/e/1FAIpQLSfvi2jV7AlzGamcSzMUlXT74HAisrrjUiKFZ4-rmQKeG41oHA/viewform?usp=sf_link";
+  const formUrl = buildFeedbackUrl(
+    runtime.getManifest().version,
+    navigator.userAgent,
+  );
 
   return (
     <p

@@ -1,6 +1,7 @@
 import {
-  BellRingingIcon,
   BookmarkSimpleIcon,
+  CalendarBlankIcon,
+  CalendarDotsIcon,
   CameraIcon,
   ChatCircleDotsIcon,
   ColumnsIcon,
@@ -49,6 +50,23 @@ export const layoutEntries: SettingEntry[] = [
     icon: LinkIcon,
   },
   {
+    kind: "segmented",
+    id: "sidebar.shortlinkColumns",
+    section: "sidebar",
+    ...asString(field("sidebar", "shortlinkColumns"), (value) =>
+      value === "1" ? 1 : 2,
+    ),
+    title: "Shortlink columns",
+    description: "One long list, or two side by side.",
+    keywords: ["layout", "grid", "links", "wide"],
+    icon: ColumnsIcon,
+    isDisabled: (settings) => !settings.sidebar.showShortlinks,
+    options: [
+      { value: "1", label: "One" },
+      { value: "2", label: "Two" },
+    ],
+  },
+  {
     kind: "switch",
     id: "sidebar.showBookmarks",
     section: "sidebar",
@@ -57,16 +75,6 @@ export const layoutEntries: SettingEntry[] = [
     description: "Your browser's bookmarks, searchable from the sidebar.",
     keywords: ["favourites", "favorites", "saved"],
     icon: BookmarkSimpleIcon,
-  },
-  {
-    kind: "switch",
-    id: "sidebar.showUpdates",
-    section: "sidebar",
-    ...field("sidebar", "showUpdates"),
-    title: "Update news",
-    description: "Tells you when UpTab has something new. No spam, promise.",
-    keywords: ["notification", "changelog", "what's new", "release"],
-    icon: BellRingingIcon,
   },
   {
     kind: "switch",
@@ -79,22 +87,6 @@ export const layoutEntries: SettingEntry[] = [
     icon: ChatCircleDotsIcon,
   },
   {
-    kind: "segmented",
-    id: "sidebar.shortlinkColumns",
-    section: "sidebar",
-    ...asString(field("sidebar", "shortlinkColumns"), (value) =>
-      value === "1" ? 1 : 2,
-    ),
-    title: "Shortlink columns",
-    description: "One long list, or two side by side.",
-    keywords: ["layout", "grid", "links", "wide"],
-    icon: ColumnsIcon,
-    options: [
-      { value: "1", label: "One" },
-      { value: "2", label: "Two" },
-    ],
-  },
-  {
     kind: "switch",
     id: "homescreen.showInfoWidget",
     section: "homescreen",
@@ -103,6 +95,34 @@ export const layoutEntries: SettingEntry[] = [
     description: "Weather and the date, floating over your photo.",
     keywords: ["forecast", "calendar", "widget"],
     icon: SunHorizonIcon,
+  },
+  {
+    kind: "switch",
+    id: "time.showWeekNumber",
+    section: "homescreen",
+    ...field("dateTime", "showWeekNumber"),
+    title: "Week number",
+    description: "Shows which week of the year it is, under the date.",
+    keywords: ["calendar", "date", "widget"],
+    icon: CalendarDotsIcon,
+    isDisabled: (settings) => !settings.homescreen.showInfoWidget,
+  },
+  {
+    kind: "segmented",
+    id: "time.weekStartsOn",
+    section: "homescreen",
+    ...asString(field("dateTime", "weekStartsOn"), (value) =>
+      value === "sunday" ? "sunday" : "monday",
+    ),
+    title: "Weeks start on",
+    description: "Decides how the week number is counted.",
+    keywords: ["calendar", "monday", "sunday", "first day"],
+    icon: CalendarBlankIcon,
+    isDisabled: (settings) => !settings.homescreen.showInfoWidget,
+    options: [
+      { value: "monday", label: "Monday" },
+      { value: "sunday", label: "Sunday" },
+    ],
   },
   {
     kind: "switch",

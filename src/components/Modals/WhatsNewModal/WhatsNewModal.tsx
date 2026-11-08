@@ -14,7 +14,7 @@ import Spinner from "../../ui/Spinner";
 
 const ChangelogMarkdown = lazy(() => import("../../ui/ChangelogMarkdown"));
 
-const CHANGELOG_URL = "/src/pages/changelog/index.html";
+const CHANGELOG_URL = "https://uptab.vercel.app/changelog";
 
 const WhatsNewModal = () => {
   const activeModal = useModalStore((state) => state.activeModal);

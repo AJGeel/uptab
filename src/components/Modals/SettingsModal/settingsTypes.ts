@@ -1,4 +1,5 @@
-import { Icon } from "@phosphor-icons/react";
+import { Icon, IconWeight } from "@phosphor-icons/react";
+import { ComponentType } from "react";
 
 import { SettingsSection } from "@/src/hooks/stores/useModalStore";
 import { Hotkeys } from "@/src/services/hotkeys/types";
@@ -7,7 +8,7 @@ import { Settings } from "@/src/services/settings/types";
 export type Section = {
   id: SettingsSection;
   label: string;
-  icon: Icon;
+  icon: ComponentType<{ weight?: IconWeight; className?: string }>;
   /** Back to this section's defaults. Left out when that would throw away the user's own data. */
   reset?: (settings: Settings) => Settings;
 };
@@ -22,6 +23,8 @@ type Base = {
   icon: Icon;
   /** A key that does the same from anywhere, shown next to the title. */
   hotkey?: Hotkeys;
+  /** Greyed out and untouchable while the setting it depends on is off. */
+  isDisabled?: (settings: Settings) => boolean;
 };
 
 /** How an entry reads its value from the settings, and writes a new one. */
@@ -45,7 +48,7 @@ export type SwatchesEntry = Base & {
 /** Has its own contents, which the modal knows how to render. */
 export type CustomEntry = Base & {
   kind: "custom";
-  content: "backgrounds" | "localPhotos" | "location";
+  content: "about" | "backgrounds" | "localPhotos" | "location";
 };
 
 export type SettingEntry =

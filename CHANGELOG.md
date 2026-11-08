@@ -2,6 +2,20 @@
 
 UpTab adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [V2.2.0] — 2026-11-08
+
+### ✨ Added
+
+- A new About section in preferences, with a check for updates.
+
+### ♻️ Changed
+
+- A tidier preferences menu, with unused sections greyed out.
+
+### 🐛 Fixed
+
+- Bookmarks and shortlinks now only open web addresses, for extra safety.
+
 ## [V2.1.0] — 2026-11-04
 
 ### ✨ Added

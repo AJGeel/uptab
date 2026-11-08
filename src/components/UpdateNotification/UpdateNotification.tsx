@@ -5,11 +5,18 @@ import { useState } from "react";
 import { Modals, useModalStore } from "@/src/hooks/stores/useModalStore";
 import { cn } from "@/src/utils";
 
-import { useUpdateNotification } from "../../hooks/useUpdateNotification";
+export type NotificationVariant = "sidebar" | "floating";
 
 type Props = {
   /** Over the homescreen's photo, instead of in the sidebar. */
-  variant?: "sidebar" | "floating";
+  variant?: NotificationVariant;
+  onHide: () => void;
+};
+
+export const notificationStyles = {
+  sidebar: "mb-8 bg-sky-500/10 hover:bg-sky-500/20",
+  floating:
+    "bg-white/80 text-black shadow-lg backdrop-blur-sm hover:bg-white/90",
 };
 
 type SparkleProps = {
@@ -56,23 +63,16 @@ const Sparkles = () => (
   </svg>
 );
 
-const UpdateNotification = ({ variant = "sidebar" }: Props) => {
-  const { isVisible, onHide } = useUpdateNotification();
+const UpdateNotification = ({ variant = "sidebar", onHide }: Props) => {
   const [RNG] = useState(() => Math.random());
   const setActiveModal = useModalStore((state) => state.setActiveModal);
-
-  if (!isVisible) {
-    return <></>;
-  }
 
   return (
     <button
       data-setting="sidebar.showUpdates"
       className={cn(
         "flex w-full items-center gap-2 rounded-2xl p-2 pl-4 duration-150",
-        variant === "sidebar"
-          ? "mb-8 bg-sky-500/10 hover:bg-sky-500/20"
-          : "bg-white/80 text-black shadow-lg backdrop-blur-sm hover:bg-white/90",
+        notificationStyles[variant],
       )}
       onClick={(event) => {
         event.preventDefault();

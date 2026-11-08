@@ -79,7 +79,7 @@ const InfoWidget = ({ className, inert, settingId }: Props) => {
                   widgetHover,
                   widgetPress,
                 )}
-                onClick={() => openSettingsSection("weather", "citySearch")}
+                onClick={() => openSettingsSection("location", "citySearch")}
               >
                 <CloudSunIcon className="size-8" />
 

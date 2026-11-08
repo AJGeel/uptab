@@ -16,7 +16,13 @@ export type Modals = (typeof Modals)[keyof typeof Modals];
 export type SettingsFocus = "citySearch";
 
 export type SettingsSection =
-  "sidebar" | "homescreen" | "photos" | "weather" | "time" | "appearance";
+  | "sidebar"
+  | "homescreen"
+  | "photos"
+  | "location"
+  | "weather"
+  | "appearance"
+  | "general";
 
 type State = {
   activeModal: Modals | null;

@@ -19,6 +19,7 @@ type Props = {
   /** The control on the right. Without one, the row is a switch. */
   children?: ReactNode;
   isActive?: boolean;
+  isDisabled?: boolean;
   onToggle?: () => void;
 };
 
@@ -31,14 +32,15 @@ const SettingRow = ({
   hotkey,
   children,
   isActive = false,
+  isDisabled = false,
   onToggle,
 }: Props) => {
   const highlightProps = useSettingHighlight(settingId);
 
   return (
     <div
-      className={`group flex items-center gap-3 rounded-xl p-3 duration-150 hover:bg-black/5 ${onToggle ? "cursor-pointer" : ""}`}
-      onClick={onToggle}
+      className={`group flex items-center gap-3 rounded-xl p-3 duration-150 ${isDisabled ? "opacity-50" : `hover:bg-black/5 ${onToggle ? "cursor-pointer" : ""}`}`}
+      onClick={isDisabled ? undefined : onToggle}
       {...highlightProps}
     >
       <span className="flex size-9 shrink-0 items-center justify-center rounded-xl bg-sky-500/10 text-sky-800">
@@ -63,6 +65,7 @@ const SettingRow = ({
       {onToggle ? (
         <Switch
           checked={isActive}
+          disabled={isDisabled}
           aria-label={title}
           onCheckedChange={onToggle}
           // The row toggles too, so this would toggle twice.
