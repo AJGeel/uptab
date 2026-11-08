@@ -4,10 +4,21 @@ import { AccentId } from "./types";
  * The colours to choose from, in rainbow order. Their ramps are in tailwind.css,
  * under `data-accent`. Blue is the page's own, so it needs none.
  */
-export const ACCENTS: { id: AccentId; label: string; swatch: string }[] = [
+export const ACCENTS: {
+  id: AccentId;
+  label: string;
+  swatch: string;
+  /** For the check mark on the swatch, when white wouldn't show. */
+  checkColor?: string;
+}[] = [
   { id: "rose", label: "Red", swatch: "oklch(58.6% 0.253 17.585)" },
   { id: "orange", label: "Orange", swatch: "oklch(64.6% 0.222 41.116)" },
-  { id: "yellow", label: "Yellow", swatch: "oklch(55.4% 0.135 66.442)" },
+  {
+    id: "yellow",
+    label: "Yellow",
+    swatch: "oklch(83% 0.175 90)",
+    checkColor: "oklch(24% 0.05 70)",
+  },
   { id: "emerald", label: "Green", swatch: "oklch(59.6% 0.145 163.225)" },
   { id: "sky", label: "Blue", swatch: "#138cd0" },
   { id: "indigo", label: "Indigo", swatch: "oklch(51.1% 0.262 276.966)" },

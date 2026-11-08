@@ -134,10 +134,11 @@ export const generalEntries: SettingEntry[] = [
     description: "Buttons, switches and highlights.",
     keywords: ["theme", "colour", "color", "blue", "highlight", "palette"],
     icon: PaletteIcon,
-    options: ACCENTS.map(({ id, label, swatch }) => ({
+    options: ACCENTS.map(({ id, label, swatch, checkColor }) => ({
       value: id,
       label,
       color: swatch,
+      checkColor,
     })),
   },
   {

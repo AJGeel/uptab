@@ -2,7 +2,13 @@ import { CheckIcon } from "@phosphor-icons/react";
 
 import { cn } from "@/src/utils";
 
-type Swatch = { value: string; label: string; color: string };
+type Swatch = {
+  value: string;
+  label: string;
+  color: string;
+  /** For the check mark, where white wouldn't show on the colour. */
+  checkColor?: string;
+};
 
 type Props = {
   value: string;
@@ -30,7 +36,7 @@ const SwatchesControl = ({
           aria-label={swatch.label}
           title={swatch.label}
           onClick={() => onValueChange(swatch.value)}
-          style={{ backgroundColor: swatch.color }}
+          style={{ backgroundColor: swatch.color, color: swatch.checkColor }}
           className={cn(
             "flex size-7 items-center justify-center rounded-full text-white ring-gray-900/60 ring-offset-2 duration-150 hover:scale-110 focus-visible:ring-2 focus-visible:outline-hidden active:scale-95",
             isActive && "ring-2",

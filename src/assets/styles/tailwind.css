@@ -114,20 +114,20 @@
 :root[data-theme="dark"] {
   color-scheme: dark;
 
-  --color-surface: oklch(24% 0.03 264);
-  --color-black: oklch(96% 0.01 264);
+  --color-surface: oklch(28% 0.017 264);
+  --color-black: oklch(96% 0.006 264);
 
-  --color-gray-50: oklch(27% 0.03 264);
-  --color-gray-100: oklch(30% 0.03 264);
-  --color-gray-200: oklch(36% 0.03 264);
-  --color-gray-300: oklch(42% 0.03 264);
-  --color-gray-400: oklch(62% 0.025 264);
-  --color-gray-500: oklch(70% 0.02 264);
-  --color-gray-600: oklch(78% 0.015 264);
-  --color-gray-700: oklch(85% 0.01 264);
-  --color-gray-800: oklch(91% 0.008 264);
-  --color-gray-900: oklch(95% 0.005 264);
-  --color-gray-950: oklch(98% 0.003 264);
+  --color-gray-50: oklch(31% 0.017 264);
+  --color-gray-100: oklch(34% 0.017 264);
+  --color-gray-200: oklch(40% 0.017 264);
+  --color-gray-300: oklch(46% 0.017 264);
+  --color-gray-400: oklch(62% 0.014 264);
+  --color-gray-500: oklch(70% 0.011 264);
+  --color-gray-600: oklch(78% 0.008 264);
+  --color-gray-700: oklch(85% 0.006 264);
+  --color-gray-800: oklch(91% 0.004 264);
+  --color-gray-900: oklch(95% 0.003 264);
+  --color-gray-950: oklch(98% 0.002 264);
 }
 
 /* The gap inside a focus ring, which is white until told otherwise. */
@@ -295,13 +295,15 @@
   --color-sky-100: oklch(97.3% 0.071 103.193);
   --color-sky-200: oklch(94.5% 0.129 101.54);
   --color-sky-300: oklch(90.5% 0.182 98.111);
-  --color-sky-400: oklch(68.1% 0.162 75.834);
-  --color-sky-500: oklch(55.4% 0.135 66.442);
-  --color-sky-600: oklch(55.4% 0.135 66.442);
+  --color-sky-400: oklch(87% 0.17 92);
+  --color-sky-500: oklch(83% 0.175 90);
+  --color-sky-600: oklch(56% 0.14 72);
   --color-sky-700: oklch(47.6% 0.114 61.907);
   --color-sky-800: oklch(42.1% 0.095 57.708);
   --color-sky-900: oklch(28.6% 0.066 53.813);
   --color-sky-950: oklch(28.6% 0.066 53.813);
+  /* Too bright for white text. */
+  --color-on-accent: oklch(24% 0.05 70);
 }
 
 :root[data-accent="pink"] {
@@ -331,12 +333,12 @@
 }
 
 /*
-  Yellow and orange are only dark enough for white text in the light theme. In
-  the dark one their fills are brighter, with dark text on them instead.
+  Orange is only dark enough for white text in the light theme. In the dark one
+  its fill is brighter, with dark text on it instead. Yellow is that bright in
+  both, and leans a little to orange in the dark one.
 */
 :root[data-theme="dark"][data-accent="yellow"] {
-  --color-sky-500: oklch(83% 0.17 88);
-  --color-on-accent: oklch(24% 0.05 70);
+  --color-sky-500: oklch(81% 0.172 78);
 }
 
 :root[data-theme="dark"][data-accent="orange"] {

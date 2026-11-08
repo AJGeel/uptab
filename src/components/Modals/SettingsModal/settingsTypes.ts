@@ -42,7 +42,12 @@ export type SegmentedEntry = Base & {
 
 export type SwatchesEntry = Base & {
   kind: "swatches";
-  options: { value: string; label: string; color: string }[];
+  options: {
+    value: string;
+    label: string;
+    color: string;
+    checkColor?: string;
+  }[];
 } & Control<string>;
 
 /** Has its own contents, which the modal knows how to render. */
