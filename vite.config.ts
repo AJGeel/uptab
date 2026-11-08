@@ -22,6 +22,8 @@ const isDev = process.env.__DEV__ === "true";
 
 export default defineConfig({
   build: {
+    // Extension bundles load from disk, so the web-oriented 500 kB default is noise.
+    chunkSizeWarningLimit: 1000,
     outDir,
     rollupOptions: {
       input: {
