@@ -23,6 +23,7 @@
   --animate-contentHide: contentHide 250ms cubic-bezier(0.16, 1, 0.3, 1);
   --animate-hotkey: hotkey 1s ease-out forwards;
   --animate-shake: shake 400ms ease-in-out;
+  --animate-swatch-spin: swatch-spin 6s linear infinite;
 
   @keyframes overlayShow {
     from {
@@ -62,6 +63,11 @@
     to {
       opacity: 0;
       transform: translateY(2%) scale(0.96);
+    }
+  }
+  @keyframes swatch-spin {
+    to {
+      --swatch-spin: 360deg;
     }
   }
   @keyframes shake {
@@ -320,6 +326,53 @@
   --color-sky-950: oklch(28.4% 0.109 3.907);
 }
 
+
+/*
+  Rainbow: one ramp for every hue, with the hue itself animated. The property
+  is registered so the browser can animate it as a number.
+*/
+@property --rainbow-hue {
+  syntax: "<number>";
+  inherits: true;
+  initial-value: 250;
+}
+
+@property --swatch-spin {
+  syntax: "<angle>";
+  inherits: true;
+  initial-value: 0deg;
+}
+
+@keyframes rainbow-hue {
+  from {
+    --rainbow-hue: 0;
+  }
+  to {
+    --rainbow-hue: 360;
+  }
+}
+
+:root[data-accent="rainbow"] {
+  animation: rainbow-hue 30s linear infinite;
+
+  --color-sky-50: oklch(96.5% 0.02 var(--rainbow-hue));
+  --color-sky-100: oklch(93.5% 0.04 var(--rainbow-hue));
+  --color-sky-200: oklch(87% 0.08 var(--rainbow-hue));
+  --color-sky-300: oklch(79% 0.13 var(--rainbow-hue));
+  --color-sky-400: oklch(62% 0.2 var(--rainbow-hue));
+  --color-sky-500: oklch(54% 0.22 var(--rainbow-hue));
+  --color-sky-600: oklch(54% 0.22 var(--rainbow-hue));
+  --color-sky-700: oklch(47% 0.2 var(--rainbow-hue));
+  --color-sky-800: oklch(41% 0.17 var(--rainbow-hue));
+  --color-sky-900: oklch(36% 0.12 var(--rainbow-hue));
+  --color-sky-950: oklch(26% 0.08 var(--rainbow-hue));
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root[data-accent="rainbow"] {
+    animation: none;
+  }
+}
 
 /*
   In the dark theme, accent text (links, key hints) takes the pale step of the

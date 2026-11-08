@@ -2,7 +2,8 @@ import { AccentId } from "./types";
 
 /**
  * The colours to choose from, in rainbow order. Their ramps are in tailwind.css,
- * under `data-accent`. Blue is the page's own, so it needs none.
+ * under `data-accent`. Blue is the page's own, so it needs none. Rainbow's ramp
+ * is animated, and never stops moving through the others.
  */
 export const ACCENTS: {
   id: AccentId;
@@ -24,6 +25,12 @@ export const ACCENTS: {
   { id: "indigo", label: "Indigo", swatch: "oklch(51.1% 0.262 276.966)" },
   { id: "violet", label: "Violet", swatch: "oklch(54.1% 0.281 293.009)" },
   { id: "pink", label: "Pink", swatch: "oklch(59.2% 0.249 0.584)" },
+  {
+    id: "rainbow",
+    label: "Rainbow",
+    swatch:
+      "conic-gradient(from var(--swatch-spin) in oklch, oklch(65% 0.24 0), oklch(65% 0.24 45), oklch(65% 0.24 90), oklch(65% 0.24 135), oklch(65% 0.24 180), oklch(65% 0.24 225), oklch(65% 0.24 270), oklch(65% 0.24 315), oklch(65% 0.24 360))",
+  },
 ];
 
 const STORAGE_KEY = "uptab.accent";

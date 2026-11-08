@@ -5,14 +5,22 @@ type Props = {
   label: string;
   side?: "top" | "bottom";
   disabled?: boolean;
+  /** Milliseconds of hovering before it shows. */
+  delay?: number;
   /** The element that gets the tooltip: it needs to accept props and a ref. */
   children: ReactElement<Record<string, unknown>>;
 };
 
 /** A short explanation, shown after hovering or focusing for a moment. */
-const Tooltip = ({ label, side = "top", disabled, children }: Props) => (
+const Tooltip = ({
+  label,
+  side = "top",
+  disabled,
+  delay = 700,
+  children,
+}: Props) => (
   <BaseTooltip.Root disabled={disabled}>
-    <BaseTooltip.Trigger delay={700} render={children} />
+    <BaseTooltip.Trigger delay={delay} render={children} />
 
     <BaseTooltip.Portal>
       <BaseTooltip.Positioner side={side} sideOffset={10} className="z-50">
