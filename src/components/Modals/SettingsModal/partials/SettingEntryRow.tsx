@@ -2,6 +2,7 @@ import { Modals, useModalStore } from "@/src/hooks/stores/useModalStore";
 import { hotkeyDescriptions } from "@/src/services/hotkeys/hotkeys";
 import { Settings } from "@/src/services/settings/types";
 
+import AboutTab from "./AboutTab";
 import LocationTab from "./LocationTab";
 import SettingRow from "./SettingRow";
 import Button, { buttonVariants } from "../../../ui/Button";
@@ -74,6 +75,10 @@ const SettingEntryRow = ({ entry, settings, query, onChange }: Props) => {
         />
       </SettingRow>
     );
+  }
+
+  if (entry.content === "about") {
+    return <AboutTab />;
   }
 
   if (entry.content === "location") {

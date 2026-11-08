@@ -7,6 +7,7 @@ import {
   SidebarSimpleIcon,
 } from "@phosphor-icons/react";
 
+import UpTabIcon from "@/src/components/ui/UpTabIcon";
 import { defaultSettings } from "@/src/services/settings/defaultSettings";
 
 import { Section } from "./settingsTypes";
@@ -62,4 +63,5 @@ export const sections: Section[] = [
       appearance: defaultSettings.appearance,
     }),
   },
+  { id: "general", label: "About UpTab", icon: UpTabIcon },
 ];

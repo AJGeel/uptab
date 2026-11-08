@@ -34,7 +34,6 @@ export default defineConfig({
         ),
         newtab: resolve(pagesDir, "newtab", "index.html"),
         popup: resolve(pagesDir, "popup", "index.html"),
-        changelog: resolve(pagesDir, "changelog", "index.html"),
       },
       output: {
         entryFileNames: (chunk) => `src/pages/${chunk.name}/index.js`,
