@@ -33,7 +33,7 @@ const FeedbackNotification = ({ variant = "sidebar", onHide }: Props) => (
       Enjoying UpTab? Tell me what you think!
     </a>
     <button
-      className="flex items-center gap-1 rounded-xl px-3 py-2 duration-150 hover:bg-sky-800/10 hover:text-sky-800"
+      className="flex items-center gap-1 rounded-xl px-3 py-2 duration-150 hover:bg-sky-800/10 hover:text-sky-800 dark:hover:bg-sky-500/25 dark:hover:text-sky-300"
       onClick={onHide}
     >
       Close

@@ -35,7 +35,7 @@ const SortBookmarks = ({
   return (
     <div
       className={cn(
-        "flex shrink-0 items-center border-l bg-white px-1",
+        "flex shrink-0 items-center border-l bg-surface px-1",
         displayMode === "Popup" && "hidden",
       )}
     >

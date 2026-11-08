@@ -67,7 +67,10 @@ export type AccentId =
   | "violet"
   | "pink";
 
+export type ThemeId = "system" | "light" | "dark";
+
 export type AppearanceSettings = {
+  theme: ThemeId;
   accent: AccentId;
 };
 

@@ -75,7 +75,7 @@ const AboutTab = () => {
           alt=""
           className="absolute inset-0 size-full scale-110 object-cover object-[30%_60%] opacity-30 blur-[2px]"
         />
-        <div className="absolute inset-0 bg-linear-to-t from-black/70 to-black/10" />
+        <div className="absolute inset-0 bg-linear-to-t from-scrim/70 to-scrim/10" />
 
         <div className="relative flex items-center gap-4 p-5">
           <div>
@@ -107,7 +107,7 @@ const AboutTab = () => {
       </div>
 
       <a
-        className="flex flex-wrap items-center gap-3 rounded-2xl bg-sky-500/10 px-5 py-4 ring-sky-500 duration-150 hover:bg-sky-500/20 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-hidden active:scale-98"
+        className="flex flex-wrap items-center gap-3 rounded-2xl bg-sky-500/10 px-5 py-4 ring-sky-500 duration-150 hover:bg-sky-500/20 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-hidden active:scale-98 dark:bg-sky-500/25 dark:hover:bg-sky-500/40"
         href={buildFeedbackUrl(
           runtime.getManifest().version,
           navigator.userAgent,
@@ -122,7 +122,7 @@ const AboutTab = () => {
             what UpTab becomes.
           </span>
         </span>
-        <span className="inline-flex shrink-0 items-center justify-center gap-1.5 rounded-xl bg-sky-500 px-4 py-3 leading-none font-medium text-white">
+        <span className="inline-flex shrink-0 items-center justify-center gap-1.5 rounded-xl bg-sky-500 px-4 py-3 leading-none font-medium text-on-accent">
           Send feedback
           <ArrowSquareOutIcon className="size-4" />
         </span>
@@ -161,7 +161,7 @@ const AboutTab = () => {
           <Button
             label={isChecking ? "Checking..." : "Check for updates"}
             variant={buttonVariants.secondary}
-            className="shrink-0 border bg-white"
+            className="shrink-0 border bg-surface"
             disabled={isChecking}
             onClick={check}
           />

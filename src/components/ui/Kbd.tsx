@@ -36,7 +36,7 @@ const Kbd = ({ size = "inline", hint = true, children }: Props) => {
   const kbd = (
     <kbd
       className={cn(
-        "border border-sky-900/30 bg-white font-mono font-bold text-sky-600 shadow-xs",
+        "border border-sky-900/30 bg-surface font-mono font-bold text-sky-600 shadow-xs",
         sizes[size],
       )}
     >

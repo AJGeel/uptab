@@ -66,7 +66,7 @@ const SettingsNav = ({
           value={query}
           onChange={(event) => onQueryChange(event.target.value)}
           placeholder="Search settings..."
-          className="w-full rounded-xl border bg-white py-2 pr-3 pl-9 shadow-xs ring-sky-500 duration-150 outline-none placeholder:text-gray-500 focus-visible:ring-2 [&::-webkit-search-cancel-button]:hidden"
+          className="w-full rounded-xl border bg-surface py-2 pr-3 pl-9 shadow-xs ring-sky-500 duration-150 outline-none placeholder:text-gray-500 focus-visible:ring-2 [&::-webkit-search-cancel-button]:hidden"
         />
       </label>
 
@@ -87,7 +87,7 @@ const SettingsNav = ({
               className={cn(
                 "flex shrink-0 items-center gap-2 rounded-xl px-3 py-2 text-left font-medium whitespace-nowrap ring-sky-500 duration-150 focus-visible:ring-2 focus-visible:outline-hidden active:scale-95",
                 isActive
-                  ? "bg-sky-500/10 text-sky-800"
+                  ? "bg-sky-500/10 text-sky-800 dark:bg-sky-500/25 dark:text-sky-300"
                   : "text-gray-600 hover:bg-black/5",
                 matchCounts && !count && "opacity-40",
               )}
@@ -98,7 +98,7 @@ const SettingsNav = ({
               />
               <span className="grow">{label}</span>
               {count !== undefined && count > 0 && (
-                <span className="rounded-full bg-sky-500 px-1.5 text-xs text-white">
+                <span className="rounded-full bg-sky-500 px-1.5 text-xs text-on-accent">
                   {count}
                 </span>
               )}

@@ -26,7 +26,7 @@ const Sidebar = ({ isExpanded, setIsExpanded }: Props) => {
     <div
       data-setting="sidebar.isOpen"
       className={cn(
-        "absolute top-0 left-0 z-20 h-screen w-full max-w-150 flex-1 bg-white duration-500 [--widget-hover:rgb(0_0_0/0.05)]",
+        "absolute top-0 left-0 z-20 h-screen w-full max-w-150 flex-1 bg-surface duration-500 [--widget-hover:color-mix(in_oklab,var(--color-black)_5%,transparent)]",
         isExpanded ? "translate-x-0" : "-translate-x-full",
       )}
     >

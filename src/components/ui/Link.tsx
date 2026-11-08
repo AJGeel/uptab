@@ -8,7 +8,7 @@ const Link = ({ className, children, ...props }: Props) => (
   <a
     {...props}
     className={cn(
-      "duration-150 hover:text-sky-800 active:scale-90 active:opacity-60",
+      "duration-150 hover:text-sky-800 active:scale-90 active:opacity-60 dark:hover:text-sky-300",
       className,
     )}
   >

@@ -9,6 +9,7 @@ import { useEasterEggs } from "@/src/hooks/useEasterEggs";
 import useKeyPress from "@/src/hooks/useKeyPress";
 import { useRandomBackground } from "@/src/hooks/useRandomBackground/useRandomBackground";
 import { useSettings } from "@/src/hooks/useSettings";
+import { useTheme } from "@/src/hooks/useTheme";
 import { hotkeys } from "@/src/services/hotkeys/hotkeys";
 import { cn } from "@/src/utils";
 
@@ -36,6 +37,7 @@ const Homescreen = () => {
   useKeyPress("ArrowLeft", () => browse(-1));
   useEasterEggs();
   useAccent();
+  useTheme();
 
   if (isPending) {
     return <></>;
@@ -68,7 +70,7 @@ const Homescreen = () => {
               settingId="homescreen.showInfoWidget"
               inert={isSidebarOpen}
               className={cn(
-                "p-6 pb-16 pl-20 duration-500",
+                "p-6 pb-16 pl-20 text-black duration-500 [--color-black:#020e2c]",
                 isSidebarOpen && "pointer-events-none translate-x-40 opacity-0",
               )}
             />
@@ -90,7 +92,7 @@ const Homescreen = () => {
           )}
           <div
             className={cn(
-              "pointer-events-none absolute inset-x-0 bottom-0 h-20 bg-linear-to-t from-black/50 to-transparent duration-500",
+              "pointer-events-none absolute inset-x-0 bottom-0 h-20 bg-linear-to-t from-scrim/50 to-transparent duration-500",
               isSidebarOpen && "opacity-0",
             )}
           />
@@ -98,7 +100,7 @@ const Homescreen = () => {
             <div
               inert={isSidebarOpen}
               className={cn(
-                "flex items-center gap-1 rounded-2xl p-1 text-white opacity-100 duration-500 text-shadow-black/20 text-shadow-md focus-within:bg-black/30 focus-within:opacity-100 hover:bg-black/30 hover:opacity-100",
+                "flex items-center gap-1 rounded-2xl p-1 text-white opacity-100 duration-500 text-shadow-md text-shadow-scrim/20 focus-within:bg-scrim/30 focus-within:opacity-100 hover:bg-scrim/30 hover:opacity-100",
                 isSidebarOpen && "pointer-events-none translate-x-40 opacity-0",
               )}
             >
@@ -113,11 +115,11 @@ const Homescreen = () => {
                     className="active:scale-90"
                     onClick={() => browse(-1)}
                   >
-                    <CaretLeftIcon className="size-4 drop-shadow-md drop-shadow-black/20" />
+                    <CaretLeftIcon className="size-4 drop-shadow-md drop-shadow-scrim/20" />
                   </BarButton>
                   <BarButton
                     tooltip="Choose backgrounds (B)"
-                    className="flex items-center gap-2 px-3 text-shadow-black/20 text-shadow-md active:scale-95"
+                    className="flex items-center gap-2 px-3 text-shadow-md text-shadow-scrim/20 active:scale-95"
                     onClick={() => setActiveModal(ModalIds.backgrounds)}
                   >
                     Backgrounds
@@ -128,7 +130,7 @@ const Homescreen = () => {
                     className="active:scale-90"
                     onClick={() => browse(1)}
                   >
-                    <CaretRightIcon className="size-4 drop-shadow-md drop-shadow-black/20" />
+                    <CaretRightIcon className="size-4 drop-shadow-md drop-shadow-scrim/20" />
                   </BarButton>
                 </div>
               )}
@@ -137,14 +139,14 @@ const Homescreen = () => {
                   <a
                     href={activeBg.link}
                     data-setting="homescreen.showPhotoCredit"
-                    className="mr-1 ml-3 rounded-xl p-2 px-3 duration-150 text-shadow-black/20 text-shadow-md hover:bg-white/15 active:scale-95"
+                    className="mr-1 ml-3 rounded-xl p-2 px-3 duration-150 text-shadow-md text-shadow-scrim/20 hover:bg-white/15 active:scale-95"
                   >
                     Photo by {activeBg.author}
                   </a>
                 ) : (
                   <p
                     data-setting="homescreen.showPhotoCredit"
-                    className="mr-1 ml-3 p-2 px-3 text-shadow-black/20 text-shadow-md"
+                    className="mr-1 ml-3 p-2 px-3 text-shadow-md text-shadow-scrim/20"
                   >
                     Photo by {activeBg.author}
                   </p>
@@ -157,14 +159,14 @@ const Homescreen = () => {
                 inert={isSidebarOpen}
                 data-setting="homescreen.showPreferencesButton"
                 className={cn(
-                  "rounded-2xl p-1 text-white duration-500 text-shadow-black/20 text-shadow-md focus-within:bg-black/30 hover:bg-black/30",
+                  "rounded-2xl p-1 text-white duration-500 text-shadow-md text-shadow-scrim/20 focus-within:bg-scrim/30 hover:bg-scrim/30",
                   isSidebarOpen &&
                     "pointer-events-none translate-x-40 opacity-0",
                 )}
               >
                 <BarButton
                   tooltip="Edit preferences (/)"
-                  className="flex items-center gap-2 px-3 text-shadow-black/20 text-shadow-md active:scale-95"
+                  className="flex items-center gap-2 px-3 text-shadow-md text-shadow-scrim/20 active:scale-95"
                   onClick={() => openSettingsSection("homescreen")}
                 >
                   Edit preferences

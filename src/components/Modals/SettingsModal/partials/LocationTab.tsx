@@ -62,7 +62,7 @@ const LocationTab = () => {
       {...highlightProps}
     >
       <div className="flex items-center gap-3 p-3">
-        <span className="flex size-9 shrink-0 items-center justify-center rounded-xl bg-sky-500/10 text-sky-800">
+        <span className="flex size-9 shrink-0 items-center justify-center rounded-xl bg-sky-500/10 text-sky-800 dark:bg-sky-500/25 dark:text-sky-300">
           <MapPinIcon weight="duotone" className="size-5" />
         </span>
         <div className="flex flex-col">

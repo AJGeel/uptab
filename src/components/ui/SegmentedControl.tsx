@@ -47,7 +47,7 @@ const SegmentedControl = ({
             compact ? "px-2 py-0.5 text-xs" : "px-3 py-1 text-sm",
             "rounded-lg font-medium whitespace-nowrap ring-sky-500 duration-150 focus-visible:ring-2 focus-visible:outline-hidden active:scale-95",
             isActive
-              ? "bg-white text-black shadow-xs outline-1 outline-black/5 outline-solid"
+              ? "bg-surface text-black shadow-xs outline-1 outline-black/5 outline-solid"
               : "text-gray-600 hover:text-black",
           )}
         >

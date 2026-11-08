@@ -18,9 +18,9 @@ const Banner = ({ photoSrc, title, subtitle, className }: Props) => (
       className,
     )}
   >
-    <div className="absolute inset-0 bg-linear-to-t from-black/65 via-black/15 to-transparent" />
+    <div className="absolute inset-0 bg-linear-to-t from-scrim/65 via-scrim/15 to-transparent" />
 
-    <div className="absolute bottom-4 left-6 text-white text-shadow-black/30 text-shadow-md">
+    <div className="absolute bottom-4 left-6 text-white text-shadow-md text-shadow-scrim/30">
       <p className="text-2xl leading-tight font-bold">{title}</p>
       {subtitle && <p className="mt-0.5 text-sm text-white/85">{subtitle}</p>}
     </div>

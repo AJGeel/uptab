@@ -40,8 +40,9 @@ const BookmarkItem = ({
     role="option"
     aria-selected={isHighlighted}
     className={cn(
-      "group relative flex scroll-mt-9 items-center gap-3 px-2 py-1.5 text-gray-600 outline-hidden duration-150 focus-within:outline-hidden hover:bg-sky-500/10 hover:text-sky-800 focus-visible:bg-sky-500/10 focus-visible:text-sky-800",
-      isHighlighted && "bg-sky-500/10 text-sky-800",
+      "group relative flex scroll-mt-9 items-center gap-3 px-2 py-1.5 text-gray-600 outline-hidden duration-150 focus-within:outline-hidden hover:bg-sky-500/10 hover:text-sky-800 focus-visible:bg-sky-500/10 focus-visible:text-sky-800 dark:hover:bg-sky-500/25 dark:hover:text-sky-300 dark:hover:text-sky-300 dark:focus-visible:bg-sky-500/25",
+      isHighlighted &&
+        "bg-sky-500/10 text-sky-800 dark:bg-sky-500/25 dark:text-sky-300",
     )}
     onClick={(event) => {
       if (displayMode === "Popup") {
@@ -72,7 +73,7 @@ const BookmarkItem = ({
               event.preventDefault();
               handleAddToShortlink();
             }}
-            className="size-7 shrink-0 rounded-lg border bg-white p-1 text-gray-500 shadow-xs ring-sky-500 duration-150 hover:text-sky-500 hover:ring-2"
+            className="size-7 shrink-0 rounded-lg border bg-surface p-1 text-gray-500 shadow-xs ring-sky-500 duration-150 hover:text-sky-500 hover:ring-2"
           />
         </Tooltip>
       )}
@@ -83,7 +84,7 @@ const BookmarkItem = ({
             event.preventDefault();
             handleEdit();
           }}
-          className="size-7 shrink-0 rounded-lg border bg-white p-1 text-gray-500 shadow-xs ring-sky-500 duration-150 hover:text-sky-500 hover:ring-2"
+          className="size-7 shrink-0 rounded-lg border bg-surface p-1 text-gray-500 shadow-xs ring-sky-500 duration-150 hover:text-sky-500 hover:ring-2"
         />
       </Tooltip>
       <Tooltip label="Remove bookmark">
@@ -93,7 +94,7 @@ const BookmarkItem = ({
             event.preventDefault();
             handleDelete();
           }}
-          className="size-7 shrink-0 rounded-lg border bg-white p-1 text-gray-500 shadow-xs ring-red-500 duration-150 hover:text-red-500 hover:ring-2"
+          className="size-7 shrink-0 rounded-lg border bg-surface p-1 text-gray-500 shadow-xs ring-red-500 duration-150 hover:text-red-500 hover:ring-2"
         />
       </Tooltip>
     </div>

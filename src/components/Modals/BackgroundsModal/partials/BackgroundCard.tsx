@@ -61,7 +61,7 @@ const BackgroundCard = ({
         aria-pressed={isSelected}
         onClick={isLocked ? nudge : onClick}
         className={cn(
-          "group flex flex-1 flex-col overflow-hidden rounded-xl border bg-white text-left ring-sky-500 duration-150 focus-visible:ring-2 focus-visible:outline-hidden",
+          "group flex flex-1 flex-col overflow-hidden rounded-xl border bg-surface text-left ring-sky-500 duration-150 focus-visible:ring-2 focus-visible:outline-hidden",
           isSelected
             ? "border-sky-500 ring-1"
             : "border-black/10 opacity-70 hover:opacity-100",
@@ -93,11 +93,11 @@ const BackgroundCard = ({
           {isSelected && (
             <CheckCircleIcon
               weight="fill"
-              className="absolute top-2 right-2 size-6 rounded-full bg-white text-sky-500 shadow-sm"
+              className="absolute top-2 right-2 size-6 rounded-full bg-surface text-sky-500 shadow-sm"
             />
           )}
         </div>
-        <div className="relative bg-white px-3 py-2">
+        <div className="relative bg-surface px-3 py-2">
           <p className="font-semibold">{name}</p>
           <p
             aria-live="polite"

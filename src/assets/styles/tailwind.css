@@ -10,6 +10,12 @@
   --color-sky-800: #085884;
 
   --color-black: #020e2c;
+  /* Panels and fields. White, until the dark theme. */
+  --color-surface: #fff;
+  /* Text on an accent fill. */
+  --color-on-accent: #fff;
+  /* The shade over photos. Unlike black, which is text, it stays dark. */
+  --color-scrim: #000;
 
   --animate-overlayShow: overlayShow 250ms cubic-bezier(0.16, 1, 0.3, 1);
   --animate-overlayHide: overlayHide 250ms cubic-bezier(0.16, 1, 0.3, 1);
@@ -93,6 +99,40 @@
       transform: translateY(6px) scale(0.95);
     }
   }
+}
+
+/*
+  The dark theme: the gray ramp is made over, black (the text) turns light and
+  surfaces turn dark. Photos, and what sits on them, keep white and the scrim.
+*/
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
+
+:root {
+  color-scheme: light;
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+
+  --color-surface: oklch(24% 0.03 264);
+  --color-black: oklch(96% 0.01 264);
+
+  --color-gray-50: oklch(27% 0.03 264);
+  --color-gray-100: oklch(30% 0.03 264);
+  --color-gray-200: oklch(36% 0.03 264);
+  --color-gray-300: oklch(42% 0.03 264);
+  --color-gray-400: oklch(62% 0.025 264);
+  --color-gray-500: oklch(70% 0.02 264);
+  --color-gray-600: oklch(78% 0.015 264);
+  --color-gray-700: oklch(85% 0.01 264);
+  --color-gray-800: oklch(91% 0.008 264);
+  --color-gray-900: oklch(95% 0.005 264);
+  --color-gray-950: oklch(98% 0.003 264);
+}
+
+/* The gap inside a focus ring, which is white until told otherwise. */
+:root[data-theme="dark"] * {
+  --tw-ring-offset-color: var(--color-surface);
 }
 
 /*
@@ -278,6 +318,31 @@
   --color-sky-950: oklch(28.4% 0.109 3.907);
 }
 
+
+/*
+  In the dark theme, accent text (links, key hints) takes the pale step of the
+  ramp: the 600 is a fill-dark shade, too dim on a dark surface, and the 50 a
+  pale tint, too bright. After the
+  accents above, so it wins for every one of them.
+*/
+:root[data-theme="dark"] {
+  --color-sky-50: color-mix(in oklab, var(--color-sky-500) 15%, transparent);
+  --color-sky-600: var(--color-sky-300);
+}
+
+/*
+  Yellow and orange are only dark enough for white text in the light theme. In
+  the dark one their fills are brighter, with dark text on them instead.
+*/
+:root[data-theme="dark"][data-accent="yellow"] {
+  --color-sky-500: oklch(83% 0.17 88);
+  --color-on-accent: oklch(24% 0.05 70);
+}
+
+:root[data-theme="dark"][data-accent="orange"] {
+  --color-sky-500: oklch(74% 0.19 52);
+  --color-on-accent: oklch(24% 0.05 40);
+}
 
 /* What a setting changes, while the pointer is on that setting in the preferences. */
 @layer base {

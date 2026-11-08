@@ -1,6 +1,7 @@
 import {
   BellRingingIcon,
   CalendarCheckIcon,
+  CircleHalfIcon,
   ClockIcon,
   CloudSunIcon,
   InfoIcon,
@@ -12,7 +13,8 @@ import {
 } from "@phosphor-icons/react";
 
 import { ACCENTS } from "@/src/services/settings/accents";
-import { AccentId } from "@/src/services/settings/types";
+import { THEMES } from "@/src/services/settings/theme";
+import { AccentId, ThemeId } from "@/src/services/settings/types";
 import { MAX_EXTRA_FORECAST_DAYS } from "@/src/services/weather/constants";
 
 import { asString, field, SettingEntry } from "./settingsTypes";
@@ -99,6 +101,27 @@ export const generalEntries: SettingEntry[] = [
       value: String(index + 1),
       label: String(index + 1),
     })),
+  },
+  {
+    kind: "segmented",
+    id: "appearance.theme",
+    section: "appearance",
+    ...asString(field("appearance", "theme"), (value) =>
+      THEMES.some(({ id }) => id === value) ? (value as ThemeId) : "system",
+    ),
+    title: "Theme",
+    description: "Light, dark, or whatever your system is set to.",
+    keywords: [
+      "dark",
+      "light",
+      "mode",
+      "night",
+      "appearance",
+      "system",
+      "colour",
+    ],
+    icon: CircleHalfIcon,
+    options: THEMES.map(({ id, label }) => ({ value: id, label })),
   },
   {
     kind: "swatches",

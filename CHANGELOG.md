@@ -2,6 +2,12 @@
 
 UpTab adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [V2.3.0] — 2026-11-08
+
+### ✨ Added
+
+- A dark theme. Choose System, Light or Dark in preferences.
+
 ## [V2.2.0] — 2026-11-08
 
 ### ✨ Added

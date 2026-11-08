@@ -117,7 +117,7 @@ const BackgroundsModal = () => {
           and → arrow keys.{" "}
           <a
             href="https://uptab.vercel.app/backgrounds"
-            className="underline duration-150 hover:text-sky-800 hover:no-underline"
+            className="underline duration-150 hover:text-sky-800 hover:no-underline dark:hover:text-sky-300"
           >
             See all photos
           </a>

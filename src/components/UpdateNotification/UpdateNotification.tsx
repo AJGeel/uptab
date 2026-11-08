@@ -14,9 +14,10 @@ type Props = {
 };
 
 export const notificationStyles = {
-  sidebar: "mb-8 bg-sky-500/10 hover:bg-sky-500/20",
+  sidebar:
+    "mb-8 bg-sky-500/10 dark:bg-sky-500/25 hover:bg-sky-500/20 dark:hover:bg-sky-500/40",
   floating:
-    "bg-white/80 text-black shadow-lg backdrop-blur-sm hover:bg-white/90",
+    "bg-surface/80 text-black shadow-lg backdrop-blur-sm hover:bg-surface/90",
 };
 
 type SparkleProps = {
@@ -86,7 +87,7 @@ const UpdateNotification = ({ variant = "sidebar", onHide }: Props) => {
         UpTab has been updated! See what&apos;s new.
       </p>
       <button
-        className="flex items-center gap-1 rounded-xl px-3 py-2 duration-150 hover:bg-sky-800/10 hover:text-sky-800"
+        className="flex items-center gap-1 rounded-xl px-3 py-2 duration-150 hover:bg-sky-800/10 hover:text-sky-800 dark:hover:bg-sky-500/25 dark:hover:text-sky-300"
         onClick={(event) => {
           event.stopPropagation();
           onHide();
