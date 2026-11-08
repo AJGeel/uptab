@@ -1,7 +1,6 @@
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 
 import {
-  FeedbackHistory,
   getFeedbackHistory,
   isFeedbackDue,
   setFeedbackAsked,
