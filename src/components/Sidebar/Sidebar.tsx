@@ -8,7 +8,7 @@ import InfoWidget from "../InfoWidget/InfoWidget";
 import Shortlinks from "../Shortlinks/Shortlinks";
 import Button, { buttonVariants } from "../ui/Button";
 import FeedbackPrompt from "../ui/FeedbackPrompt";
-import UpdateNotification from "../UpdateNotification/UpdateNotification";
+import Notification from "../UpdateNotification/Notification";
 
 export type Props = {
   isExpanded: boolean;
@@ -39,7 +39,12 @@ const Sidebar = ({ isExpanded, setIsExpanded }: Props) => {
         inert={!isExpanded}
         className="flex h-full flex-col overflow-y-auto p-6"
       >
-        {settings?.sidebar.showUpdates && <UpdateNotification />}
+        {settings && (
+          <Notification
+            showUpdates={settings.sidebar.showUpdates}
+            feedbackFrequency={settings.sidebar.feedbackFrequency}
+          />
+        )}
         {settings?.sidebar.showInfoWidget && (
           <InfoWidget settingId="sidebar.showInfoWidget" />
         )}

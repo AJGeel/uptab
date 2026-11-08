@@ -8,6 +8,7 @@ export const defaultSettings: Settings = {
     showUpdates: true,
     showInfoWidget: true,
     showFeedbackPrompt: true,
+    feedbackFrequency: "quarterly",
     isOpen: false,
     shortlinkColumns: 2,
   },

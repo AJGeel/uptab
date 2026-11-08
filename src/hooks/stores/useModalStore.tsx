@@ -19,8 +19,8 @@ export type SettingsSection =
   | "sidebar"
   | "homescreen"
   | "photos"
+  | "location"
   | "weather"
-  | "time"
   | "appearance"
   | "general";
 

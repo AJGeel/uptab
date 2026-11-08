@@ -29,6 +29,7 @@ const AboutTab = () => {
   const [isChecking, setIsChecking] = useState(false);
   const [result, setResult] = useState<UpdateCheck>();
   const [isReady, setIsReady] = useState(false);
+  const [spins, setSpins] = useState(0);
   const { data: notes } = useReleaseNotes(true);
   const releaseDate = notes?.date ? parseISO(notes.date) : null;
 
@@ -80,8 +81,8 @@ const AboutTab = () => {
           <div>
             <h3 className="text-xl font-bold">UpTab</h3>
             <p className="mt-1 text-white/90">
-              UpTab is the new tab I've always wanted: your bookmarks,
-              shortlinks, the weather and a beautiful photo.
+              The new tab I've always wanted: quick access to bookmarks, links,
+              weather info and beautiful photos to brighten my day.
             </p>
             <p className="mt-2 text-sm text-white/80">
               <a
@@ -98,7 +99,9 @@ const AboutTab = () => {
           <img
             src="/icon-128.png"
             alt=""
-            className="size-16 shrink-0 rounded-2xl shadow-lg"
+            className="size-16 shrink-0 cursor-pointer rounded-2xl shadow-lg duration-700 ease-out select-none active:scale-90 motion-reduce:transition-none"
+            style={{ rotate: `${spins * 360}deg` }}
+            onClick={() => setSpins((count) => count + 1)}
           />
         </div>
       </div>

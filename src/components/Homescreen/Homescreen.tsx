@@ -18,7 +18,7 @@ import { ActiveHotkeyIndicator } from "../Modals/HotkeysModal/partials/ActiveHot
 import Modals from "../Modals/Modals";
 import Sidebar from "../Sidebar/Sidebar";
 import { Background } from "../ui/Background";
-import UpdateNotification from "../UpdateNotification/UpdateNotification";
+import Notification from "../UpdateNotification/Notification";
 
 const Homescreen = () => {
   const { data: settings, isPending, toggleSidebarSetting } = useSettings();
@@ -73,7 +73,7 @@ const Homescreen = () => {
               )}
             />
           )}
-          {settings?.sidebar.showUpdates && (
+          {settings && (
             <div
               inert={isSidebarOpen}
               className={cn(
@@ -81,7 +81,11 @@ const Homescreen = () => {
                 isSidebarOpen && "pointer-events-none translate-x-40 opacity-0",
               )}
             >
-              <UpdateNotification variant="floating" />
+              <Notification
+                variant="floating"
+                showUpdates={settings.sidebar.showUpdates}
+                feedbackFrequency={settings.sidebar.feedbackFrequency}
+              />
             </div>
           )}
           <div

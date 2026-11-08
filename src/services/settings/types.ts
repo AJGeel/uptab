@@ -1,11 +1,15 @@
 import { LocationSettings } from "../location/types";
 
+export type FeedbackFrequency = "monthly" | "quarterly" | "never";
+
 export type SidebarSettings = {
   showShortlinks: boolean;
   showBookmarks: boolean;
   showUpdates: boolean;
   showInfoWidget: boolean;
   showFeedbackPrompt: boolean;
+  /** How often the feedback ask replaces the update notification. */
+  feedbackFrequency: FeedbackFrequency;
   isOpen: boolean;
   shortlinkColumns: 1 | 2;
 };
