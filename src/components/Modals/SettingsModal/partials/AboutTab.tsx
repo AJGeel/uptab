@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { runtime } from "webextension-polyfill";
 
 import { useReleaseNotes } from "@/src/hooks/queries/useReleaseNotes";
+import { buildFeedbackUrl } from "@/src/services/feedback/feedbackUrl";
 import {
   canCheckForUpdate,
   checkForUpdate,
@@ -76,16 +77,11 @@ const AboutTab = () => {
         <div className="absolute inset-0 bg-linear-to-t from-black/70 to-black/10" />
 
         <div className="relative flex items-center gap-4 p-5">
-          <img
-            src="/icon-128.png"
-            alt=""
-            className="size-16 shrink-0 rounded-2xl shadow-lg"
-          />
           <div>
             <h3 className="text-xl font-bold">UpTab</h3>
             <p className="mt-1 text-white/90">
-              UpTab is the new tab I wanted: your bookmarks, shortlinks, the
-              weather and a beautiful photo.
+              UpTab is the new tab I've always wanted: your bookmarks,
+              shortlinks, the weather and a beautiful photo.
             </p>
             <p className="mt-2 text-sm text-white/80">
               <a
@@ -99,10 +95,37 @@ const AboutTab = () => {
               · 2023–now
             </p>
           </div>
+          <img
+            src="/icon-128.png"
+            alt=""
+            className="size-16 shrink-0 rounded-2xl shadow-lg"
+          />
         </div>
       </div>
 
-      <div className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border px-5 py-4">
+      <a
+        className="flex flex-wrap items-center gap-3 rounded-2xl bg-sky-500/10 px-5 py-4 ring-sky-500 duration-150 hover:bg-sky-500/20 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-hidden active:scale-98"
+        href={buildFeedbackUrl(
+          runtime.getManifest().version,
+          navigator.userAgent,
+        )}
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        <span className="min-w-48 flex-1">
+          <span className="block font-semibold">Tell me what you think</span>
+          <span className="block text-sm text-gray-700">
+            A bug, an idea or just a hello: I read every message, and it shapes
+            what UpTab becomes.
+          </span>
+        </span>
+        <span className="inline-flex shrink-0 items-center justify-center gap-1.5 rounded-xl bg-sky-500 px-4 py-3 leading-none font-medium text-white">
+          Send feedback
+          <ArrowSquareOutIcon className="size-4" />
+        </span>
+      </a>
+
+      <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
           <div className="flex items-center gap-3">
             <p className="font-semibold">
