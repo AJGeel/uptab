@@ -23,6 +23,8 @@ type Base = {
   icon: Icon;
   /** A key that does the same from anywhere, shown next to the title. */
   hotkey?: Hotkeys;
+  /** Greyed out and untouchable while the setting it depends on is off. */
+  isDisabled?: (settings: Settings) => boolean;
 };
 
 /** How an entry reads its value from the settings, and writes a new one. */

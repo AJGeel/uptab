@@ -1,7 +1,6 @@
 import {
   BellRingingIcon,
   CalendarCheckIcon,
-  ChatCircleDotsIcon,
   ClockIcon,
   CloudSunIcon,
   InfoIcon,
@@ -144,16 +143,6 @@ export const generalEntries: SettingEntry[] = [
       { value: "quarterly", label: "3 months" },
       { value: "never", label: "Never" },
     ],
-  },
-  {
-    kind: "switch",
-    id: "sidebar.showFeedbackPrompt",
-    section: "appearance",
-    ...field("sidebar", "showFeedbackPrompt"),
-    title: "Feedback link",
-    description: "A little nudge to tell the maker what you think.",
-    keywords: ["prompt", "review", "rate", "bottom"],
-    icon: ChatCircleDotsIcon,
   },
   {
     kind: "custom",
