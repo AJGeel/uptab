@@ -1,7 +1,8 @@
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 
 import {
-  getFeedbackAskedAt,
+  FeedbackHistory,
+  getFeedbackHistory,
   isFeedbackDue,
   setFeedbackAsked,
 } from "@/src/services/feedbackPrompt/feedbackSchedule";
@@ -31,7 +32,7 @@ export const useNotification = ({
     queryKey,
     queryFn: async () => ({
       hasUpdate: !!(await getUpdateNotification()).newUpdate,
-      feedbackAskedAt: await getFeedbackAskedAt(),
+      feedback: await getFeedbackHistory(),
     }),
     staleTime: Infinity,
     networkMode: "always",
@@ -40,14 +41,14 @@ export const useNotification = ({
   const kind =
     showUpdates && data?.hasUpdate
       ? "update"
-      : data && isFeedbackDue(data.feedbackAskedAt, feedbackFrequency)
+      : data && isFeedbackDue(data.feedback, feedbackFrequency)
         ? "feedback"
         : null;
 
   const onHide = () => {
     queryClient.setQueryData(queryKey, {
       hasUpdate: false,
-      feedbackAskedAt: Date.now(),
+      feedback: { ...data?.feedback, askedAt: Date.now() },
     });
 
     if (kind === "update") {

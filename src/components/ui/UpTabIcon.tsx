@@ -2,7 +2,7 @@ import { IconWeight } from "@phosphor-icons/react";
 import { useId } from "react";
 
 type Props = {
-  /** Outlined by default, solid for "fill". The other weights are drawn as outlined. */
+  /** Outlined by default, solid for "fill", a tinted body for "duotone". The other weights are drawn as outlined. */
   weight?: IconWeight;
   className?: string;
 };
@@ -63,6 +63,8 @@ const UpTabIcon = ({ weight = "regular", className }: Props) => {
         height="19.5"
         rx="5.25"
         strokeWidth="1.5"
+        fill={weight === "duotone" ? "currentColor" : "none"}
+        fillOpacity={weight === "duotone" ? 0.2 : undefined}
       />
       <g stroke="currentColor">{face}</g>
     </svg>

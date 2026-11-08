@@ -55,7 +55,10 @@ export default defineConfig({
     },
     sourcemap: isDev,
   },
-  define: isDev ? {} : { "import.meta.env.VITE_CATALOGUE_URL": "undefined" },
+  define: {
+    "import.meta.env.VITE_IS_DEV": JSON.stringify(String(isDev)),
+    ...(isDev ? {} : { "import.meta.env.VITE_CATALOGUE_URL": "undefined" }),
+  },
   plugins: [react(), tailwindcss(), makeManifest(), includeChangelog()],
   publicDir,
   resolve: {

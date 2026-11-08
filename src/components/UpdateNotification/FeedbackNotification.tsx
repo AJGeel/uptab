@@ -1,10 +1,11 @@
-import { ChatCircleDotsIcon, XIcon } from "@phosphor-icons/react";
+import { XIcon } from "@phosphor-icons/react";
 import { runtime } from "webextension-polyfill";
 
 import { buildFeedbackUrl } from "@/src/services/feedback/feedbackUrl";
 import { cn } from "@/src/utils";
 
 import { NotificationVariant, notificationStyles } from "./UpdateNotification";
+import UpTabIcon from "../ui/UpTabIcon";
 
 type Props = {
   variant?: NotificationVariant;
@@ -27,10 +28,9 @@ const FeedbackNotification = ({ variant = "sidebar", onHide }: Props) => (
       )}
       target="_blank"
       rel="noopener noreferrer"
-      onClick={onHide}
     >
-      <ChatCircleDotsIcon weight="duotone" className="size-5 shrink-0" />
-      Enjoying UpTab? Tell me what you think.
+      <UpTabIcon weight="duotone" className="size-5 shrink-0" />
+      Enjoying UpTab? Tell me what you think!
     </a>
     <button
       className="flex items-center gap-1 rounded-xl px-3 py-2 duration-150 hover:bg-sky-800/10 hover:text-sky-800"
