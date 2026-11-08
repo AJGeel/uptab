@@ -58,7 +58,7 @@ const LocationTab = () => {
     <div
       role="radiogroup"
       aria-label="Active location"
-      className="rounded-xl border bg-white"
+      className="rounded-xl"
       {...highlightProps}
     >
       <div className="flex items-center gap-3 p-3">
@@ -74,7 +74,7 @@ const LocationTab = () => {
         </div>
       </div>
 
-      <div className="border-t px-3">
+      <div className="px-3">
         {failure ? (
           <div className="py-3">
             <GpsHelp
@@ -113,7 +113,7 @@ const LocationTab = () => {
         ))}
       </div>
 
-      <div className="rounded-b-xl border-t bg-black/2 px-3 pb-3">
+      <div className="px-3 pb-3">
         <AddLocation location={location} onChange={setLocationSettings} />
       </div>
     </div>
