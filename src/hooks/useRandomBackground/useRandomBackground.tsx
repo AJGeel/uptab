@@ -5,6 +5,7 @@ import { getImageSrc } from "@/src/services/backgrounds/getImageSrc";
 import { getPhotoPeriod } from "@/src/services/backgrounds/photoPeriod";
 import {
   getEnabledImages,
+  orderImages,
   pickDailyImage,
 } from "@/src/services/backgrounds/pickDailyImage";
 import { BackgroundImage, Catalogue } from "@/src/services/backgrounds/types";
@@ -65,8 +66,9 @@ export const useRandomBackground = () => {
       return;
     }
 
-    const index = images.indexOf(picked);
-    const next = images[(index + step + images.length) % images.length];
+    const order = orderImages(images, date);
+    const index = order.indexOf(picked);
+    const next = order[(index + step + order.length) % order.length];
 
     setUseFallback(false);
     setPick({ date, imageId: next.id });
