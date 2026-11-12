@@ -2,12 +2,16 @@
 
 UpTab adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [V2.3.0] — 2026-11-08
+## [V2.3.0] — 2026-11-12
 
 ### ✨ Added
 
 - A dark theme: System, Light or Dark. This one's for you Max!
 - A rainbow accent colour, which never stops changing 🌈
+
+### ♻️ Changed
+
+- Reworked the background selection algorithm to provide more variety
 
 ## [V2.2.0] — 2026-11-08
 
