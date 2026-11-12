@@ -57,7 +57,7 @@ const components: Components = {
     </a>
   ),
   code: ({ children }) => (
-    <code className="rounded-md border border-black/10 bg-white px-1 py-0.5 text-[0.9em]">
+    <code className="rounded-md border border-black/10 bg-surface px-1 py-0.5 text-[0.9em]">
       {children}
     </code>
   ),

@@ -20,7 +20,7 @@ export const inlineLinkStyles =
 
 const buttonStyles = {
   primary:
-    "bg-sky-500 text-white hover:brightness-110 active:brightness-100 px-4 py-3",
+    "bg-sky-500 text-on-accent hover:brightness-110 active:brightness-100 px-4 py-3",
   secondary: "bg-transparent hover:bg-black/5 active:bg-gray-200 px-4 py-3",
   inline: inlineLinkStyles,
 };

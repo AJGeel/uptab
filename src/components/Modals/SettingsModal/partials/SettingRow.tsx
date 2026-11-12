@@ -43,7 +43,7 @@ const SettingRow = ({
       onClick={isDisabled ? undefined : onToggle}
       {...highlightProps}
     >
-      <span className="flex size-9 shrink-0 items-center justify-center rounded-xl bg-sky-500/10 text-sky-800">
+      <span className="flex size-9 shrink-0 items-center justify-center rounded-xl bg-sky-500/10 text-sky-800 dark:bg-sky-500/25 dark:text-sky-300">
         <RowIcon weight="duotone" className="size-5" />
       </span>
 

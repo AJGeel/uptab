@@ -29,7 +29,7 @@ const Shortlink = ({ item, isDragging }: Props) => {
       <a
         href={isDragging ? undefined : safeHref(item.url)}
         className={cn(
-          "group relative flex w-full cursor-pointer items-center gap-3 rounded-xl border bg-white px-3 py-2.5 shadow-xs ring-sky-500 duration-150 hover:ring-3 focus:ring-3 focus:outline-hidden",
+          "group relative flex w-full cursor-pointer items-center gap-3 rounded-xl border bg-surface px-3 py-2.5 shadow-xs ring-sky-500 duration-150 hover:ring-3 focus:ring-3 focus:outline-hidden",
           isDragging && "cursor-grabbing",
         )}
       >

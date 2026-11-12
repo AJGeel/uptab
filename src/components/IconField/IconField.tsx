@@ -24,10 +24,10 @@ type InputProps = {
 };
 
 const popupClassName =
-  "origin-(--transform-origin) rounded-xl border bg-white text-black shadow-lg outline-hidden transition-[opacity,translate] duration-150 ease-out data-ending-style:-translate-y-1 data-ending-style:opacity-0 data-starting-style:-translate-y-1 data-starting-style:opacity-0";
+  "origin-(--transform-origin) rounded-xl border bg-surface text-black shadow-lg outline-hidden transition-[opacity,translate] duration-150 ease-out data-ending-style:-translate-y-1 data-ending-style:opacity-0 data-starting-style:-translate-y-1 data-starting-style:opacity-0";
 
 const triggerClassName =
-  "flex w-10 shrink-0 items-center justify-center rounded-lg border border-gray-300 bg-white shadow-sm ring-sky-500 duration-150 hover:bg-sky-500/10 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-hidden active:scale-95 disabled:pointer-events-none disabled:opacity-40";
+  "flex w-10 shrink-0 items-center justify-center rounded-lg border border-gray-300 bg-surface shadow-sm ring-sky-500 duration-150 hover:bg-sky-500/10 dark:hover:bg-sky-500/25 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-hidden active:scale-95 disabled:pointer-events-none disabled:opacity-40";
 
 const IconInput = ({ id, value, onChange, error }: InputProps) => {
   const [isRecentOpen, setIsRecentOpen] = useState(false);
@@ -50,7 +50,7 @@ const IconInput = ({ id, value, onChange, error }: InputProps) => {
             placeholder="Image URL or emoji (optional)"
             aria-invalid={!!error}
             aria-describedby={error ? `${id}-error` : undefined}
-            className={`inline-flex w-full items-center justify-center rounded-lg border bg-white py-2 pr-9 pl-3 leading-none shadow-sm ring-sky-500 outline-hidden duration-150 focus:ring-2 focus:ring-offset-2 ${error ? "border-red-400 focus:ring-red-400" : "border-gray-300"}`}
+            className={`inline-flex w-full items-center justify-center rounded-lg border bg-surface py-2 pr-9 pl-3 leading-none shadow-sm ring-sky-500 outline-hidden duration-150 focus:ring-2 focus:ring-offset-2 ${error ? "border-red-400 focus:ring-red-400" : "border-gray-300"}`}
             onChange={(event) => onChange(event.target.value)}
           />
           {value && (
@@ -84,7 +84,7 @@ const IconInput = ({ id, value, onChange, error }: InputProps) => {
                     <li key={icon}>
                       <button
                         type="button"
-                        className="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-left text-sm duration-150 hover:bg-sky-500/10 hover:text-sky-800 focus-visible:bg-sky-500/10 focus-visible:text-sky-800 focus-visible:outline-hidden"
+                        className="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-left text-sm duration-150 hover:bg-sky-500/10 hover:text-sky-800 focus-visible:bg-sky-500/10 focus-visible:text-sky-800 focus-visible:outline-hidden dark:hover:bg-sky-500/25 dark:hover:text-sky-300 dark:focus-visible:bg-sky-500/25 dark:focus-visible:text-sky-300"
                         onClick={() => choose(icon)}
                       >
                         <Favicon icon={icon} className="size-5 shrink-0" />

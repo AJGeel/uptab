@@ -141,7 +141,7 @@ const Modal = ({
           // Also when this modal sits on top of another, so the one below is dimmed too.
           forceRender
           className="
-            fixed inset-0 z-20 bg-black/50
+            fixed inset-0 z-20 bg-scrim/50
             data-closed:animate-overlayHide
             data-open:animate-overlayShow
           "
@@ -154,7 +154,7 @@ const Modal = ({
               fixed top-[50%] left-[50%] z-20
               flex max-h-[85vh] w-[90vw] max-w-md
               translate-[-50%] flex-col
-              rounded-2xl bg-white/95
+              rounded-2xl bg-surface/95
               shadow-lg
               backdrop-blur-lg backdrop-brightness-190
               backdrop-saturate-150 focus:outline-hidden
@@ -223,8 +223,8 @@ const Modal = ({
             render={
               <IconButton
                 className={cn(
-                  "absolute top-5 right-5 z-20 bg-transparent hover:bg-white",
-                  banner && "bg-white/70 backdrop-blur-sm",
+                  "absolute top-5 right-5 z-20 bg-transparent hover:bg-surface",
+                  banner && "bg-surface/70 backdrop-blur-sm",
                 )}
                 hideBorder
               />

@@ -82,14 +82,14 @@ const Select = ({
           alignItemWithTrigger={false}
           className="z-50"
         >
-          <BaseSelect.Popup className="min-w-48 origin-(--transform-origin) rounded-xl border bg-white p-1 text-black shadow-lg outline-hidden transition-[opacity,translate] duration-150 ease-out data-ending-style:-translate-y-1 data-ending-style:opacity-0 data-starting-style:-translate-y-1 data-starting-style:opacity-0">
+          <BaseSelect.Popup className="min-w-48 origin-(--transform-origin) rounded-xl border bg-surface p-1 text-black shadow-lg outline-hidden transition-[opacity,translate] duration-150 ease-out data-ending-style:-translate-y-1 data-ending-style:opacity-0 data-starting-style:-translate-y-1 data-starting-style:opacity-0">
             <BaseSelect.List>
               {options.map((option) => (
                 <BaseSelect.Item
                   key={option.value}
                   value={option.value}
                   onClick={option.onClick}
-                  className="flex cursor-pointer items-center gap-2 rounded-lg px-3 py-2 text-sm select-none data-highlighted:bg-sky-500/10 data-highlighted:text-sky-800"
+                  className="flex cursor-pointer items-center gap-2 rounded-lg px-3 py-2 text-sm select-none data-highlighted:bg-sky-500/10 data-highlighted:text-sky-800 dark:data-highlighted:bg-sky-500/25 dark:data-highlighted:text-sky-300"
                 >
                   <BaseSelect.ItemIndicator className="w-4">
                     <CheckIcon className="size-4" />
@@ -111,7 +111,7 @@ const Select = ({
               <>
                 <hr className="mt-1 border-t border-black/10" />
                 <button
-                  className="mt-1 w-full rounded-lg px-3 py-2 text-left text-sm text-sky-800 duration-150 hover:bg-sky-500/10 focus-visible:bg-sky-500/10 focus-visible:outline-hidden"
+                  className="mt-1 w-full rounded-lg px-3 py-2 text-left text-sm text-sky-800 duration-150 hover:bg-sky-500/10 focus-visible:bg-sky-500/10 focus-visible:outline-hidden dark:text-sky-300 dark:hover:bg-sky-500/25 dark:focus-visible:bg-sky-500/25"
                   onClick={() => {
                     setIsOpen(false);
                     action.onClick();

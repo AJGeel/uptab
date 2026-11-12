@@ -109,7 +109,7 @@ const SettingEntryRow = ({ entry, settings, query, onChange }: Props) => {
       <Button
         label={isBackgrounds ? "Choose backgrounds" : "Open my photos"}
         variant={buttonVariants.secondary}
-        className="shrink-0 border bg-white"
+        className="shrink-0 border bg-surface"
         onClick={() =>
           openModal(isBackgrounds ? Modals.backgrounds : Modals.localPhotos)
         }

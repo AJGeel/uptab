@@ -21,7 +21,8 @@ const EmojiMartPicker = ({ onSelect }: Props) => {
     const picker = new Picker({
       data,
       set: "native",
-      theme: "light",
+      theme:
+        document.documentElement.dataset.theme === "dark" ? "dark" : "light",
       previewPosition: "none",
       autoFocus: true,
       onEmojiSelect: ({ native }: { native: string }) =>

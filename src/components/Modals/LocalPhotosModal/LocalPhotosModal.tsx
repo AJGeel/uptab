@@ -214,7 +214,7 @@ const LocalPhotosModal = () => {
                 {isSelected && (
                   <CheckCircleIcon
                     weight="fill"
-                    className="absolute top-1.5 right-1.5 size-6 rounded-full bg-white text-sky-500 shadow-sm"
+                    className="absolute top-1.5 right-1.5 size-6 rounded-full bg-surface text-sky-500 shadow-sm"
                   />
                 )}
               </button>

@@ -1,6 +1,7 @@
 import {
   BellRingingIcon,
   CalendarCheckIcon,
+  CircleHalfIcon,
   ClockIcon,
   CloudSunIcon,
   InfoIcon,
@@ -12,7 +13,8 @@ import {
 } from "@phosphor-icons/react";
 
 import { ACCENTS } from "@/src/services/settings/accents";
-import { AccentId } from "@/src/services/settings/types";
+import { THEMES } from "@/src/services/settings/theme";
+import { AccentId, ThemeId } from "@/src/services/settings/types";
 import { MAX_EXTRA_FORECAST_DAYS } from "@/src/services/weather/constants";
 
 import { asString, field, SettingEntry } from "./settingsTypes";
@@ -101,6 +103,27 @@ export const generalEntries: SettingEntry[] = [
     })),
   },
   {
+    kind: "segmented",
+    id: "appearance.theme",
+    section: "appearance",
+    ...asString(field("appearance", "theme"), (value) =>
+      THEMES.some(({ id }) => id === value) ? (value as ThemeId) : "system",
+    ),
+    title: "Theme",
+    description: "Light, dark, or whatever your system is set to.",
+    keywords: [
+      "dark",
+      "light",
+      "mode",
+      "night",
+      "appearance",
+      "system",
+      "colour",
+    ],
+    icon: CircleHalfIcon,
+    options: THEMES.map(({ id, label }) => ({ value: id, label })),
+  },
+  {
     kind: "swatches",
     id: "appearance.accent",
     section: "appearance",
@@ -111,10 +134,11 @@ export const generalEntries: SettingEntry[] = [
     description: "Buttons, switches and highlights.",
     keywords: ["theme", "colour", "color", "blue", "highlight", "palette"],
     icon: PaletteIcon,
-    options: ACCENTS.map(({ id, label, swatch }) => ({
+    options: ACCENTS.map(({ id, label, swatch, checkColor }) => ({
       value: id,
       label,
       color: swatch,
+      checkColor,
     })),
   },
   {

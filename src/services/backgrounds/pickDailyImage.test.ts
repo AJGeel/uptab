@@ -3,6 +3,7 @@ import { describe, expect, it } from "vitest";
 import {
   getEnabledImages,
   getEnabledThemes,
+  orderImages,
   pickDailyImage,
 } from "./pickDailyImage";
 import { BackgroundImage, Catalogue } from "./types";
@@ -70,6 +71,27 @@ describe("pickDailyImage", () => {
 
   it("returns nothing without photos", () => {
     expect(pickDailyImage([], "2026-10-18")).toBeUndefined();
+  });
+});
+
+describe("orderImages", () => {
+  it("is the same every time, and holds every photo once", () => {
+    const order = orderImages(images, "2026-10-18");
+
+    expect(orderImages([...images].reverse(), "2026-10-18")).toEqual(order);
+    expect(new Set(order).size).toBe(images.length);
+  });
+
+  it("differs per date", () => {
+    expect(orderImages(images, "2026-10-18")).not.toEqual(
+      orderImages(images, "2026-10-19"),
+    );
+  });
+
+  it("starts with the daily pick", () => {
+    expect(orderImages(images, "2026-10-18")[0]).toBe(
+      pickDailyImage(images, "2026-10-18"),
+    );
   });
 });
 

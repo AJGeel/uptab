@@ -35,7 +35,7 @@ const isValidUrl = (url: string) => {
 };
 
 const inputClassName = (hasError: boolean) =>
-  `inline-flex w-full items-center justify-center rounded-lg border bg-white px-3 py-2 leading-none shadow-sm ring-sky-500 outline-hidden duration-150 focus:ring-2 focus:ring-offset-2 ${hasError ? "border-red-400 focus:ring-red-400" : "border-gray-300"}`;
+  `inline-flex w-full items-center justify-center rounded-lg border bg-surface px-3 py-2 leading-none shadow-sm ring-sky-500 outline-hidden duration-150 focus:ring-2 focus:ring-offset-2 ${hasError ? "border-red-400 focus:ring-red-400" : "border-gray-300"}`;
 
 const EditBookmarkModal = ({
   bookmark,
@@ -85,7 +85,7 @@ const EditBookmarkModal = ({
         <div className="pointer-events-none flex flex-col gap-2 self-start rounded-xl bg-black/5 p-3">
           <p className="text-sm font-semibold text-gray-500">Preview</p>
           {bookmark && (
-            <div className="overflow-hidden rounded-lg bg-white">
+            <div className="overflow-hidden rounded-lg bg-surface">
               <BookmarkItem
                 item={{
                   ...bookmark,

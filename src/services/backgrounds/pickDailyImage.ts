@@ -37,29 +37,26 @@ export const hash = (value: string) => {
 };
 
 /**
+ * Every photo in the order they're browsed for the date: a shuffle that's the
+ * same each time, so going forward and back meets the same photos. Each photo
+ * is scored on its own, so devices with slightly different photos (local ones,
+ * an older catalogue) still agree on the shared ones.
+ */
+export const orderImages = (images: BackgroundImage[], date: string) =>
+  images
+    .map((image) => ({ image, score: hash(`${date}:${image.id}`) }))
+    .sort((a, b) => b.score - a.score || (a.image.id < b.image.id ? -1 : 1))
+    .map(({ image }) => image);
+
+/**
  * Today's photo: the stored pick if it's from today and still available,
- * otherwise the photo that scores highest for the date. Each photo is scored
- * on its own, so devices with slightly different photos (local ones, an older
- * catalogue) still agree whenever they share the winner.
+ * otherwise the first of the date's order (see orderImages).
  */
 export const pickDailyImage = (
   images: BackgroundImage[],
   date: string,
   stored?: DailyPick | null,
-): BackgroundImage | undefined => {
-  const storedImage =
-    stored?.date === date
-      ? images.find((image) => image.id === stored.imageId)
-      : undefined;
-
-  return (
-    storedImage ??
-    images.reduce<BackgroundImage | undefined>(
-      (best, image) =>
-        best && hash(`${date}:${best.id}`) >= hash(`${date}:${image.id}`)
-          ? best
-          : image,
-      undefined,
-    )
-  );
-};
+): BackgroundImage | undefined =>
+  (stored?.date === date
+    ? images.find((image) => image.id === stored.imageId)
+    : undefined) ?? orderImages(images, date)[0];

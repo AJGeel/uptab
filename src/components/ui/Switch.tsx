@@ -14,7 +14,7 @@ const Switch = ({
     )}
     {...props}
   >
-    <BaseSwitch.Thumb className="pointer-events-none block size-5 translate-x-0 rounded-full bg-white shadow-lg ring-0 transition-transform data-checked:translate-x-5" />
+    <BaseSwitch.Thumb className="pointer-events-none block size-5 translate-x-0 rounded-full bg-surface shadow-lg ring-0 transition-transform data-checked:translate-x-5" />
   </BaseSwitch.Root>
 );
 

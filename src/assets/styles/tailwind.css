@@ -10,6 +10,12 @@
   --color-sky-800: #085884;
 
   --color-black: #020e2c;
+  /* Panels and fields. White, until the dark theme. */
+  --color-surface: #fff;
+  /* Text on an accent fill. */
+  --color-on-accent: #fff;
+  /* The shade over photos. Unlike black, which is text, it stays dark. */
+  --color-scrim: #000;
 
   --animate-overlayShow: overlayShow 250ms cubic-bezier(0.16, 1, 0.3, 1);
   --animate-overlayHide: overlayHide 250ms cubic-bezier(0.16, 1, 0.3, 1);
@@ -17,6 +23,7 @@
   --animate-contentHide: contentHide 250ms cubic-bezier(0.16, 1, 0.3, 1);
   --animate-hotkey: hotkey 1s ease-out forwards;
   --animate-shake: shake 400ms ease-in-out;
+  --animate-swatch-spin: swatch-spin 6s linear infinite;
 
   @keyframes overlayShow {
     from {
@@ -58,6 +65,11 @@
       transform: translateY(2%) scale(0.96);
     }
   }
+  @keyframes swatch-spin {
+    to {
+      --swatch-spin: 360deg;
+    }
+  }
   @keyframes shake {
     0%,
     100% {
@@ -93,6 +105,40 @@
       transform: translateY(6px) scale(0.95);
     }
   }
+}
+
+/*
+  The dark theme: the gray ramp is made over, black (the text) turns light and
+  surfaces turn dark. Photos, and what sits on them, keep white and the scrim.
+*/
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
+
+:root {
+  color-scheme: light;
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+
+  --color-surface: oklch(28% 0.017 264);
+  --color-black: oklch(96% 0.006 264);
+
+  --color-gray-50: oklch(31% 0.017 264);
+  --color-gray-100: oklch(34% 0.017 264);
+  --color-gray-200: oklch(40% 0.017 264);
+  --color-gray-300: oklch(46% 0.017 264);
+  --color-gray-400: oklch(62% 0.014 264);
+  --color-gray-500: oklch(70% 0.011 264);
+  --color-gray-600: oklch(78% 0.008 264);
+  --color-gray-700: oklch(85% 0.006 264);
+  --color-gray-800: oklch(91% 0.004 264);
+  --color-gray-900: oklch(95% 0.003 264);
+  --color-gray-950: oklch(98% 0.002 264);
+}
+
+/* The gap inside a focus ring, which is white until told otherwise. */
+:root[data-theme="dark"] * {
+  --tw-ring-offset-color: var(--color-surface);
 }
 
 /*
@@ -255,13 +301,15 @@
   --color-sky-100: oklch(97.3% 0.071 103.193);
   --color-sky-200: oklch(94.5% 0.129 101.54);
   --color-sky-300: oklch(90.5% 0.182 98.111);
-  --color-sky-400: oklch(68.1% 0.162 75.834);
-  --color-sky-500: oklch(55.4% 0.135 66.442);
-  --color-sky-600: oklch(55.4% 0.135 66.442);
+  --color-sky-400: oklch(87% 0.17 92);
+  --color-sky-500: oklch(83% 0.175 90);
+  --color-sky-600: oklch(56% 0.14 72);
   --color-sky-700: oklch(47.6% 0.114 61.907);
   --color-sky-800: oklch(42.1% 0.095 57.708);
   --color-sky-900: oklch(28.6% 0.066 53.813);
   --color-sky-950: oklch(28.6% 0.066 53.813);
+  /* Too bright for white text. */
+  --color-on-accent: oklch(24% 0.05 70);
 }
 
 :root[data-accent="pink"] {
@@ -278,6 +326,78 @@
   --color-sky-950: oklch(28.4% 0.109 3.907);
 }
 
+
+/*
+  Rainbow: one ramp for every hue, with the hue itself animated. The property
+  is registered so the browser can animate it as a number.
+*/
+@property --rainbow-hue {
+  syntax: "<number>";
+  inherits: true;
+  initial-value: 250;
+}
+
+@property --swatch-spin {
+  syntax: "<angle>";
+  inherits: true;
+  initial-value: 0deg;
+}
+
+@keyframes rainbow-hue {
+  from {
+    --rainbow-hue: 0;
+  }
+  to {
+    --rainbow-hue: 360;
+  }
+}
+
+:root[data-accent="rainbow"] {
+  animation: rainbow-hue 30s linear infinite;
+
+  --color-sky-50: oklch(96.5% 0.02 var(--rainbow-hue));
+  --color-sky-100: oklch(93.5% 0.04 var(--rainbow-hue));
+  --color-sky-200: oklch(87% 0.08 var(--rainbow-hue));
+  --color-sky-300: oklch(79% 0.13 var(--rainbow-hue));
+  --color-sky-400: oklch(62% 0.2 var(--rainbow-hue));
+  --color-sky-500: oklch(54% 0.22 var(--rainbow-hue));
+  --color-sky-600: oklch(54% 0.22 var(--rainbow-hue));
+  --color-sky-700: oklch(47% 0.2 var(--rainbow-hue));
+  --color-sky-800: oklch(41% 0.17 var(--rainbow-hue));
+  --color-sky-900: oklch(36% 0.12 var(--rainbow-hue));
+  --color-sky-950: oklch(26% 0.08 var(--rainbow-hue));
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root[data-accent="rainbow"] {
+    animation: none;
+  }
+}
+
+/*
+  In the dark theme, accent text (links, key hints) takes the pale step of the
+  ramp: the 600 is a fill-dark shade, too dim on a dark surface, and the 50 a
+  pale tint, too bright. After the
+  accents above, so it wins for every one of them.
+*/
+:root[data-theme="dark"] {
+  --color-sky-50: color-mix(in oklab, var(--color-sky-500) 15%, transparent);
+  --color-sky-600: var(--color-sky-300);
+}
+
+/*
+  Orange is only dark enough for white text in the light theme. In the dark one
+  its fill is brighter, with dark text on it instead. Yellow is that bright in
+  both, and leans a little to orange in the dark one.
+*/
+:root[data-theme="dark"][data-accent="yellow"] {
+  --color-sky-500: oklch(81% 0.172 78);
+}
+
+:root[data-theme="dark"][data-accent="orange"] {
+  --color-sky-500: oklch(74% 0.19 52);
+  --color-on-accent: oklch(24% 0.05 40);
+}
 
 /* What a setting changes, while the pointer is on that setting in the preferences. */
 @layer base {

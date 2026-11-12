@@ -21,7 +21,7 @@ const SearchBookmarks = ({
 }: SearchBarProps) => (
   <>
     <input
-      className="w-full min-w-0 bg-white px-3 py-2 pl-9 font-sans focus-within:outline-hidden"
+      className="w-full min-w-0 bg-surface px-3 py-2 pl-9 font-sans focus-within:outline-hidden"
       placeholder="Search your bookmarks..."
       type="search"
       role="combobox"

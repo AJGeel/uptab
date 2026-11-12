@@ -25,7 +25,7 @@ const QuickSettings = ({ ids, onOpenAll }: Props) => {
     .filter((entry): entry is SegmentedEntry => entry?.kind === "segmented");
 
   return (
-    <div className="mb-4 rounded-xl border bg-white/60 p-3">
+    <div className="mb-4 rounded-xl border bg-surface/60 p-3">
       <div className="grid gap-x-8 gap-y-2 sm:grid-cols-2">
         {entries.map((entry) => (
           <div

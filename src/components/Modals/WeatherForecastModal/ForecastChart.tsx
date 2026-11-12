@@ -34,8 +34,9 @@ import AnimatedHeight from "../../ui/AnimatedHeight";
 
 const TEMPERATURE_GRADIENT_ID = "temperatureGradient";
 
-const MUTED_COLOR = "rgba(0, 0, 0, 0.4)";
-const HAIRLINE_COLOR = "rgba(0, 0, 0, 0.08)";
+const MUTED_COLOR = "color-mix(in oklab, var(--color-black) 40%, transparent)";
+const HAIRLINE_COLOR =
+  "color-mix(in oklab, var(--color-black) 8%, transparent)";
 
 const AXIS_TICK = { fontSize: 11, fill: MUTED_COLOR };
 
@@ -81,7 +82,7 @@ const TemperatureDot = ({ cx, cy, payload }: TemperatureDotProps) => (
     cy={cy}
     r={4}
     fill={getTemperatureColor(payload?.temperature ?? 0)}
-    stroke="white"
+    stroke="var(--color-surface)"
     strokeWidth={2}
   />
 );

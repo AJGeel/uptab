@@ -43,7 +43,7 @@ const ForecastTooltip = ({ active, point }: ForecastTooltipProps) => {
   const { weather } = point;
 
   return (
-    <div className="min-w-40 rounded-lg bg-white/95 px-3 py-2 text-xs shadow-md ring-1 ring-black/5">
+    <div className="min-w-40 rounded-lg bg-surface/95 px-3 py-2 text-xs shadow-md ring-1 ring-black/5">
       <p className="text-black/50">
         {getDayLabel(date)} · {formatTime(date, settings?.dateTime.timeFormat)}
       </p>

@@ -6,6 +6,6 @@
 /** Just the tint, for controls that bring their own shape. */
 export const widgetTint = "hover:bg-(--widget-hover,rgb(255_255_255/0.4))";
 
-export const widgetHover = `-mx-3 -my-2 rounded-2xl px-3 py-2 duration-150 hover:text-current hover:backdrop-blur-sm ${widgetTint}`;
+export const widgetHover = `-mx-3 -my-2 rounded-2xl px-3 py-2 duration-150 hover:text-current dark:hover:text-current hover:backdrop-blur-sm ${widgetTint}`;
 
 export const widgetPress = "active:scale-95 active:opacity-70";

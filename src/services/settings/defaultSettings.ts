@@ -40,6 +40,7 @@ export const defaultSettings: Settings = {
     showFeelsLike: true,
   },
   appearance: {
+    theme: "system",
     accent: "sky",
   },
 };
