@@ -75,6 +75,11 @@ export type AppearanceSettings = {
   accent: AccentId;
 };
 
+export type PrivacySettings = {
+  /** Off until someone turns it on: nothing is sent without it. */
+  errorReporting: boolean;
+};
+
 export type Settings = {
   sidebar: SidebarSettings;
   homescreen: HomescreenSettings;
@@ -84,4 +89,5 @@ export type Settings = {
   dateTime: DateTimeSettings;
   forecast: ForecastSettings;
   appearance: AppearanceSettings;
+  privacy: PrivacySettings;
 };

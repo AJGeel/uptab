@@ -1,13 +1,9 @@
 import { useEffect, useState } from "react";
 import { permissions } from "webextension-polyfill";
 
+import { isFirefox, supportsDataConsent } from "@/src/utils/firefox";
+
 const GEOLOCATION = { permissions: ["geolocation" as const] };
-
-const isFirefox = (() => navigator.userAgent.includes("Firefox"))();
-
-/** Firefox shows data categories from version 140. Read synchronously, to keep the click. */
-const supportsDataConsent = () =>
-  Number(/Firefox\/(\d+)/.exec(navigator.userAgent)?.[1] ?? 0) >= 140;
 
 /**
  * Whether UpTab may use the current location. Only Firefox has it as an

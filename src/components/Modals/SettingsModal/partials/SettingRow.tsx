@@ -7,6 +7,9 @@ import { useSettingHighlight } from "@/src/hooks/useSettingHighlight";
 
 import Highlight from "./Highlight";
 
+/** On each row that has a setting id, to find it and focus its control. */
+export const SETTING_ROW_ID_PREFIX = "setting-row-";
+
 type Props = {
   icon: Icon;
   /** What the setting changes is outlined on the page while it's hovered or focused. */
@@ -39,6 +42,7 @@ const SettingRow = ({
 
   return (
     <div
+      id={settingId && `${SETTING_ROW_ID_PREFIX}${settingId}`}
       className={`group flex items-center gap-3 rounded-xl p-3 duration-150 ${isDisabled ? "opacity-50" : `hover:bg-black/5 ${onToggle ? "cursor-pointer" : ""}`}`}
       onClick={isDisabled ? undefined : onToggle}
       {...highlightProps}

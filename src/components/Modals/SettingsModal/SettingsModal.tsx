@@ -11,6 +11,7 @@ import { hotkeys } from "@/src/services/hotkeys/hotkeys";
 
 import { CITY_SEARCH_ID } from "./partials/AddLocation";
 import SettingEntryRow from "./partials/SettingEntryRow";
+import { SETTING_ROW_ID_PREFIX } from "./partials/SettingRow";
 import SettingsNav from "./partials/SettingsNav";
 import { searchSettings } from "./searchSettings";
 import {
@@ -156,7 +157,18 @@ const SettingsModal = () => {
         // Below the location help, so it's brought into view as well.
         citySearch?.scrollIntoView({ block: "nearest" });
 
-        return citySearch ?? true;
+        const errorReportsSwitch =
+          requestedFocus === "errorReports"
+            ? document
+                .getElementById(
+                  `${SETTING_ROW_ID_PREFIX}privacy.errorReporting`,
+                )
+                ?.querySelector<HTMLElement>('[role="switch"]')
+            : null;
+
+        errorReportsSwitch?.scrollIntoView({ block: "nearest" });
+
+        return citySearch ?? errorReportsSwitch ?? true;
       }}
       title="Edit Preferences"
       className="h-[min(39rem,calc(100dvh-2rem))] w-[calc(100vw-2rem)] max-w-208"

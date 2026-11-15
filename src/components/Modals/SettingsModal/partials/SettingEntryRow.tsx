@@ -36,7 +36,20 @@ const SettingEntryRow = ({ entry, settings, query, onChange }: Props) => {
         hotkey={hotkeyOf(entry)}
         isActive={entry.get(settings)}
         isDisabled={isDisabled}
-        onToggle={() => onChange(entry.set(settings, !entry.get(settings)))}
+        onToggle={() => {
+          const to = !entry.get(settings);
+
+          if (!entry.confirmChange) {
+            onChange(entry.set(settings, to));
+            return;
+          }
+
+          void entry.confirmChange(to).then((isConfirmed) => {
+            if (isConfirmed) {
+              onChange(entry.set(settings, to));
+            }
+          });
+        }}
       />
     );
   }

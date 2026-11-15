@@ -1,7 +1,10 @@
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 
 import { highlightParts, searchSettings } from "./searchSettings";
 import { sections, settingEntries } from "./settingsRegistry";
+
+// The registry reaches the browser's permissions API, which only exists in an extension.
+vi.mock("webextension-polyfill", () => ({ permissions: {} }));
 
 const titles = (query: string) =>
   searchSettings(settingEntries, sections, query).map(({ id }) => id);

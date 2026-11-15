@@ -87,6 +87,7 @@ const Homescreen = () => {
                 variant="floating"
                 showUpdates={settings.sidebar.showUpdates}
                 feedbackFrequency={settings.sidebar.feedbackFrequency}
+                isErrorReportingOn={settings.privacy.errorReporting}
               />
             </div>
           )}

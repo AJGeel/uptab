@@ -43,4 +43,7 @@ export const defaultSettings: Settings = {
     theme: "system",
     accent: "sky",
   },
+  privacy: {
+    errorReporting: false,
+  },
 };

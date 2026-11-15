@@ -5,6 +5,7 @@ import {
   getFailureReason,
 } from "@/src/services/location/locationMessages";
 import { GpsFailure } from "@/src/services/location/types";
+import { isFirefox } from "@/src/utils/firefox";
 
 import Button, { buttonVariants } from "../../../ui/Button";
 import Loader from "../../../ui/Loader";
@@ -16,8 +17,6 @@ type Props = {
   /** Firefox only: asks for the optional location permission. */
   onRequestAccess: () => void;
 };
-
-const isFirefox = navigator.userAgent.includes("Firefox");
 
 /** Why the current location isn't working, and what to try. */
 const GpsHelp = ({ failure, isRetrying, onRetry, onRequestAccess }: Props) => {

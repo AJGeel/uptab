@@ -43,6 +43,7 @@ const Sidebar = ({ isExpanded, setIsExpanded }: Props) => {
           <Notification
             showUpdates={settings.sidebar.showUpdates}
             feedbackFrequency={settings.sidebar.feedbackFrequency}
+            isErrorReportingOn={settings.privacy.errorReporting}
           />
         )}
         {settings?.sidebar.showInfoWidget && (
