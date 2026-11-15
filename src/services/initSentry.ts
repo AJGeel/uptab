@@ -11,18 +11,19 @@ const start = async (dsn: string) => {
   }
 
   isRunning = true;
-  const Sentry = await import("@sentry/browser");
+  // Named, so the bundle drops the SDK's unused parts, like Spotlight's localhost.
+  const { init, breadcrumbsIntegration } = await import("@sentry/browser");
 
   // Switched off again while it was loading.
   if (!isRunning) {
     return;
   }
 
-  Sentry.init({
+  init({
     dsn,
     // These record web addresses, which carry places and searches.
     integrations: [
-      Sentry.breadcrumbsIntegration({
+      breadcrumbsIntegration({
         fetch: false,
         xhr: false,
         history: false,
@@ -39,8 +40,8 @@ const stop = async () => {
   }
 
   isRunning = false;
-  const Sentry = await import("@sentry/browser");
-  await Sentry.close();
+  const { close } = await import("@sentry/browser");
+  await close();
 };
 
 /** Reports errors only for people who turned it on, and stops when they turn it off. */
