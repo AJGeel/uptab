@@ -1,6 +1,6 @@
-import { GlobeIcon } from "@phosphor-icons/react";
+import { ChatCircleDotsIcon, GlobeIcon } from "@phosphor-icons/react";
 
-import { SettingEntry } from "./settingsTypes";
+import { field, SettingEntry } from "./settingsTypes";
 
 export const searchEntries: SettingEntry[] = [
   {
@@ -22,5 +22,15 @@ export const searchEntries: SettingEntry[] = [
     ],
     icon: GlobeIcon,
     isDisabled: (settings) => !settings.sidebar.showBookmarks,
+  },
+  {
+    kind: "switch",
+    id: "sidebar.showFeedbackPrompt",
+    section: "sidebar",
+    ...field("sidebar", "showFeedbackPrompt"),
+    title: "Feedback link",
+    description: "A little nudge to tell the maker what you think.",
+    keywords: ["prompt", "review", "rate", "bottom"],
+    icon: ChatCircleDotsIcon,
   },
 ];

@@ -12,7 +12,7 @@ export type SidebarSettings = {
   /** How often the feedback ask replaces the update notification. */
   feedbackFrequency: FeedbackFrequency;
   isOpen: boolean;
-  shortlinkColumns: 1 | 2;
+  shortlinkColumns: 1 | 2 | 3;
 };
 
 export type HomescreenSettings = {

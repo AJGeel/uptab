@@ -1,5 +1,5 @@
 import { Icon, IconWeight } from "@phosphor-icons/react";
-import { ComponentType } from "react";
+import { ComponentType, ReactNode } from "react";
 
 import { SettingsSection } from "@/src/hooks/stores/useModalStore";
 import { Hotkeys } from "@/src/services/hotkeys/types";
@@ -44,7 +44,7 @@ export type SwitchEntry = Base & {
 
 export type SegmentedEntry = Base & {
   kind: "segmented";
-  options: { value: string; label: string }[];
+  options: { value: string; label: string; icon?: ReactNode }[];
 } & Control<string>;
 
 export type SwatchesEntry = Base & {

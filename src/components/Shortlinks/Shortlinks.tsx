@@ -104,9 +104,11 @@ const Shortlinks = () => {
             <div
               className={cn(
                 "-m-2 grid gap-2 rounded-2xl border border-dashed border-transparent p-2 transition-colors duration-250",
-                settings?.sidebar.shortlinkColumns === 1
-                  ? "grid-cols-1"
-                  : "grid-cols-2",
+                settings?.sidebar.shortlinkColumns === 1 && "grid-cols-1",
+                settings?.sidebar.shortlinkColumns === 3 && "grid-cols-3",
+                settings?.sidebar.shortlinkColumns !== 1 &&
+                  settings?.sidebar.shortlinkColumns !== 3 &&
+                  "grid-cols-2",
                 isDragging && "border-gray-200 bg-gray-100",
               )}
             >
