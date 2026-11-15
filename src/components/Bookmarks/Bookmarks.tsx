@@ -14,6 +14,7 @@ import { useBookmarkNavigation } from "@/src/hooks/useBookmarkNavigation";
 import { useHistoryAccess } from "@/src/hooks/useHistoryAccess";
 import { usePersistedState } from "@/src/hooks/usePersistedState";
 import { useSettings } from "@/src/hooks/useSettings";
+import { Command } from "@/src/services/bookmarks/commands";
 import {
   isVisitSort,
   SortMode,
@@ -26,12 +27,13 @@ import { addShortlink } from "@/src/services/shortlinks";
 import { cn } from "@/src/utils";
 
 import BookmarkItem from "./partials/BookmarkItem";
+import CommandList from "./partials/CommandList";
 import EditBookmarkModal from "./partials/EditBookmarkModal";
 import NoMatches from "./partials/NoMatches";
+import Notice from "./partials/Notice";
 import RemoveBookmarkModal from "./partials/RemoveBookmarkModal";
 import SearchBookmarks from "./partials/SearchBookmarks";
 import SortBookmarks from "./partials/SortBookmarks";
-import Button, { buttonVariants } from "../ui/Button";
 
 export type BookmarksProps = {
   displayMode?: "NewTab" | "Popup";
@@ -75,6 +77,10 @@ const Bookmarks = ({ displayMode = "NewTab" }: BookmarksProps) => {
   const {
     entries,
     activeEntry,
+    commands,
+    activeCommand,
+    activeItemId,
+    getCommandId,
     queryTarget,
     openQueryTarget,
     getEntryId,
@@ -86,6 +92,7 @@ const Bookmarks = ({ displayMode = "NewTab" }: BookmarksProps) => {
     visits,
     searchQuery,
     searchEngine,
+    onRunCommand: (command) => runCommand(command),
     onClearQuery: () => {
       setSearchQuery("");
       resetHighlight();
@@ -142,6 +149,11 @@ const Bookmarks = ({ displayMode = "NewTab" }: BookmarksProps) => {
     setSortMode(mode);
   };
 
+  const runCommand = (command: Command) => {
+    changeSortMode(command.run(sortBy));
+    setSearchQuery("");
+  };
+
   // Until the saved choices are in, the list would show the defaults first.
   const isReady =
     isSortHydrated &&
@@ -167,7 +179,7 @@ const Bookmarks = ({ displayMode = "NewTab" }: BookmarksProps) => {
           }}
           onKeyDown={handleKeyDown}
           listId="bookmarks-list"
-          activeItemId={activeEntry ? getEntryId(activeEntry) : undefined}
+          activeItemId={activeItemId}
           autoFocus={displayMode === "Popup"}
         />
         <SortBookmarks
@@ -184,20 +196,10 @@ const Bookmarks = ({ displayMode = "NewTab" }: BookmarksProps) => {
         )}
       >
         {notice && (
-          <div
-            role="status"
-            className="flex shrink-0 items-start gap-2 bg-amber-50 px-2 py-1.5 text-xs text-amber-950"
-          >
-            <p className="grow">{notice}</p>
-            <Button
-              label="Dismiss"
-              variant={buttonVariants.inline}
-              onClick={() => setNotice(undefined)}
-            />
-          </div>
+          <Notice message={notice} onDismiss={() => setNotice(undefined)} />
         )}
 
-        {isReady && entries.length === 0 && (
+        {isReady && !commands && entries.length === 0 && (
           <NoMatches
             query={searchQuery}
             target={queryTarget}
@@ -210,6 +212,14 @@ const Bookmarks = ({ displayMode = "NewTab" }: BookmarksProps) => {
                 search: { ...settings.search, engine },
               })
             }
+          />
+        )}
+        {commands && (
+          <CommandList
+            commands={commands}
+            activeCommand={activeCommand}
+            getId={getCommandId}
+            onRun={runCommand}
           />
         )}
 
