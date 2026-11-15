@@ -1,6 +1,8 @@
 import { storage } from "webextension-polyfill";
 
-import { GeocodeResponse, Location } from "./types";
+import { Area, Location } from "./types";
+
+type CachedArea = { address: Area };
 
 /**
  * Checks a previous reverse geocoding result for lat/long to minimise API calls
@@ -8,12 +10,12 @@ import { GeocodeResponse, Location } from "./types";
 export const getCachedReverseGeocoding = async ({
   latitude,
   longitude,
-}: Location): Promise<GeocodeResponse | void> => {
+}: Location): Promise<CachedArea | void> => {
   try {
     const { cachedReverseGeocoding } = (await storage.local.get(
       "cachedReverseGeocoding",
     )) as {
-      cachedReverseGeocoding?: GeocodeResponse & { _input?: Location };
+      cachedReverseGeocoding?: CachedArea & { _input?: Location };
     };
 
     // Entries cached before errors were rejected may lack an address.

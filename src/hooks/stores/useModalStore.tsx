@@ -13,7 +13,8 @@ export const Modals = {
 export type Modals = (typeof Modals)[keyof typeof Modals];
 
 /** Something in the settings modal to focus when it opens, instead of the first field. */
-export type SettingsFocus = "citySearch";
+export type SettingsFocus =
+  "citySearch" | "errorReports" | "preferencesButton" | "updateNews";
 
 export type SettingsSection =
   | "sidebar"

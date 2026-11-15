@@ -5,6 +5,7 @@ import {
   getFailureReason,
 } from "@/src/services/location/locationMessages";
 import { GpsFailure } from "@/src/services/location/types";
+import { isFirefox } from "@/src/utils/firefox";
 
 import Button, { buttonVariants } from "../../../ui/Button";
 import Loader from "../../../ui/Loader";
@@ -13,12 +14,30 @@ type Props = {
   failure: GpsFailure;
   isRetrying: boolean;
   onRetry: () => void;
+  /** Firefox only: asks for the optional location permission. */
+  onRequestAccess: () => void;
 };
 
-const isFirefox = navigator.userAgent.includes("Firefox");
-
 /** Why the current location isn't working, and what to try. */
-const GpsHelp = ({ failure, isRetrying, onRetry }: Props) => {
+const GpsHelp = ({ failure, isRetrying, onRetry, onRequestAccess }: Props) => {
+  if (failure === "notGranted") {
+    return (
+      <div
+        role="status"
+        className="flex flex-col items-start gap-3 rounded-xl bg-sky-500/10 p-3 text-sm"
+      >
+        <p>
+          {getFailureReason(failure)} It&apos;s only used for the weather, and
+          you can take it back any time in your browser&apos;s add-on settings.
+        </p>
+
+        <Button label="Use my location" onClick={onRequestAccess} />
+
+        <p>Or skip this and add a city yourself below.</p>
+      </div>
+    );
+  }
+
   return (
     <div
       role="status"

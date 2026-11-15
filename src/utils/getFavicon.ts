@@ -1,5 +1,7 @@
 import { runtime } from "webextension-polyfill";
 
+import { isFirefox } from "./firefox";
+
 export const FALLBACK_FAVICON = "/favicon-fallback.svg";
 
 const FAVICON_SIZE = 32;
@@ -14,8 +16,6 @@ const WELL_KNOWN_PATHS = [
 ];
 
 const DUCKDUCKGO_ICONS = "https://icons.duckduckgo.com/ip3/";
-
-const isFirefox = () => runtime.getURL("").startsWith("moz-extension:");
 
 const chromeFaviconBase = () => runtime.getURL("/_favicon/");
 
@@ -33,7 +33,7 @@ const getChromeFavicon = (url: string) =>
  * is the only step that tells anyone else which sites are bookmarked.
  */
 export const getFaviconSources = (url: string) => {
-  const sources = isFirefox() ? [] : [getChromeFavicon(url)];
+  const sources = isFirefox ? [] : [getChromeFavicon(url)];
 
   try {
     const { origin, hostname } = new URL(url);

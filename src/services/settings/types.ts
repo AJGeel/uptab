@@ -1,4 +1,5 @@
 import { LocationSettings } from "../location/types";
+import { SearchEngineId } from "../search/searchEngines";
 
 export type FeedbackFrequency = "monthly" | "quarterly" | "never";
 
@@ -11,7 +12,7 @@ export type SidebarSettings = {
   /** How often the feedback ask replaces the update notification. */
   feedbackFrequency: FeedbackFrequency;
   isOpen: boolean;
-  shortlinkColumns: 1 | 2;
+  shortlinkColumns: 1 | 2 | 3;
 };
 
 export type HomescreenSettings = {
@@ -39,7 +40,7 @@ export type DateTimeSettings = {
   timeFormat: TimeFormat;
   showWeekNumber: boolean;
   weekStartsOn: WeekStart;
-  /** How many days the weather forecast shows, today included. */
+  /** The days after today the weather forecast shows. Zero is today, and the next 24 hours. */
   forecastDays: number;
 };
 
@@ -75,6 +76,16 @@ export type AppearanceSettings = {
   accent: AccentId;
 };
 
+export type PrivacySettings = {
+  /** Off until someone turns it on: nothing is sent without it. */
+  errorReporting: boolean;
+};
+
+export type SearchSettings = {
+  /** Where <kbd>Enter</kbd> searches when no bookmark matches. */
+  engine: SearchEngineId;
+};
+
 export type Settings = {
   sidebar: SidebarSettings;
   homescreen: HomescreenSettings;
@@ -84,4 +95,6 @@ export type Settings = {
   dateTime: DateTimeSettings;
   forecast: ForecastSettings;
   appearance: AppearanceSettings;
+  privacy: PrivacySettings;
+  search: SearchSettings;
 };

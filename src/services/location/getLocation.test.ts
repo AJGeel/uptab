@@ -41,6 +41,12 @@ describe("getLocation", () => {
     expect(await getLocation()).toEqual(position);
   });
 
+  it("rounds the coordinates to about a kilometre", async () => {
+    stubGeolocation([{ latitude: 52.374567, longitude: 4.898912 }]);
+
+    expect(await getLocation()).toEqual({ latitude: 52.37, longitude: 4.9 });
+  });
+
   it("doesn't retry a denied permission", async () => {
     const getCurrentPosition = stubGeolocation([{ code: 1 }]);
 

@@ -42,12 +42,15 @@ const manifest: Manifest.WebExtensionManifest = {
   permissions: [
     "storage",
     "unlimitedStorage",
-    "geolocation",
     "bookmarks",
     ...(process.env.BUILD_TARGET === buildTargets.firefox ? [] : ["favicon"]),
   ],
-  // Asked for when someone first sorts bookmarks by their visits.
-  optional_permissions: ["history"],
+  optional_permissions: [
+    "history", // Asked for when first sorting bookmarks by visits
+    ...(process.env.BUILD_TARGET === buildTargets.firefox
+      ? ["geolocation" as const] // Asked for when pressing "use my location"
+      : []),
+  ],
   version: pkg.version,
   web_accessible_resources: [
     {
@@ -61,6 +64,15 @@ const manifest: Manifest.WebExtensionManifest = {
           gecko: {
             id: "ageel@enrise.com",
             strict_min_version: "109.0",
+            // Nothing is collected unless someone opts in. Firefox 140+ shows these.
+            data_collection_permissions: {
+              required: ["none"],
+              optional: [
+                "locationInfo",
+                "searchTerms",
+                "technicalAndInteraction",
+              ],
+            },
           },
         },
       }

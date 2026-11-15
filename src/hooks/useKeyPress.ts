@@ -18,7 +18,10 @@ export const isEditableElement = (element: EventTarget | null): boolean => {
   );
 };
 
-const useKeyPress = (targetKey: Hotkeys, callback: () => void) => {
+const useKeyPress = (
+  targetKey: Hotkeys,
+  callback: (event: KeyboardEvent) => void,
+) => {
   const handleKeyPress = useCallback(
     (event: KeyboardEvent) => {
       if (DEBUG_ENABLED) {
@@ -30,7 +33,7 @@ const useKeyPress = (targetKey: Hotkeys, callback: () => void) => {
       }
 
       if (event.key === targetKey) {
-        callback();
+        callback(event);
       }
     },
     [targetKey, callback],

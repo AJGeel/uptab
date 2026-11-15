@@ -7,11 +7,16 @@ import {
   InfoIcon,
   MegaphoneIcon,
   PaletteIcon,
+  BugBeetleIcon,
   ThermometerIcon,
   ThermometerSimpleIcon,
   WindIcon,
 } from "@phosphor-icons/react";
 
+import {
+  requestErrorReporting,
+  revokeErrorReporting,
+} from "@/src/services/errorReporting/consent";
 import { ACCENTS } from "@/src/services/settings/accents";
 import { THEMES } from "@/src/services/settings/theme";
 import { AccentId, ThemeId } from "@/src/services/settings/types";
@@ -93,14 +98,18 @@ export const generalEntries: SettingEntry[] = [
     id: "time.forecastDays",
     section: "weather",
     ...asString(field("dateTime", "forecastDays"), Number),
-    title: "Forecast length",
-    description: "How many days after today the weather forecast shows.",
-    keywords: ["weather", "days", "week", "long", "far ahead"],
+    title: "Show days ahead",
+    description: "How many days the weather forecast shows, today included.",
+    keywords: ["weather", "days", "week", "long", "far ahead", "length"],
     icon: CalendarCheckIcon,
-    options: Array.from({ length: MAX_EXTRA_FORECAST_DAYS }, (_, index) => ({
-      value: String(index + 1),
-      label: String(index + 1),
-    })),
+    // Saved as the days after today, so what people picked before still means the same.
+    options: Array.from(
+      { length: MAX_EXTRA_FORECAST_DAYS + 1 },
+      (_, index) => ({
+        value: String(index),
+        label: String(index + 1),
+      }),
+    ),
   },
   {
     kind: "segmented",
@@ -110,7 +119,7 @@ export const generalEntries: SettingEntry[] = [
       THEMES.some(({ id }) => id === value) ? (value as ThemeId) : "system",
     ),
     title: "Theme",
-    description: "Light, dark, or whatever your system is set to.",
+    description: "Light, dark, or whatever your system wants.",
     keywords: [
       "dark",
       "light",
@@ -167,6 +176,26 @@ export const generalEntries: SettingEntry[] = [
       { value: "quarterly", label: "3 months" },
       { value: "never", label: "Never" },
     ],
+  },
+  {
+    kind: "switch",
+    id: "privacy.errorReporting",
+    section: "appearance",
+    ...field("privacy", "errorReporting"),
+    confirmChange: async (to) => {
+      if (to) {
+        return requestErrorReporting();
+      }
+
+      await revokeErrorReporting();
+
+      return true;
+    },
+    title: "Error reports",
+    description:
+      "Sends a report when UpTab breaks, so bugs get fixed. It never includes page addresses, locations, bookmarks or searches.",
+    keywords: ["crash", "bug", "telemetry", "diagnostics", "privacy", "sentry"],
+    icon: BugBeetleIcon,
   },
   {
     kind: "custom",

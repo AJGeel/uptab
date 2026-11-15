@@ -3,6 +3,8 @@ import { GpsFailure } from "./types";
 /** What went wrong, in a sentence. */
 export const getFailureReason = (failure: GpsFailure) => {
   switch (failure) {
+    case "notGranted":
+      return "UpTab needs your permission to use your location.";
     case "denied":
       return "Location access is blocked.";
     case "timeout":
@@ -15,6 +17,8 @@ export const getFailureReason = (failure: GpsFailure) => {
 /** Steps to try, where there's something to fix. */
 export const getFailureHelp = (failure: GpsFailure, isFirefox: boolean) => {
   switch (failure) {
+    case "notGranted":
+      return [];
     case "denied":
       return isFirefox
         ? [

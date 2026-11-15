@@ -1,6 +1,13 @@
+import { ReactNode } from "react";
+
 import { cn } from "@/src/utils";
 
-type Option = { value: string; label: string };
+type Option = {
+  value: string;
+  label: string;
+  /** Shown instead of the label, which is then only for screen readers and the tooltip. */
+  icon?: ReactNode;
+};
 
 type Props = {
   value: string;
@@ -40,6 +47,8 @@ const SegmentedControl = ({
           key={option.value}
           role="radio"
           aria-checked={isActive}
+          aria-label={option.icon ? option.label : undefined}
+          title={option.icon ? option.label : undefined}
           disabled={disabled}
           onClick={() => onValueChange(option.value)}
           className={cn(
@@ -47,11 +56,16 @@ const SegmentedControl = ({
             compact ? "px-2 py-0.5 text-xs" : "px-3 py-1 text-sm",
             "rounded-lg font-medium whitespace-nowrap ring-sky-500 duration-150 focus-visible:ring-2 focus-visible:outline-hidden active:scale-95",
             isActive
-              ? "bg-surface text-black shadow-xs outline-1 outline-black/5 outline-solid"
-              : "text-gray-600 hover:text-black",
+              ? cn(
+                  "bg-surface shadow-xs outline-1 outline-black/5 outline-solid",
+                  option.icon ? "text-sky-500" : "text-black",
+                )
+              : option.icon
+                ? "text-gray-300 hover:text-gray-500"
+                : "text-gray-600 hover:text-black",
           )}
         >
-          {option.label}
+          {option.icon ?? option.label}
         </button>
       );
     })}

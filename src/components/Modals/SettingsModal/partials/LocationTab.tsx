@@ -21,7 +21,8 @@ import LocationRow from "./LocationRow";
 const LocationTab = () => {
   const highlightProps = useSettingHighlight("weather.location");
   const { data: settings, setLocationSettings } = useSettings();
-  const { gpsFailure, retryLocation } = useLocationAndWeather();
+  const { gpsFailure, retryLocation, requestLocationAccess } =
+    useLocationAndWeather();
   // Only reads the cached GPS lookup, which useLocationAndWeather fetches.
   const { data: gpsLocation } = useQuery({
     enabled: false,
@@ -81,6 +82,7 @@ const LocationTab = () => {
               failure={failure}
               isRetrying={isRetrying}
               onRetry={retry}
+              onRequestAccess={requestLocationAccess}
             />
           </div>
         ) : (

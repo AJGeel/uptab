@@ -1,5 +1,5 @@
 import { Icon, IconWeight } from "@phosphor-icons/react";
-import { ComponentType } from "react";
+import { ComponentType, ReactNode } from "react";
 
 import { SettingsSection } from "@/src/hooks/stores/useModalStore";
 import { Hotkeys } from "@/src/services/hotkeys/types";
@@ -33,11 +33,18 @@ export type Control<T> = {
   set: (settings: Settings, value: T) => Settings;
 };
 
-export type SwitchEntry = Base & { kind: "switch" } & Control<boolean>;
+export type SwitchEntry = Base & {
+  kind: "switch";
+  /**
+   * Called straight from the click, before the change. Resolves with whether
+   * to go ahead: for asking the browser for a permission first.
+   */
+  confirmChange?: (to: boolean) => Promise<boolean>;
+} & Control<boolean>;
 
 export type SegmentedEntry = Base & {
   kind: "segmented";
-  options: { value: string; label: string }[];
+  options: { value: string; label: string; icon?: ReactNode }[];
 } & Control<string>;
 
 export type SwatchesEntry = Base & {
@@ -53,7 +60,8 @@ export type SwatchesEntry = Base & {
 /** Has its own contents, which the modal knows how to render. */
 export type CustomEntry = Base & {
   kind: "custom";
-  content: "about" | "backgrounds" | "localPhotos" | "location";
+  content:
+    "about" | "backgrounds" | "localPhotos" | "location" | "searchEngine";
 };
 
 export type SettingEntry =
@@ -66,7 +74,9 @@ type Group =
   | "dateTime"
   | "forecast"
   | "appearance"
-  | "backgrounds";
+  | "backgrounds"
+  | "privacy"
+  | "search";
 
 /** One value inside one of the settings groups. */
 export const field = <G extends Group, K extends keyof Settings[G]>(

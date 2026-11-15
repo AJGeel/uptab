@@ -6,6 +6,7 @@ import AboutTab from "./AboutTab";
 import LocationTab from "./LocationTab";
 import SettingRow from "./SettingRow";
 import Button, { buttonVariants } from "../../../ui/Button";
+import SearchEngineSelect from "../../../ui/SearchEngineSelect";
 import SegmentedControl from "../../../ui/SegmentedControl";
 import SwatchesControl from "../../../ui/SwatchesControl";
 import { SettingEntry } from "../settingsRegistry";
@@ -36,7 +37,20 @@ const SettingEntryRow = ({ entry, settings, query, onChange }: Props) => {
         hotkey={hotkeyOf(entry)}
         isActive={entry.get(settings)}
         isDisabled={isDisabled}
-        onToggle={() => onChange(entry.set(settings, !entry.get(settings)))}
+        onToggle={() => {
+          const to = !entry.get(settings);
+
+          if (!entry.confirmChange) {
+            onChange(entry.set(settings, to));
+            return;
+          }
+
+          void entry.confirmChange(to).then((isConfirmed) => {
+            if (isConfirmed) {
+              onChange(entry.set(settings, to));
+            }
+          });
+        }}
       />
     );
   }
@@ -87,6 +101,26 @@ const SettingEntryRow = ({ entry, settings, query, onChange }: Props) => {
 
   if (entry.content === "location") {
     return <LocationTab />;
+  }
+
+  if (entry.content === "searchEngine") {
+    return (
+      <SettingRow
+        settingId={entry.id}
+        icon={entry.icon}
+        title={entry.title}
+        description={entry.description}
+        query={query}
+        isDisabled={isDisabled}
+      >
+        <SearchEngineSelect
+          value={settings.search.engine}
+          onValueChange={(engine) =>
+            onChange({ ...settings, search: { ...settings.search, engine } })
+          }
+        />
+      </SettingRow>
+    );
   }
 
   const isBackgrounds = entry.content === "backgrounds";

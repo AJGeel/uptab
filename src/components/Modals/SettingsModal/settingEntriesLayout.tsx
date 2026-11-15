@@ -3,7 +3,6 @@ import {
   CalendarBlankIcon,
   CalendarDotsIcon,
   CameraIcon,
-  ChatCircleDotsIcon,
   ColumnsIcon,
   ImagesIcon,
   LinkIcon,
@@ -13,6 +12,7 @@ import {
   ShuffleIcon,
 } from "@phosphor-icons/react";
 
+import ColumnBlocks from "@/src/components/ui/ColumnBlocks";
 import { hotkeys } from "@/src/services/hotkeys/hotkeys";
 
 import { asString, field, SettingEntry } from "./settingsTypes";
@@ -54,16 +54,29 @@ export const layoutEntries: SettingEntry[] = [
     id: "sidebar.shortlinkColumns",
     section: "sidebar",
     ...asString(field("sidebar", "shortlinkColumns"), (value) =>
-      value === "1" ? 1 : 2,
+      value === "1" ? 1 : value === "3" ? 3 : 2,
     ),
     title: "Shortlink columns",
-    description: "One long list, or two side by side.",
+    description: "One long list, or two or three columns side by side.",
     keywords: ["layout", "grid", "links", "wide"],
     icon: ColumnsIcon,
     isDisabled: (settings) => !settings.sidebar.showShortlinks,
     options: [
-      { value: "1", label: "One" },
-      { value: "2", label: "Two" },
+      {
+        value: "1",
+        label: "One column",
+        icon: <ColumnBlocks columns={1} className="h-4 w-5" />,
+      },
+      {
+        value: "2",
+        label: "Two columns",
+        icon: <ColumnBlocks columns={2} className="h-4 w-5" />,
+      },
+      {
+        value: "3",
+        label: "Three columns",
+        icon: <ColumnBlocks columns={3} className="h-4 w-5" />,
+      },
     ],
   },
   {
@@ -75,16 +88,6 @@ export const layoutEntries: SettingEntry[] = [
     description: "Your browser's bookmarks, searchable from the sidebar.",
     keywords: ["favourites", "favorites", "saved"],
     icon: BookmarkSimpleIcon,
-  },
-  {
-    kind: "switch",
-    id: "sidebar.showFeedbackPrompt",
-    section: "sidebar",
-    ...field("sidebar", "showFeedbackPrompt"),
-    title: "Feedback link",
-    description: "A little nudge to tell the maker what you think.",
-    keywords: ["prompt", "review", "rate", "bottom"],
-    icon: ChatCircleDotsIcon,
   },
   {
     kind: "switch",
@@ -151,10 +154,11 @@ export const layoutEntries: SettingEntry[] = [
     section: "homescreen",
     ...field("homescreen", "showPreferencesButton"),
     title: "Show preferences button",
-    description: "A shortcut to these settings.",
+    description:
+      "A shortcut to these settings. It's also shown at the bottom of the sidebar.",
     keywords: ["settings", "edit", "shortcut", "hotkey", "gear", "corner"],
     icon: SlidersHorizontalIcon,
-    hotkey: hotkeys.slash,
+    hotkey: hotkeys.comma,
   },
   {
     kind: "segmented",

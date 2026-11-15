@@ -77,7 +77,12 @@ const WeatherWidget = ({ weatherData, area }: WeatherWidgetProps) => {
 
         {weatherDescription && (
           <img
-            className="size-10"
+            /*
+             * Black line art, which turns light with the text in the dark theme.
+             * Not selectable or draggable, so it never takes the hover from the button under it.
+             */
+            draggable={false}
+            className="pointer-events-none size-10 select-none dark:invert"
             src={weatherDescription.image}
             alt={weatherDescription.description}
           />

@@ -1,4 +1,5 @@
 import { Settings } from "./types";
+import { DEFAULT_SEARCH_ENGINE } from "../search/searchEngines";
 import { DEFAULT_EXTRA_FORECAST_DAYS } from "../weather/constants";
 
 export const defaultSettings: Settings = {
@@ -42,5 +43,11 @@ export const defaultSettings: Settings = {
   appearance: {
     theme: "system",
     accent: "sky",
+  },
+  search: {
+    engine: DEFAULT_SEARCH_ENGINE,
+  },
+  privacy: {
+    errorReporting: false,
   },
 };

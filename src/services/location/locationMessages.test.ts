@@ -19,9 +19,13 @@ describe("getFailureHelp", () => {
     );
   });
 
-  it("has steps for every failure", () => {
+  it("has steps for every failure that can be fixed by hand", () => {
     for (const failure of ["denied", "timeout", "unavailable"] as const) {
       expect(getFailureHelp(failure, false).length).toBeGreaterThan(0);
     }
+  });
+
+  it("has no steps when only a click is needed", () => {
+    expect(getFailureHelp("notGranted", true)).toEqual([]);
   });
 });
