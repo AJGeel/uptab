@@ -98,14 +98,18 @@ export const generalEntries: SettingEntry[] = [
     id: "time.forecastDays",
     section: "weather",
     ...asString(field("dateTime", "forecastDays"), Number),
-    title: "Forecast length",
-    description: "How many days after today the weather forecast shows.",
-    keywords: ["weather", "days", "week", "long", "far ahead"],
+    title: "Show days ahead",
+    description: "How many days the weather forecast shows, today included.",
+    keywords: ["weather", "days", "week", "long", "far ahead", "length"],
     icon: CalendarCheckIcon,
-    options: Array.from({ length: MAX_EXTRA_FORECAST_DAYS }, (_, index) => ({
-      value: String(index + 1),
-      label: String(index + 1),
-    })),
+    // Saved as the days after today, so what people picked before still means the same.
+    options: Array.from(
+      { length: MAX_EXTRA_FORECAST_DAYS + 1 },
+      (_, index) => ({
+        value: String(index),
+        label: String(index + 1),
+      }),
+    ),
   },
   {
     kind: "segmented",

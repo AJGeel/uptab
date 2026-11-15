@@ -40,7 +40,7 @@ export type DateTimeSettings = {
   timeFormat: TimeFormat;
   showWeekNumber: boolean;
   weekStartsOn: WeekStart;
-  /** How many days the weather forecast shows, today included. */
+  /** The days after today the weather forecast shows. Zero is today, and the next 24 hours. */
   forecastDays: number;
 };
 

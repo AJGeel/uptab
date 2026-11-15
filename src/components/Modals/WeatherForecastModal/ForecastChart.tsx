@@ -12,9 +12,12 @@ import {
 } from "recharts";
 
 import { useSettings } from "@/src/hooks/useSettings";
+import { DEFAULT_EXTRA_FORECAST_DAYS } from "@/src/services/weather/constants";
 import { toDisplayTemperature } from "@/src/services/weather/temperature";
+import { cn } from "@/src/utils";
 
 import DailySummaries from "./DailySummaries";
+import FocusMask from "./FocusMask";
 import {
   buildDailySummaries,
   buildForecastChartData,
@@ -26,6 +29,7 @@ import {
   HourlyForecast,
 } from "./forecastChartData";
 import ForecastTooltip from "./ForecastTooltip";
+import { RAIN_COLOR_CLASS } from "./rainColor";
 import {
   getTemperatureColor,
   getTemperatureGradientStops,
@@ -33,6 +37,7 @@ import {
 import AnimatedHeight from "../../ui/AnimatedHeight";
 
 const TEMPERATURE_GRADIENT_ID = "temperatureGradient";
+const FOCUS_MASK_ID = "focusedDayMask";
 
 const MUTED_COLOR = "color-mix(in oklab, var(--color-black) 40%, transparent)";
 const HAIRLINE_COLOR =
@@ -104,14 +109,19 @@ const ForecastChart = ({ hourly }: ForecastChartProps) => {
   const unit = settings?.units.temperature ?? "celsius";
   // The chart starts at the hour the modal was opened in.
   const [now] = useState(() => new Date());
-  const data = buildForecastChartData(
-    hourly,
-    now,
-    settings?.dateTime.forecastDays,
-  );
+  const extraDays =
+    settings?.dateTime.forecastDays ?? DEFAULT_EXTRA_FORECAST_DAYS;
+  const data = buildForecastChartData(hourly, now, extraDays);
+  // The day whose summary is under the pointer: the rest of the chart steps back.
+  const [focusedDay, setFocusedDay] = useState<string>();
   const dayBoundaries = getDayBoundaries(data);
+  const firstFocused = data.findIndex((point) => point.dayKey === focusedDay);
+  const lastFocused = data.findLastIndex(
+    (point) => point.dayKey === focusedDay,
+  );
   const timeTicks = getTimeTicks(data);
-  const summaries = buildDailySummaries(data);
+  // The next 24 hours run into tomorrow, which isn't shown above the chart.
+  const summaries = buildDailySummaries(data).slice(0, extraDays + 1);
 
   const temperatures = data.map((point) => point.temperature);
   const temperatureTicks = getTemperatureTicks(temperatures);
@@ -123,20 +133,28 @@ const ForecastChart = ({ hourly }: ForecastChartProps) => {
   const [firstPoint] = data;
 
   return (
-    <div className="mt-2 space-y-6">
-      {/* More or fewer days change the rows: the space follows smoothly. */}
-      <AnimatedHeight>
-        <DailySummaries summaries={summaries} />
+    <div className="mt-2">
+      {/*
+       * More or fewer days change the rows: the space follows smoothly. The
+       * padding gives the days' hover rings room, the margin cancels it, and
+       * box-content keeps the animated height to the rows alone.
+       */}
+      <AnimatedHeight className="-m-3 box-content p-3">
+        <DailySummaries
+          summaries={summaries}
+          focusedDay={focusedDay}
+          onFocusDay={setFocusedDay}
+        />
       </AnimatedHeight>
 
-      <div className="h-70 w-full">
+      <div className="mt-[50px] h-70 w-full">
         <ResponsiveContainer width="100%" height="100%">
           <ComposedChart
             data={data}
             margin={{ top: 0, right: 0, bottom: 0, left: 0 }}
           >
-            {gradientStops && (
-              <defs>
+            <defs>
+              {gradientStops && (
                 <linearGradient
                   id={TEMPERATURE_GRADIENT_ID}
                   x1="0"
@@ -148,8 +166,15 @@ const ForecastChart = ({ hourly }: ForecastChartProps) => {
                     <stop key={offset} offset={offset} stopColor={color} />
                   ))}
                 </linearGradient>
-              </defs>
-            )}
+              )}
+
+              <FocusMask
+                id={FOCUS_MASK_ID}
+                count={data.length}
+                first={firstFocused}
+                last={lastFocused}
+              />
+            </defs>
 
             <XAxis
               dataKey="time"
@@ -205,6 +230,8 @@ const ForecastChart = ({ hourly }: ForecastChartProps) => {
 
             <Tooltip
               cursor={{ stroke: HAIRLINE_COLOR, strokeWidth: 1 }}
+              isAnimationActive={false}
+              wrapperStyle={{ visibility: "visible" }}
               content={({ active, payload }) => (
                 <ForecastTooltip
                   active={active}
@@ -224,9 +251,11 @@ const ForecastChart = ({ hourly }: ForecastChartProps) => {
               {data.map((point) => (
                 <Cell
                   key={point.time}
-                  className={
-                    point.isSnow ? "text-indigo-300/70" : "text-sky-400/50"
-                  }
+                  className={cn(
+                    "duration-150",
+                    RAIN_COLOR_CLASS,
+                    focusedDay && point.dayKey !== focusedDay && "opacity-33",
+                  )}
                 />
               ))}
             </Bar>
@@ -242,6 +271,7 @@ const ForecastChart = ({ hourly }: ForecastChartProps) => {
               dot={false}
               activeDot={TemperatureDot}
               isAnimationActive={false}
+              mask={data.length > 1 ? `url(#${FOCUS_MASK_ID})` : undefined}
             />
           </ComposedChart>
         </ResponsiveContainer>

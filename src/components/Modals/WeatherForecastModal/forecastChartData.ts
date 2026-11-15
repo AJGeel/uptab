@@ -72,16 +72,25 @@ export const formatTime = (date: Date, timeFormat: TimeFormat = "24h") =>
 export const formatHour = (date: Date, timeFormat: TimeFormat = "24h") =>
   format(date, timeFormat === "12h" ? "h a" : "HH:mm");
 
-/** Hourly points from the current hour through the end of today plus `extraDays`. */
+const DAY_MS = 24 * 60 * 60 * 1000;
+
+/**
+ * Hourly points from the current hour through the end of today plus
+ * `extraDays`. With none, today is all there is to show, so it's the next 24 hours.
+ */
 export const buildForecastChartData = (
   hourly: HourlyForecast[],
   now = new Date(),
   extraDays = DEFAULT_EXTRA_FORECAST_DAYS,
 ): ForecastChartPoint[] => {
+  const start = startOfHour(now);
   const range = {
-    start: startOfHour(now),
-    // A setting saved when the limit was higher can exceed what's fetched.
-    end: endOfDay(addDays(now, Math.min(extraDays, MAX_EXTRA_FORECAST_DAYS))),
+    start,
+    end:
+      extraDays <= 0
+        ? new Date(start.getTime() + DAY_MS - 1)
+        : // A setting saved when the limit was higher can exceed what's fetched.
+          endOfDay(addDays(now, Math.min(extraDays, MAX_EXTRA_FORECAST_DAYS))),
   };
 
   return hourly

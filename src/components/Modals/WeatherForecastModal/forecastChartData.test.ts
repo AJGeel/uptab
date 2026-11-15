@@ -1,3 +1,4 @@
+import { format } from "date-fns";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import {
@@ -51,6 +52,17 @@ describe("buildForecastChartData", () => {
     expect(buildForecastChartData(hourly, NOW, 0)).toHaveLength(1);
     expect(buildForecastChartData(hourly, NOW, 1)).toHaveLength(2);
     expect(buildForecastChartData(hourly, NOW, 7)).toHaveLength(3);
+  });
+
+  it("shows the next 24 hours, across midnight, when there are no extra days", () => {
+    const hourly = Array.from({ length: 48 }, (_, i) =>
+      hour(format(new Date(2026, 9, 16, i), "yyyy-MM-dd'T'HH:00")),
+    );
+    const times = buildForecastChartData(hourly, NOW, 0).map((p) => p.time);
+
+    expect(times).toHaveLength(24);
+    expect(times[0]).toBe("2026-10-16T14:00");
+    expect(times.at(-1)).toBe("2026-10-17T13:00");
   });
 
   it("keeps hours from the current hour through the last forecast day", () => {
