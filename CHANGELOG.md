@@ -2,6 +2,19 @@
 
 UpTab adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [V2.4.0] — 2026-11-15
+
+### ✨ Added
+
+- Search the web right from the bookmark search when nothing matches, with the search engine of your choice.
+- Change how bookmarks are sorted straight from the search, with commands.
+- A redesigned weather forecast: hover a day to focus on it, and see rain and wind at a glance.
+
+### ♻️ Changed
+
+- Animated weather icons.
+- Error reports are now opt-in, and location access is optional.
+
 ## [V2.3.0] — 2026-11-12
 
 ### ✨ Added
