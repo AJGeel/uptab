@@ -121,7 +121,8 @@ const Homescreen = () => {
               settingId="homescreen.showInfoWidget"
               inert={isSidebarOpen}
               className={cn(
-                "p-6 pb-16 pl-20 text-black duration-500 [--color-black:#020e2c]",
+                // Dark text on the photo in either theme, so the weather icon stays black too.
+                "p-6 pb-16 pl-20 text-black duration-500 [--color-black:#020e2c] dark:[&_img]:invert-0",
                 isSidebarOpen && "pointer-events-none translate-x-40 opacity-0",
               )}
             />

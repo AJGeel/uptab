@@ -154,7 +154,8 @@ export const layoutEntries: SettingEntry[] = [
     section: "homescreen",
     ...field("homescreen", "showPreferencesButton"),
     title: "Show preferences button",
-    description: "A shortcut to these settings.",
+    description:
+      "A shortcut to these settings. It's also shown at the bottom of the sidebar.",
     keywords: ["settings", "edit", "shortcut", "hotkey", "gear", "corner"],
     icon: SlidersHorizontalIcon,
     hotkey: hotkeys.comma,

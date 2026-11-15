@@ -115,7 +115,7 @@ export const generalEntries: SettingEntry[] = [
       THEMES.some(({ id }) => id === value) ? (value as ThemeId) : "system",
     ),
     title: "Theme",
-    description: "Light, dark, or whatever your system is set to.",
+    description: "Light, dark, or whatever your system wants.",
     keywords: [
       "dark",
       "light",

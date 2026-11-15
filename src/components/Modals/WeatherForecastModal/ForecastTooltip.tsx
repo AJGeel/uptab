@@ -57,7 +57,7 @@ const ForecastTooltip = ({ active, point }: ForecastTooltipProps) => {
           <img
             src={weather.image}
             alt={weather.description ?? ""}
-            className="-my-2 -mr-2 size-10 drop-shadow-sm"
+            className="-my-2 -mr-2 size-10 dark:invert"
           />
         )}
       </div>

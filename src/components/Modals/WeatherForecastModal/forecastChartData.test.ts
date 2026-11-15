@@ -188,7 +188,7 @@ describe("buildDailySummaries", () => {
     });
     // The rainy night hour wins, but the summary always shows the day icon.
     expect(today.weather?.description).toBe("Light Rain");
-    expect(today.weather?.image).toContain("10d");
+    expect(today.weather?.image).toBe("/weather/rain.svg");
     expect(tomorrow).toMatchObject({ high: 7, low: 7, precipitation: 0 });
   });
 
