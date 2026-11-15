@@ -19,6 +19,9 @@ const CHANGELOG_URL = "https://uptab.vercel.app/changelog";
 const WhatsNewModal = () => {
   const activeModal = useModalStore((state) => state.activeModal);
   const setActiveModal = useModalStore((state) => state.setActiveModal);
+  const openSettingsSection = useModalStore(
+    (state) => state.openSettingsSection,
+  );
   const isVisible = activeModal === Modals.whatsNew;
   const { data: notes, isError, isPending } = useReleaseNotes(isVisible);
   const { activeBg } = useRandomBackground();
@@ -43,14 +46,23 @@ const WhatsNewModal = () => {
       className="max-w-xl"
       footer={
         <div className="flex items-center justify-between gap-2">
-          <a
-            href={CHANGELOG_URL}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-sm text-gray-700 underline duration-150 hover:no-underline"
-          >
-            View full changelog
-          </a>
+          <p className="flex items-center gap-1.5 text-sm text-gray-700">
+            <a
+              href={CHANGELOG_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="underline duration-150 hover:no-underline"
+            >
+              View full changelog
+            </a>
+            <span aria-hidden>·</span>
+            <button
+              className="underline duration-150 hover:no-underline"
+              onClick={() => openSettingsSection("appearance", "updateNews")}
+            >
+              Hide these?
+            </button>
+          </p>
           <Button label="Okie dokie!" onClick={close} />
         </div>
       }

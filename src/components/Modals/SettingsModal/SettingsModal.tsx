@@ -2,6 +2,7 @@ import { useRef, useState } from "react";
 
 import {
   Modals,
+  SettingsFocus,
   SettingsSection,
   useModalStore,
 } from "@/src/hooks/stores/useModalStore";
@@ -22,6 +23,28 @@ import {
 } from "./settingsRegistry";
 import Button, { buttonVariants } from "../../ui/Button";
 import Modal from "../../ui/Modal";
+
+/** The setting each link points at, for the ones that aren't the city search. */
+const FOCUSED_SETTING_ROWS: Partial<Record<SettingsFocus, string>> = {
+  errorReports: "privacy.errorReporting",
+  preferencesButton: "homescreen.showPreferencesButton",
+  updateNews: "sidebar.showUpdates",
+};
+
+/** Rings an element in the accent colour, which holds for a moment and fades. */
+const flashElement = (element?: HTMLElement | null) => {
+  const ring = "0 0 0 3px var(--color-sky-500)";
+
+  element?.animate(
+    [
+      { boxShadow: ring },
+      { boxShadow: ring, offset: 0.4 },
+      { boxShadow: "0 0 0 3px transparent" },
+    ],
+    // The delay lets the modal finish opening first.
+    { duration: 1600, delay: 200, easing: "ease-out", fill: "backwards" },
+  );
+};
 
 const SettingsModal = () => {
   const {
@@ -157,18 +180,19 @@ const SettingsModal = () => {
         // Below the location help, so it's brought into view as well.
         citySearch?.scrollIntoView({ block: "nearest" });
 
-        const errorReportsSwitch =
-          requestedFocus === "errorReports"
-            ? document
-                .getElementById(
-                  `${SETTING_ROW_ID_PREFIX}privacy.errorReporting`,
-                )
-                ?.querySelector<HTMLElement>('[role="switch"]')
-            : null;
+        const row = requestedFocus && FOCUSED_SETTING_ROWS[requestedFocus];
+        const settingRow = row
+          ? document.getElementById(`${SETTING_ROW_ID_PREFIX}${row}`)
+          : null;
+        const settingSwitch =
+          settingRow?.querySelector<HTMLElement>('[role="switch"]');
 
-        errorReportsSwitch?.scrollIntoView({ block: "nearest" });
+        settingSwitch?.scrollIntoView({ block: "nearest" });
 
-        return citySearch ?? errorReportsSwitch ?? true;
+        // Focus alone is hidden after a click: this shows where the link landed.
+        flashElement(citySearch?.parentElement ?? settingRow);
+
+        return citySearch ?? settingSwitch ?? true;
       }}
       title="Edit Preferences"
       className="h-[min(39rem,calc(100dvh-2rem))] w-[calc(100vw-2rem)] max-w-208"

@@ -220,7 +220,9 @@ const Homescreen = () => {
                 <BarButton
                   tooltip="Edit preferences (/)"
                   className="flex items-center gap-2 px-3 text-shadow-md text-shadow-scrim/20 active:scale-95"
-                  onClick={() => openSettingsSection("homescreen")}
+                  onClick={() =>
+                    openSettingsSection("homescreen", "preferencesButton")
+                  }
                 >
                   Edit preferences
                 </BarButton>
