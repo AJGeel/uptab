@@ -1,4 +1,5 @@
 import { LocationSettings } from "../location/types";
+import { SearchEngineId } from "../search/searchEngines";
 
 export type FeedbackFrequency = "monthly" | "quarterly" | "never";
 
@@ -80,6 +81,11 @@ export type PrivacySettings = {
   errorReporting: boolean;
 };
 
+export type SearchSettings = {
+  /** Where <kbd>Enter</kbd> searches when no bookmark matches. */
+  engine: SearchEngineId;
+};
+
 export type Settings = {
   sidebar: SidebarSettings;
   homescreen: HomescreenSettings;
@@ -90,4 +96,5 @@ export type Settings = {
   forecast: ForecastSettings;
   appearance: AppearanceSettings;
   privacy: PrivacySettings;
+  search: SearchSettings;
 };

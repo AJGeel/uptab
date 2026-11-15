@@ -27,6 +27,8 @@ type Props = {
   onValueChange: (value: string) => void;
   /** Shown in the trigger, instead of the selected option's label. */
   triggerLabel?: ReactNode;
+  /** The icon before the label, not after it. */
+  isIconFirst?: boolean;
   /** A button below the options, which doesn't change the value. */
   action?: Action;
   ariaLabel: string;
@@ -41,6 +43,7 @@ const Select = ({
   onValueChange,
   triggerLabel,
   action,
+  isIconFirst,
   ariaLabel,
   tooltip,
   className,
@@ -94,10 +97,11 @@ const Select = ({
                   <BaseSelect.ItemIndicator className="w-4">
                     <CheckIcon className="size-4" />
                   </BaseSelect.ItemIndicator>
+                  {isIconFirst && option.icon}
                   <BaseSelect.ItemText className="data-selected:font-medium">
                     {option.label}
                   </BaseSelect.ItemText>
-                  {option.icon}
+                  {!isIconFirst && option.icon}
                   {option.hint && (
                     <span className="ml-auto pl-4 text-xs text-gray-500">
                       {option.hint}

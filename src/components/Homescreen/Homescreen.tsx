@@ -1,4 +1,5 @@
 import { CaretLeftIcon, CaretRightIcon } from "@phosphor-icons/react";
+import { useEffect } from "react";
 
 import {
   Modals as ModalIds,
@@ -6,13 +7,14 @@ import {
 } from "@/src/hooks/stores/useModalStore";
 import { useAccent } from "@/src/hooks/useAccent";
 import { useEasterEggs } from "@/src/hooks/useEasterEggs";
-import useKeyPress from "@/src/hooks/useKeyPress";
+import useKeyPress, { isEditableElement } from "@/src/hooks/useKeyPress";
 import { useRandomBackground } from "@/src/hooks/useRandomBackground/useRandomBackground";
 import { useSettings } from "@/src/hooks/useSettings";
 import { useTheme } from "@/src/hooks/useTheme";
 import { hotkeys } from "@/src/services/hotkeys/hotkeys";
 import { cn } from "@/src/utils";
 
+import { BOOKMARK_SEARCH_ID } from "../Bookmarks/partials/SearchBookmarks";
 import InfoWidget from "../InfoWidget/InfoWidget";
 import BarButton from "./partials/BarButton";
 import { ActiveHotkeyIndicator } from "../Modals/HotkeysModal/partials/ActiveHotkeyIndicator";
@@ -22,7 +24,13 @@ import { Background } from "../ui/Background";
 import Notification from "../UpdateNotification/Notification";
 
 const Homescreen = () => {
-  const { data: settings, isPending, toggleSidebarSetting } = useSettings();
+  const {
+    data: settings,
+    isPending,
+    toggleSidebarSetting,
+    setSidebarOpen,
+  } = useSettings();
+  const activeModal = useModalStore((state) => state.activeModal);
   const { activeBg, onError, browse } = useRandomBackground();
   const setActiveModal = useModalStore((state) => state.setActiveModal);
   const openSettingsSection = useModalStore(
@@ -33,6 +41,49 @@ const Homescreen = () => {
   const isSidebarOpen = settings?.sidebar?.isOpen;
 
   useKeyPress(hotkeys.backslash, () => toggleSidebarSetting("isOpen"));
+  useKeyPress(hotkeys.slash, (event) => {
+    // Without the bookmarks card there's nothing to search, and the setting wins.
+    if (activeModal || !settings?.sidebar.showBookmarks) {
+      return;
+    }
+
+    // Or the slash itself would be typed into the box.
+    event.preventDefault();
+
+    const focusSearch = () =>
+      document.getElementById(BOOKMARK_SEARCH_ID)?.focus();
+
+    // Already open: focus now, so what's typed right after the slash isn't lost.
+    if (isSidebarOpen) {
+      focusSearch();
+      return;
+    }
+
+    void setSidebarOpen(true);
+    // A closed sidebar can only take focus once it's open and no longer inert.
+    setTimeout(focusSearch, 50);
+  });
+
+  // The last step of Esc: with nothing else to close, it closes the sidebar.
+  useEffect(() => {
+    if (!isSidebarOpen || activeModal) {
+      return;
+    }
+
+    const closeSidebar = (event: KeyboardEvent) => {
+      if (
+        event.key === "Escape" &&
+        !event.defaultPrevented &&
+        !isEditableElement(event.target)
+      ) {
+        void setSidebarOpen(false);
+      }
+    };
+
+    window.addEventListener("keydown", closeSidebar);
+
+    return () => window.removeEventListener("keydown", closeSidebar);
+  }, [isSidebarOpen, activeModal, setSidebarOpen]);
   useKeyPress("ArrowRight", () => browse(1));
   useKeyPress("ArrowLeft", () => browse(-1));
   useEasterEggs();

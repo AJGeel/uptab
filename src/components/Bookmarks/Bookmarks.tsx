@@ -13,6 +13,7 @@ import { useBookmarkMutations } from "@/src/hooks/useBookmarkMutations";
 import { useBookmarkNavigation } from "@/src/hooks/useBookmarkNavigation";
 import { useHistoryAccess } from "@/src/hooks/useHistoryAccess";
 import { usePersistedState } from "@/src/hooks/usePersistedState";
+import { useSettings } from "@/src/hooks/useSettings";
 import {
   isVisitSort,
   SortMode,
@@ -20,15 +21,17 @@ import {
 } from "@/src/services/bookmarks/sortBookmarks";
 import { getVisitDetail } from "@/src/services/bookmarks/visitDetail";
 import { getVisit } from "@/src/services/bookmarks/visits";
+import { DEFAULT_SEARCH_ENGINE } from "@/src/services/search/searchEngines";
 import { addShortlink } from "@/src/services/shortlinks";
 import { cn } from "@/src/utils";
 
 import BookmarkItem from "./partials/BookmarkItem";
 import EditBookmarkModal from "./partials/EditBookmarkModal";
+import NoMatches from "./partials/NoMatches";
+import RemoveBookmarkModal from "./partials/RemoveBookmarkModal";
 import SearchBookmarks from "./partials/SearchBookmarks";
 import SortBookmarks from "./partials/SortBookmarks";
 import Button, { buttonVariants } from "../ui/Button";
-import Modal from "../ui/Modal";
 
 export type BookmarksProps = {
   displayMode?: "NewTab" | "Popup";
@@ -66,13 +69,29 @@ const Bookmarks = ({ displayMode = "NewTab" }: BookmarksProps) => {
     !isPending && !!hasAccess && isVisitSort(sortBy),
   );
 
-  const { entries, activeEntry, getEntryId, resetHighlight, handleKeyDown } =
-    useBookmarkNavigation({
-      bookmarks: data ?? [],
-      sortMode: sortBy,
-      visits,
-      searchQuery,
-    });
+  const { data: settings, updateSettings } = useSettings();
+  const searchEngine = settings?.search.engine ?? DEFAULT_SEARCH_ENGINE;
+
+  const {
+    entries,
+    activeEntry,
+    queryTarget,
+    openQueryTarget,
+    getEntryId,
+    resetHighlight,
+    handleKeyDown,
+  } = useBookmarkNavigation({
+    bookmarks: data ?? [],
+    sortMode: sortBy,
+    visits,
+    searchQuery,
+    searchEngine,
+    onClearQuery: () => {
+      setSearchQuery("");
+      resetHighlight();
+    },
+    canLeaveSearch: displayMode === "NewTab",
+  });
 
   const { data: shortlinks } = useShortlinks();
   const { data: icons, isPending: isLoadingIcons } = useBookmarkIcons();
@@ -179,9 +198,19 @@ const Bookmarks = ({ displayMode = "NewTab" }: BookmarksProps) => {
         )}
 
         {isReady && entries.length === 0 && (
-          <p className="px-2 py-1.5 text-gray-600">
-            Nothing matches that. Try another word?
-          </p>
+          <NoMatches
+            query={searchQuery}
+            target={queryTarget}
+            onOpen={openQueryTarget}
+            engine={searchEngine}
+            onEngineChange={(engine) =>
+              settings &&
+              updateSettings({
+                ...settings,
+                search: { ...settings.search, engine },
+              })
+            }
+          />
         )}
 
         <div id="bookmarks-list" role="listbox" aria-label="Bookmarks">
@@ -242,38 +271,17 @@ const Bookmarks = ({ displayMode = "NewTab" }: BookmarksProps) => {
         onClose={() => setBookmarkToEdit(undefined)}
       />
 
-      <Modal
-        isVisible={!!bookmarkToRemove}
-        onClose={() => setBookmarkToRemove(undefined)}
-        title="Ready to say goodbye?"
-        subtitle={
-          <>
-            <strong className="font-semibold">{bookmarkToRemove?.title}</strong>{" "}
-            is about to vanish from your browser&apos;s bookmarks too. No
-            take-backs.
-          </>
-        }
-        footer={
-          <div className="flex items-center justify-end gap-2">
-            <Button
-              label="Phew, keep it!"
-              variant={buttonVariants.secondary}
-              onClick={() => setBookmarkToRemove(undefined)}
-            />
-            <Button
-              label="Bye bye, bookmark!"
-              className="bg-red-500 ring-red-500"
-              onClick={() => {
-                if (bookmarkToRemove) {
-                  deleteMutation.mutate(bookmarkToRemove.id);
-                }
+      <RemoveBookmarkModal
+        bookmark={bookmarkToRemove}
+        onCancel={() => setBookmarkToRemove(undefined)}
+        onConfirm={() => {
+          if (bookmarkToRemove) {
+            deleteMutation.mutate(bookmarkToRemove.id);
+          }
 
-                setBookmarkToRemove(undefined);
-                setBookmarkToEdit(undefined);
-              }}
-            />
-          </div>
-        }
+          setBookmarkToRemove(undefined);
+          setBookmarkToEdit(undefined);
+        }}
       />
     </div>
   );

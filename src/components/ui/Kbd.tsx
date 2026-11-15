@@ -9,6 +9,8 @@ type Props = PropsWithChildren<{
   size?: "inline" | "sm" | "lg";
   /** Tells, after a moment's hover, that this is a key to press. */
   hint?: boolean;
+  /** Makes the key clickable, pressing it on the user's behalf. */
+  onClick?: () => void;
 }>;
 
 const sizes = {
@@ -29,19 +31,28 @@ const getKeyName = (children: ReactNode) => {
     : "";
 };
 
+const keyStyles =
+  "border border-sky-900/30 bg-surface font-mono font-bold text-sky-600 shadow-xs";
+
+/** A clicked key sinks, as if pressed. */
+const clickableStyles =
+  "duration-100 hover:border-sky-500 hover:bg-sky-500/10 hover:text-sky-800 active:translate-y-px active:border-b dark:hover:text-sky-300";
+
 /** A keyboard key. */
-const Kbd = ({ size = "inline", hint = true, children }: Props) => {
+const Kbd = ({ size = "inline", hint = true, onClick, children }: Props) => {
   const key = getKeyName(children);
 
-  const kbd = (
-    <kbd
-      className={cn(
-        "border border-sky-900/30 bg-surface font-mono font-bold text-sky-600 shadow-xs",
-        sizes[size],
-      )}
+  const kbd = onClick ? (
+    <button
+      type="button"
+      aria-label={key ? `Press ${key}` : undefined}
+      onClick={onClick}
+      className={cn(keyStyles, clickableStyles, sizes[size])}
     >
       {children}
-    </kbd>
+    </button>
+  ) : (
+    <kbd className={cn(keyStyles, sizes[size])}>{children}</kbd>
   );
 
   return hint && key ? <Tooltip label={`Press ${key}`}>{kbd}</Tooltip> : kbd;

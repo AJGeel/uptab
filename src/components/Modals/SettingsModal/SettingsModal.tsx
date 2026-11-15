@@ -65,7 +65,7 @@ const SettingsModal = () => {
     closeModal();
   };
 
-  useKeyPress(hotkeys.slash, () => {
+  useKeyPress(hotkeys.comma, () => {
     if (activeModal === Modals.settings) {
       close();
     } else {

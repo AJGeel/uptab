@@ -2,6 +2,7 @@ import { HotkeyDescription, Hotkeys } from "./types";
 
 export const hotkeys = {
   slash: "/",
+  comma: ",",
   backslash: "\\",
   questionMark: "?",
   left: "ArrowLeft",
@@ -12,6 +13,10 @@ export const hotkeys = {
 export const hotkeyDescriptions: Record<Hotkeys, HotkeyDescription> = {
   [hotkeys.slash]: {
     keyDisplay: "/",
+    description: "Search your bookmarks",
+  },
+  [hotkeys.comma]: {
+    keyDisplay: ",",
     description: "View/hide the settings menu",
   },
   [hotkeys.backslash]: {

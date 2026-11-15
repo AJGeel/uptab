@@ -154,7 +154,7 @@ export const layoutEntries: SettingEntry[] = [
     description: "A shortcut to these settings.",
     keywords: ["settings", "edit", "shortcut", "hotkey", "gear", "corner"],
     icon: SlidersHorizontalIcon,
-    hotkey: hotkeys.slash,
+    hotkey: hotkeys.comma,
   },
   {
     kind: "segmented",

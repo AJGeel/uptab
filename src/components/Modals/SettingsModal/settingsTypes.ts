@@ -60,7 +60,8 @@ export type SwatchesEntry = Base & {
 /** Has its own contents, which the modal knows how to render. */
 export type CustomEntry = Base & {
   kind: "custom";
-  content: "about" | "backgrounds" | "localPhotos" | "location";
+  content:
+    "about" | "backgrounds" | "localPhotos" | "location" | "searchEngine";
 };
 
 export type SettingEntry =
@@ -74,7 +75,8 @@ type Group =
   | "forecast"
   | "appearance"
   | "backgrounds"
-  | "privacy";
+  | "privacy"
+  | "search";
 
 /** One value inside one of the settings groups. */
 export const field = <G extends Group, K extends keyof Settings[G]>(
