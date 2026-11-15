@@ -1,8 +1,14 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 const getURL = vi.hoisted(() => vi.fn());
+const browser = vi.hoisted(() => ({ isFirefox: false }));
 
 vi.mock("webextension-polyfill", () => ({ runtime: { getURL } }));
+vi.mock("./firefox", () => ({
+  get isFirefox() {
+    return browser.isFirefox;
+  },
+}));
 
 import {
   getFaviconSources,
@@ -10,8 +16,10 @@ import {
   isMissingFavicon,
 } from "./getFavicon";
 
-const setBrowser = (origin: string) =>
+const setBrowser = (origin: string, isFirefox = false) => {
+  browser.isFirefox = isFirefox;
   getURL.mockImplementation((path: string) => `${origin}${path}`);
+};
 
 const WELL_KNOWN = [
   "https://example.com/favicon.ico",
@@ -33,7 +41,7 @@ describe("getFaviconSources", () => {
   });
 
   it("skips the cache on Firefox", () => {
-    setBrowser("moz-extension://abc");
+    setBrowser("moz-extension://abc", true);
 
     expect(getFaviconSources("https://example.com/some/page")).toEqual(
       WELL_KNOWN,
@@ -41,7 +49,7 @@ describe("getFaviconSources", () => {
   });
 
   it("has nothing to ask for a page that isn't on the web", () => {
-    setBrowser("moz-extension://abc");
+    setBrowser("moz-extension://abc", true);
 
     expect(getFaviconSources("")).toEqual([]);
     expect(getFaviconSources("about:blank")).toEqual([]);
