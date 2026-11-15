@@ -39,4 +39,5 @@ export type LocationSettings = {
   saved: SavedLocation[];
 };
 
-export type GpsFailure = "denied" | "timeout" | "unavailable";
+/** `notGranted`: Firefox's optional location permission hasn't been given yet. */
+export type GpsFailure = "denied" | "timeout" | "unavailable" | "notGranted";

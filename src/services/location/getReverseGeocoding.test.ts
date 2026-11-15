@@ -45,6 +45,27 @@ describe("getReverseGeocoding", () => {
     expect(fetchMock).toHaveBeenCalledTimes(1);
   });
 
+  it("keeps only the place names, not the street or postcode", async () => {
+    stubFetch({
+      ok: true,
+      json: () =>
+        Promise.resolve({
+          address: {
+            city: "Amsterdam",
+            road: "Dam",
+            house_number: "1",
+            postcode: "1012 JS",
+          },
+        }),
+    });
+
+    expect(await getReverseGeocoding(location)).toEqual({ city: "Amsterdam" });
+    expect(store.cachedReverseGeocoding).toEqual({
+      _input: location,
+      address: { city: "Amsterdam" },
+    });
+  });
+
   it("throws on an error response, caching nothing", async () => {
     stubFetch({ ok: false, status: 429 });
 

@@ -22,6 +22,12 @@ export const GPS_ATTEMPTS = [
 const GPS_TIMEOUT = 4000;
 const GPS_MAX_AGE = 3600000;
 
+/** About 1 km: plenty for weather, and less than a GPS fix gives away. */
+const COORDINATE_DECIMALS = 2;
+
+export const roundCoordinate = (value: number) =>
+  Number(value.toFixed(COORDINATE_DECIMALS));
+
 const getFailure = ({ code }: GeolocationPositionError): GpsFailure => {
   if (code === PERMISSION_DENIED) {
     return "denied";
@@ -39,7 +45,10 @@ const getPosition = (enableHighAccuracy: boolean): Promise<Location> =>
 
     navigator.geolocation.getCurrentPosition(
       ({ coords }) => {
-        resolve({ latitude: coords.latitude, longitude: coords.longitude });
+        resolve({
+          latitude: roundCoordinate(coords.latitude),
+          longitude: roundCoordinate(coords.longitude),
+        });
       },
       (error) => {
         reject(new GpsError(getFailure(error)));

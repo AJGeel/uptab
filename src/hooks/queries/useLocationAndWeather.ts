@@ -1,5 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 
+import { useLocationAccess } from "@/src/hooks/useLocationAccess";
 import { useSettings } from "@/src/hooks/useSettings";
 import { getGeocodedLocation } from "@/src/services/location";
 import { GpsError } from "@/src/services/location/getLocation";
@@ -18,13 +19,15 @@ type Status = "loading" | "ready" | "locationError" | "weatherError";
 export const useLocationAndWeather = () => {
   const { data: settings } = useSettings();
   const savedLocation = settings && getActiveSavedLocation(settings.location);
+  const { hasAccess, requestAccess } = useLocationAccess();
 
   /*
    * Only asks for GPS once the settings say it's needed: with a saved place
-   * active, the browser never prompts for location access.
+   * active, the browser never prompts for location access. On Firefox it also
+   * waits for the optional permission, so nothing asks without a click.
    */
   const gpsQuery = useQuery({
-    enabled: Boolean(settings) && !savedLocation,
+    enabled: Boolean(settings) && !savedLocation && hasAccess === true,
     queryFn: getGeocodedLocation,
     queryKey: ["location", "gps"],
     staleTime: PERSIST_DURATION,
@@ -63,6 +66,10 @@ export const useLocationAndWeather = () => {
 
   const getStatus = (): Status => {
     if (!locationData) {
+      if (hasAccess === false && !savedLocation) {
+        return "locationError";
+      }
+
       return gpsQuery.isError && !gpsQuery.isFetching
         ? "locationError"
         : "loading";
@@ -82,6 +89,10 @@ export const useLocationAndWeather = () => {
       return undefined;
     }
 
+    if (hasAccess === false) {
+      return "notGranted";
+    }
+
     return gpsQuery.error instanceof GpsError
       ? gpsQuery.error.reason
       : "unavailable";
@@ -96,6 +107,8 @@ export const useLocationAndWeather = () => {
     /** Why GPS failed, when `status` is `locationError`. */
     gpsFailure: getGpsFailure(),
     retryLocation: () => gpsQuery.refetch(),
+    /** From a click. Fetching starts by itself once it's granted. */
+    requestLocationAccess: requestAccess,
     retryWeather: () => weatherQuery.refetch(),
   };
 };
