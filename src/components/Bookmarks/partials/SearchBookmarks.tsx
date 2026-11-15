@@ -41,8 +41,9 @@ const SearchBookmarks = ({
         onChange={(event) => setSearchQuery(event.target.value)}
         onKeyDown={onKeyDown}
       />
-      {/* Follows the input's focus, through `peer`. */}
-      <div className="pointer-events-none absolute top-0 left-0 flex h-full items-center justify-center p-2.5 text-gray-600 duration-150 peer-focus:text-sky-500">
+      {/* Follows the input's focus, through `peer`: the duotone fill shows under the bold outline. */}
+      <div className="pointer-events-none absolute top-0 left-0 grid h-full place-items-center p-2.5 text-gray-600 duration-150 *:col-start-1 *:row-start-1 peer-focus:text-sky-500 *:first:opacity-0 *:first:duration-150 peer-focus:*:first:opacity-100">
+        <MagnifyingGlassIcon weight="duotone" className="size-4" />
         <MagnifyingGlassIcon weight="bold" className="size-4" />
       </div>
       {isSearching && (
