@@ -1,4 +1,4 @@
-export const CALENDAR_HOST = "calendar.google.com";
+import { CALENDAR_HOST } from "./constants";
 
 type Result = { ok: true; url: string } | { ok: false };
 

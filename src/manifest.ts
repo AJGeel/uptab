@@ -2,6 +2,7 @@ import type { Manifest } from "webextension-polyfill";
 
 import { buildTargets } from "../buildTarget.ts";
 import pkg from "../package.json" with { type: "json" };
+import { CALENDAR_ORIGIN } from "./services/calendar/constants.ts";
 
 const pages = {
   background: "src/pages/background/index.js",
@@ -48,9 +49,16 @@ const manifest: Manifest.WebExtensionManifest = {
   optional_permissions: [
     "history", // Asked for when first sorting bookmarks by visits
     ...(process.env.BUILD_TARGET === buildTargets.firefox
-      ? ["geolocation" as const] // Asked for when pressing "use my location"
+      ? [
+          "geolocation" as const, // Asked for when pressing "use my location"
+          CALENDAR_ORIGIN, // Asked for when connecting a calendar
+        ]
       : []),
   ],
+  // Chrome keeps websites apart from API permissions. Asked for when connecting a calendar.
+  ...(process.env.BUILD_TARGET === buildTargets.firefox
+    ? {}
+    : { optional_host_permissions: [CALENDAR_ORIGIN] }),
   version: pkg.version,
   web_accessible_resources: [
     {
