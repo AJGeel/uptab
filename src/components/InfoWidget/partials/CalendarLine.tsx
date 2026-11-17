@@ -2,7 +2,6 @@ import {
   CalendarPlusIcon,
   CircleNotchIcon,
   CloudSlashIcon,
-  VideoCameraIcon,
   WarningIcon,
 } from "@phosphor-icons/react";
 import { ReactNode } from "react";
@@ -15,7 +14,9 @@ import {
   formatEventTiming,
 } from "@/src/services/calendar/eventLine";
 import { TimeFormat } from "@/src/services/settings/types";
-import { cn } from "@/src/utils";
+
+import JoinPill from "./JoinPill";
+import PulseDot from "./PulseDot";
 
 type Props = {
   status: CalendarStatus;
@@ -34,35 +35,10 @@ const FadeIn = ({ children }: { children: ReactNode }) => (
 
 /** Covers the whole widget, so the text on top of it can't take the click. */
 const triggerStyles =
-  "flex min-w-0 items-center gap-1.5 rounded-xs text-left after:absolute after:inset-0 after:rounded-2xl focus-visible:outline-hidden focus-visible:after:outline-2 focus-visible:after:outline-offset-2 focus-visible:after:outline-sky-500";
+  "pointer-events-auto flex min-w-0 items-center gap-1.5 rounded-xs text-left after:absolute after:inset-0 after:rounded-2xl focus-visible:outline-hidden focus-visible:after:outline-2 focus-visible:after:outline-offset-2 focus-visible:after:outline-sky-500";
 
 const Muted = ({ children }: { children: ReactNode }) => (
   <span className="shrink-0 opacity-70">{children}</span>
-);
-
-const JoinPill = ({
-  href,
-  isPrimary,
-}: {
-  href: string;
-  isPrimary: boolean;
-}) => (
-  <a
-    href={href}
-    target="_blank"
-    rel="noreferrer"
-    data-setting="calendar.showJoinButton"
-    className={cn(
-      // The pseudo-element makes the small pill comfortable to hit.
-      "relative z-10 inline-flex h-4 shrink-0 items-center gap-1 rounded-full px-1.5 text-[11px] leading-none font-medium whitespace-nowrap duration-150 before:absolute before:-inset-x-1 before:-inset-y-1.5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-500",
-      isPrimary
-        ? "bg-sky-500 text-on-accent hover:brightness-110"
-        : "bg-black/5 hover:bg-black/10",
-    )}
-  >
-    <VideoCameraIcon weight="fill" className="size-3" aria-hidden />
-    Join
-  </a>
 );
 
 /** The second line of the date widget: the calendar's state, or what's next. */
@@ -72,34 +48,38 @@ const CalendarLine = ({ status, line, now, timeFormat, showJoin }: Props) => {
 
   // The line is always this tall, so no state shifts what's around it.
   const renderContents = () => {
-    if (status === "notConnected" || status === "reconnect") {
-      const isReconnect = status === "reconnect";
-
+    if (status === "notConnected") {
       return (
         <FadeIn key={status}>
           <button className={triggerStyles} onClick={connect}>
-            {isReconnect ? (
-              <WarningIcon
-                weight="fill"
-                className="size-3.5 shrink-0 text-amber-600"
-                aria-hidden
-              />
-            ) : (
-              <CalendarPlusIcon
-                weight="fill"
-                className="size-3.5 shrink-0 text-sky-600 dark:text-sky-300"
-                aria-hidden
-              />
-            )}
-            <span
-              className={cn(
-                "truncate font-medium group-hover:underline",
-                isReconnect && "text-amber-800",
-              )}
-            >
-              {isReconnect ? "Reconnect calendar" : "Connect your calendar"}
+            <CalendarPlusIcon
+              weight="fill"
+              className="size-3.5 shrink-0"
+              aria-hidden
+            />
+            <span className="truncate font-medium group-hover:underline">
+              Connect your calendar
             </span>
           </button>
+        </FadeIn>
+      );
+    }
+
+    /*
+     * The agenda, which the whole widget opens, explains what to do. No colour
+     * here, as none holds up over every photo: it's bolder and underlined instead.
+     */
+    if (status === "reconnect") {
+      return (
+        <FadeIn key={status}>
+          <WarningIcon
+            weight="fill"
+            className="size-3.5 shrink-0"
+            aria-hidden
+          />
+          <span className="truncate font-semibold underline underline-offset-2">
+            Reconnect calendar
+          </span>
         </FadeIn>
       );
     }
@@ -148,12 +128,7 @@ const CalendarLine = ({ status, line, now, timeFormat, showJoin }: Props) => {
 
     return (
       <FadeIn key={`${line.kind}-${event.id}`}>
-        {isNow && (
-          <span
-            aria-hidden
-            className="size-1.5 shrink-0 rounded-full bg-sky-500 ring-2 ring-sky-500/25"
-          />
-        )}
+        {isNow && <PulseDot />}
         <span className="min-w-0 truncate">
           <span className="font-medium">{event.title}</span>{" "}
           {isNow && <span aria-hidden>·</span>}{" "}
@@ -172,7 +147,8 @@ const CalendarLine = ({ status, line, now, timeFormat, showJoin }: Props) => {
   return (
     <div
       data-setting="calendar.connection"
-      className="flex h-4 min-w-0 items-center text-xs"
+      // Only the buttons and links take clicks: the text lets them through to the widget.
+      className="pointer-events-none flex h-4 min-w-0 items-center text-xs"
     >
       {renderContents()}
     </div>

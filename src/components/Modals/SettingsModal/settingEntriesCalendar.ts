@@ -1,5 +1,6 @@
 import {
   CalendarDotsIcon,
+  HouseIcon,
   SidebarSimpleIcon,
   VideoCameraIcon,
 } from "@phosphor-icons/react";
@@ -36,6 +37,17 @@ export const calendarEntries: SettingEntry[] = [
     description: "Show Join for Meet, Zoom and Teams links.",
     keywords: ["meeting", "video", "call", "meet", "zoom", "teams", "link"],
     icon: VideoCameraIcon,
+  },
+  {
+    kind: "switch",
+    id: "calendar.showOnHomescreen",
+    section: "calendar",
+    ...field("calendar", "showOnHomescreen"),
+    needsCalendar: true,
+    title: "Show on homescreen",
+    description: "Next event under the date on the homescreen.",
+    keywords: ["events", "agenda", "widget", "date", "next", "background"],
+    icon: HouseIcon,
   },
   {
     kind: "switch",

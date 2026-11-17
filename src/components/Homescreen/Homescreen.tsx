@@ -17,6 +17,7 @@ import { cn } from "@/src/utils";
 import { BOOKMARK_SEARCH_ID } from "../Bookmarks/partials/SearchBookmarks";
 import InfoWidget from "../InfoWidget/InfoWidget";
 import BarButton from "./partials/BarButton";
+import CalendarDebugPanel from "../InfoWidget/partials/CalendarDebugPanel";
 import { ActiveHotkeyIndicator } from "../Modals/HotkeysModal/partials/ActiveHotkeyIndicator";
 import Modals from "../Modals/Modals";
 import Sidebar from "../Sidebar/Sidebar";
@@ -97,6 +98,8 @@ const Homescreen = () => {
   return (
     <>
       <Modals />
+      {/* TEMPORARY: in development builds only. */}
+      {import.meta.env.VITE_IS_DEV === "true" && <CalendarDebugPanel />}
       <ActiveHotkeyIndicator />
       <div className="relative flex size-full max-h-screen min-h-screen items-stretch overflow-hidden">
         <Sidebar

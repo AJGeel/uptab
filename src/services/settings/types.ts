@@ -53,6 +53,8 @@ export type BackgroundSettings = {
 export type CalendarSettings = {
   /** The Join pill on events that have a meeting link. */
   showJoinButton: boolean;
+  /** The next event under the date on the homescreen. */
+  showOnHomescreen: boolean;
   /** The next event under the date in the sidebar. */
   showInSidebar: boolean;
 };

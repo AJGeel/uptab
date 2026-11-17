@@ -2,8 +2,11 @@ import { describe, expect, it } from "vitest";
 
 import {
   canJoin,
+  formatEventBadge,
   formatEventTiming,
   getEventLine,
+  getMeetingProvider,
+  getTodaysEvents,
   JOIN_LEAD_MS,
 } from "./eventLine";
 import type { CalendarEvent } from "./types";
@@ -133,5 +136,44 @@ describe("canJoin", () => {
 
   it("needs a meeting link", () => {
     expect(canJoin(timed("b", at(10), at(11)), at(10))).toBe(false);
+  });
+});
+
+describe("getTodaysEvents", () => {
+  it("splits today's events into all-day and timed, keeping the ones that are over", () => {
+    const day = allDay("birthday");
+    const over = timed("over", at(8), at(9));
+    const tomorrow = timed("tomorrow", at(33), at(34));
+    const yesterday = timed("yesterday", at(-5), at(-4));
+
+    const result = getTodaysEvents([yesterday, day, over, tomorrow], at(12));
+
+    expect(result.allDay).toEqual([day]);
+    expect(result.timed).toEqual([over]);
+  });
+});
+
+describe("formatEventBadge", () => {
+  it("counts down while the next event is close", () => {
+    const event = timed("a", at(9, 8), at(10));
+
+    expect(formatEventBadge({ kind: "next", event }, at(9))).toBe("in 8m");
+  });
+
+  it("just says Next when it's further away, and Now while it's on", () => {
+    const event = timed("a", at(12), at(13));
+
+    expect(formatEventBadge({ kind: "next", event }, at(9))).toBe("Next");
+    expect(formatEventBadge({ kind: "now", event }, at(12, 30))).toBe("Now");
+  });
+});
+
+describe("getMeetingProvider", () => {
+  it.each([
+    ["https://meet.google.com/abc-defg-hij", "Google Meet"],
+    ["https://us02web.zoom.us/j/123", "Zoom"],
+    ["https://teams.microsoft.com/l/meetup-join/19", "Microsoft Teams"],
+  ])("names %s", (link, name) => {
+    expect(getMeetingProvider(link)).toBe(name);
   });
 });

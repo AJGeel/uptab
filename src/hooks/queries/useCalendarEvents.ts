@@ -27,5 +27,6 @@ export const useCalendarEvents = () => {
     data: query.data,
     error: query.error,
     dataUpdatedAt: query.dataUpdatedAt,
+    refetch: query.refetch,
   };
 };

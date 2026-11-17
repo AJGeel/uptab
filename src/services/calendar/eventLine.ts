@@ -83,3 +83,44 @@ export const formatEventTiming = (
     ? `in ${until}m`
     : `at ${formatClock(event.start, timeFormat)}`;
 };
+
+/** The events that touch today, with all-day ones apart, as the agenda lists them. */
+export const getTodaysEvents = (events: CalendarEvent[], now: number) => {
+  const startOfToday = startOfDay(now).getTime();
+  const endOfToday = addDays(startOfToday, 1).getTime();
+  const today = events.filter(
+    ({ start, end }) => end > startOfToday && start < endOfToday,
+  );
+
+  return {
+    allDay: today.filter(({ allDay }) => allDay),
+    timed: today.filter(({ allDay }) => !allDay),
+  };
+};
+
+/** The small label on the agenda's next event: "in 8m" while it's close, else "Next". */
+export const formatEventBadge = (
+  line: Exclude<EventLine, { kind: "none" }>,
+  now: number,
+) => {
+  if (line.kind === "now") {
+    return "Now";
+  }
+
+  const until = minutesBetween(now, line.event.start);
+
+  return until <= 60 ? `in ${until}m` : "Next";
+};
+
+/** Which service a meeting link is for, as a name people know. */
+export const getMeetingProvider = (link: string) => {
+  const { hostname } = new URL(link);
+
+  if (hostname.endsWith("zoom.us")) {
+    return "Zoom";
+  }
+
+  return hostname.endsWith("teams.microsoft.com")
+    ? "Microsoft Teams"
+    : "Google Meet";
+};

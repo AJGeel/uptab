@@ -40,6 +40,7 @@ export const defaultSettings: Settings = {
   },
   calendar: {
     showJoinButton: true,
+    showOnHomescreen: true,
     showInSidebar: true,
   },
   appearance: {

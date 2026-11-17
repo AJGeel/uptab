@@ -27,6 +27,7 @@ import Modal from "../../ui/Modal";
 
 /** The setting each link points at, for the ones that aren't the city search. */
 const FOCUSED_SETTING_ROWS: Partial<Record<SettingsFocus, string>> = {
+  calendar: "calendar.connection",
   errorReports: "privacy.errorReporting",
   preferencesButton: "homescreen.showPreferencesButton",
   updateNews: "sidebar.showUpdates",
@@ -190,8 +191,9 @@ const SettingsModal = () => {
         const settingRow = row
           ? document.getElementById(`${SETTING_ROW_ID_PREFIX}${row}`)
           : null;
-        const settingSwitch =
-          settingRow?.querySelector<HTMLElement>('[role="switch"]');
+        const settingSwitch = settingRow?.querySelector<HTMLElement>(
+          '[role="switch"], button',
+        );
 
         settingSwitch?.scrollIntoView({ block: "nearest" });
 
