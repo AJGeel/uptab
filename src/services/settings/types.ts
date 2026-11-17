@@ -50,6 +50,13 @@ export type BackgroundSettings = {
   photoChange: PhotoChange;
 };
 
+export type CalendarSettings = {
+  /** The Join pill on events that have a meeting link. */
+  showJoinButton: boolean;
+  /** The next event under the date in the sidebar. */
+  showInSidebar: boolean;
+};
+
 export type ForecastSettings = {
   /** The "feels like" line in the forecast's tooltip. */
   showFeelsLike: boolean;
@@ -90,6 +97,7 @@ export type Settings = {
   location: LocationSettings;
   units: UnitSettings;
   dateTime: DateTimeSettings;
+  calendar: CalendarSettings;
   forecast: ForecastSettings;
   appearance: AppearanceSettings;
   privacy: PrivacySettings;

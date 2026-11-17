@@ -38,6 +38,10 @@ export const defaultSettings: Settings = {
   forecast: {
     showFeelsLike: true,
   },
+  calendar: {
+    showJoinButton: true,
+    showInSidebar: true,
+  },
   appearance: {
     theme: "system",
     accent: "sky",

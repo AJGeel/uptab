@@ -1,19 +1,9 @@
 import { addDays, startOfDay } from "date-fns";
 
 import { getCalendarUrl, hasCalendarAccess } from "./calendarConnection";
+import { CalendarError } from "./calendarError";
 import { parseCalendar } from "./parseCalendar";
 import type { CalendarEvent } from "./types";
-
-/**
- * `reconnect`: the address was reset in Google, or the access was taken back.
- * `offline`: anything else, such as no connection or Google being down.
- */
-export class CalendarError extends Error {
-  constructor(readonly kind: "reconnect" | "offline") {
-    // Never put the address in here: errors can end up in reports.
-    super(`Calendar unavailable: ${kind}`);
-  }
-}
 
 /** Google answers with these once the secret address has been reset. */
 const isAddressGone = (status: number) => status === 403 || status === 404;

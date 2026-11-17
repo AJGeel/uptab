@@ -1,6 +1,10 @@
-import { CalendarDotsIcon } from "@phosphor-icons/react";
+import {
+  CalendarDotsIcon,
+  SidebarSimpleIcon,
+  VideoCameraIcon,
+} from "@phosphor-icons/react";
 
-import { SettingEntry } from "./settingsTypes";
+import { field, SettingEntry } from "./settingsTypes";
 
 export const calendarEntries: SettingEntry[] = [
   {
@@ -21,5 +25,27 @@ export const calendarEntries: SettingEntry[] = [
       "schedule",
     ],
     icon: CalendarDotsIcon,
+  },
+  {
+    kind: "switch",
+    id: "calendar.showJoinButton",
+    section: "calendar",
+    ...field("calendar", "showJoinButton"),
+    needsCalendar: true,
+    title: "Join button",
+    description: "Show Join for Meet, Zoom and Teams links.",
+    keywords: ["meeting", "video", "call", "meet", "zoom", "teams", "link"],
+    icon: VideoCameraIcon,
+  },
+  {
+    kind: "switch",
+    id: "calendar.showInSidebar",
+    section: "calendar",
+    ...field("calendar", "showInSidebar"),
+    needsCalendar: true,
+    title: "Show in sidebar",
+    description: "Next event under the date in the sidebar.",
+    keywords: ["events", "agenda", "widget", "date", "next"],
+    icon: SidebarSimpleIcon,
   },
 ];

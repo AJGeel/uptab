@@ -23,6 +23,8 @@ type Base = {
   icon: Icon;
   /** A key that does the same from anywhere, shown next to the title. */
   hotkey?: Hotkeys;
+  /** Only shown while a calendar is connected, as it has nothing to change before. */
+  needsCalendar?: boolean;
   /** Greyed out and untouchable while the setting it depends on is off. */
   isDisabled?: (settings: Settings) => boolean;
 };
@@ -77,6 +79,7 @@ type Group =
   | "homescreen"
   | "units"
   | "dateTime"
+  | "calendar"
   | "forecast"
   | "appearance"
   | "backgrounds"

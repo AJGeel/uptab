@@ -47,7 +47,7 @@ const Sidebar = ({ isExpanded, setIsExpanded }: Props) => {
           />
         )}
         {settings?.sidebar.showInfoWidget && (
-          <InfoWidget settingId="sidebar.showInfoWidget" />
+          <InfoWidget isSidebar settingId="sidebar.showInfoWidget" />
         )}
         {settings?.sidebar.showShortlinks && <Shortlinks />}
         {settings?.sidebar.showBookmarks && <Bookmarks />}
