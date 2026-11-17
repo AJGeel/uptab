@@ -1,4 +1,5 @@
 import {
+  CalendarDotsIcon,
   CloudSunIcon,
   HouseIcon,
   ImagesIcon,
@@ -36,11 +37,6 @@ export const sections: Section[] = [
     reset: (settings) => ({
       ...settings,
       homescreen: defaultSettings.homescreen,
-      dateTime: {
-        ...settings.dateTime,
-        showWeekNumber: defaultSettings.dateTime.showWeekNumber,
-        weekStartsOn: defaultSettings.dateTime.weekStartsOn,
-      },
     }),
   },
   {
@@ -68,6 +64,7 @@ export const sections: Section[] = [
       },
     }),
   },
+  { id: "calendar", label: "Calendar", icon: CalendarDotsIcon },
   {
     id: "appearance",
     label: "Look & feel",

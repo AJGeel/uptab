@@ -61,7 +61,12 @@ export type SwatchesEntry = Base & {
 export type CustomEntry = Base & {
   kind: "custom";
   content:
-    "about" | "backgrounds" | "localPhotos" | "location" | "searchEngine";
+    | "about"
+    | "backgrounds"
+    | "calendarConnection"
+    | "localPhotos"
+    | "location"
+    | "searchEngine";
 };
 
 export type SettingEntry =

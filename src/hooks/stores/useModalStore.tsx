@@ -8,6 +8,7 @@ export const Modals = {
   backgrounds: "backgrounds",
   localPhotos: "localPhotos",
   whatsNew: "whatsNew",
+  calendarConnect: "calendarConnect",
 } as const;
 
 export type Modals = (typeof Modals)[keyof typeof Modals];
@@ -22,6 +23,7 @@ export type SettingsSection =
   | "photos"
   | "location"
   | "weather"
+  | "calendar"
   | "appearance"
   | "general";
 

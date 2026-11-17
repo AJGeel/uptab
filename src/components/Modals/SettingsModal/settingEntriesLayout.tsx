@@ -1,7 +1,5 @@
 import {
   BookmarkSimpleIcon,
-  CalendarBlankIcon,
-  CalendarDotsIcon,
   CameraIcon,
   ColumnsIcon,
   ImagesIcon,
@@ -98,34 +96,6 @@ export const layoutEntries: SettingEntry[] = [
     description: "Weather and the date, floating over your photo.",
     keywords: ["forecast", "calendar", "widget"],
     icon: SunHorizonIcon,
-  },
-  {
-    kind: "switch",
-    id: "time.showWeekNumber",
-    section: "homescreen",
-    ...field("dateTime", "showWeekNumber"),
-    title: "Week number",
-    description: "Shows which week of the year it is, under the date.",
-    keywords: ["calendar", "date", "widget"],
-    icon: CalendarDotsIcon,
-    isDisabled: (settings) => !settings.homescreen.showInfoWidget,
-  },
-  {
-    kind: "segmented",
-    id: "time.weekStartsOn",
-    section: "homescreen",
-    ...asString(field("dateTime", "weekStartsOn"), (value) =>
-      value === "sunday" ? "sunday" : "monday",
-    ),
-    title: "Weeks start on",
-    description: "Decides how the week number is counted.",
-    keywords: ["calendar", "monday", "sunday", "first day"],
-    icon: CalendarBlankIcon,
-    isDisabled: (settings) => !settings.homescreen.showInfoWidget,
-    options: [
-      { value: "monday", label: "Monday" },
-      { value: "sunday", label: "Sunday" },
-    ],
   },
   {
     kind: "switch",

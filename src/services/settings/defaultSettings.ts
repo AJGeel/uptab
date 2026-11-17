@@ -33,8 +33,6 @@ export const defaultSettings: Settings = {
   },
   dateTime: {
     timeFormat: "24h",
-    showWeekNumber: true,
-    weekStartsOn: "monday",
     forecastDays: DEFAULT_EXTRA_FORECAST_DAYS,
   },
   forecast: {
