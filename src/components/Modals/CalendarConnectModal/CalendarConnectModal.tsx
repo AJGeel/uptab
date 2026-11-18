@@ -12,10 +12,9 @@ import { FormEvent, PropsWithChildren, useState } from "react";
 
 import { Modals, useModalStore } from "@/src/hooks/stores/useModalStore";
 import { useCalendarConnection } from "@/src/hooks/useCalendarConnection";
-import { useSettings } from "@/src/hooks/useSettings";
 import { validateCalendarUrl } from "@/src/services/calendar/validateCalendarUrl";
 
-import Button, { buttonVariants, inlineLinkStyles } from "../../ui/Button";
+import Button, { inlineLinkStyles } from "../../ui/Button";
 import Modal from "../../ui/Modal";
 
 type Status = "idle" | "waiting" | "declined";
@@ -39,8 +38,7 @@ const Step = ({ number, children }: PropsWithChildren<{ number: number }>) => (
 const CalendarConnectModal = () => {
   const activeModal = useModalStore((state) => state.activeModal);
   const closeModal = useModalStore((state) => state.closeModal);
-  const { isConnected, connect } = useCalendarConnection();
-  const { setShowCalendarPrompt } = useSettings();
+  const { connect } = useCalendarConnection();
 
   const [value, setValue] = useState("");
   const [status, setStatus] = useState<Status>("idle");
@@ -167,32 +165,16 @@ const CalendarConnectModal = () => {
         )}
 
         <Collapsible.Root open={isHelpOpen} onOpenChange={setIsHelpOpen}>
-          <div className="flex items-center justify-between gap-4">
-            <Collapsible.Trigger
-              className={`${inlineLinkStyles} inline-flex items-center gap-1`}
-            >
-              Where do I find this?
-              {isHelpOpen ? (
-                <CaretUpIcon className="size-3.5" aria-hidden />
-              ) : (
-                <CaretDownIcon className="size-3.5" aria-hidden />
-              )}
-            </Collapsible.Trigger>
-
-            {/* Not when reconnecting: the calendar was wanted once. */}
-            {isConnected === false && (
-              <Button
-                type="button"
-                label="Don't ask again"
-                variant={buttonVariants.inline}
-                className="shrink-0 whitespace-nowrap"
-                onClick={() => {
-                  void setShowCalendarPrompt(false);
-                  close();
-                }}
-              />
+          <Collapsible.Trigger
+            className={`${inlineLinkStyles} inline-flex items-center gap-1`}
+          >
+            Where do I find this?
+            {isHelpOpen ? (
+              <CaretUpIcon className="size-3.5" aria-hidden />
+            ) : (
+              <CaretDownIcon className="size-3.5" aria-hidden />
             )}
-          </div>
+          </Collapsible.Trigger>
 
           <Collapsible.Panel className="-mx-2 h-(--collapsible-panel-height) overflow-hidden px-2 transition-[height] duration-300 ease-in-out data-ending-style:h-0 data-starting-style:h-0 motion-reduce:transition-none">
             <ol className="mt-3 space-y-2 text-sm">

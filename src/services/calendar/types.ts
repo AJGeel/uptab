@@ -10,4 +10,6 @@ export type CalendarEvent = {
   meetingLink?: string;
   /** Where the event is in Google Calendar. */
   url: string;
+  /** Your answer to the invitation, when the feed says. Left out for your own events. */
+  response?: "accepted" | "tentative" | "declined" | "needsAction";
 };

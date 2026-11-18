@@ -3,8 +3,11 @@ import { useQuery } from "@tanstack/react-query";
 import { useCalendarConnection } from "@/src/hooks/useCalendarConnection";
 import { getCalendarEvents } from "@/src/services/calendar/getCalendarEvents";
 
-/** How often events are fetched again, and how long they're reused when a tab opens. */
-export const CALENDAR_REFRESH_MS = 15 * 60 * 1000;
+/**
+ * How often events are fetched again, and how long they're reused when a tab opens.
+ * The feed is the whole calendar, over a megabyte, so this is kept slow: the agenda can refresh it by hand.
+ */
+export const CALENDAR_REFRESH_MS = 60 * 60 * 1000;
 
 export const useCalendarEvents = () => {
   const { isConnected } = useCalendarConnection();

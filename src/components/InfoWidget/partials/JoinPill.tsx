@@ -31,7 +31,8 @@ const JoinPill = ({ href, isPrimary, placement = "widget" }: Props) => (
         : cn(
             "h-6 px-2.5 text-xs",
             isPrimary
-              ? "bg-sky-500 text-on-accent hover:brightness-110"
+              ? // Stands out with an edge and a shadow, not a colour of its own.
+                "border bg-surface shadow-sm hover:shadow-md active:shadow-xs"
               : "bg-black/5 hover:bg-black/10",
           ),
     )}

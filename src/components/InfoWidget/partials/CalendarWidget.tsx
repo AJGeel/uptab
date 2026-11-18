@@ -1,8 +1,7 @@
 import { Popover } from "@base-ui/react/popover";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import { useCalendarEvents } from "@/src/hooks/queries/useCalendarEvents";
-import { useCalendarDebugStore } from "@/src/hooks/stores/useCalendarDebugStore";
 import { Modals, useModalStore } from "@/src/hooks/stores/useModalStore";
 import { useNow } from "@/src/hooks/useNow";
 import { useSettings } from "@/src/hooks/useSettings";
@@ -10,7 +9,6 @@ import {
   CalendarStatus,
   getCalendarStatus,
 } from "@/src/services/calendar/calendarStatus";
-import { getDebugView } from "@/src/services/calendar/debugView";
 import { getEventLine } from "@/src/services/calendar/eventLine";
 import { cn, formatToday } from "@/src/utils";
 
@@ -46,22 +44,28 @@ const CalendarWidget = ({ isSidebar }: Props) => {
     useCalendarEvents();
   const [isOpen, setIsOpen] = useState(false);
   const openModal = useModalStore((state) => state.openModal);
+  const openSettingsSection = useModalStore(
+    (state) => state.openSettingsSection,
+  );
+  const activeModal = useModalStore((state) => state.activeModal);
+  // Set when the agenda was left for the settings, so it comes back after them.
+  const returnsFromSettingsRef = useRef(false);
 
-  const debugState = useCalendarDebugStore((state) => state.state);
-  const real = {
-    status: getCalendarStatus({
-      isConnected,
-      hasEvents: data !== undefined,
-      error,
-      dataUpdatedAt,
-      now,
-    }),
-    events: data ?? [],
+  useEffect(() => {
+    if (activeModal === null && returnsFromSettingsRef.current) {
+      returnsFromSettingsRef.current = false;
+      setIsOpen(true);
+    }
+  }, [activeModal]);
+
+  const status = getCalendarStatus({
+    isConnected,
+    hasEvents: data !== undefined,
+    error,
     dataUpdatedAt,
-  };
-  // TEMPORARY: forced by the debug panel.
-  const view = debugState ? getDebugView(debugState, now) : real;
-  const { status, events } = view;
+    now,
+  });
+  const events = data ?? [];
   const line = getEventLine(events, now);
   const timeFormat = settings?.dateTime.timeFormat ?? "24h";
   const showJoin = settings?.calendar.showJoinButton !== false;
@@ -121,9 +125,14 @@ const CalendarWidget = ({ isSidebar }: Props) => {
                   now={now}
                   timeFormat={timeFormat}
                   showJoin={showJoin}
-                  updatedAt={view.dataUpdatedAt}
-                  onRetry={refetch}
+                  updatedAt={dataUpdatedAt}
+                  onRefresh={refetch}
                   onClose={() => setIsOpen(false)}
+                  onOpenSettings={() => {
+                    returnsFromSettingsRef.current = true;
+                    setIsOpen(false);
+                    openSettingsSection("calendar", "calendar");
+                  }}
                 />
               </Popover.Popup>
             </Popover.Positioner>

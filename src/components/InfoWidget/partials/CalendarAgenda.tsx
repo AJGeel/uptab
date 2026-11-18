@@ -24,6 +24,7 @@ import { TimeFormat } from "@/src/services/settings/types";
 import { delay } from "@/src/utils/delay";
 
 import AgendaEventRow from "./AgendaEventRow";
+import RefreshButton from "./RefreshButton";
 import Button, { buttonVariants } from "../../ui/Button";
 import Spinner from "../../ui/Spinner";
 import Tooltip from "../../ui/Tooltip";
@@ -37,8 +38,10 @@ type Props = {
   showJoin: boolean;
   /** When the events were fetched. */
   updatedAt: number;
-  onRetry: () => Promise<unknown>;
+  onRefresh: () => Promise<unknown>;
   onClose: () => void;
+  /** Closes the agenda and opens the calendar settings, which bring it back when they close. */
+  onOpenSettings: () => void;
 };
 
 const ReconnectPanel = ({ onClose }: Pick<Props, "onClose">) => {
@@ -63,7 +66,7 @@ const ReconnectPanel = ({ onClose }: Pick<Props, "onClose">) => {
         </div>
       </div>
 
-      <div className="flex justify-end gap-2">
+      <div className="flex items-center justify-end gap-2">
         <Button
           label="Disconnect"
           variant={buttonVariants.secondary}
@@ -90,8 +93,8 @@ const OfflineBanner = ({
   hasEvents,
   updatedAt,
   timeFormat,
-  onRetry,
-}: Pick<Props, "updatedAt" | "timeFormat" | "onRetry"> & {
+  onRefresh,
+}: Pick<Props, "updatedAt" | "timeFormat" | "onRefresh"> & {
   hasEvents: boolean;
 }) => {
   const [isRetrying, setIsRetrying] = useState(false);
@@ -99,16 +102,16 @@ const OfflineBanner = ({
   const retry = async () => {
     setIsRetrying(true);
     // A retry can be over in a blink, so it shows as busy for long enough to notice.
-    await Promise.all([onRetry(), delay(MIN_RETRY_MS)]);
+    await Promise.all([onRefresh(), delay(MIN_RETRY_MS)]);
     setIsRetrying(false);
   };
 
   return (
     <div
       role="status"
-      className="mx-2 mb-2 flex items-start gap-2 rounded-xl bg-black/5 p-3 text-sm"
+      className="mx-2 mb-2 flex items-center gap-2 rounded-xl bg-black/5 p-3 text-sm"
     >
-      <CloudSlashIcon className="mt-0.5 size-4 shrink-0" aria-hidden />
+      <CloudSlashIcon className="size-4 shrink-0" aria-hidden />
       <p className="grow">
         Can&apos;t reach Google Calendar right now.
         {hasEvents &&
@@ -116,8 +119,7 @@ const OfflineBanner = ({
       </p>
       <Button
         label={isRetrying ? "Trying…" : "Try again"}
-        variant={buttonVariants.inline}
-        className="shrink-0 self-center whitespace-nowrap"
+        className="shrink-0 px-3 py-2 text-sm whitespace-nowrap"
         disabled={isRetrying}
         onClick={retry}
       />
@@ -134,12 +136,10 @@ const CalendarAgenda = ({
   timeFormat,
   showJoin,
   updatedAt,
-  onRetry,
+  onRefresh,
   onClose,
+  onOpenSettings,
 }: Props) => {
-  const openSettingsSection = useModalStore(
-    (state) => state.openSettingsSection,
-  );
   const { allDay, timed } = getTodaysEvents(events, now);
   const isOffline = status === "stale" || status === "unavailable";
   const isReconnect = status === "reconnect";
@@ -164,7 +164,7 @@ const CalendarAgenda = ({
             hasEvents={status === "stale"}
             updatedAt={updatedAt}
             timeFormat={timeFormat}
-            onRetry={onRetry}
+            onRefresh={onRefresh}
           />
         )}
 
@@ -231,17 +231,22 @@ const CalendarAgenda = ({
           </span>
         </h2>
 
-        <Tooltip label="Open Google Calendar" side="bottom">
-          <a
-            href="https://calendar.google.com"
-            target="_blank"
-            rel="noreferrer"
-            aria-label="Open Google Calendar"
-            className="rounded-lg p-1.5 text-gray-700 duration-150 hover:bg-black/5 focus-visible:outline-2 focus-visible:outline-sky-500 active:scale-90"
-          >
-            <ArrowSquareOutIcon className="size-5" />
-          </a>
-        </Tooltip>
+        <div className="flex items-center gap-1">
+          {!isReconnect && status !== "loading" && (
+            <RefreshButton onRefresh={onRefresh} />
+          )}
+          <Tooltip label="Open Google Calendar" side="bottom">
+            <a
+              href="https://calendar.google.com"
+              target="_blank"
+              rel="noreferrer"
+              aria-label="Open Google Calendar"
+              className="rounded-lg p-1.5 text-gray-700 duration-150 hover:bg-black/5 focus-visible:outline-2 focus-visible:outline-sky-500 active:scale-90"
+            >
+              <ArrowSquareOutIcon className="size-5" />
+            </a>
+          </Tooltip>
+        </div>
       </header>
 
       <div className="min-h-0 grow overflow-y-auto px-2 pb-2">
@@ -259,10 +264,7 @@ const CalendarAgenda = ({
             label="Settings"
             variant={buttonVariants.inline}
             className="shrink-0 whitespace-nowrap"
-            onClick={() => {
-              onClose();
-              openSettingsSection("calendar", "calendar");
-            }}
+            onClick={onOpenSettings}
           />
         </footer>
       )}

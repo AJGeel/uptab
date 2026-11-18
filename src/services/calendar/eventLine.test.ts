@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 
 import {
   canJoin,
+  isUnaccepted,
   formatEventBadge,
   formatEventTiming,
   getEventLine,
@@ -91,6 +92,43 @@ describe("getEventLine", () => {
   });
 });
 
+describe("invitations that aren't accepted", () => {
+  const invited = (id: string, start: number, end: number) =>
+    timed(id, start, end, { response: "needsAction" });
+
+  it("count as not accepted when unanswered or declined", () => {
+    expect(isUnaccepted(timed("a", at(9), at(10)))).toBe(false);
+    expect(isUnaccepted(invited("b", at(9), at(10)))).toBe(true);
+    expect(
+      isUnaccepted(timed("c", at(9), at(10), { response: "declined" })),
+    ).toBe(true);
+    expect(
+      isUnaccepted(timed("d", at(9), at(10), { response: "tentative" })),
+    ).toBe(false);
+  });
+
+  it("come after accepted events, even when they start sooner", () => {
+    const soon = invited("soon", at(10), at(11));
+    const later = timed("later", at(12), at(13));
+
+    expect(getEventLine([soon, later], at(9))).toEqual({
+      kind: "next",
+      event: later,
+    });
+  });
+
+  it("come after an all-day event, but still show when nothing else is left", () => {
+    const soon = invited("soon", at(10), at(11));
+    const day = allDay("birthday");
+
+    expect(getEventLine([soon, day], at(9))).toEqual({
+      kind: "allDay",
+      event: day,
+    });
+    expect(getEventLine([soon], at(9))).toEqual({ kind: "next", event: soon });
+  });
+});
+
 describe("formatEventTiming", () => {
   const next = (minutes: number) =>
     ({
@@ -124,10 +162,10 @@ describe("formatEventTiming", () => {
     expect(formatEventTiming(line, at(9, 30), "24h")).toBe("until 13:00");
   });
 
-  it("says all day for all-day events", () => {
+  it("puts all day in brackets for all-day events", () => {
     expect(
       formatEventTiming({ kind: "allDay", event: allDay("a") }, at(9)),
-    ).toBe("all day");
+    ).toBe("(all day)");
   });
 });
 

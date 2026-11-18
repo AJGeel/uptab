@@ -12,8 +12,10 @@ import {
   canJoin,
   EventLine,
   formatEventTiming,
+  isUnaccepted,
 } from "@/src/services/calendar/eventLine";
 import { TimeFormat } from "@/src/services/settings/types";
+import { cn } from "@/src/utils";
 
 import JoinPill from "./JoinPill";
 import PulseDot from "./PulseDot";
@@ -48,10 +50,10 @@ const CalendarLine = ({ status, line, now, timeFormat, showJoin }: Props) => {
         <FadeIn key={status}>
           <CalendarPlusIcon
             weight="fill"
-            className="size-3.5 shrink-0"
+            className="size-3.5 shrink-0 opacity-70"
             aria-hidden
           />
-          <span className="truncate font-medium group-hover:underline">
+          <span className="truncate opacity-70 group-hover:underline">
             Connect your calendar
           </span>
           <span aria-hidden className="shrink-0 opacity-70">
@@ -127,20 +129,26 @@ const CalendarLine = ({ status, line, now, timeFormat, showJoin }: Props) => {
 
     const { event } = line;
     const isNow = line.kind === "now";
+    // Only left to show when nothing accepted is: it gets less weight, and no pulse.
+    const isInvite = isUnaccepted(event);
 
     return (
       <FadeIn key={`${line.kind}-${event.id}`}>
-        {isNow && <PulseDot />}
-        <span className="min-w-0 truncate">
-          <span className="font-medium">{event.title}</span>{" "}
-          {isNow && <span aria-hidden>·</span>}{" "}
-          <span className="opacity-70">
-            {formatEventTiming(line, now, timeFormat)}
-          </span>
+        {isNow && !isInvite && <PulseDot />}
+        {/* Quiet, like the weather's text beside it: a bit fainter still for an invitation. */}
+        <span
+          className={cn(
+            "min-w-0 truncate",
+            isInvite ? "opacity-50" : "opacity-70",
+          )}
+        >
+          {event.title}
+          {isNow && <span aria-hidden> ·</span>}{" "}
+          {formatEventTiming(line, now, timeFormat)}
         </span>
         {staleIcon}
         {showJoin && canJoin(event, now) && (
-          <JoinPill href={event.meetingLink!} isPrimary={isNow} />
+          <JoinPill href={event.meetingLink!} isPrimary={isNow && !isInvite} />
         )}
       </FadeIn>
     );

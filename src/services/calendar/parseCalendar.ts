@@ -1,6 +1,7 @@
 import ICAL from "ical.js";
 
 import { getEventUrl } from "./eventUrl";
+import { trimFeed } from "./trimFeed";
 import type { CalendarEvent } from "./types";
 
 /** Stops a daily event from years ago from looping forever. */
@@ -36,6 +37,29 @@ const isCancelled = (event: ICAL.Event) =>
   String(event.component.getFirstPropertyValue("status")).toUpperCase() ===
   "CANCELLED";
 
+const RESPONSES: Record<string, CalendarEvent["response"]> = {
+  ACCEPTED: "accepted",
+  TENTATIVE: "tentative",
+  DECLINED: "declined",
+  "NEEDS-ACTION": "needsAction",
+};
+
+/** What the calendar's owner answered, from the guest list: the entry with their address. */
+const findResponse = (event: ICAL.Event, calendarId: string | undefined) => {
+  if (!calendarId) {
+    return undefined;
+  }
+
+  const own = event.component.getAllProperties("attendee").find(
+    (guest) =>
+      String(guest.getFirstValue())
+        .replace(/^mailto:/i, "")
+        .toLowerCase() === calendarId.toLowerCase(),
+  );
+
+  return RESPONSES[String(own?.getParameter("partstat")).toUpperCase()];
+};
+
 const toCalendarEvent = (
   event: ICAL.Event,
   start: ICAL.Time,
@@ -60,6 +84,7 @@ const toCalendarEvent = (
       instance: instance ? instance.toJSDate() : undefined,
       calendarId,
     }),
+    response: findResponse(event, calendarId),
   };
 };
 
@@ -74,7 +99,7 @@ export const parseCalendar = (
   /** Needed to link each event to its page in Google Calendar. */
   calendarId?: string,
 ): CalendarEvent[] => {
-  const root = new ICAL.Component(ICAL.parse(ics));
+  const root = new ICAL.Component(ICAL.parse(trimFeed(ics, from, to)));
 
   for (const zone of root.getAllSubcomponents("vtimezone")) {
     ICAL.TimezoneService.register(zone);

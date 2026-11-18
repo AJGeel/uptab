@@ -1,7 +1,7 @@
 import { CalendarError } from "./calendarError";
 
-/** Events older than this get the "not updated recently" icon. */
-export const STALE_AFTER_MS = 60 * 60 * 1000;
+/** Events older than this get the "not updated recently" icon: a missed refresh, not just a slow one. */
+export const STALE_AFTER_MS = 2 * 60 * 60 * 1000;
 
 export type CalendarStatus =
   /** Not known yet, as the saved address is still being read. */

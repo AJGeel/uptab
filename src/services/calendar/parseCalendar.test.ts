@@ -226,4 +226,48 @@ describe("parseCalendar", () => {
 
     expect(atob(eid)).toBe("rep_20261116T100000Z me@example.com");
   });
+
+  it.each([
+    ["ACCEPTED", "accepted"],
+    ["TENTATIVE", "tentative"],
+    ["DECLINED", "declined"],
+    ["NEEDS-ACTION", "needsAction"],
+  ])("reads your answer to an invitation: %s", (partstat, expected) => {
+    const ics = feed(
+      event(
+        "UID:inv@google.com",
+        "SUMMARY:Planning",
+        "DTSTART:20261116T090000Z",
+        "DTEND:20261116T100000Z",
+        `ATTENDEE;CUTYPE=INDIVIDUAL;PARTSTAT=${partstat};CN=Other:mailto:other@example.com`,
+        `ATTENDEE;CUTYPE=INDIVIDUAL;PARTSTAT=${partstat};CN=Me:mailto:Me@Example.com`,
+      ),
+    );
+
+    const [result] = parseCalendar(ics, day, week, "me@example.com");
+
+    expect(result.response).toBe(expected);
+  });
+
+  it("ignores other guests' answers, and events without a guest list", () => {
+    const ics = feed(
+      event(
+        "UID:a@google.com",
+        "SUMMARY:Others only",
+        "DTSTART:20261116T090000Z",
+        "DTEND:20261116T100000Z",
+        "ATTENDEE;PARTSTAT=NEEDS-ACTION:mailto:other@example.com",
+      ),
+      event(
+        "UID:b@google.com",
+        "SUMMARY:Mine",
+        "DTSTART:20261116T110000Z",
+        "DTEND:20261116T120000Z",
+      ),
+    );
+
+    const results = parseCalendar(ics, day, week, "me@example.com");
+
+    expect(results.map((e) => e.response)).toEqual([undefined, undefined]);
+  });
 });

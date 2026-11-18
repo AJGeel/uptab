@@ -13,9 +13,14 @@ export type EventLine =
   | { kind: "allDay"; event: CalendarEvent }
   | { kind: "none" };
 
+/** An invitation that hasn't been accepted: not answered yet, or turned down. */
+export const isUnaccepted = ({ response }: CalendarEvent) =>
+  response === "needsAction" || response === "declined";
+
 /**
  * What the date widget says: what's on right now, else what's next today.
- * All-day events only show when no timed event is left today.
+ * All-day events only show when no timed event is left today. Invitations
+ * that aren't accepted come last, as they're the least likely to matter.
  */
 export const getEventLine = (
   events: CalendarEvent[],
@@ -26,22 +31,28 @@ export const getEventLine = (
     ({ start, end }) => end > now && start < endOfToday,
   );
   const timed = today.filter(({ allDay }) => !allDay);
+  const accepted = timed.filter((event) => !isUnaccepted(event));
+  const invited = timed.filter(isUnaccepted);
 
-  const current = timed.find(({ start }) => start <= now);
+  const pick = (candidates: CalendarEvent[]): EventLine | undefined => {
+    const current = candidates.find(({ start }) => start <= now);
 
-  if (current) {
-    return { kind: "now", event: current };
-  }
+    if (current) {
+      return { kind: "now", event: current };
+    }
 
-  const next = timed.find(({ start }) => start > now);
+    const next = candidates.find(({ start }) => start > now);
 
-  if (next) {
-    return { kind: "next", event: next };
-  }
+    return next ? { kind: "next", event: next } : undefined;
+  };
 
   const allDay = today.find((event) => event.allDay);
 
-  return allDay ? { kind: "allDay", event: allDay } : { kind: "none" };
+  return (
+    pick(accepted) ??
+    (allDay ? { kind: "allDay", event: allDay } : undefined) ??
+    pick(invited) ?? { kind: "none" }
+  );
 };
 
 /** From shortly before the event until it ends, for events with a meeting link. */
@@ -57,7 +68,7 @@ const minutesBetween = (from: number, to: number) =>
 export const formatClock = (time: number, timeFormat: "24h" | "12h" = "24h") =>
   format(time, timeFormat === "12h" ? "h:mm a" : "HH:mm");
 
-/** The muted part after the title: "in 8m", "at 12:30", "20m left", "all day". */
+/** The muted part after the title: "in 8m", "at 12:30", "20m left", "(all day)". */
 export const formatEventTiming = (
   line: Exclude<EventLine, { kind: "none" }>,
   now: number,
@@ -66,7 +77,7 @@ export const formatEventTiming = (
   const { event } = line;
 
   if (line.kind === "allDay") {
-    return "all day";
+    return "(all day)";
   }
 
   if (line.kind === "now") {
