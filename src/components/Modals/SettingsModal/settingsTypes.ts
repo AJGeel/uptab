@@ -23,8 +23,8 @@ type Base = {
   icon: Icon;
   /** A key that does the same from anywhere, shown next to the title. */
   hotkey?: Hotkeys;
-  /** Only shown while a calendar is connected, as it has nothing to change before. */
-  needsCalendar?: boolean;
+  /** Only shown while a calendar is connected, or while none is: otherwise it has nothing to change. */
+  visibleWhen?: "connected" | "disconnected";
   /** Greyed out and untouchable while the setting it depends on is off. */
   isDisabled?: (settings: Settings) => boolean;
 };

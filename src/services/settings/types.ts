@@ -51,6 +51,8 @@ export type BackgroundSettings = {
 };
 
 export type CalendarSettings = {
+  /** "Connect your calendar" under the date, until one is connected. */
+  showConnectPrompt: boolean;
   /** The Join pill on events that have a meeting link. */
   showJoinButton: boolean;
   /** The next event under the date on the homescreen. */

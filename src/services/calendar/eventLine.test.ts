@@ -20,7 +20,15 @@ const timed = (
   start: number,
   end: number,
   extra: Partial<CalendarEvent> = {},
-): CalendarEvent => ({ id, title: id, start, end, allDay: false, ...extra });
+): CalendarEvent => ({
+  id,
+  title: id,
+  start,
+  end,
+  allDay: false,
+  url: "https://calendar.google.com",
+  ...extra,
+});
 
 const allDay = (id: string): CalendarEvent => ({
   id,
@@ -28,6 +36,7 @@ const allDay = (id: string): CalendarEvent => ({
   start: new Date(2026, 10, 16).getTime(),
   end: new Date(2026, 10, 17).getTime(),
   allDay: true,
+  url: "https://calendar.google.com",
 });
 
 describe("getEventLine", () => {

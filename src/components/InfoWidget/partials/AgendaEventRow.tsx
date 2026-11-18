@@ -4,12 +4,14 @@ import {
   formatClock,
   getMeetingProvider,
 } from "@/src/services/calendar/eventLine";
+import { getMapsUrl, isPlace } from "@/src/services/calendar/eventUrl";
 import type { CalendarEvent } from "@/src/services/calendar/types";
 import { TimeFormat } from "@/src/services/settings/types";
 import { cn } from "@/src/utils";
 
 import JoinPill from "./JoinPill";
 import PulseDot from "./PulseDot";
+import Tooltip from "../../ui/Tooltip";
 
 type Props = {
   event: CalendarEvent;
@@ -28,7 +30,7 @@ const AgendaEventRow = ({ event, now, timeFormat, showJoin, badge }: Props) => {
   return (
     <li
       className={cn(
-        "flex items-start gap-3 rounded-xl p-2",
+        "relative flex items-start gap-3 rounded-xl p-2 duration-150 hover:bg-black/5",
         // Past events stay in view, but quiet.
         isOver && "opacity-50",
       )}
@@ -40,7 +42,15 @@ const AgendaEventRow = ({ event, now, timeFormat, showJoin, badge }: Props) => {
 
       <div className="min-w-0 grow">
         <p className="truncate text-sm leading-snug font-medium">
-          {event.title}
+          {/* Covers the whole row, so the pill and the place sit above it. */}
+          <a
+            href={event.url}
+            target="_blank"
+            rel="noreferrer"
+            className="rounded-xs after:absolute after:inset-0 after:rounded-xl focus-visible:outline-hidden focus-visible:after:outline-2 focus-visible:after:outline-sky-500"
+          >
+            {event.title}
+          </a>
         </p>
 
         {(event.location || event.meetingLink) && (
@@ -55,7 +65,20 @@ const AgendaEventRow = ({ event, now, timeFormat, showJoin, badge }: Props) => {
             ) : (
               <>
                 <MapPinIcon className="size-3.5 shrink-0" aria-hidden />
-                <span className="truncate">{event.location}</span>
+                {isPlace(event.location!) ? (
+                  <Tooltip label="Open in Google Maps" side="bottom">
+                    <a
+                      href={getMapsUrl(event.location!)}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="relative z-10 truncate rounded-xs hover:underline focus-visible:outline-2 focus-visible:outline-sky-500"
+                    >
+                      {event.location}
+                    </a>
+                  </Tooltip>
+                ) : (
+                  <span className="truncate">{event.location}</span>
+                )}
               </>
             )}
           </p>

@@ -2,6 +2,7 @@ import { addDays, startOfDay } from "date-fns";
 
 import { getCalendarUrl, hasCalendarAccess } from "./calendarConnection";
 import { CalendarError } from "./calendarError";
+import { getCalendarId } from "./eventUrl";
 import { parseCalendar } from "./parseCalendar";
 import type { CalendarEvent } from "./types";
 
@@ -44,7 +45,12 @@ export const getCalendarEvents = async (
     // Today and tomorrow, so a tab left open past midnight still has events.
     const from = startOfDay(now);
 
-    return parseCalendar(await response.text(), from, addDays(from, 2));
+    return parseCalendar(
+      await response.text(),
+      from,
+      addDays(from, 2),
+      getCalendarId(url),
+    );
   } catch {
     throw new CalendarError("offline");
   }

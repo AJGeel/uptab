@@ -6,7 +6,7 @@ import {
 } from "@phosphor-icons/react";
 import { ReactNode } from "react";
 
-import { Modals, useModalStore } from "@/src/hooks/stores/useModalStore";
+import { useSettings } from "@/src/hooks/useSettings";
 import type { CalendarStatus } from "@/src/services/calendar/calendarStatus";
 import {
   canJoin,
@@ -26,16 +26,12 @@ type Props = {
   showJoin: boolean;
 };
 
-/** Fades in sliding from the right, whenever what it shows changes. */
+/** Fades in whenever what it shows changes. It doesn't slide, as the whole widget already does. */
 const FadeIn = ({ children }: { children: ReactNode }) => (
-  <div className="flex min-w-0 items-center gap-1.5 transition-[opacity,translate] duration-200 motion-reduce:transition-none starting:translate-x-2 starting:opacity-0 motion-reduce:starting:translate-x-0">
+  <div className="flex min-w-0 items-center gap-1.5 transition-opacity duration-200 motion-reduce:transition-none starting:opacity-0">
     {children}
   </div>
 );
-
-/** Covers the whole widget, so the text on top of it can't take the click. */
-const triggerStyles =
-  "pointer-events-auto flex min-w-0 items-center gap-1.5 rounded-xs text-left after:absolute after:inset-0 after:rounded-2xl focus-visible:outline-hidden focus-visible:after:outline-2 focus-visible:after:outline-offset-2 focus-visible:after:outline-sky-500";
 
 const Muted = ({ children }: { children: ReactNode }) => (
   <span className="shrink-0 opacity-70">{children}</span>
@@ -43,23 +39,29 @@ const Muted = ({ children }: { children: ReactNode }) => (
 
 /** The second line of the date widget: the calendar's state, or what's next. */
 const CalendarLine = ({ status, line, now, timeFormat, showJoin }: Props) => {
-  const openModal = useModalStore((state) => state.openModal);
-  const connect = () => openModal(Modals.calendarConnect);
+  const { setShowCalendarPrompt } = useSettings();
 
   // The line is always this tall, so no state shifts what's around it.
   const renderContents = () => {
     if (status === "notConnected") {
       return (
         <FadeIn key={status}>
-          <button className={triggerStyles} onClick={connect}>
-            <CalendarPlusIcon
-              weight="fill"
-              className="size-3.5 shrink-0"
-              aria-hidden
-            />
-            <span className="truncate font-medium group-hover:underline">
-              Connect your calendar
-            </span>
+          <CalendarPlusIcon
+            weight="fill"
+            className="size-3.5 shrink-0"
+            aria-hidden
+          />
+          <span className="truncate font-medium group-hover:underline">
+            Connect your calendar
+          </span>
+          <span aria-hidden className="shrink-0 opacity-70">
+            &middot;
+          </span>
+          <button
+            className="pointer-events-auto relative z-10 shrink-0 rounded-xs whitespace-nowrap opacity-70 duration-150 hover:underline hover:opacity-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-500"
+            onClick={() => void setShowCalendarPrompt(false)}
+          >
+            Don&apos;t show this
           </button>
         </FadeIn>
       );

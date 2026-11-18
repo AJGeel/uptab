@@ -38,6 +38,7 @@ describe("parseCalendar", () => {
         allDay: false,
         location: "Room 4",
         meetingLink: undefined,
+        url: "https://calendar.google.com/calendar/r/day/2026/11/16",
       },
     ]);
   });
@@ -190,5 +191,39 @@ describe("parseCalendar", () => {
       "Sooner",
       "Later",
     ]);
+  });
+
+  it("links each event to its page in Google Calendar", () => {
+    const ics = feed(
+      event(
+        "UID:abc123@google.com",
+        "SUMMARY:Standup",
+        "DTSTART:20261116T090000Z",
+        "DTEND:20261116T091500Z",
+      ),
+    );
+
+    const [result] = parseCalendar(ics, day, week, "me@example.com");
+
+    expect(result.url).toBe(
+      `https://calendar.google.com/calendar/event?eid=${encodeURIComponent(btoa("abc123 me@example.com").replace(/=+$/, ""))}`,
+    );
+  });
+
+  it("links an occurrence of a repeating event by when it was scheduled", () => {
+    const ics = feed(
+      event(
+        "UID:rep@google.com",
+        "SUMMARY:Daily",
+        "DTSTART:20261109T100000Z",
+        "DTEND:20261109T110000Z",
+        "RRULE:FREQ=DAILY;COUNT=10",
+      ),
+    );
+
+    const [first] = parseCalendar(ics, day, week, "me@example.com");
+    const eid = decodeURIComponent(first.url.split("eid=")[1]);
+
+    expect(atob(eid)).toBe("rep_20261116T100000Z me@example.com");
   });
 });

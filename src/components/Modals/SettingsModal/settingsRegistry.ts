@@ -28,7 +28,14 @@ export const sections: Section[] = [
     id: "sidebar",
     label: "Sidebar",
     icon: SidebarSimpleIcon,
-    reset: (settings) => ({ ...settings, sidebar: defaultSettings.sidebar }),
+    reset: (settings) => ({
+      ...settings,
+      // The weather & date widget is switched in its own section.
+      sidebar: {
+        ...defaultSettings.sidebar,
+        showInfoWidget: settings.sidebar.showInfoWidget,
+      },
+    }),
   },
   {
     id: "homescreen",
@@ -36,7 +43,10 @@ export const sections: Section[] = [
     icon: HouseIcon,
     reset: (settings) => ({
       ...settings,
-      homescreen: defaultSettings.homescreen,
+      homescreen: {
+        ...defaultSettings.homescreen,
+        showInfoWidget: settings.homescreen.showInfoWidget,
+      },
     }),
   },
   {
@@ -57,6 +67,14 @@ export const sections: Section[] = [
       ...settings,
       units: defaultSettings.units,
       forecast: defaultSettings.forecast,
+      sidebar: {
+        ...settings.sidebar,
+        showInfoWidget: defaultSettings.sidebar.showInfoWidget,
+      },
+      homescreen: {
+        ...settings.homescreen,
+        showInfoWidget: defaultSettings.homescreen.showInfoWidget,
+      },
       dateTime: {
         ...settings.dateTime,
         timeFormat: defaultSettings.dateTime.timeFormat,

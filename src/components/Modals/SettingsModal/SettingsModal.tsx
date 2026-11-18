@@ -64,7 +64,10 @@ const SettingsModal = () => {
 
   const { isConnected } = useCalendarConnection();
   const availableEntries = settingEntries.filter(
-    ({ needsCalendar }) => !needsCalendar || isConnected,
+    ({ visibleWhen }) =>
+      !visibleWhen ||
+      (isConnected !== undefined &&
+        (visibleWhen === "connected") === isConnected),
   );
 
   const [query, setQuery] = useState("");

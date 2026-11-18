@@ -39,6 +39,7 @@ export const defaultSettings: Settings = {
     showFeelsLike: true,
   },
   calendar: {
+    showConnectPrompt: true,
     showJoinButton: true,
     showOnHomescreen: true,
     showInSidebar: true,

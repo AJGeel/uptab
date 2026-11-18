@@ -39,6 +39,7 @@ const timed = (
   start: now + startMinutes * MINUTE,
   end: now + (startMinutes + minutes) * MINUTE,
   allDay: false,
+  url: "https://calendar.google.com",
   ...extra,
 });
 
@@ -48,6 +49,7 @@ const birthday = (now: number): CalendarEvent => ({
   start: startOfDay(now).getTime(),
   end: addDays(startOfDay(now), 1).getTime(),
   allDay: true,
+  url: "https://calendar.google.com",
 });
 
 export const getDebugView = (

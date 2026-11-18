@@ -8,4 +8,6 @@ export type CalendarEvent = {
   allDay: boolean;
   location?: string;
   meetingLink?: string;
+  /** Where the event is in Google Calendar. */
+  url: string;
 };

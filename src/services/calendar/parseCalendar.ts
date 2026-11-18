@@ -1,5 +1,6 @@
 import ICAL from "ical.js";
 
+import { getEventUrl } from "./eventUrl";
 import type { CalendarEvent } from "./types";
 
 /** Stops a daily event from years ago from looping forever. */
@@ -39,6 +40,8 @@ const toCalendarEvent = (
   event: ICAL.Event,
   start: ICAL.Time,
   end: ICAL.Time,
+  instance: ICAL.Time | null | undefined,
+  calendarId: string | undefined,
 ): CalendarEvent => {
   const startMs = toMillis(start);
 
@@ -50,6 +53,13 @@ const toCalendarEvent = (
     allDay: start.isDate,
     location: event.location || undefined,
     meetingLink: findMeetingLink(event),
+    url: getEventUrl({
+      uid: event.uid,
+      start: startMs,
+      isAllDay: start.isDate,
+      instance: instance ? instance.toJSDate() : undefined,
+      calendarId,
+    }),
   };
 };
 
@@ -61,6 +71,8 @@ export const parseCalendar = (
   ics: string,
   from: Date,
   to: Date,
+  /** Needed to link each event to its page in Google Calendar. */
+  calendarId?: string,
 ): CalendarEvent[] => {
   const root = new ICAL.Component(ICAL.parse(ics));
 
@@ -100,12 +112,17 @@ export const parseCalendar = (
   const toMs = to.getTime();
   const result: CalendarEvent[] = [];
 
-  const add = (event: ICAL.Event, start: ICAL.Time, end: ICAL.Time) => {
+  const add = (
+    event: ICAL.Event,
+    start: ICAL.Time,
+    end: ICAL.Time,
+    instance?: ICAL.Time | null,
+  ) => {
     if (isCancelled(event)) {
       return;
     }
 
-    const item = toCalendarEvent(event, start, end);
+    const item = toCalendarEvent(event, start, end, instance, calendarId);
 
     if (item.end > fromMs && item.start < toMs) {
       result.push(item);
@@ -113,7 +130,8 @@ export const parseCalendar = (
   };
 
   for (const event of singles) {
-    add(event, event.startDate, event.endDate);
+    // A moved occurrence whose series isn't in the feed still knows which one it was.
+    add(event, event.startDate, event.endDate, event.recurrenceId);
   }
 
   for (const master of masters.values()) {
@@ -126,9 +144,10 @@ export const parseCalendar = (
         break;
       }
 
-      const { item, startDate, endDate } = master.getOccurrenceDetails(next);
+      const { item, startDate, endDate, recurrenceId } =
+        master.getOccurrenceDetails(next);
 
-      add(item, startDate, endDate);
+      add(item, startDate, endDate, recurrenceId);
     }
   }
 

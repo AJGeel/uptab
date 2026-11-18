@@ -26,6 +26,7 @@ import { delay } from "@/src/utils/delay";
 import AgendaEventRow from "./AgendaEventRow";
 import Button, { buttonVariants } from "../../ui/Button";
 import Spinner from "../../ui/Spinner";
+import Tooltip from "../../ui/Tooltip";
 
 type Props = {
   status: CalendarStatus;
@@ -173,12 +174,16 @@ const CalendarAgenda = ({
               All day
             </p>
             <ul className="flex min-w-0 flex-wrap gap-1.5">
-              {allDay.map(({ id, title }) => (
-                <li
-                  key={id}
-                  className="max-w-full truncate rounded-lg bg-sky-500/15 px-2 py-0.5 text-sm font-medium"
-                >
-                  {title}
+              {allDay.map(({ id, title, url }) => (
+                <li key={id} className="max-w-full">
+                  <a
+                    href={url}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="block truncate rounded-lg bg-sky-500/15 px-2 py-0.5 text-sm font-medium duration-150 hover:bg-sky-500/25 focus-visible:outline-2 focus-visible:outline-sky-500"
+                  >
+                    {title}
+                  </a>
                 </li>
               ))}
             </ul>
@@ -226,15 +231,17 @@ const CalendarAgenda = ({
           </span>
         </h2>
 
-        <a
-          href="https://calendar.google.com"
-          target="_blank"
-          rel="noreferrer"
-          aria-label="Open Google Calendar"
-          className="rounded-lg p-1.5 text-gray-700 duration-150 hover:bg-black/5 focus-visible:outline-2 focus-visible:outline-sky-500 active:scale-90"
-        >
-          <ArrowSquareOutIcon className="size-5" />
-        </a>
+        <Tooltip label="Open Google Calendar" side="bottom">
+          <a
+            href="https://calendar.google.com"
+            target="_blank"
+            rel="noreferrer"
+            aria-label="Open Google Calendar"
+            className="rounded-lg p-1.5 text-gray-700 duration-150 hover:bg-black/5 focus-visible:outline-2 focus-visible:outline-sky-500 active:scale-90"
+          >
+            <ArrowSquareOutIcon className="size-5" />
+          </a>
+        </Tooltip>
       </header>
 
       <div className="min-h-0 grow overflow-y-auto px-2 pb-2">

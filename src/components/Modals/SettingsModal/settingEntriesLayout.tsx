@@ -6,7 +6,6 @@ import {
   LinkIcon,
   SidebarSimpleIcon,
   SlidersHorizontalIcon,
-  SunHorizonIcon,
   ShuffleIcon,
 } from "@phosphor-icons/react";
 
@@ -26,16 +25,6 @@ export const layoutEntries: SettingEntry[] = [
     keywords: ["show", "hide", "toggle", "panel", "hotkey", "shortcut"],
     hotkey: hotkeys.backslash,
     icon: SidebarSimpleIcon,
-  },
-  {
-    kind: "switch",
-    id: "sidebar.showInfoWidget",
-    section: "sidebar",
-    ...field("sidebar", "showInfoWidget"),
-    title: "Weather & date",
-    description: "A peek outside, right in your sidebar.",
-    keywords: ["forecast", "calendar", "widget"],
-    icon: SunHorizonIcon,
   },
   {
     kind: "switch",
@@ -86,16 +75,6 @@ export const layoutEntries: SettingEntry[] = [
     description: "Your browser's bookmarks, searchable from the sidebar.",
     keywords: ["favourites", "favorites", "saved"],
     icon: BookmarkSimpleIcon,
-  },
-  {
-    kind: "switch",
-    id: "homescreen.showInfoWidget",
-    section: "homescreen",
-    ...field("homescreen", "showInfoWidget"),
-    title: "Weather & date",
-    description: "Weather and the date, floating over your photo.",
-    keywords: ["forecast", "calendar", "widget"],
-    icon: SunHorizonIcon,
   },
   {
     kind: "switch",

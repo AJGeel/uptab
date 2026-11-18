@@ -3,9 +3,13 @@ import { useState } from "react";
 
 import { useCalendarEvents } from "@/src/hooks/queries/useCalendarEvents";
 import { useCalendarDebugStore } from "@/src/hooks/stores/useCalendarDebugStore";
+import { Modals, useModalStore } from "@/src/hooks/stores/useModalStore";
 import { useNow } from "@/src/hooks/useNow";
 import { useSettings } from "@/src/hooks/useSettings";
-import { getCalendarStatus } from "@/src/services/calendar/calendarStatus";
+import {
+  CalendarStatus,
+  getCalendarStatus,
+} from "@/src/services/calendar/calendarStatus";
 import { getDebugView } from "@/src/services/calendar/debugView";
 import { getEventLine } from "@/src/services/calendar/eventLine";
 import { cn, formatToday } from "@/src/utils";
@@ -13,10 +17,26 @@ import { cn, formatToday } from "@/src/utils";
 import CalendarAgenda from "./CalendarAgenda";
 import CalendarLine from "./CalendarLine";
 import { widgetHover, widgetPress } from "./widgetHover";
+import Tooltip from "../../ui/Tooltip";
 
 type Props = {
   /** The sidebar has its own setting for showing events. */
   isSidebar?: boolean;
+};
+
+const getTriggerLabel = (status: CalendarStatus) => {
+  switch (status) {
+    case "reconnect":
+      return "Your calendar needs reconnecting";
+    case "loading":
+      return "Loading your events…";
+    case "unavailable":
+      return "Couldn't load your events";
+    case "stale":
+      return "See today's events (not updated recently)";
+    default:
+      return "See today's events";
+  }
 };
 
 const CalendarWidget = ({ isSidebar }: Props) => {
@@ -25,6 +45,7 @@ const CalendarWidget = ({ isSidebar }: Props) => {
   const { isConnected, data, error, dataUpdatedAt, refetch } =
     useCalendarEvents();
   const [isOpen, setIsOpen] = useState(false);
+  const openModal = useModalStore((state) => state.openModal);
 
   const debugState = useCalendarDebugStore((state) => state.state);
   const real = {
@@ -51,7 +72,9 @@ const CalendarWidget = ({ isSidebar }: Props) => {
   const isShownHere = isSidebar
     ? settings?.calendar.showInSidebar
     : settings?.calendar.showOnHomescreen;
-  const showLine = isPrompt || isShownHere !== false;
+  const showLine = isPrompt
+    ? settings?.calendar.showConnectPrompt !== false
+    : isShownHere !== false;
 
   return (
     <div
@@ -61,11 +84,30 @@ const CalendarWidget = ({ isSidebar }: Props) => {
         widgetPress,
       )}
     >
+      {/* The whole date connects, also when the prompt itself is hidden. */}
+      {isPrompt && (
+        <Tooltip label="Show your Google Calendar events here" side="bottom">
+          <button
+            className="absolute inset-0 rounded-2xl focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-500"
+            onClick={() => openModal(Modals.calendarConnect)}
+          >
+            <span className="sr-only">Connect your calendar</span>
+          </button>
+        </Tooltip>
+      )}
+
       {canOpenAgenda && (
         <Popover.Root open={isOpen} onOpenChange={setIsOpen}>
-          <Popover.Trigger className="absolute inset-0 rounded-2xl focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-500">
-            <span className="sr-only">See today&apos;s events</span>
-          </Popover.Trigger>
+          {/* Says what the widget is for right now, which matters most when tabbing to it. */}
+          <Tooltip
+            label={getTriggerLabel(status)}
+            side="bottom"
+            disabled={isOpen}
+          >
+            <Popover.Trigger className="absolute inset-0 rounded-2xl focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-500">
+              <span className="sr-only">{getTriggerLabel(status)}</span>
+            </Popover.Trigger>
+          </Tooltip>
 
           <Popover.Portal>
             {/* A faint dimming, to draw the eye to the agenda. */}
