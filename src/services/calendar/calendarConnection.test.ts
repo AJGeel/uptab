@@ -3,6 +3,7 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 import { connectCalendar, disconnectCalendar } from "./calendarConnection";
 
 const mocks = vi.hoisted(() => ({
+  get: vi.fn(),
   request: vi.fn(),
   remove: vi.fn(),
   set: vi.fn(),
@@ -11,7 +12,9 @@ const mocks = vi.hoisted(() => ({
 
 vi.mock("webextension-polyfill", () => ({
   permissions: { request: mocks.request, remove: mocks.remove },
-  storage: { local: { set: mocks.set, remove: mocks.removeStored } },
+  storage: {
+    local: { get: mocks.get, set: mocks.set, remove: mocks.removeStored },
+  },
 }));
 
 const ORIGIN = { origins: ["https://calendar.google.com/*"] };
@@ -50,10 +53,39 @@ describe("calendar connection", () => {
     expect(mocks.set).not.toHaveBeenCalled();
   });
 
+  it("asks only for the site the address is on", () => {
+    mocks.request.mockResolvedValue(true);
+
+    void connectCalendar(
+      "https://outlook.live.com/owa/calendar/a/b/calendar.ics",
+    );
+
+    expect(mocks.request).toHaveBeenCalledWith({
+      origins: ["https://outlook.live.com/*"],
+    });
+  });
+
   it("forgets the address and gives the access back", async () => {
+    mocks.get.mockResolvedValue({
+      calendarUrl: "https://calendar.google.com/x/basic.ics",
+    });
+
     await disconnectCalendar();
 
     expect(mocks.removeStored).toHaveBeenCalledWith("calendarUrl");
     expect(mocks.remove).toHaveBeenCalledWith(ORIGIN);
+  });
+
+  it("gives back only the access of the calendar it was connected to", async () => {
+    mocks.get.mockResolvedValue({
+      calendarUrl:
+        "https://outlook.office365.com/owa/calendar/a/b/calendar.ics",
+    });
+
+    await disconnectCalendar();
+
+    expect(mocks.remove).toHaveBeenCalledWith({
+      origins: ["https://outlook.office365.com/*"],
+    });
   });
 });

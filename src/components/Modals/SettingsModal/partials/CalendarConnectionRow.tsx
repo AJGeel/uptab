@@ -16,7 +16,7 @@ type Props = {
 /** Connects or disconnects the calendar, which asks first before forgetting it. */
 const CalendarConnectionRow = ({ entry, query }: Props) => {
   const openModal = useModalStore((state) => state.openModal);
-  const { isConnected, disconnect } = useCalendarConnection();
+  const { isConnected, connection, disconnect } = useCalendarConnection();
   const [isConfirming, setIsConfirming] = useState(false);
 
   return (
@@ -24,7 +24,7 @@ const CalendarConnectionRow = ({ entry, query }: Props) => {
       <SettingRow
         settingId={entry.id}
         icon={entry.icon}
-        title={isConnected ? "Google Calendar" : entry.title}
+        title={connection?.label ?? entry.title}
         description={isConnected ? "Connected." : entry.description}
         query={query}
       >
@@ -56,7 +56,7 @@ const CalendarConnectionRow = ({ entry, query }: Props) => {
         isVisible={isConfirming}
         onClose={() => setIsConfirming(false)}
         title="Disconnect your calendar?"
-        subtitle="UpTab forgets the address and saved events, and gives up access to calendar.google.com."
+        subtitle={`UpTab forgets the address and saved events, and gives up access to ${connection?.host ?? "your calendar"}.`}
         footer={
           <div className="flex items-center justify-end gap-2">
             <Button

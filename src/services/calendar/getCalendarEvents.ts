@@ -4,6 +4,7 @@ import { getCalendarUrl, hasCalendarAccess } from "./calendarConnection";
 import { CalendarError } from "./calendarError";
 import { getCalendarId } from "./eventUrl";
 import { parseCalendar } from "./parseCalendar";
+import { getConnection } from "./providers";
 import type { CalendarEvent } from "./types";
 
 /** Google answers with these once the secret address has been reset. */
@@ -19,8 +20,13 @@ export const getCalendarEvents = async (
     return [];
   }
 
-  // The browser can't tell "no access" from "no connection" once fetch fails.
-  if (!(await hasCalendarAccess())) {
+  const connection = getConnection(url);
+
+  /*
+   * An address from a site that isn't supported can't be read: start over.
+   * The browser can't tell "no access" from "no connection" once fetch fails.
+   */
+  if (!connection || !(await hasCalendarAccess(url))) {
     throw new CalendarError("reconnect");
   }
 
@@ -49,7 +55,10 @@ export const getCalendarEvents = async (
       await response.text(),
       from,
       addDays(from, 2),
-      getCalendarId(url),
+      // Only Google's events can be linked one by one, and have an owner to check invites for.
+      connection.provider === "google"
+        ? { calendarId: getCalendarId(url) }
+        : { linkTo: connection.openUrl },
     );
   } catch {
     throw new CalendarError("offline");

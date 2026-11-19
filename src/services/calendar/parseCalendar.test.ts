@@ -203,7 +203,9 @@ describe("parseCalendar", () => {
       ),
     );
 
-    const [result] = parseCalendar(ics, day, week, "me@example.com");
+    const [result] = parseCalendar(ics, day, week, {
+      calendarId: "me@example.com",
+    });
 
     expect(result.url).toBe(
       `https://calendar.google.com/calendar/event?eid=${encodeURIComponent(btoa("abc123 me@example.com").replace(/=+$/, ""))}`,
@@ -221,7 +223,9 @@ describe("parseCalendar", () => {
       ),
     );
 
-    const [first] = parseCalendar(ics, day, week, "me@example.com");
+    const [first] = parseCalendar(ics, day, week, {
+      calendarId: "me@example.com",
+    });
     const eid = decodeURIComponent(first.url.split("eid=")[1]);
 
     expect(atob(eid)).toBe("rep_20261116T100000Z me@example.com");
@@ -244,7 +248,9 @@ describe("parseCalendar", () => {
       ),
     );
 
-    const [result] = parseCalendar(ics, day, week, "me@example.com");
+    const [result] = parseCalendar(ics, day, week, {
+      calendarId: "me@example.com",
+    });
 
     expect(result.response).toBe(expected);
   });
@@ -266,7 +272,9 @@ describe("parseCalendar", () => {
       ),
     );
 
-    const results = parseCalendar(ics, day, week, "me@example.com");
+    const results = parseCalendar(ics, day, week, {
+      calendarId: "me@example.com",
+    });
 
     expect(results.map((e) => e.response)).toEqual([undefined, undefined]);
   });

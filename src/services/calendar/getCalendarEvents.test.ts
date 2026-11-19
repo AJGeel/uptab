@@ -59,6 +59,32 @@ describe("getCalendarEvents", () => {
     expect(fetchMock).toHaveBeenCalledWith(SECRET, { cache: "no-store" });
   });
 
+  it("reads an Outlook calendar, linking every event to Outlook", async () => {
+    const outlook =
+      "https://outlook.live.com/owa/calendar/aaa/bbb/calendar.ics";
+
+    mocks.get.mockResolvedValue({ calendarUrl: outlook });
+    fetchMock.mockResolvedValue(new Response(ICS));
+
+    const events = await getCalendarEvents(now);
+
+    expect(events.map((e) => e.url)).toEqual([
+      "https://outlook.live.com/calendar/",
+    ]);
+    expect(mocks.contains).toHaveBeenCalledWith({
+      origins: ["https://outlook.live.com/*"],
+    });
+  });
+
+  it("asks to reconnect for an address from a site that isn't supported", async () => {
+    mocks.get.mockResolvedValue({ calendarUrl: "https://example.com/a.ics" });
+
+    await expect(getCalendarEvents(now)).rejects.toMatchObject({
+      kind: "reconnect",
+    });
+    expect(fetchMock).not.toHaveBeenCalled();
+  });
+
   it("asks to reconnect when the access was taken back, without fetching", async () => {
     mocks.contains.mockResolvedValue(false);
 

@@ -14,6 +14,7 @@ const findMeetingLink = (event: ICAL.Event) => {
   const { component } = event;
   const candidates = [
     component.getFirstPropertyValue("x-google-conference"),
+    component.getFirstPropertyValue("x-microsoft-skypeteamsmeetingurl"),
     event.location,
     event.description,
   ];
@@ -60,12 +61,19 @@ const findResponse = (event: ICAL.Event, calendarId: string | undefined) => {
   return RESPONSES[String(own?.getParameter("partstat")).toUpperCase()];
 };
 
+type Links = {
+  /** Google's calendar id, to link each event to its own page and find your reply. */
+  calendarId?: string;
+  /** A page to send every event to, for a calendar whose events can't be linked one by one. */
+  linkTo?: string;
+};
+
 const toCalendarEvent = (
   event: ICAL.Event,
   start: ICAL.Time,
   end: ICAL.Time,
   instance: ICAL.Time | null | undefined,
-  calendarId: string | undefined,
+  { calendarId, linkTo }: Links,
 ): CalendarEvent => {
   const startMs = toMillis(start);
 
@@ -77,13 +85,15 @@ const toCalendarEvent = (
     allDay: start.isDate,
     location: event.location || undefined,
     meetingLink: findMeetingLink(event),
-    url: getEventUrl({
-      uid: event.uid,
-      start: startMs,
-      isAllDay: start.isDate,
-      instance: instance ? instance.toJSDate() : undefined,
-      calendarId,
-    }),
+    url:
+      linkTo ??
+      getEventUrl({
+        uid: event.uid,
+        start: startMs,
+        isAllDay: start.isDate,
+        instance: instance ? instance.toJSDate() : undefined,
+        calendarId,
+      }),
     response: findResponse(event, calendarId),
   };
 };
@@ -96,8 +106,7 @@ export const parseCalendar = (
   ics: string,
   from: Date,
   to: Date,
-  /** Needed to link each event to its page in Google Calendar. */
-  calendarId?: string,
+  links: Links = {},
 ): CalendarEvent[] => {
   const root = new ICAL.Component(ICAL.parse(trimFeed(ics, from, to)));
 
@@ -147,7 +156,7 @@ export const parseCalendar = (
       return;
     }
 
-    const item = toCalendarEvent(event, start, end, instance, calendarId);
+    const item = toCalendarEvent(event, start, end, instance, links);
 
     if (item.end > fromMs && item.start < toMs) {
       result.push(item);

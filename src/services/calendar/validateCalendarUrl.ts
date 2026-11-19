@@ -1,23 +1,20 @@
-import { CALENDAR_HOST } from "./constants";
+import { CalendarConnection, getConnection } from "./providers";
 
-type Result = { ok: true; url: string } | { ok: false };
+type Result =
+  { ok: true; url: string; connection: CalendarConnection } | { ok: false };
 
 /**
- * Accepts only a Google Calendar address. `webcal://` is quietly turned into
- * `https://`, since that is what Google's "Add calendar" links use.
+ * Accepts only an address from a supported calendar, and says which one.
+ * `webcal://` is quietly turned into `https://`, as that is what "Add
+ * calendar" links use.
  */
 export const validateCalendarUrl = (input: string): Result => {
   const trimmed = input.trim().replace(/^webcal:\/\//i, "https://");
+  const connection = getConnection(trimmed);
 
-  try {
-    const url = new URL(trimmed);
-
-    if (url.protocol !== "https:" || url.hostname !== CALENDAR_HOST) {
-      return { ok: false };
-    }
-
-    return { ok: true, url: url.href };
-  } catch {
+  if (!connection) {
     return { ok: false };
   }
+
+  return { ok: true, url: new URL(trimmed).href, connection };
 };

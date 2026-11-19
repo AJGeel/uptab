@@ -19,6 +19,7 @@ import {
   formatUpdatedAgo,
   formatUpdatedAt,
 } from "@/src/services/calendar/formatUpdated";
+import type { CalendarConnection } from "@/src/services/calendar/providers";
 import type { CalendarEvent } from "@/src/services/calendar/types";
 import { TimeFormat } from "@/src/services/settings/types";
 import { delay } from "@/src/utils/delay";
@@ -31,6 +32,8 @@ import Tooltip from "../../ui/Tooltip";
 
 type Props = {
   status: CalendarStatus;
+  /** Which calendar it is, for its name and where to open it. */
+  connection: CalendarConnection | undefined;
   events: CalendarEvent[];
   line: EventLine;
   now: number;
@@ -44,7 +47,10 @@ type Props = {
   onOpenSettings: () => void;
 };
 
-const ReconnectPanel = ({ onClose }: Pick<Props, "onClose">) => {
+const ReconnectPanel = ({
+  connection,
+  onClose,
+}: Pick<Props, "connection" | "onClose">) => {
   const openModal = useModalStore((state) => state.openModal);
   const { disconnect } = useCalendarConnection();
 
@@ -59,9 +65,10 @@ const ReconnectPanel = ({ onClose }: Pick<Props, "onClose">) => {
         <div className="space-y-1.5">
           <h3 className="font-semibold">Your calendar was disconnected</h3>
           <p className="text-sm text-gray-800">
-            Google may have reset your secret address, or your browser took back
-            UpTab&apos;s access to calendar.google.com. Paste your address again
-            to reconnect, or disconnect to forget it.
+            {connection?.label ?? "Your calendar"} may have reset your secret
+            address, or your browser took back UpTab&apos;s access to{" "}
+            {connection?.host ?? "it"}. Paste your address again to reconnect,
+            or disconnect to forget it.
           </p>
         </div>
       </div>
@@ -90,11 +97,13 @@ const ReconnectPanel = ({ onClose }: Pick<Props, "onClose">) => {
 };
 
 const OfflineBanner = ({
+  label,
   hasEvents,
   updatedAt,
   timeFormat,
   onRefresh,
 }: Pick<Props, "updatedAt" | "timeFormat" | "onRefresh"> & {
+  label: string;
   hasEvents: boolean;
 }) => {
   const [isRetrying, setIsRetrying] = useState(false);
@@ -113,7 +122,7 @@ const OfflineBanner = ({
     >
       <CloudSlashIcon className="size-4 shrink-0" aria-hidden />
       <p className="grow">
-        Can&apos;t reach Google Calendar right now.
+        Can&apos;t reach {label} right now.
         {hasEvents &&
           ` These are your events from ${formatUpdatedAt(updatedAt, timeFormat)}.`}
       </p>
@@ -130,6 +139,7 @@ const OfflineBanner = ({
 /** Today's events, as a popover under the date. */
 const CalendarAgenda = ({
   status,
+  connection,
   events,
   line,
   now,
@@ -141,12 +151,13 @@ const CalendarAgenda = ({
   onOpenSettings,
 }: Props) => {
   const { allDay, timed } = getTodaysEvents(events, now);
+  const openLabel = connection?.label ?? "your calendar";
   const isOffline = status === "stale" || status === "unavailable";
   const isReconnect = status === "reconnect";
 
   const renderBody = () => {
     if (isReconnect) {
-      return <ReconnectPanel onClose={onClose} />;
+      return <ReconnectPanel connection={connection} onClose={onClose} />;
     }
 
     if (status === "loading") {
@@ -161,6 +172,7 @@ const CalendarAgenda = ({
       <>
         {isOffline && (
           <OfflineBanner
+            label={connection?.label ?? "your calendar"}
             hasEvents={status === "stale"}
             updatedAt={updatedAt}
             timeFormat={timeFormat}
@@ -235,12 +247,12 @@ const CalendarAgenda = ({
           {!isReconnect && status !== "loading" && (
             <RefreshButton onRefresh={onRefresh} />
           )}
-          <Tooltip label="Open Google Calendar" side="bottom">
+          <Tooltip label={`Open ${openLabel}`} side="bottom">
             <a
-              href="https://calendar.google.com"
+              href={connection?.openUrl}
               target="_blank"
               rel="noreferrer"
-              aria-label="Open Google Calendar"
+              aria-label={`Open ${openLabel}`}
               className="rounded-lg p-1.5 text-gray-700 duration-150 hover:bg-black/5 focus-visible:outline-2 focus-visible:outline-sky-500 active:scale-90"
             >
               <ArrowSquareOutIcon className="size-5" />

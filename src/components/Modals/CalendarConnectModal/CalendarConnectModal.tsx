@@ -8,32 +8,39 @@ import {
   ShieldCheckIcon,
   WarningIcon,
 } from "@phosphor-icons/react";
-import { FormEvent, PropsWithChildren, useState } from "react";
+import { FormEvent, useState } from "react";
+import { runtime, tabs } from "webextension-polyfill";
 
 import { Modals, useModalStore } from "@/src/hooks/stores/useModalStore";
 import { useCalendarConnection } from "@/src/hooks/useCalendarConnection";
+import {
+  CALENDAR_PROVIDERS,
+  CalendarProviderId,
+  getProvider,
+} from "@/src/services/calendar/providers";
 import { validateCalendarUrl } from "@/src/services/calendar/validateCalendarUrl";
+import { buildFeedbackUrl } from "@/src/services/feedback/feedbackUrl";
 
+import ProviderSteps from "./ProviderSteps";
 import Button, { inlineLinkStyles } from "../../ui/Button";
+import CalendarProviderIcon from "../../ui/CalendarProviderIcon";
 import Modal from "../../ui/Modal";
+import Select from "../../ui/Select";
 
 type Status = "idle" | "waiting" | "declined";
 
 const FORM_ID = "calendar-connect-form";
 const INPUT_ID = "calendar-connect-url";
-const SETTINGS_URL = "https://calendar.google.com/calendar/r/settings";
 
-const Step = ({ number, children }: PropsWithChildren<{ number: number }>) => (
-  <li className="flex items-start gap-2.5">
-    <span
-      aria-hidden
-      className="flex size-5 shrink-0 items-center justify-center rounded-full bg-sky-500 text-xs font-semibold text-on-accent"
-    >
-      {number}
-    </span>
-    <span className="pt-px">{children}</span>
-  </li>
-);
+const PLACEHOLDERS: Record<CalendarProviderId, string> = {
+  google: "https://calendar.google.com/calendar/ical/…/basic.ics",
+  outlook: "https://outlook.live.com/owa/calendar/…/calendar.ics",
+};
+
+const ADDRESS_LABELS: Record<CalendarProviderId, string> = {
+  google: "Secret address in iCal format",
+  outlook: "Published ICS link",
+};
 
 const CalendarConnectModal = () => {
   const activeModal = useModalStore((state) => state.activeModal);
@@ -44,6 +51,14 @@ const CalendarConnectModal = () => {
   const [status, setStatus] = useState<Status>("idle");
   const [isInvalid, setIsInvalid] = useState(false);
   const [isHelpOpen, setIsHelpOpen] = useState(false);
+  const [providerId, setProviderId] = useState<CalendarProviderId>("google");
+  const provider = getProvider(providerId);
+  const sites = provider.hosts.map(({ host }) => host).join(" or ");
+  // Some calendars live on more than one site, and only the address's is asked for.
+  const accessNote =
+    provider.hosts.length > 1
+      ? `Your browser will ask to let UpTab read only the site your link is on: ${sites}.`
+      : `Your browser will ask to let UpTab read ${sites}. That's the only site it gets.`;
 
   const isWaiting = status === "waiting";
   const isDeclined = status === "declined";
@@ -84,7 +99,41 @@ const CalendarConnectModal = () => {
       onClose={close}
       title="Show your events"
       className="max-w-xl"
-      subtitle="See what's next on your Google Calendar, right under the date."
+      subtitle={
+        <span className="flex flex-wrap items-center gap-y-1">
+          See what&apos;s next on your
+          <Select
+            ariaLabel="Calendar"
+            value={providerId}
+            isIconFirst
+            options={CALENDAR_PROVIDERS.map(({ id, label }) => ({
+              value: id,
+              label,
+              icon: <CalendarProviderIcon provider={id} />,
+            }))}
+            triggerLabel={
+              <span className="flex items-center gap-2 whitespace-nowrap">
+                <CalendarProviderIcon provider={providerId} />
+                {provider.label}
+              </span>
+            }
+            // Only these work for now: this is how people ask for the rest.
+            action={{
+              label: "Missing yours? Let me know",
+              onClick: () =>
+                void tabs.create({
+                  url: buildFeedbackUrl(
+                    runtime.getManifest().version,
+                    navigator.userAgent,
+                  ),
+                }),
+            }}
+            onValueChange={(next) => setProviderId(next as CalendarProviderId)}
+            className="-mr-1.5 ml-1"
+          />
+          , right under the date.
+        </span>
+      }
     >
       <form
         id={FORM_ID}
@@ -94,7 +143,7 @@ const CalendarConnectModal = () => {
       >
         <div className="space-y-3.5">
           <label htmlFor={INPUT_ID} className="block font-semibold">
-            Secret address in iCal format
+            {ADDRESS_LABELS[providerId]}
           </label>
 
           <div className="flex items-stretch gap-2">
@@ -104,12 +153,19 @@ const CalendarConnectModal = () => {
                 type="url"
                 autoComplete="off"
                 spellCheck={false}
-                placeholder="https://calendar.google.com/calendar/ical/…/basic.ics"
+                placeholder={PLACEHOLDERS[providerId]}
                 aria-invalid={isInvalid}
                 aria-describedby={isInvalid ? `${INPUT_ID}-error` : undefined}
                 className="w-full rounded-xl bg-surface px-3 py-2 font-sans focus-within:outline-hidden"
                 value={value}
                 onChange={(event) => {
+                  const result = validateCalendarUrl(event.target.value);
+
+                  // A pasted address says which calendar it is.
+                  if (result.ok) {
+                    setProviderId(result.connection.provider);
+                  }
+
                   setValue(event.target.value);
                   setIsInvalid(false);
                 }}
@@ -141,8 +197,8 @@ const CalendarConnectModal = () => {
               className="flex items-start gap-2 text-sm text-red-700"
             >
               <InfoIcon weight="fill" className="mt-0.5 size-4 shrink-0" />
-              This isn&apos;t a Google Calendar address. Only Google Calendar
-              works for now.
+              This isn&apos;t a Google Calendar or Outlook address. Only those
+              two work for now.
             </p>
           )}
         </div>
@@ -177,28 +233,7 @@ const CalendarConnectModal = () => {
           </Collapsible.Trigger>
 
           <Collapsible.Panel className="-mx-2 h-(--collapsible-panel-height) overflow-hidden px-2 transition-[height] duration-300 ease-in-out data-ending-style:h-0 data-starting-style:h-0 motion-reduce:transition-none">
-            <ol className="mt-3 space-y-2 text-sm">
-              <Step number={1}>
-                Open{" "}
-                <a
-                  href={SETTINGS_URL}
-                  target="_blank"
-                  rel="noreferrer"
-                  className={inlineLinkStyles}
-                >
-                  Google Calendar settings
-                </a>{" "}
-                on a computer.
-              </Step>
-              <Step number={2}>
-                Under <strong>Settings for my calendars</strong>, pick your
-                calendar and choose <strong>Integrate calendar</strong>.
-              </Step>
-              <Step number={3}>
-                Copy the <strong>Secret address in iCal format</strong> and
-                paste it above.
-              </Step>
-            </ol>
+            <ProviderSteps provider={providerId} />
           </Collapsible.Panel>
         </Collapsible.Root>
 
@@ -216,7 +251,7 @@ const CalendarConnectModal = () => {
             <span>
               {isWaiting
                 ? "Choose Allow in the browser's prompt to finish."
-                : "Your browser will ask to let UpTab read calendar.google.com. That's the only site it gets."}
+                : accessNote}
             </span>
           </p>
         </div>

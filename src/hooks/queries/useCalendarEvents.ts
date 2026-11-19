@@ -10,7 +10,7 @@ import { getCalendarEvents } from "@/src/services/calendar/getCalendarEvents";
 export const CALENDAR_REFRESH_MS = 60 * 60 * 1000;
 
 export const useCalendarEvents = () => {
-  const { isConnected } = useCalendarConnection();
+  const { isConnected, connection } = useCalendarConnection();
 
   const query = useQuery({
     enabled: isConnected === true,
@@ -27,6 +27,7 @@ export const useCalendarEvents = () => {
 
   return {
     isConnected,
+    connection,
     data: query.data,
     error: query.error,
     dataUpdatedAt: query.dataUpdatedAt,

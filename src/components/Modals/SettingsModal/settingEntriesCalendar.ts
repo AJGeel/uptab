@@ -15,9 +15,11 @@ export const calendarEntries: SettingEntry[] = [
     section: "calendar",
     content: "calendarConnection",
     title: "Your events",
-    description: "See what's next from Google Calendar. Read-only.",
+    description: "See what's next from Google Calendar or Outlook. Read-only.",
     keywords: [
       "google",
+      "outlook",
+      "microsoft",
       "agenda",
       "events",
       "connect",

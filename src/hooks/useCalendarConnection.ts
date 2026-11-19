@@ -5,15 +5,26 @@ import {
   disconnectCalendar,
   getCalendarUrl,
 } from "@/src/services/calendar/calendarConnection";
+import {
+  CalendarConnection,
+  getConnection,
+} from "@/src/services/calendar/providers";
 
 const CONNECTION_QUERY_KEY = ["calendar", "connection"] as const;
 
-/** Whether a calendar is connected. The address itself never leaves storage. */
+/**
+ * Which calendar is connected, if any. The address itself never leaves
+ * storage: only the site it's on, and what that site is called.
+ */
 export const useCalendarConnection = () => {
   const queryClient = useQueryClient();
 
-  const { data: isConnected } = useQuery({
-    queryFn: async () => Boolean(await getCalendarUrl()),
+  const { data: connection } = useQuery({
+    queryFn: async (): Promise<CalendarConnection | null> => {
+      const url = await getCalendarUrl();
+
+      return (url && getConnection(url)) || null;
+    },
     queryKey: CONNECTION_QUERY_KEY,
     // Reads local storage only, so don't pause while the browser is offline.
     networkMode: "always",
@@ -24,7 +35,10 @@ export const useCalendarConnection = () => {
   const connect = (url: string) =>
     connectCalendar(url).then((isGranted) => {
       if (isGranted) {
-        queryClient.setQueryData(CONNECTION_QUERY_KEY, true);
+        queryClient.setQueryData(
+          CONNECTION_QUERY_KEY,
+          getConnection(url) ?? null,
+        );
       }
 
       return isGranted;
@@ -34,8 +48,14 @@ export const useCalendarConnection = () => {
     await disconnectCalendar();
     // The saved events go too, not just the address.
     queryClient.removeQueries({ queryKey: ["calendar", "events"] });
-    queryClient.setQueryData(CONNECTION_QUERY_KEY, false);
+    queryClient.setQueryData(CONNECTION_QUERY_KEY, null);
   };
 
-  return { isConnected, connect, disconnect };
+  return {
+    /** Not known until the saved address has been read. */
+    isConnected: connection === undefined ? undefined : connection !== null,
+    connection: connection ?? undefined,
+    connect,
+    disconnect,
+  };
 };

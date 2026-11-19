@@ -40,7 +40,7 @@ const getTriggerLabel = (status: CalendarStatus) => {
 const CalendarWidget = ({ isSidebar }: Props) => {
   const now = useNow();
   const { data: settings } = useSettings();
-  const { isConnected, data, error, dataUpdatedAt, refetch } =
+  const { isConnected, connection, data, error, dataUpdatedAt, refetch } =
     useCalendarEvents();
   const [isOpen, setIsOpen] = useState(false);
   const openModal = useModalStore((state) => state.openModal);
@@ -90,7 +90,7 @@ const CalendarWidget = ({ isSidebar }: Props) => {
     >
       {/* The whole date connects, also when the prompt itself is hidden. */}
       {isPrompt && (
-        <Tooltip label="Show your Google Calendar events here" side="bottom">
+        <Tooltip label="Show your calendar events here" side="bottom">
           <button
             className="absolute inset-0 rounded-2xl focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-500"
             onClick={() => openModal(Modals.calendarConnect)}
@@ -120,6 +120,7 @@ const CalendarWidget = ({ isSidebar }: Props) => {
               <Popover.Popup className="origin-(--transform-origin) rounded-2xl border bg-surface/95 text-black shadow-lg outline-hidden backdrop-blur-lg transition-[opacity,translate] duration-150 ease-out data-ending-style:-translate-y-1 data-ending-style:opacity-0 data-starting-style:-translate-y-1 data-starting-style:opacity-0">
                 <CalendarAgenda
                   status={status}
+                  connection={connection}
                   events={events}
                   line={line}
                   now={now}
