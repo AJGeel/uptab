@@ -151,7 +151,7 @@ When developing against a local website, set `VITE_CATALOGUE_URL` in `.env`. Pro
 - **Build**: `bun run build` runs Vite twice, with `BUILD_TARGET=chrome` into `dist/chromium` and `BUILD_TARGET=firefox` into `dist/firefox`. The `makeManifest` plugin writes the manifest from `src/manifest.ts` (so `public/manifest.json` is a build artifact), and `includeChangelog` copies `CHANGELOG.md` for the "What's new" window.
 - **Test**: Vitest, with tests next to the code (`*.test.ts`), mostly for services and utils.
 - **CI** runs test, lint, typecheck and build on every push and pull request, and CodeQL scans the code.
-- **Release**: see [Releasing](/docs/2-releasing.md). `ext-store` submits to both stores and refuses to upload from a dirty tree, a version a store already has, or a manifest for the wrong browser. `bun tag-release` tags the merged release and creates the GitHub release. `/release-audit` reviews a release branch before it ships.
+- **Release**: see [Releasing](/docs/3-releasing.md). `ext-store` submits to both stores and refuses to upload from a dirty tree, a version a store already has, or a manifest for the wrong browser. `bun tag-release` tags the merged release and creates the GitHub release. `/release-audit` reviews a release branch before it ships.
 
 <br/>
 

@@ -66,7 +66,7 @@ Strong success criteria let you loop independently. Weak criteria ("make it work
 
 ## Architecture
 
-`docs/architecture.md` maps the extension and the website: layers, storage, network calls, permissions and the backgrounds catalogue contract. Read it before adding storage, a permission, a network call or a catalogue field.
+`docs/2-architecture.md` maps the extension and the website: layers, storage, network calls, permissions and the backgrounds catalogue contract. Read it before adding storage, a permission, a network call or a catalogue field.
 
 ## UI components
 
