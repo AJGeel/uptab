@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>UpTab README banner</title>
+    <!--
+      Source of docs/banner.jpg, made from the store screenshots (docs/store-listing/screenshots).
+      Render it after refreshing them:
+        bunx playwright screenshot --viewport-size=1600,540 --wait-for-timeout=500 \
+          file://$PWD/dev/readme/banner.html docs/banner.jpg
+    -->
+    <style>
+      @font-face {
+        font-family: "Figtree";
+        src: url("../../src/assets/fonts/Figtree-Variable.ttf")
+          format("truetype");
+        font-weight: 100 1000;
+      }
+
+      :root {
+        --ink: #020e2c;
+        --accent: #138cd0;
+      }
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+      }
+
+      body {
+        position: relative;
+        width: 1600px;
+        height: 540px;
+        overflow: hidden;
+        font-family: "Figtree", sans-serif;
+        background:
+          radial-gradient(900px 340px at 50% 0%, #ffffff 0%, transparent 70%),
+          linear-gradient(180deg, #eef4fb 0%, #cfe3f5 100%);
+      }
+
+      h1 {
+        position: absolute;
+        top: 34px;
+        width: 100%;
+        text-align: center;
+        color: var(--ink);
+        font-size: 46px;
+        font-weight: 700;
+        line-height: 1.12;
+      }
+
+      h1 span {
+        display: block;
+        color: var(--accent);
+      }
+
+      /* One store screenshot, cut down to its browser window. */
+      .window {
+        position: absolute;
+        width: 1076px;
+        height: 606px;
+        overflow: hidden;
+        border-radius: 18px;
+        transform-origin: top left;
+        box-shadow: 0 30px 80px rgb(2 14 44 / 0.35);
+      }
+
+      .window img {
+        position: absolute;
+        top: -177px;
+        left: -102px;
+      }
+
+      .left {
+        top: 215px;
+        left: -70px;
+        transform: scale(0.56);
+      }
+
+      .right {
+        top: 215px;
+        left: 1067px;
+        transform: scale(0.56);
+      }
+
+      .center {
+        top: 150px;
+        left: 445px;
+        z-index: 1;
+        transform: scale(0.66);
+      }
+    </style>
+  </head>
+  <body>
+    <h1>A beautiful new tab <span>that stays out of your way.</span></h1>
+    <div class="window left">
+      <img src="../../docs/store-listing/screenshots/1.jpg" alt="" />
+    </div>
+    <div class="window right">
+      <img src="../../docs/store-listing/screenshots/2.jpg" alt="" />
+    </div>
+    <div class="window center">
+      <img src="../../docs/store-listing/screenshots/5.jpg" alt="" />
+    </div>
+  </body>
+</html>
