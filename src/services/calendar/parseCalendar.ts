@@ -8,7 +8,7 @@ import type { CalendarEvent } from "./types";
 const MAX_OCCURRENCES = 10_000;
 
 const MEETING_LINK =
-  /https:\/\/(?:meet\.google\.com\/[a-z0-9-]+|[a-z0-9.-]*zoom\.us\/(?:j|my)\/[^\s"<>]+|teams\.microsoft\.com\/l\/meetup-join\/[^\s"<>]+)/i;
+  /https:\/\/(?:meet\.google\.com\/[a-z0-9-]+|(?:[a-z0-9-]+\.)?zoom\.us\/(?:j|my)\/[^\s"<>]+|teams\.microsoft\.com\/l\/meetup-join\/[^\s"<>]+)/i;
 
 const findMeetingLink = (event: ICAL.Event) => {
   const { component } = event;
@@ -131,11 +131,17 @@ export const parseCalendar = (
     }
   }
 
+  const exceptionsByUid = new Map<string, ICAL.Event[]>();
+
   for (const exception of exceptions) {
     const master = masters.get(exception.uid);
 
     if (master) {
       master.relateException(exception);
+      exceptionsByUid.set(exception.uid, [
+        ...(exceptionsByUid.get(exception.uid) ?? []),
+        exception,
+      ]);
     } else {
       // Its series isn't in the feed, so it stands alone.
       singles.push(exception);
@@ -182,6 +188,21 @@ export const parseCalendar = (
         master.getOccurrenceDetails(next);
 
       add(item, startDate, endDate, recurrenceId);
+    }
+
+    /*
+     * The loop stops at the original times, so an occurrence moved into the
+     * window from later than it is never reached.
+     */
+    for (const exception of exceptionsByUid.get(master.uid) ?? []) {
+      if (toMillis(exception.recurrenceId) >= toMs) {
+        add(
+          exception,
+          exception.startDate,
+          exception.endDate,
+          exception.recurrenceId,
+        );
+      }
     }
   }
 

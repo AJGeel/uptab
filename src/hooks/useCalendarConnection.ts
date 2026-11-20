@@ -39,6 +39,10 @@ export const useCalendarConnection = () => {
           CONNECTION_QUERY_KEY,
           getConnection(url) ?? null,
         );
+        // Clears a "reconnect" error and any events from a previous address.
+        void queryClient.invalidateQueries({
+          queryKey: ["calendar", "events"],
+        });
       }
 
       return isGranted;

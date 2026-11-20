@@ -12,7 +12,7 @@ UpTab adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### ♻️ Changed
 
-- The week number under the date is gone, making room for your calendar.
+- The week number under the date is gone, making room for your calendar. The week number / start options are gone too.
 
 ## [V2.4.0] — 2026-11-15
 
