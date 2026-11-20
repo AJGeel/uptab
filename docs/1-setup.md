@@ -7,7 +7,7 @@ bun install
 cp .env.example .env  # optional for development, see below
 ```
 
-`.env` holds the GlitchTip DSN for error reporting, plus the store credentials used for [releasing](/docs/2-releasing.md). You can develop without it.
+`.env` holds the GlitchTip DSN for error reporting, plus the store credentials used for [releasing](/docs/3-releasing.md). You can develop without it.
 
 <br/>
 
@@ -44,6 +44,8 @@ bun run test
 bun run lint
 ```
 
+`bun install` also points git at `.githooks/`, so `git push` first runs the same quick checks as CI (typecheck, tests, lint) and stops on a failure. Pushing only tags or deleting branches skips them. Skip the checks once with `git push --no-verify`.
+
 <br/>
 
 ## 3. Production builds
@@ -53,7 +55,7 @@ bun run build  # builds dist/chromium and dist/firefox
 bun ship       # builds and zips both, as submitted to the stores
 ```
 
-See [Releasing](/docs/2-releasing.md) to submit a build to the stores.
+See [Releasing](/docs/3-releasing.md) to submit a build to the stores.
 
 <br/>
 

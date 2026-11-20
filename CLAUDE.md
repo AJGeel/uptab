@@ -64,6 +64,10 @@ Strong success criteria let you loop independently. Weak criteria ("make it work
 
 **These guidelines are working if:** fewer unnecessary changes in diffs, fewer rewrites due to overcomplication, and clarifying questions come before implementation rather than after mistakes.
 
+## Architecture
+
+`docs/2-architecture.md` maps the extension and the website: layers, storage, network calls, permissions and the backgrounds catalogue contract. Read it before adding storage, a permission, a network call or a catalogue field.
+
 ## UI components
 
 Base UI (`@base-ui/react`) is the component library, and Phosphor (`@phosphor-icons/react`) the icon library. Don't add Radix or Heroicons.
