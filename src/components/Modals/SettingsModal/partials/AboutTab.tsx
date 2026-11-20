@@ -15,6 +15,8 @@ import { delay } from "@/src/utils/delay";
 import Button, { buttonVariants, inlineLinkStyles } from "../../../ui/Button";
 
 const CHANGELOG_URL = "https://uptab.vercel.app/changelog";
+const PRIVACY_URL = "https://uptab.vercel.app/privacy";
+const TERMS_URL = "https://uptab.vercel.app/terms";
 const AUTHOR_URL = "https://arthur-geel.vercel.app";
 /** A check can be over in a blink, so it shows as busy for long enough to notice. */
 const MIN_CHECK_MS = 800;
@@ -177,6 +179,24 @@ const AboutTab = () => {
           {message}
         </p>
       )}
+
+      <p className="flex items-center gap-4 text-sm">
+        {[
+          ["Privacy", PRIVACY_URL],
+          ["Terms", TERMS_URL],
+        ].map(([label, href]) => (
+          <a
+            key={href}
+            className={`${inlineLinkStyles} inline-flex items-center gap-1`}
+            href={href}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            {label}
+            <ArrowSquareOutIcon className="size-3.5" />
+          </a>
+        ))}
+      </p>
     </div>
   );
 };

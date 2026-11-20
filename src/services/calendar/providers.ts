@@ -5,6 +5,8 @@ export type CalendarProviderId = "google" | "outlook";
 export type CalendarProvider = {
   id: CalendarProviderId;
   label: string;
+  /** What the path of a secret address looks like, to tell it from any other page of that site. */
+  path: RegExp;
   /** The sites a secret address can be on, each with the page to open that calendar. */
   hosts: { host: string; openUrl: string }[];
 };
@@ -13,6 +15,7 @@ export const CALENDAR_PROVIDERS: CalendarProvider[] = [
   {
     id: "google",
     label: "Google Calendar",
+    path: /^\/calendar\/ical\/[^/]+\/(?:private-[^/]+|public)\/basic\.ics$/,
     hosts: [
       { host: "calendar.google.com", openUrl: "https://calendar.google.com" },
     ],
@@ -20,6 +23,7 @@ export const CALENDAR_PROVIDERS: CalendarProvider[] = [
   {
     id: "outlook",
     label: "Outlook",
+    path: /^\/owa\/calendar\/[^/]+\/[^/]+\/calendar\.ics$/,
     hosts: [
       {
         host: "outlook.live.com",
@@ -78,4 +82,14 @@ export const getConnection = (
   }
 
   return undefined;
+};
+
+/** Whether an address has the shape of a secret calendar address, and not some other page of the site. */
+export const hasExpectedShape = (address: string) => {
+  const connection = getConnection(address);
+
+  return Boolean(
+    connection &&
+    getProvider(connection.provider).path.test(new URL(address).pathname),
+  );
 };

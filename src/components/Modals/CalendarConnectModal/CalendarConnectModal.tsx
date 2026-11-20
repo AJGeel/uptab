@@ -1,9 +1,9 @@
 import { Collapsible } from "@base-ui/react/collapsible";
 import {
+  ArrowSquareOutIcon,
   CaretDownIcon,
   CaretUpIcon,
   CircleNotchIcon,
-  InfoIcon,
   LockIcon,
   ShieldCheckIcon,
   WarningIcon,
@@ -21,6 +21,7 @@ import {
 import { validateCalendarUrl } from "@/src/services/calendar/validateCalendarUrl";
 import { buildFeedbackUrl } from "@/src/services/feedback/feedbackUrl";
 
+import AddressWarning from "./AddressWarning";
 import ProviderSteps from "./ProviderSteps";
 import Button, { inlineLinkStyles } from "../../ui/Button";
 import CalendarProviderIcon from "../../ui/CalendarProviderIcon";
@@ -49,7 +50,8 @@ const CalendarConnectModal = () => {
 
   const [value, setValue] = useState("");
   const [status, setStatus] = useState<Status>("idle");
-  const [isInvalid, setIsInvalid] = useState(false);
+  // Whether to say what's wrong with the address: once pasted, left or sent, not while typing.
+  const [isChecked, setIsChecked] = useState(false);
   const [isHelpOpen, setIsHelpOpen] = useState(false);
   const [providerId, setProviderId] = useState<CalendarProviderId>("google");
   const provider = getProvider(providerId);
@@ -60,13 +62,22 @@ const CalendarConnectModal = () => {
       ? `Your browser will ask to let UpTab read only the site your link is on: ${sites}.`
       : `Your browser will ask to let UpTab read ${sites}. That's the only site it gets.`;
 
+  const check = validateCalendarUrl(value);
+  const warning =
+    isChecked && value.trim() !== ""
+      ? !check.ok
+        ? "unknown"
+        : !check.hasExpectedShape
+          ? "shape"
+          : undefined
+      : undefined;
   const isWaiting = status === "waiting";
   const isDeclined = status === "declined";
 
   const close = () => {
     setValue("");
     setStatus("idle");
-    setIsInvalid(false);
+    setIsChecked(false);
     closeModal();
   };
 
@@ -74,14 +85,14 @@ const CalendarConnectModal = () => {
   const handleSubmit = (event: FormEvent) => {
     event.preventDefault();
 
-    const result = validateCalendarUrl(value);
+    const result = check;
 
     if (isWaiting) {
       return;
     }
 
     if (!result.ok) {
-      setIsInvalid(true);
+      setIsChecked(true);
 
       return;
     }
@@ -154,8 +165,8 @@ const CalendarConnectModal = () => {
                 autoComplete="off"
                 spellCheck={false}
                 placeholder={PLACEHOLDERS[providerId]}
-                aria-invalid={isInvalid}
-                aria-describedby={isInvalid ? `${INPUT_ID}-error` : undefined}
+                aria-invalid={warning === "unknown"}
+                aria-describedby={warning ? `${INPUT_ID}-warning` : undefined}
                 className="w-full rounded-xl bg-surface px-3 py-2 font-sans focus-within:outline-hidden"
                 value={value}
                 onChange={(event) => {
@@ -167,8 +178,12 @@ const CalendarConnectModal = () => {
                   }
 
                   setValue(event.target.value);
-                  setIsInvalid(false);
+                  setIsChecked(
+                    (event.nativeEvent as InputEvent).inputType ===
+                      "insertFromPaste",
+                  );
                 }}
+                onBlur={() => setIsChecked(true)}
               />
             </div>
 
@@ -186,20 +201,18 @@ const CalendarConnectModal = () => {
                 )
               }
               className="shrink-0 whitespace-nowrap disabled:opacity-50"
-              disabled={isWaiting || value.trim() === ""}
+              disabled={
+                isWaiting || value.trim() === "" || warning === "unknown"
+              }
             />
           </div>
 
-          {isInvalid && (
-            <p
-              id={`${INPUT_ID}-error`}
-              role="alert"
-              className="flex items-start gap-2 text-sm text-red-700"
-            >
-              <InfoIcon weight="fill" className="mt-0.5 size-4 shrink-0" />
-              This isn&apos;t a Google Calendar or Outlook address. Only those
-              two work for now.
-            </p>
+          {warning && (
+            <AddressWarning
+              id={`${INPUT_ID}-warning`}
+              kind={warning}
+              provider={providerId}
+            />
           )}
         </div>
 
@@ -254,6 +267,15 @@ const CalendarConnectModal = () => {
                 : accessNote}
             </span>
           </p>
+          <a
+            href="https://uptab.vercel.app/privacy"
+            target="_blank"
+            rel="noreferrer"
+            className={`${inlineLinkStyles} ml-6 inline-flex items-center gap-1`}
+          >
+            View privacy policy
+            <ArrowSquareOutIcon className="size-3.5" aria-hidden />
+          </a>
         </div>
       </form>
     </Modal>

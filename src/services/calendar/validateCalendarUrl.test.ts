@@ -10,6 +10,7 @@ describe("validateCalendarUrl", () => {
     expect(validateCalendarUrl(ADDRESS)).toEqual({
       ok: true,
       url: ADDRESS,
+      hasExpectedShape: true,
       connection: {
         provider: "google",
         label: "Google Calendar",
@@ -28,6 +29,7 @@ describe("validateCalendarUrl", () => {
     expect(validateCalendarUrl(url)).toEqual({
       ok: true,
       url,
+      hasExpectedShape: true,
       connection: { provider: "outlook", label: "Outlook", host, openUrl },
     });
   });
@@ -59,5 +61,25 @@ describe("validateCalendarUrl", () => {
     "javascript:alert(1)",
   ])("rejects %s", (input) => {
     expect(validateCalendarUrl(input)).toEqual({ ok: false });
+  });
+
+  it.each([
+    "https://calendar.google.com/calendar/ical/me%40example.com/public/basic.ics",
+    "https://outlook.office365.com/owa/calendar/aaa/bbb/calendar.ics",
+  ])("knows the shape of %s", (url) => {
+    expect(validateCalendarUrl(url)).toMatchObject({ hasExpectedShape: true });
+  });
+
+  it.each([
+    "https://calendar.google.com/calendar/u/0/r",
+    "https://calendar.google.com/calendar/ical/me%40example.com/basic.ics",
+    "https://calendar.google.com/calendar/ical/me%40example.com/private-abc/other.ics",
+    "https://outlook.live.com/calendar/0/view/month",
+    "https://outlook.live.com/owa/calendar/aaa/calendar.ics",
+  ])("accepts the site but not the shape of %s", (url) => {
+    expect(validateCalendarUrl(url)).toMatchObject({
+      ok: true,
+      hasExpectedShape: false,
+    });
   });
 });

@@ -1,7 +1,18 @@
-import { CalendarConnection, getConnection } from "./providers";
+import {
+  CalendarConnection,
+  getConnection,
+  hasExpectedShape,
+} from "./providers";
 
 type Result =
-  { ok: true; url: string; connection: CalendarConnection } | { ok: false };
+  | {
+      ok: true;
+      url: string;
+      connection: CalendarConnection;
+      /** False for a page of the site that isn't a secret calendar address. */
+      hasExpectedShape: boolean;
+    }
+  | { ok: false };
 
 /**
  * Accepts only an address from a supported calendar, and says which one.
@@ -16,5 +27,10 @@ export const validateCalendarUrl = (input: string): Result => {
     return { ok: false };
   }
 
-  return { ok: true, url: new URL(trimmed).href, connection };
+  return {
+    ok: true,
+    url: new URL(trimmed).href,
+    connection,
+    hasExpectedShape: hasExpectedShape(trimmed),
+  };
 };
