@@ -29,7 +29,8 @@ A humble extension that super-charges your new tabs, adding quick access to book
 ## Docs 📓 <a name="docs"></a>
 
 1. [Setup](/docs/1-setup.md): install, run in Firefox or Chrome, test and lint.
-2. [Releasing](/docs/2-releasing.md): the release checklist, the stores and the listing screenshots.
+2. [Architecture](/docs/architecture.md): how the extension and the website fit together, with diagrams.
+3. [Releasing](/docs/2-releasing.md): the release checklist, the stores and the listing screenshots.
 
 ### For agents 🤖
 

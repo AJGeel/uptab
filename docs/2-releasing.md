@@ -23,10 +23,11 @@ After submitting, both stores review the update. Chrome publishes it automatical
 
 1. Bump `version` in `package.json`.
 2. Add the release to `CHANGELOG.md`. Keep it short: a handful of bullets in a few words each, for what users notice. The "What's new" window shows this section as is. Mark keyboard keys as `<kbd>B</kbd>`: the window and the changelog page show them as keys, and so does GitHub.
-3. Commit, then run `bun store:submit --dry-run`.
-4. Run `bun store:submit`.
-5. Check `bun store:status` in the following days.
-6. Once the release PR is merged, check out an up-to-date `main` and run `bun tag-release`.
+3. Commit, then run `/release-audit` in Claude Code on the release branch. It reports a verdict (`ship`, `ship with fixes` or `block`) and changes nothing. Fix every blocker and major finding, or decide to accept it, before going on.
+4. Run `bun store:submit --dry-run`.
+5. Run `bun store:submit`.
+6. Check `bun store:status` in the following days.
+7. Once the release PR is merged, check out an up-to-date `main` and run `bun tag-release`.
 
 If one store fails, fix the problem and rerun for that store only, e.g. `bun store:submit chrome`. The version check stops a store from receiving the same version twice.
 
