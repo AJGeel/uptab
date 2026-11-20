@@ -1,7 +1,7 @@
 {
   "name": "uptab",
   "displayName": "UpTab",
-  "version": "2.4.0",
+  "version": "2.5.0",
   "description": "What's UpTab?",
   "author": "Arthur Geel <ageel@enrise.com>",
   "scripts": {
@@ -40,6 +40,7 @@
     "date-fns": "^4.4.0",
     "deepmerge": "^4.3.1",
     "emoji-mart": "^5.6.0",
+    "ical.js": "^2.2.1",
     "motion": "^14.5.0",
     "react": "^19.3.0",
     "react-dom": "^19.3.0",

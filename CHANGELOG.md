@@ -2,6 +2,18 @@
 
 UpTab adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [V2.5.0] — 2026-11-20
+
+### ✨ Added
+
+- Optional: connect Google Calendar or Outlook with a read-only link.
+- See your next calendar event under the date, with a one-click Join for meetings.
+- Open your full agenda from the date, and jump to the event.
+
+### ♻️ Changed
+
+- The week number under the date is gone, making room for your calendar. The week number / start options are gone too.
+
 ## [V2.4.0] — 2026-11-15
 
 ### ✨ Added

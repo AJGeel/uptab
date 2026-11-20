@@ -34,12 +34,9 @@ export type UnitSettings = {
 };
 
 export type TimeFormat = "24h" | "12h";
-export type WeekStart = "monday" | "sunday";
 
 export type DateTimeSettings = {
   timeFormat: TimeFormat;
-  showWeekNumber: boolean;
-  weekStartsOn: WeekStart;
   /** The days after today the weather forecast shows. Zero is today, and the next 24 hours. */
   forecastDays: number;
 };
@@ -51,6 +48,17 @@ export type BackgroundSettings = {
   themes: string[];
   /** How long a photo lasts: a day, six hours, an hour, or a new tab. */
   photoChange: PhotoChange;
+};
+
+export type CalendarSettings = {
+  /** "Connect your calendar" under the date, until one is connected. */
+  showConnectPrompt: boolean;
+  /** The Join pill on events that have a meeting link. */
+  showJoinButton: boolean;
+  /** The next event under the date on the homescreen. */
+  showOnHomescreen: boolean;
+  /** The next event under the date in the sidebar. */
+  showInSidebar: boolean;
 };
 
 export type ForecastSettings = {
@@ -93,6 +101,7 @@ export type Settings = {
   location: LocationSettings;
   units: UnitSettings;
   dateTime: DateTimeSettings;
+  calendar: CalendarSettings;
   forecast: ForecastSettings;
   appearance: AppearanceSettings;
   privacy: PrivacySettings;

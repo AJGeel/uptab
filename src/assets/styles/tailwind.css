@@ -23,6 +23,7 @@
   --animate-contentHide: contentHide 250ms cubic-bezier(0.16, 1, 0.3, 1);
   --animate-hotkey: hotkey 1s ease-out forwards;
   --animate-shake: shake 400ms ease-in-out;
+  --animate-ripple: ripple 1.8s ease-out infinite;
   --animate-swatch-spin: swatch-spin 6s linear infinite;
 
   @keyframes overlayShow {
@@ -68,6 +69,17 @@
   @keyframes swatch-spin {
     to {
       --swatch-spin: 360deg;
+    }
+  }
+  @keyframes ripple {
+    0% {
+      opacity: 0.7;
+      transform: scale(1);
+    }
+    80%,
+    100% {
+      opacity: 0;
+      transform: scale(3);
     }
   }
   @keyframes shake {

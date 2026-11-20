@@ -1,4 +1,5 @@
 import BackgroundsModal from "./BackgroundsModal/BackgroundsModal";
+import CalendarConnectModal from "./CalendarConnectModal/CalendarConnectModal";
 import HotkeysModal from "./HotkeysModal/HotkeysModal";
 import LocalPhotosModal from "./LocalPhotosModal/LocalPhotosModal";
 import SettingsModal from "./SettingsModal/SettingsModal";
@@ -15,6 +16,7 @@ const Modals = () => (
     <BackgroundsModal />
     <LocalPhotosModal />
     <WhatsNewModal />
+    <CalendarConnectModal />
   </>
 );
 

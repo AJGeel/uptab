@@ -20,6 +20,8 @@ import Loader from "../ui/Loader";
 type Props = {
   className?: string;
   inert?: boolean;
+  /** Shows the calendar the way the sidebar does. */
+  isSidebar?: boolean;
   /** The setting that shows this widget, outlined when it's hovered in the preferences. */
   settingId?: string;
 };
@@ -46,7 +48,7 @@ const LoadingMessage = () => {
   return <Loader label={message} className="h-10.5" />;
 };
 
-const InfoWidget = ({ className, inert, settingId }: Props) => {
+const InfoWidget = ({ className, inert, isSidebar, settingId }: Props) => {
   const {
     status: liveStatus,
     data: { weatherData, locationData },
@@ -91,7 +93,7 @@ const InfoWidget = ({ className, inert, settingId }: Props) => {
 
               <div className="h-10 w-0.5 rounded-sm bg-black/5" />
 
-              <CalendarWidget />
+              <CalendarWidget isSidebar={isSidebar} />
             </Wrapper>
           )}
 
@@ -124,7 +126,7 @@ const InfoWidget = ({ className, inert, settingId }: Props) => {
 
               <div className="h-10 w-0.5 rounded-sm bg-black/5" />
 
-              <CalendarWidget />
+              <CalendarWidget isSidebar={isSidebar} />
             </Wrapper>
           )}
         </AnimatePresence>

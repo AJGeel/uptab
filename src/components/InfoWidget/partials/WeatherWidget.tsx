@@ -33,7 +33,8 @@ const WeatherWidget = ({ weatherData, area }: WeatherWidgetProps) => {
   return (
     <div
       className={cn(
-        "group relative flex items-center gap-6",
+        // Keeps its size when a long event title next to it is squeezed instead.
+        "group relative flex shrink-0 items-center gap-6",
         widgetHover,
         "has-[[data-forecast]:active]:scale-95 has-[[data-forecast]:active]:opacity-70",
         // The location switcher has its own hover, so the widget's steps aside.

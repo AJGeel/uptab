@@ -6,6 +6,7 @@ import {
   SettingsSection,
   useModalStore,
 } from "@/src/hooks/stores/useModalStore";
+import { useCalendarConnection } from "@/src/hooks/useCalendarConnection";
 import useKeyPress from "@/src/hooks/useKeyPress";
 import { useSettings } from "@/src/hooks/useSettings";
 import { hotkeys } from "@/src/services/hotkeys/hotkeys";
@@ -26,6 +27,7 @@ import Modal from "../../ui/Modal";
 
 /** The setting each link points at, for the ones that aren't the city search. */
 const FOCUSED_SETTING_ROWS: Partial<Record<SettingsFocus, string>> = {
+  calendar: "calendar.connection",
   errorReports: "privacy.errorReporting",
   preferencesButton: "homescreen.showPreferencesButton",
   updateNews: "sidebar.showUpdates",
@@ -60,13 +62,21 @@ const SettingsModal = () => {
   const requestedSection = useModalStore((state) => state.settingsSection);
   const requestedFocus = useModalStore((state) => state.settingsFocus);
 
+  const { isConnected } = useCalendarConnection();
+  const availableEntries = settingEntries.filter(
+    ({ visibleWhen }) =>
+      !visibleWhen ||
+      (isConnected !== undefined &&
+        (visibleWhen === "connected") === isConnected),
+  );
+
   const [query, setQuery] = useState("");
   const [chosenSection, setChosenSection] = useState<SettingsSection>();
   const [isConfirmingReset, setIsConfirmingReset] = useState(false);
   const searchRef = useRef<HTMLInputElement>(null);
 
   const isSearching = query.trim() !== "";
-  const matches = searchSettings(settingEntries, sections, query);
+  const matches = searchSettings(availableEntries, sections, query);
   const matchCounts = isSearching
     ? Object.fromEntries(
         sections.map(({ id }) => [
@@ -184,8 +194,9 @@ const SettingsModal = () => {
         const settingRow = row
           ? document.getElementById(`${SETTING_ROW_ID_PREFIX}${row}`)
           : null;
-        const settingSwitch =
-          settingRow?.querySelector<HTMLElement>('[role="switch"]');
+        const settingSwitch = settingRow?.querySelector<HTMLElement>(
+          '[role="switch"], button',
+        );
 
         settingSwitch?.scrollIntoView({ block: "nearest" });
 
@@ -220,7 +231,7 @@ const SettingsModal = () => {
             {visibleSections.map((section) =>
               renderSection({
                 section,
-                entries: (isSearching ? matches : settingEntries).filter(
+                entries: (isSearching ? matches : availableEntries).filter(
                   (entry) => entry.section === section.id,
                 ),
                 canReset: !isSearching,

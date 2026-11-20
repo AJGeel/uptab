@@ -1,9 +1,11 @@
-import { ButtonHTMLAttributes } from "react";
+import { ButtonHTMLAttributes, ReactNode } from "react";
 
 import { cn } from "@/src/utils";
 
 type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
   label: string;
+  /** Before the label, such as a spinner. */
+  icon?: ReactNode;
   className?: string;
   variant?: (typeof buttonVariants)[keyof typeof buttonVariants];
 };
@@ -27,6 +29,7 @@ const buttonStyles = {
 
 const Button = ({
   label,
+  icon,
   onClick,
   className,
   variant = buttonVariants.primary,
@@ -35,7 +38,7 @@ const Button = ({
   <button
     {...props}
     className={cn(
-      "inline-flex items-center justify-center rounded-xl leading-none font-medium ring-sky-500 duration-150 focus:ring-2 focus:ring-offset-2 focus:outline-hidden active:ring-2 active:ring-offset-2",
+      "inline-flex items-center justify-center gap-2 rounded-xl leading-none font-medium ring-sky-500 duration-150 focus:ring-2 focus:ring-offset-2 focus:outline-hidden active:ring-2 active:ring-offset-2",
       variant === buttonVariants.primary && buttonStyles.primary,
       variant === buttonVariants.secondary && buttonStyles.secondary,
       variant === buttonVariants.inline && buttonStyles.inline,
@@ -43,6 +46,7 @@ const Button = ({
     )}
     onClick={onClick}
   >
+    {icon}
     {label}
   </button>
 );

@@ -8,13 +8,18 @@ export const Modals = {
   backgrounds: "backgrounds",
   localPhotos: "localPhotos",
   whatsNew: "whatsNew",
+  calendarConnect: "calendarConnect",
 } as const;
 
 export type Modals = (typeof Modals)[keyof typeof Modals];
 
 /** Something in the settings modal to focus when it opens, instead of the first field. */
 export type SettingsFocus =
-  "citySearch" | "errorReports" | "preferencesButton" | "updateNews";
+  | "calendar"
+  | "citySearch"
+  | "errorReports"
+  | "preferencesButton"
+  | "updateNews";
 
 export type SettingsSection =
   | "sidebar"
@@ -22,6 +27,7 @@ export type SettingsSection =
   | "photos"
   | "location"
   | "weather"
+  | "calendar"
   | "appearance"
   | "general";
 

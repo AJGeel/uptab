@@ -23,6 +23,8 @@ type Base = {
   icon: Icon;
   /** A key that does the same from anywhere, shown next to the title. */
   hotkey?: Hotkeys;
+  /** Only shown while a calendar is connected, or while none is: otherwise it has nothing to change. */
+  visibleWhen?: "connected" | "disconnected";
   /** Greyed out and untouchable while the setting it depends on is off. */
   isDisabled?: (settings: Settings) => boolean;
 };
@@ -61,7 +63,12 @@ export type SwatchesEntry = Base & {
 export type CustomEntry = Base & {
   kind: "custom";
   content:
-    "about" | "backgrounds" | "localPhotos" | "location" | "searchEngine";
+    | "about"
+    | "backgrounds"
+    | "calendarConnection"
+    | "localPhotos"
+    | "location"
+    | "searchEngine";
 };
 
 export type SettingEntry =
@@ -72,6 +79,7 @@ type Group =
   | "homescreen"
   | "units"
   | "dateTime"
+  | "calendar"
   | "forecast"
   | "appearance"
   | "backgrounds"

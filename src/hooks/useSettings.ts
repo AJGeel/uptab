@@ -89,6 +89,17 @@ export const useSettings = () => {
     await editMutation.mutateAsync({ ...data, location });
   };
 
+  const setShowCalendarPrompt = async (to: boolean) => {
+    if (!data) {
+      return;
+    }
+
+    await editMutation.mutateAsync({
+      ...data,
+      calendar: { ...data.calendar, showConnectPrompt: to },
+    });
+  };
+
   const updateSettings = async (newSettings: Settings) => {
     await editMutation.mutateAsync(newSettings);
   };
@@ -104,6 +115,7 @@ export const useSettings = () => {
     toggleSidebarSetting,
     setBackgroundThemes,
     setLocationSettings,
+    setShowCalendarPrompt,
     setSidebarOpen,
     updateSettings,
     resetDefaultSettings,

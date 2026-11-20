@@ -3,6 +3,7 @@ import { hotkeyDescriptions } from "@/src/services/hotkeys/hotkeys";
 import { Settings } from "@/src/services/settings/types";
 
 import AboutTab from "./AboutTab";
+import CalendarConnectionRow from "./CalendarConnectionRow";
 import LocationTab from "./LocationTab";
 import SettingRow from "./SettingRow";
 import Button, { buttonVariants } from "../../../ui/Button";
@@ -97,6 +98,10 @@ const SettingEntryRow = ({ entry, settings, query, onChange }: Props) => {
 
   if (entry.content === "about") {
     return <AboutTab />;
+  }
+
+  if (entry.content === "calendarConnection") {
+    return <CalendarConnectionRow entry={entry} query={query} />;
   }
 
   if (entry.content === "location") {
