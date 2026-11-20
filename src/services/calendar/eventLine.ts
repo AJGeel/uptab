@@ -124,14 +124,17 @@ export const formatEventBadge = (
 };
 
 /** Which service a meeting link is for, as a name people know. */
+const matchesHost = (hostname: string, allowedHost: string) =>
+  hostname === allowedHost || hostname.endsWith(`.${allowedHost}`);
+
 export const getMeetingProvider = (link: string) => {
   const { hostname } = new URL(link);
 
-  if (hostname.endsWith("zoom.us")) {
+  if (matchesHost(hostname, "zoom.us")) {
     return "Zoom";
   }
 
-  return hostname.endsWith("teams.microsoft.com")
+  return matchesHost(hostname, "teams.microsoft.com")
     ? "Microsoft Teams"
     : "Google Meet";
 };
