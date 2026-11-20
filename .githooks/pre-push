@@ -1,0 +1,20 @@
+#!/bin/sh
+# Runs CI's quick checks before a branch is pushed, cheapest first.
+# Skip it once with `git push --no-verify`.
+
+# Pushing only tags or deleting branches has nothing to check.
+should_run=false
+while read -r _ local_sha remote_ref _; do
+  case "$remote_ref" in
+    refs/heads/*)
+      case "$local_sha" in
+        *[!0]*) should_run=true ;;
+      esac
+      ;;
+  esac
+done
+
+[ "$should_run" = true ] || exit 0
+
+echo "pre-push: typecheck, test, lint (same as CI)"
+bun run typecheck && bun run test --run && bun run lint

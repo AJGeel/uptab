@@ -5,6 +5,7 @@
   "description": "What's UpTab?",
   "author": "Arthur Geel <ageel@enrise.com>",
   "scripts": {
+    "prepare": "[ -e .git ] && git config core.hooksPath .githooks || true",
     "dev": "trap 'kill 0' EXIT; BUILD_TARGET=firefox nodemon & bun load:firefox",
     "build": "BUILD_TARGET=chrome vite build && BUILD_TARGET=firefox vite build",
     "zip": "cd dist/firefox && zip -r firefox.zip . && mv firefox.zip ../firefox.zip && cd ../../ && cd dist/chromium && zip -r chromium.zip . && mv chromium.zip ../chromium.zip && cd ../../",

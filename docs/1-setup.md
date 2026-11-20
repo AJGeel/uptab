@@ -44,6 +44,8 @@ bun run test
 bun run lint
 ```
 
+`bun install` also points git at `.githooks/`, so `git push` first runs the same quick checks as CI (typecheck, tests, lint) and stops on a failure. Pushing only tags or deleting branches skips them. Skip the checks once with `git push --no-verify`.
+
 <br/>
 
 ## 3. Production builds
