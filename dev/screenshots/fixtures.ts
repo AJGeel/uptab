@@ -13,6 +13,7 @@ export const NOW = new Date("2026-06-20T16:20:00+02:00");
 export const TODAY = "2026-06-20";
 
 const CURRENT_TEMPERATURE = 25;
+const CURRENT_WIND = 12;
 
 /** Per day: lowest and highest temperature, WMO weather code, rain at its peak. */
 const DAYS = [
@@ -62,6 +63,7 @@ const units = {
   snowfall: "cm",
   weather_code: "wmo code",
   is_day: "",
+  wind_speed_10m: "km/h",
 };
 
 /** An Open-Meteo forecast response (see src/services/weather/types.ts). */
@@ -92,6 +94,7 @@ export const weather = () => {
       snowfall: 0,
       weather_code: DAYS[0].code,
       is_day: 1,
+      wind_speed_10m: CURRENT_WIND,
     },
     hourly_units: units,
     hourly: {
@@ -111,6 +114,7 @@ export const weather = () => {
       is_day: hours.map(({ hour }) =>
         hour >= SUNRISE && hour < SUNSET ? 1 : 0,
       ),
+      wind_speed_10m: hours.map(() => CURRENT_WIND),
     },
   };
 };

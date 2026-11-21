@@ -147,8 +147,17 @@ export const seedStorage = (
           id: crypto.randomUUID(),
         })),
       });
-      // No "What's new" notice in the sidebar.
+      /*
+       * No notice above the date: not "What's new", the error reports nudge or
+       * the feedback ask (the last two are due right away in a dev build). And
+       * no "Connect your calendar" under it.
+       */
       await chrome.storage.local.remove("newUpdate");
+      await chrome.storage.local.set({
+        errorReportsNudgedAt: Date.now(),
+        feedbackAskedAt: Date.now(),
+        settings: { calendar: { showConnectPrompt: false } },
+      });
 
       // A few milliseconds apart, so sorting by date gives the same order every run.
       for (const bookmark of bookmarks) {
