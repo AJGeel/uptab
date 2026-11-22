@@ -1,5 +1,5 @@
 import { CaretDownIcon } from "@phosphor-icons/react";
-import { lazy, ReactNode, Suspense, useState } from "react";
+import { lazy, ReactNode, Suspense, useMemo, useState } from "react";
 
 import { useLocationAndWeather } from "@/src/hooks/queries/useLocationAndWeather";
 import { Modals, useModalStore } from "@/src/hooks/stores/useModalStore";
@@ -7,6 +7,7 @@ import { useSettings } from "@/src/hooks/useSettings";
 import { DEFAULT_EXTRA_FORECAST_DAYS } from "@/src/services/weather/constants";
 import { cn } from "@/src/utils";
 
+import { getForecastMood, pickCloseLabel } from "./closeLabel";
 import DailySummaries from "./DailySummaries";
 import { DailySummary } from "./forecastChartData";
 import ForecastLayout from "./ForecastLayout";
@@ -78,10 +79,22 @@ const WeatherForecastModal = () => {
 
   const isPending = status === "loading";
   const isError = status === "locationError" || status === "weatherError";
+  const isVisible = activeModal === Modals.weather_forecast;
+
+  // A fresh pick each time the modal opens, then stable while it's open.
+  const closeLabel = useMemo(
+    () =>
+      pickCloseLabel(
+        isVisible && weatherData
+          ? getForecastMood(weatherData.hourly)
+          : undefined,
+      ),
+    [isVisible, weatherData],
+  );
 
   return (
     <Modal
-      isVisible={activeModal === Modals.weather_forecast}
+      isVisible={isVisible}
       onClose={closeModal}
       title="Weather Forecast"
       subtitle={
@@ -116,7 +129,7 @@ const WeatherForecastModal = () => {
                 )}
               />
             </button>
-            <Button label="Looking good!" onClick={closeModal} />
+            <Button label={closeLabel} onClick={closeModal} />
           </div>
         </div>
       }
