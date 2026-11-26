@@ -155,6 +155,11 @@ const ForecastChart = ({ hourly }: ForecastChartProps) => {
       <ResponsiveContainer width="100%" height="100%">
         <ComposedChart
           data={data}
+          /*
+           * Its keyboard layer makes the chart focusable, and focus alone
+           * shows the tooltip at the first point, as if it were hovered.
+           */
+          accessibilityLayer={false}
           margin={{ top: 0, right: 0, bottom: 0, left: 0 }}
         >
           <defs>

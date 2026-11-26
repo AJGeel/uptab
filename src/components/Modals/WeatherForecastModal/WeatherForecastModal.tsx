@@ -81,16 +81,10 @@ const WeatherForecastModal = () => {
   const isError = status === "locationError" || status === "weatherError";
   const isVisible = activeModal === Modals.weather_forecast;
 
+  const mood =
+    isVisible && weatherData ? getForecastMood(weatherData.hourly) : undefined;
   // A fresh pick each time the modal opens, then stable while it's open.
-  const closeLabel = useMemo(
-    () =>
-      pickCloseLabel(
-        isVisible && weatherData
-          ? getForecastMood(weatherData.hourly)
-          : undefined,
-      ),
-    [isVisible, weatherData],
-  );
+  const closeLabel = useMemo(() => pickCloseLabel(mood), [mood]);
 
   return (
     <Modal
