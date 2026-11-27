@@ -47,6 +47,9 @@ const Homescreen = () => {
   const showCredit = settings?.homescreen.showPhotoCredit && bg?.author;
 
   const isSidebarOpen = settings?.sidebar?.isOpen;
+  // An easter egg has the photo: the photo controls explain that instead.
+  const eggTooltip = "You found an easter egg!";
+  const showEgg = () => setActiveModal(ModalIds.easterEgg);
 
   useKeyPress(hotkeys.backslash, () => toggleSidebarSetting("isOpen"));
   useKeyPress(hotkeys.slash, (event) => {
@@ -102,8 +105,17 @@ const Homescreen = () => {
       closeModal();
     }
   });
-  useKeyPress("ArrowRight", () => browse(1));
-  useKeyPress("ArrowLeft", () => browse(-1));
+  // An easter egg has the photo, so the arrows leave the pick alone.
+  useKeyPress("ArrowRight", () => {
+    if (!egg) {
+      browse(1);
+    }
+  });
+  useKeyPress("ArrowLeft", () => {
+    if (!egg) {
+      browse(-1);
+    }
+  });
   useAccent();
   useTheme();
 
@@ -182,24 +194,26 @@ const Homescreen = () => {
                 >
                   <BarButton
                     aria-label="Previous background"
-                    tooltip="Previous photo (←)"
+                    tooltip={egg ? eggTooltip : "Previous photo (←)"}
                     className="active:scale-90"
-                    onClick={() => browse(-1)}
+                    onClick={() => (egg ? showEgg() : browse(-1))}
                   >
                     <CaretLeftIcon className="size-4 drop-shadow-md drop-shadow-scrim/20" />
                   </BarButton>
                   <BarButton
-                    tooltip="Choose backgrounds (B)"
+                    tooltip={egg ? eggTooltip : "Choose backgrounds (B)"}
                     className="flex items-center gap-2 px-3 text-shadow-md text-shadow-scrim/20 active:scale-95"
-                    onClick={() => setActiveModal(ModalIds.backgrounds)}
+                    onClick={() =>
+                      egg ? showEgg() : setActiveModal(ModalIds.backgrounds)
+                    }
                   >
                     Backgrounds
                   </BarButton>
                   <BarButton
                     aria-label="Next background"
-                    tooltip="Next photo (→)"
+                    tooltip={egg ? eggTooltip : "Next photo (→)"}
                     className="active:scale-90"
-                    onClick={() => browse(1)}
+                    onClick={() => (egg ? showEgg() : browse(1))}
                   >
                     <CaretRightIcon className="size-4 drop-shadow-md drop-shadow-scrim/20" />
                   </BarButton>

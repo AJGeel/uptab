@@ -16,6 +16,7 @@ const INTERACTIVE_ELEMENTS =
 export const useEasterEggs = () => {
   const { data: settings } = useSettings();
   const forced = useEggStore((state) => state.forced);
+  const setActiveEgg = useEggStore((state) => state.setActiveEgg);
   // Rolled once, so settings changing later doesn't re-roll the dice.
   const [rolled] = useState(() => {
     const roll = Math.random();
@@ -40,6 +41,13 @@ export const useEasterEggs = () => {
       document.title = "What's UpTab? 🥕";
     }
   }, [isOn, forced, egg, rolled.isCheeky]);
+
+  // So the rest of the page knows the photo isn't the usual one.
+  useEffect(() => {
+    setActiveEgg(egg);
+
+    return () => setActiveEgg(undefined);
+  }, [egg, setActiveEgg]);
 
   // The particles of the egg, for as long as it plays.
   useEffect(() => {

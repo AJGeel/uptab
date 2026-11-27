@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 
+import { useEggStore } from "@/src/hooks/stores/useEggStore";
 import { isEditableElement } from "@/src/hooks/useKeyPress";
 import { hotkeyDescriptions, hotkeys } from "@/src/services/hotkeys/hotkeys";
 import { Hotkeys } from "@/src/services/hotkeys/types";
@@ -14,6 +15,14 @@ export const ActiveHotkeyIndicator = () => {
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       if (isEditableElement(event.target)) {
+        return;
+      }
+
+      // The arrows don't do anything while an easter egg has the photo.
+      if (
+        useEggStore.getState().activeEgg &&
+        (event.key === hotkeys.left || event.key === hotkeys.right)
+      ) {
         return;
       }
 

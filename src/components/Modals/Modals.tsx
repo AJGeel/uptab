@@ -1,5 +1,6 @@
 import BackgroundsModal from "./BackgroundsModal/BackgroundsModal";
 import CalendarConnectModal from "./CalendarConnectModal/CalendarConnectModal";
+import EasterEggModal from "./EasterEggModal/EasterEggModal";
 import HotkeysModal from "./HotkeysModal/HotkeysModal";
 import LocalPhotosModal from "./LocalPhotosModal/LocalPhotosModal";
 import SettingsModal from "./SettingsModal/SettingsModal";
@@ -17,6 +18,7 @@ const Modals = () => (
     <LocalPhotosModal />
     <WhatsNewModal />
     <CalendarConnectModal />
+    <EasterEggModal />
   </>
 );
 
