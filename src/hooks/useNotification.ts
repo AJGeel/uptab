@@ -28,6 +28,44 @@ type Options = {
 
 const queryKey = ["notification"];
 
+type NotificationData = {
+  hasUpdate: boolean;
+  feedback: Awaited<ReturnType<typeof getFeedbackHistory>>;
+  errorReportsNudgedAt: Awaited<ReturnType<typeof getErrorReportsNudgedAt>>;
+  sessionKind: NotificationKind | undefined;
+};
+
+/** What decides which notification shows. Shared, so hiding it in one place hides it everywhere. */
+export const useNotificationData = () =>
+  useQuery({
+    queryKey,
+    queryFn: async () => {
+      const feedback = await getFeedbackHistory();
+
+      return {
+        hasUpdate: !!(await getUpdateNotification()).newUpdate,
+        feedback,
+        errorReportsNudgedAt: await getErrorReportsNudgedAt(),
+        sessionKind: await getSessionNotification(),
+      };
+    },
+    staleTime: Infinity,
+    networkMode: "always",
+  });
+
+/** Ends the update notification, for the Close button and for reading the notes. */
+export const useDismissUpdate = () => {
+  const queryClient = useQueryClient();
+
+  return () => {
+    queryClient.setQueryData<NotificationData>(
+      queryKey,
+      (data) => data && { ...data, hasUpdate: false },
+    );
+    setUpdateNotification(false);
+  };
+};
+
 /** In the order they're shown: only the first one that's due gets its turn. */
 const PRIORITY: NotificationKind[] = ["update", "errorReports", "feedback"];
 
@@ -43,23 +81,9 @@ export const useNotification = ({
   isErrorReportingOn,
 }: Options) => {
   const queryClient = useQueryClient();
+  const dismissUpdate = useDismissUpdate();
 
-  // Shared, so hiding the notification in one place hides it everywhere.
-  const { data } = useQuery({
-    queryKey,
-    queryFn: async () => {
-      const feedback = await getFeedbackHistory();
-
-      return {
-        hasUpdate: !!(await getUpdateNotification()).newUpdate,
-        feedback,
-        errorReportsNudgedAt: await getErrorReportsNudgedAt(),
-        sessionKind: await getSessionNotification(),
-      };
-    },
-    staleTime: Infinity,
-    networkMode: "always",
-  });
+  const { data } = useNotificationData();
 
   const isDue = (kind: NotificationKind) => {
     if (!data) {
@@ -108,7 +132,6 @@ export const useNotification = ({
 
     queryClient.setQueryData(queryKey, {
       ...data,
-      hasUpdate: kind === "update" ? false : data.hasUpdate,
       errorReportsNudgedAt:
         kind === "errorReports" ? now : data.errorReportsNudgedAt,
       feedback:
@@ -118,7 +141,7 @@ export const useNotification = ({
     });
 
     if (kind === "update") {
-      setUpdateNotification(false);
+      dismissUpdate();
     } else if (kind === "errorReports") {
       void setErrorReportsNudged();
     } else {
