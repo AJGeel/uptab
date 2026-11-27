@@ -4,8 +4,9 @@ import { getShortlinks } from "@/src/services/shortlinks/getShortlinks";
 
 export const SHORTLINK_QUERY_KEY = ["shortlinks"] as const;
 
-export const useShortlinks = () =>
+export const useShortlinks = (enabled = true) =>
   useQuery({
     queryFn: getShortlinks,
     queryKey: SHORTLINK_QUERY_KEY,
+    enabled,
   });

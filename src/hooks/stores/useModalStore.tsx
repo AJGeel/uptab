@@ -9,6 +9,7 @@ export const Modals = {
   localPhotos: "localPhotos",
   whatsNew: "whatsNew",
   calendarConnect: "calendarConnect",
+  easterEgg: "easterEgg",
 } as const;
 
 export type Modals = (typeof Modals)[keyof typeof Modals];
@@ -17,6 +18,7 @@ export type Modals = (typeof Modals)[keyof typeof Modals];
 export type SettingsFocus =
   | "calendar"
   | "citySearch"
+  | "disableFun"
   | "errorReports"
   | "preferencesButton"
   | "updateNews";

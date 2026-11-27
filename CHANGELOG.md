@@ -2,6 +2,17 @@
 
 UpTab adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [V2.5.1] — 2026-11-27
+
+### ✨ Added
+
+- Some days are special. Keep an eye on your new tab 👀
+
+### 🐛 Fixed
+
+- The sidebar no longer jumps around while it loads.
+- Closing the release notes modal dismisses the update notification.
+
 ## [V2.5.0] — 2026-11-20
 
 ### ✨ Added

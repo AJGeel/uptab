@@ -1,5 +1,5 @@
 import { CaretDownIcon } from "@phosphor-icons/react";
-import { lazy, ReactNode, Suspense, useState } from "react";
+import { lazy, ReactNode, Suspense, useMemo, useState } from "react";
 
 import { useLocationAndWeather } from "@/src/hooks/queries/useLocationAndWeather";
 import { Modals, useModalStore } from "@/src/hooks/stores/useModalStore";
@@ -7,8 +7,10 @@ import { useSettings } from "@/src/hooks/useSettings";
 import { DEFAULT_EXTRA_FORECAST_DAYS } from "@/src/services/weather/constants";
 import { cn } from "@/src/utils";
 
+import { getForecastMood, pickCloseLabel } from "./closeLabel";
 import DailySummaries from "./DailySummaries";
 import { DailySummary } from "./forecastChartData";
+import ForecastLayout from "./ForecastLayout";
 import { loadForecastChart } from "./loadForecastChart";
 import AnimatedHeight from "../../ui/AnimatedHeight";
 import Button, { inlineLinkStyles } from "../../ui/Button";
@@ -38,8 +40,8 @@ const placeholderSummaries = (days: number): DailySummary[] =>
   }));
 
 /**
- * Mirrors ForecastChart's layout (an invisible summary row, then the chart's
- * height), so the modal keeps its size when the chart loads.
+ * Takes the chart's place (an invisible summary row, then its box), so the
+ * modal keeps its size when the chart loads.
  */
 const Placeholder = ({
   days,
@@ -48,12 +50,15 @@ const Placeholder = ({
   days: number;
   children: ReactNode;
 }) => (
-  <div className="mt-2 space-y-6">
-    <div className="invisible" aria-hidden>
-      <DailySummaries summaries={placeholderSummaries(days)} />
-    </div>
-    <div className="flex h-70 items-center justify-center">{children}</div>
-  </div>
+  <ForecastLayout
+    summaries={
+      <div className="invisible" aria-hidden>
+        <DailySummaries summaries={placeholderSummaries(days)} />
+      </div>
+    }
+  >
+    <div className="flex size-full items-center justify-center">{children}</div>
+  </ForecastLayout>
 );
 
 const WeatherForecastModal = () => {
@@ -74,10 +79,16 @@ const WeatherForecastModal = () => {
 
   const isPending = status === "loading";
   const isError = status === "locationError" || status === "weatherError";
+  const isVisible = activeModal === Modals.weather_forecast;
+
+  const mood =
+    isVisible && weatherData ? getForecastMood(weatherData.hourly) : undefined;
+  // A fresh pick each time the modal opens, then stable while it's open.
+  const closeLabel = useMemo(() => pickCloseLabel(mood), [mood]);
 
   return (
     <Modal
-      isVisible={activeModal === Modals.weather_forecast}
+      isVisible={isVisible}
       onClose={closeModal}
       title="Weather Forecast"
       subtitle={
@@ -112,7 +123,7 @@ const WeatherForecastModal = () => {
                 )}
               />
             </button>
-            <Button label="Looking good!" onClick={closeModal} />
+            <Button label={closeLabel} onClick={closeModal} />
           </div>
         </div>
       }

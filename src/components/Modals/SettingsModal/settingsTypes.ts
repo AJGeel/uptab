@@ -66,6 +66,7 @@ export type CustomEntry = Base & {
     | "about"
     | "backgrounds"
     | "calendarConnection"
+    | "devEggs"
     | "localPhotos"
     | "location"
     | "searchEngine";

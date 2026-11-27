@@ -2,6 +2,7 @@ import { PlusIcon } from "@phosphor-icons/react";
 import { useState } from "react";
 
 import { useBackgroundCatalogue } from "@/src/hooks/queries/useBackgroundCatalogue";
+import { useEggStore } from "@/src/hooks/stores/useEggStore";
 import { Modals, useModalStore } from "@/src/hooks/stores/useModalStore";
 import useKeyPress from "@/src/hooks/useKeyPress";
 import { useSettings } from "@/src/hooks/useSettings";
@@ -48,11 +49,16 @@ const BackgroundsModal = () => {
     (state) => state.openSettingsSection,
   );
 
+  const activeEgg = useEggStore((state) => state.activeEgg);
+
   useKeyPress(hotkeys.b, () => {
-    if (activeModal === Modals.backgrounds) {
+    // An easter egg has the photo: its own modal says so, instead of the picker.
+    const modal = activeEgg ? Modals.easterEgg : Modals.backgrounds;
+
+    if (activeModal === modal) {
       closeModal();
     } else {
-      setActiveModal(Modals.backgrounds);
+      setActiveModal(modal);
     }
   });
 

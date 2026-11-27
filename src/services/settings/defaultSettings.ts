@@ -47,6 +47,7 @@ export const defaultSettings: Settings = {
   appearance: {
     theme: "system",
     accent: "sky",
+    disableFun: false,
   },
   search: {
     engine: DEFAULT_SEARCH_ENGINE,

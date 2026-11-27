@@ -8,6 +8,7 @@ export const hotkeys = {
   left: "ArrowLeft",
   right: "ArrowRight",
   b: "b",
+  l: "l",
 } as const;
 
 export const hotkeyDescriptions: Record<Hotkeys, HotkeyDescription> = {
@@ -38,5 +39,9 @@ export const hotkeyDescriptions: Record<Hotkeys, HotkeyDescription> = {
   [hotkeys.b]: {
     keyDisplay: "B",
     description: "Choose backgrounds",
+  },
+  [hotkeys.l]: {
+    keyDisplay: "L",
+    description: "Open look & feel",
   },
 };

@@ -4,6 +4,7 @@ import { runtime } from "webextension-polyfill";
 
 import { useReleaseNotes } from "@/src/hooks/queries/useReleaseNotes";
 import { Modals, useModalStore } from "@/src/hooks/stores/useModalStore";
+import { useDismissUpdate } from "@/src/hooks/useNotification";
 import { useRandomBackground } from "@/src/hooks/useRandomBackground/useRandomBackground";
 
 import AnimatedHeight from "../../ui/AnimatedHeight";
@@ -26,7 +27,11 @@ const WhatsNewModal = () => {
   const { data: notes, isError, isPending } = useReleaseNotes(isVisible);
   const { activeBg } = useRandomBackground();
   const { version } = runtime.getManifest();
-  const close = () => setActiveModal(null);
+  const dismissUpdate = useDismissUpdate();
+  const close = () => {
+    setActiveModal(null);
+    dismissUpdate();
+  };
   const releaseDate = notes?.date ? parseISO(notes.date) : null;
   const title = `What's new in UpTab ${version}`;
   const released =

@@ -6,11 +6,13 @@ import {
   useModalStore,
 } from "@/src/hooks/stores/useModalStore";
 import { useAccent } from "@/src/hooks/useAccent";
+import { useDebouncedValue } from "@/src/hooks/useDebouncedValue";
 import { useEasterEggs } from "@/src/hooks/useEasterEggs";
 import useKeyPress, { isEditableElement } from "@/src/hooks/useKeyPress";
 import { useRandomBackground } from "@/src/hooks/useRandomBackground/useRandomBackground";
 import { useSettings } from "@/src/hooks/useSettings";
 import { useTheme } from "@/src/hooks/useTheme";
+import { eggs } from "@/src/services/easterEggs/eggs";
 import { hotkeys } from "@/src/services/hotkeys/hotkeys";
 import { cn } from "@/src/utils";
 
@@ -32,13 +34,28 @@ const Homescreen = () => {
   } = useSettings();
   const activeModal = useModalStore((state) => state.activeModal);
   const { activeBg, onError, browse } = useRandomBackground();
+  const egg = useEasterEggs();
   const setActiveModal = useModalStore((state) => state.setActiveModal);
+  const settingsSection = useModalStore((state) => state.settingsSection);
+  const closeModal = useModalStore((state) => state.closeModal);
   const openSettingsSection = useModalStore(
     (state) => state.openSettingsSection,
   );
-  const showCredit = settings?.homescreen.showPhotoCredit && activeBg?.author;
+  // An easter egg takes over the photo, and its credit.
+  const bg = egg ? eggs[egg].background : activeBg;
+  // Only easter eggs say how their photo looks for now: the catalogue's photos are all light.
+  const isDarkPhoto = egg ? eggs[egg].background.tone === "dark" : false;
+  /*
+   * The text changes in one step, when the new photo is about half faded in.
+   * Fading it would pass through a blue-grey: the dark text is a navy.
+   */
+  const isWhiteText = useDebouncedValue(isDarkPhoto, 350);
+  const showCredit = settings?.homescreen.showPhotoCredit && bg?.author;
 
   const isSidebarOpen = settings?.sidebar?.isOpen;
+  // An easter egg has the photo: the photo controls explain that instead.
+  const eggTooltip = "You found an easter egg!";
+  const showEgg = () => setActiveModal(ModalIds.easterEgg);
 
   useKeyPress(hotkeys.backslash, () => toggleSidebarSetting("isOpen"));
   useKeyPress(hotkeys.slash, (event) => {
@@ -84,9 +101,27 @@ const Homescreen = () => {
 
     return () => window.removeEventListener("keydown", closeSidebar);
   }, [isSidebarOpen, activeModal, setSidebarOpen]);
-  useKeyPress("ArrowRight", () => browse(1));
-  useKeyPress("ArrowLeft", () => browse(-1));
-  useEasterEggs();
+  useKeyPress(hotkeys.l, () => {
+    if (!activeModal) {
+      openSettingsSection("appearance");
+    } else if (
+      activeModal === ModalIds.settings &&
+      settingsSection === "appearance"
+    ) {
+      closeModal();
+    }
+  });
+  // An easter egg has the photo, so the arrows leave the pick alone.
+  useKeyPress("ArrowRight", () => {
+    if (!egg) {
+      browse(1);
+    }
+  });
+  useKeyPress("ArrowLeft", () => {
+    if (!egg) {
+      browse(-1);
+    }
+  });
   useAccent();
   useTheme();
 
@@ -104,12 +139,10 @@ const Homescreen = () => {
           setIsExpanded={() => toggleSidebarSetting("isOpen")}
         />
         <Background
-          src={activeBg?.src}
+          src={bg?.src}
           onError={onError}
           alt={
-            activeBg?.author
-              ? `A great photo by ${activeBg.author}`
-              : "Background photo"
+            bg?.author ? `A great photo by ${bg.author}` : "Background photo"
           }
           className={cn(
             "flex flex-1 flex-col bg-cover bg-center duration-500",
@@ -121,8 +154,12 @@ const Homescreen = () => {
               settingId="homescreen.showInfoWidget"
               inert={isSidebarOpen}
               className={cn(
-                // Dark text on the photo in either theme, so the weather icon stays black too.
-                "p-6 pb-16 pl-20 text-black duration-500 [--color-black:#020e2c] dark:[&_img]:invert-0",
+                // Only the slide away fades: the colours change in one step.
+                "p-6 pb-16 pl-20 text-black transition-[translate,opacity] duration-500",
+                // Text on the photo in either theme, so the weather icon follows: dark on a light photo, white on a dark one.
+                isWhiteText
+                  ? "[--color-black:oklch(96%_0.006_264)] [--widget-hover:rgb(0_0_0/0.35)] [&_img]:invert"
+                  : "[--color-black:#020e2c] dark:[&_img]:invert-0",
                 isSidebarOpen && "pointer-events-none translate-x-40 opacity-0",
               )}
             />
@@ -164,44 +201,46 @@ const Homescreen = () => {
                 >
                   <BarButton
                     aria-label="Previous background"
-                    tooltip="Previous photo (←)"
+                    tooltip={egg ? eggTooltip : "Previous photo (←)"}
                     className="active:scale-90"
-                    onClick={() => browse(-1)}
+                    onClick={() => (egg ? showEgg() : browse(-1))}
                   >
                     <CaretLeftIcon className="size-4 drop-shadow-md drop-shadow-scrim/20" />
                   </BarButton>
                   <BarButton
-                    tooltip="Choose backgrounds (B)"
+                    tooltip={egg ? eggTooltip : "Choose backgrounds (B)"}
                     className="flex items-center gap-2 px-3 text-shadow-md text-shadow-scrim/20 active:scale-95"
-                    onClick={() => setActiveModal(ModalIds.backgrounds)}
+                    onClick={() =>
+                      egg ? showEgg() : setActiveModal(ModalIds.backgrounds)
+                    }
                   >
                     Backgrounds
                   </BarButton>
                   <BarButton
                     aria-label="Next background"
-                    tooltip="Next photo (→)"
+                    tooltip={egg ? eggTooltip : "Next photo (→)"}
                     className="active:scale-90"
-                    onClick={() => browse(1)}
+                    onClick={() => (egg ? showEgg() : browse(1))}
                   >
                     <CaretRightIcon className="size-4 drop-shadow-md drop-shadow-scrim/20" />
                   </BarButton>
                 </div>
               )}
               {showCredit &&
-                (activeBg.link ? (
+                (bg.link ? (
                   <a
-                    href={activeBg.link}
+                    href={bg.link}
                     data-setting="homescreen.showPhotoCredit"
                     className="mr-1 ml-3 rounded-xl p-2 px-3 duration-150 text-shadow-md text-shadow-scrim/20 hover:bg-white/15 active:scale-95"
                   >
-                    Photo by {activeBg.author}
+                    Photo by {bg.author}
                   </a>
                 ) : (
                   <p
                     data-setting="homescreen.showPhotoCredit"
                     className="mr-1 ml-3 p-2 px-3 text-shadow-md text-shadow-scrim/20"
                   >
-                    Photo by {activeBg.author}
+                    Photo by {bg.author}
                   </p>
                 ))}
             </div>

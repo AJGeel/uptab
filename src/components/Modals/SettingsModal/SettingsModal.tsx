@@ -28,6 +28,7 @@ import Modal from "../../ui/Modal";
 /** The setting each link points at, for the ones that aren't the city search. */
 const FOCUSED_SETTING_ROWS: Partial<Record<SettingsFocus, string>> = {
   calendar: "calendar.connection",
+  disableFun: "appearance.disableFun",
   errorReports: "privacy.errorReporting",
   preferencesButton: "homescreen.showPreferencesButton",
   updateNews: "sidebar.showUpdates",

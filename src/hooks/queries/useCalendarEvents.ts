@@ -1,6 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 
 import { useCalendarConnection } from "@/src/hooks/useCalendarConnection";
+import { useIdle } from "@/src/hooks/useIdle";
 import { getCalendarEvents } from "@/src/services/calendar/getCalendarEvents";
 
 /**
@@ -11,9 +12,11 @@ export const CALENDAR_REFRESH_MS = 60 * 60 * 1000;
 
 export const useCalendarEvents = () => {
   const { isConnected, connection } = useCalendarConnection();
+  // Fetching and parsing the feed is heavy: saved events show first, and it waits until the page has settled.
+  const isIdle = useIdle();
 
   const query = useQuery({
-    enabled: isConnected === true,
+    enabled: isConnected === true && isIdle,
     queryFn: () => getCalendarEvents(),
     // Saved with the other persisted queries, which look at this key.
     queryKey: ["calendar", "events"],

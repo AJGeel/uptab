@@ -3,14 +3,11 @@ import { PersistQueryClientProvider } from "@tanstack/react-query-persist-client
 import { AnimatePresence, motion } from "motion/react";
 
 import Homescreen from "@/src/components/Homescreen/Homescreen";
-import { useEasterEggs } from "@/src/hooks/useEasterEggs";
 import { persistOptions } from "@/src/services/persistQueries";
 
 const queryClient = new QueryClient();
 
 export default function Newtab() {
-  useEasterEggs();
-
   return (
     <AnimatePresence>
       <motion.div
