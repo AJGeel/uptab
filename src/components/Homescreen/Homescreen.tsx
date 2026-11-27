@@ -6,6 +6,7 @@ import {
   useModalStore,
 } from "@/src/hooks/stores/useModalStore";
 import { useAccent } from "@/src/hooks/useAccent";
+import { useDebouncedValue } from "@/src/hooks/useDebouncedValue";
 import { useEasterEggs } from "@/src/hooks/useEasterEggs";
 import useKeyPress, { isEditableElement } from "@/src/hooks/useKeyPress";
 import { useRandomBackground } from "@/src/hooks/useRandomBackground/useRandomBackground";
@@ -44,6 +45,11 @@ const Homescreen = () => {
   const bg = egg ? eggs[egg].background : activeBg;
   // Only easter eggs say how their photo looks for now: the catalogue's photos are all light.
   const isDarkPhoto = egg ? eggs[egg].background.tone === "dark" : false;
+  /*
+   * The text changes in one step, when the new photo is about half faded in.
+   * Fading it would pass through a blue-grey: the dark text is a navy.
+   */
+  const isWhiteText = useDebouncedValue(isDarkPhoto, 350);
   const showCredit = settings?.homescreen.showPhotoCredit && bg?.author;
 
   const isSidebarOpen = settings?.sidebar?.isOpen;
@@ -148,9 +154,10 @@ const Homescreen = () => {
               settingId="homescreen.showInfoWidget"
               inert={isSidebarOpen}
               className={cn(
-                "p-6 pb-16 pl-20 text-black duration-500",
+                // Only the slide away fades: the colours change in one step.
+                "p-6 pb-16 pl-20 text-black transition-[translate,opacity] duration-500",
                 // Text on the photo in either theme, so the weather icon follows: dark on a light photo, white on a dark one.
-                isDarkPhoto
+                isWhiteText
                   ? "[--color-black:oklch(96%_0.006_264)] [--widget-hover:rgb(0_0_0/0.35)] [&_img]:invert"
                   : "[--color-black:#020e2c] dark:[&_img]:invert-0",
                 isSidebarOpen && "pointer-events-none translate-x-40 opacity-0",

@@ -19,7 +19,7 @@ const JoinPill = ({ href, isPrimary, placement = "widget" }: Props) => (
     data-setting="calendar.showJoinButton"
     className={cn(
       // The pseudo-element makes the small pill comfortable to hit.
-      "pointer-events-auto relative z-10 inline-flex shrink-0 items-center gap-1 rounded-full leading-none font-medium whitespace-nowrap duration-150 before:absolute before:-inset-x-1 before:-inset-y-1.5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-500",
+      "pointer-events-auto relative z-10 inline-flex shrink-0 items-center gap-1 rounded-full leading-none font-medium whitespace-nowrap transition-[background-color,box-shadow] duration-150 before:absolute before:-inset-x-1 before:-inset-y-1.5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-500",
       placement === "widget"
         ? // Follows the text colour, so it reads on a photo and in either theme.
           cn(

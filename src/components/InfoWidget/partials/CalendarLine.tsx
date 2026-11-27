@@ -60,7 +60,7 @@ const CalendarLine = ({ status, line, now, timeFormat, showJoin }: Props) => {
             &middot;
           </span>
           <button
-            className="pointer-events-auto relative z-10 shrink-0 rounded-xs whitespace-nowrap opacity-70 duration-150 hover:underline hover:opacity-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-500"
+            className="pointer-events-auto relative z-10 shrink-0 rounded-xs whitespace-nowrap opacity-70 transition-opacity duration-150 hover:underline hover:opacity-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-500"
             onClick={() => void setShowCalendarPrompt(false)}
           >
             Don&apos;t show this
