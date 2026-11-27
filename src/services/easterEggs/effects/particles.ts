@@ -30,6 +30,12 @@ export type Burst = {
   sway?: number;
   shape: Shape;
   colors: string[];
+  /** The way a piece starts out, in degrees. Random when left out. */
+  rotation?: Range;
+  /** Mirrors the piece, for one that flies the other way. */
+  flip?: boolean;
+  /** How solid a piece is at most, from 0 to 1: lower is more subtle. */
+  opacity?: number;
   /** Below 1 squashes a piece, so a turning circle shows it turns. */
   squash?: number;
   /** A thin border, for contrast with what's behind it. */
@@ -102,7 +108,9 @@ export const createParticles = () => {
         piece.age >= piece.life ||
         piece.y > window.innerHeight + 60 ||
         piece.x < -80 ||
-        piece.x > window.innerWidth + 80
+        piece.x > window.innerWidth + 80 ||
+        // Something that only rises never comes back.
+        (piece.gravity <= 0 && piece.y < -200)
       ) {
         // Swap with the last one, which is cheaper than shifting all the rest.
         pieces[index] = pieces[pieces.length - 1];
@@ -139,7 +147,11 @@ export const createParticles = () => {
         y: burst.y,
         vx: Math.cos(angle) * speed,
         vy: -Math.sin(angle) * speed,
-        rotation: Math.random() * Math.PI * 2,
+        rotation: burst.rotation
+          ? toRadians(random(burst.rotation))
+          : Math.random() * Math.PI * 2,
+        flip: burst.flip ?? false,
+        opacity: burst.opacity ?? 1,
         spin: toRadians(random(burst.spin)) * (Math.random() < 0.5 ? -1 : 1),
         size: random(burst.size),
         age: 0,

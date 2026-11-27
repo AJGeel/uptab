@@ -2,6 +2,8 @@ import {
   CarrotIcon,
   CheckIcon,
   ConfettiIcon,
+  CrownIcon,
+  FlagIcon,
   Icon,
   SnowflakeIcon,
 } from "@phosphor-icons/react";
@@ -14,6 +16,12 @@ const EGG_ICONS: Record<EggId, { icon: Icon; color: string }> = {
   Sinterklaas: { icon: CarrotIcon, color: "text-orange-500" },
   Christmas: { icon: SnowflakeIcon, color: "text-sky-500" },
   "Oud & Nieuw": { icon: ConfettiIcon, color: "text-fuchsia-500" },
+  Koningsdag: { icon: CrownIcon, color: "text-orange-500" },
+  /*
+   * TODO(sint-maarten): parked until it has a photo. Import MusicNotesIcon again.
+   * "Sint-Maarten": { icon: MusicNotesIcon, color: "text-amber-500" },
+   */
+  Bevrijdingsdag: { icon: FlagIcon, color: "text-blue-600" },
 };
 
 /** The banner of an unlocked achievement: the egg's own photo, a medal, and a shine. */

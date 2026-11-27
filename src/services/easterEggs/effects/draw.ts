@@ -4,6 +4,8 @@ import { Piece } from "./types";
 type Batch = { path: Path2D; color: string; alpha: number };
 
 const OUTLINE_WIDTH = 2;
+/** Red, white and blue, from the top. */
+const FLAG_STRIPES = ["#ae1c28", "#ffffff", "#21468b"];
 /** How opaque the three parts of a tail are, newest first, and how wide. */
 const TAIL_ALPHA = [0.75, 0.42, 0.18];
 const TAIL_WIDTH = [2.6, 1.7, 0.9];
@@ -112,7 +114,7 @@ export const createPainter = (canvas: HTMLCanvasElement) => {
     }
 
     context.save();
-    context.globalAlpha = fade;
+    context.globalAlpha = fade * piece.opacity;
     context.translate(piece.x * ratio, piece.y * ratio);
 
     if (piece.shape === "glow") {
@@ -132,9 +134,26 @@ export const createPainter = (canvas: HTMLCanvasElement) => {
 
     context.fillStyle = piece.color;
     context.rotate(piece.rotation);
-    context.scale(ratio, ratio * piece.squash);
+    context.scale(piece.flip ? -ratio : ratio, ratio * piece.squash);
 
-    if (piece.shape === "circle") {
+    if (piece.shape === "flag") {
+      // The Dutch flag, three stripes in the proportion of 3 to 2.
+      const width = piece.size;
+      const stripe = (width * 2) / 9;
+
+      FLAG_STRIPES.forEach((color, index) => {
+        context.fillStyle = color;
+        context.fillRect(
+          -width / 2,
+          -stripe * 1.5 + index * stripe,
+          width,
+          stripe,
+        );
+      });
+      context.lineWidth = 0.8;
+      context.strokeStyle = "rgba(0, 0, 0, 0.18)";
+      context.strokeRect(-width / 2, -stripe * 1.5, width, stripe * 3);
+    } else if (piece.shape === "circle") {
       context.beginPath();
       context.arc(0, 0, piece.size / 2, 0, Math.PI * 2);
       context.fill();
@@ -172,7 +191,12 @@ export const createPainter = (canvas: HTMLCanvasElement) => {
 
   /** Draws a piece, or gathers it to be drawn with the rest at the end. */
   const draw = (piece: Piece, fade: number) => {
-    if (piece.shape !== "circle" || piece.squash !== 1 || piece.outline) {
+    if (
+      piece.shape !== "circle" ||
+      piece.squash !== 1 ||
+      piece.outline ||
+      piece.opacity !== 1
+    ) {
       drawAlone(piece, fade);
 
       return;

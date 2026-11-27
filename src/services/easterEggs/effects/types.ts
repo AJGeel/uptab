@@ -6,7 +6,7 @@ export type Effect = {
 };
 
 /** A glow is a soft round light, for flashes: its colour must be a six-digit hex. */
-export type Shape = "circle" | "glow" | Path2D;
+export type Shape = "circle" | "glow" | "flag" | Path2D;
 
 export type Piece = {
   x: number;
@@ -14,6 +14,8 @@ export type Piece = {
   vx: number;
   vy: number;
   rotation: number;
+  flip: boolean;
+  opacity: number;
   spin: number;
   size: number;
   age: number;

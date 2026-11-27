@@ -1,30 +1,128 @@
-export type EggId = "Sinterklaas" | "Christmas" | "Oud & Nieuw";
+import {
+  endOfDay,
+  getDay,
+  isWithinInterval,
+  startOfDay,
+  subDays,
+} from "date-fns";
 
-/** A month (1–12) and a day, in any year. */
-type MonthDay = readonly [month: number, day: number];
+export type EggId =
+  | "Koningsdag"
+  | "Bevrijdingsdag"
+  /*
+   * TODO(sint-maarten): parked until it has a photo. Search for the tag to bring it back.
+   * | "Sint-Maarten"
+   */
+  | "Sinterklaas"
+  | "Christmas"
+  | "Oud & Nieuw";
 
 export type EggRange = {
   egg: EggId;
-  from: MonthDay;
-  to: MonthDay;
+  /** The first day. */
+  from: Date;
+  /** The last day: it counts until the end of it. */
+  to: Date;
   /** The odds, from 0 to 1, that a new tab shows the egg. */
   chance: number;
 };
 
+/** Koningsdag is on 27 April, or the day before when that's a Sunday. */
+const getKoningsdag = (year: number) => {
+  const day = new Date(year, 3, 27);
+
+  return getDay(day) === 0 ? new Date(year, 3, 26) : day;
+};
+
 /*
- * Ranges are inclusive, in local time, and must not overlap: `pickEgg` takes
- * the first match. The odds build up towards the day itself.
+ * The ranges of a year, in local time. They must not overlap: `pickEgg` takes
+ * the first match. The odds build up towards the day itself, and the quieter
+ * days stay below 100% on purpose, so they feel like a surprise. Months in a
+ * Date start at 0: 0 is January and 11 is December.
  */
-export const eggRanges: EggRange[] = [
-  { egg: "Sinterklaas", from: [11, 15], to: [12, 1], chance: 0.05 },
-  { egg: "Sinterklaas", from: [12, 2], to: [12, 4], chance: 0.25 },
-  { egg: "Sinterklaas", from: [12, 5], to: [12, 5], chance: 1 },
-  { egg: "Christmas", from: [12, 15], to: [12, 23], chance: 0.1 },
-  { egg: "Christmas", from: [12, 24], to: [12, 26], chance: 0.5 },
-  { egg: "Oud & Nieuw", from: [12, 30], to: [12, 30], chance: 0.1 },
-  { egg: "Oud & Nieuw", from: [12, 31], to: [12, 31], chance: 0.6 },
-  { egg: "Oud & Nieuw", from: [1, 1], to: [1, 1], chance: 0.25 },
-];
+export const getEggRanges = (year: number): EggRange[] => {
+  const koningsdag = getKoningsdag(year);
+
+  return [
+    {
+      egg: "Oud & Nieuw",
+      from: new Date(year, 0, 1),
+      to: new Date(year, 0, 1),
+      chance: 0.25,
+    },
+    // Koningsnacht, the evening before, and then the day itself.
+    {
+      egg: "Koningsdag",
+      from: subDays(koningsdag, 1),
+      to: subDays(koningsdag, 1),
+      chance: 0.2,
+    },
+    { egg: "Koningsdag", from: koningsdag, to: koningsdag, chance: 0.6 },
+    {
+      egg: "Bevrijdingsdag",
+      from: new Date(year, 4, 5),
+      to: new Date(year, 4, 5),
+      chance: 0.4,
+    },
+    /*
+     * TODO(sint-maarten): parked until it has a photo.
+     * {
+     *   egg: "Sint-Maarten",
+     *   from: new Date(year, 10, 9),
+     *   to: new Date(year, 10, 10),
+     *   chance: 0.15,
+     * },
+     * {
+     *   egg: "Sint-Maarten",
+     *   from: new Date(year, 10, 11),
+     *   to: new Date(year, 10, 11),
+     *   chance: 0.55,
+     * },
+     */
+    {
+      egg: "Sinterklaas",
+      from: new Date(year, 10, 15),
+      to: new Date(year, 11, 1),
+      chance: 0.05,
+    },
+    {
+      egg: "Sinterklaas",
+      from: new Date(year, 11, 2),
+      to: new Date(year, 11, 4),
+      chance: 0.25,
+    },
+    {
+      egg: "Sinterklaas",
+      from: new Date(year, 11, 5),
+      to: new Date(year, 11, 5),
+      chance: 1,
+    },
+    {
+      egg: "Christmas",
+      from: new Date(year, 11, 15),
+      to: new Date(year, 11, 23),
+      chance: 0.1,
+    },
+    {
+      egg: "Christmas",
+      from: new Date(year, 11, 24),
+      to: new Date(year, 11, 26),
+      chance: 0.5,
+    },
+    {
+      egg: "Oud & Nieuw",
+      from: new Date(year, 11, 30),
+      to: new Date(year, 11, 30),
+      chance: 0.1,
+    },
+    {
+      egg: "Oud & Nieuw",
+      from: new Date(year, 11, 31),
+      to: new Date(year, 11, 31),
+      chance: 0.6,
+    },
+  ];
+};
 
 type Egg = {
   title: string;
@@ -50,6 +148,51 @@ type Egg = {
 };
 
 export const eggs: Record<EggId, Egg> = {
+  Koningsdag: {
+    title: "Prins Pils 🍻",
+    achievement: {
+      name: "Oranje Boven",
+      explanation:
+        "On Koningsdag, UpTab now and then turns your tab orange and fires off confetti. Click the background for more. Don't drink too much, you've likely got things to do tomorrow...",
+      tint: "linear-gradient(135deg, rgb(234 88 12 / 0.88), rgb(251 146 60 / 0.5))",
+    },
+    background: {
+      src: "/images/eggs/koningsdag.webp",
+      tone: "dark",
+      author: "Timothy Dykes",
+      link: "https://unsplash.com/photos/a-close-up-of-a-glass-of-beer-with-drops-of-water-Lq1rOaigDoY",
+    },
+  },
+  Bevrijdingsdag: {
+    title: "Bevrijdingsdag 🕊️",
+    achievement: {
+      name: "Never Again",
+      explanation:
+        "On Bevrijdingsdag, UpTab now and then lets a few small flags drift by. Click the background for a few more.",
+      tint: "linear-gradient(135deg, rgb(30 64 175 / 0.85), rgb(220 38 38 / 0.45))",
+    },
+    background: {
+      src: "/images/eggs/bevrijdingsdag.webp",
+      author: "Kyle Hang",
+      link: "https://unsplash.com/photos/dutch-flag-on-a-classical-building-against-blue-sky-QNrXz_Y83jc",
+    },
+  },
+  /*
+   * TODO(sint-maarten): parked until it has a photo (and a tone, and a credit).
+   * The music notes effect is done: effects/notes.ts. To bring it back, also
+   * enable it in effects/index.ts and in the icons of EggAchievement.tsx, and
+   * the tests in eggs.test.ts and eggSchedule.test.ts.
+   * "Sint-Maarten": {
+   *   title: "Sint Maarten, Sint Maarten 🎶",
+   *   achievement: {
+   *     name: "Doorstep Diva",
+   *     explanation:
+   *       "Around Sint-Maarten, UpTab now and then lets a song drift up your tab, like kids singing at the door. Click the background for another verse.",
+   *     tint: "linear-gradient(135deg, rgb(120 53 15 / 0.85), rgb(245 158 11 / 0.45))",
+   *   },
+   *   background: { src: "/images/eggs/sint-maarten.webp" }, // plus tone and credit
+   * },
+   */
   Sinterklaas: {
     title: "Zet je schoentje 🥕",
     achievement: {
@@ -96,19 +239,14 @@ export const eggs: Record<EggId, Egg> = {
   },
 };
 
-const toOrdinal = ([month, day]: MonthDay) => month * 100 + day;
-
-export const isInRange = (date: Date, { from, to }: EggRange) => {
-  const today = toOrdinal([date.getMonth() + 1, date.getDate()]);
-
-  return today >= toOrdinal(from) && today <= toOrdinal(to);
-};
+export const isInRange = (date: Date, { from, to }: EggRange) =>
+  isWithinInterval(date, { start: startOfDay(from), end: endOfDay(to) });
 
 /** The egg for today, or nothing. `random` is a number from 0 up to 1, for testing. */
 export const pickEgg = (
   date: Date,
   random: number,
-  ranges: EggRange[] = eggRanges,
+  ranges: EggRange[] = getEggRanges(date.getFullYear()),
 ): EggId | undefined => {
   const range = ranges.find((candidate) => isInRange(date, candidate));
 

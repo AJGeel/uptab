@@ -10,8 +10,8 @@ type Option = {
   value: string;
   label: string;
   icon?: ReactNode;
-  /** Small, muted text after the label. */
-  hint?: string;
+  /** Small, muted text, or anything small, after the label. */
+  hint?: ReactNode;
   /** Runs on every click on the option, also when it's the one already chosen. */
   onClick?: () => void;
 };
@@ -85,7 +85,7 @@ const Select = ({
           alignItemWithTrigger={false}
           className="z-50"
         >
-          <BaseSelect.Popup className="min-w-48 origin-(--transform-origin) rounded-xl border bg-surface p-1 text-black shadow-lg outline-hidden transition-[opacity,translate] duration-150 ease-out data-ending-style:-translate-y-1 data-ending-style:opacity-0 data-starting-style:-translate-y-1 data-starting-style:opacity-0">
+          <BaseSelect.Popup className="max-h-(--available-height) min-w-48 origin-(--transform-origin) overflow-y-auto rounded-xl border bg-surface p-1 text-black shadow-lg outline-hidden transition-[opacity,translate] duration-150 ease-out data-ending-style:-translate-y-1 data-ending-style:opacity-0 data-starting-style:-translate-y-1 data-starting-style:opacity-0">
             <BaseSelect.List>
               {options.map((option) => (
                 <BaseSelect.Item
@@ -103,9 +103,9 @@ const Select = ({
                   </BaseSelect.ItemText>
                   {!isIconFirst && option.icon}
                   {option.hint && (
-                    <span className="ml-auto pl-4 text-xs text-gray-500">
+                    <div className="ml-auto pl-4 text-xs text-gray-500">
                       {option.hint}
-                    </span>
+                    </div>
                   )}
                 </BaseSelect.Item>
               ))}
