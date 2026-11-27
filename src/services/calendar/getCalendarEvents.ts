@@ -3,7 +3,6 @@ import { addDays, startOfDay } from "date-fns";
 import { getCalendarUrl, hasCalendarAccess } from "./calendarConnection";
 import { CalendarError } from "./calendarError";
 import { getCalendarId } from "./eventUrl";
-import { parseCalendar } from "./parseCalendar";
 import { getConnection } from "./providers";
 import type { CalendarEvent } from "./types";
 
@@ -50,6 +49,8 @@ export const getCalendarEvents = async (
   try {
     // Today and tomorrow, so a tab left open past midnight still has events.
     const from = startOfDay(now);
+    // Loaded when a feed is actually parsed: a new tab with fresh events never needs the parser.
+    const { parseCalendar } = await import("./parseCalendar");
 
     return parseCalendar(
       await response.text(),

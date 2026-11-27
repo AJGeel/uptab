@@ -1,4 +1,7 @@
+import { useBookmarks } from "@/src/hooks/queries/useBookmarks";
+import { useShortlinks } from "@/src/hooks/queries/useShortlinks";
 import { Modals, useModalStore } from "@/src/hooks/stores/useModalStore";
+import { useNotificationData } from "@/src/hooks/useNotification";
 import { useSettings } from "@/src/hooks/useSettings";
 import { cn } from "@/src/utils";
 
@@ -22,6 +25,25 @@ const Sidebar = ({ isExpanded, setIsExpanded }: Props) => {
     (state) => state.openSettingsSection,
   );
 
+  const { isPending: isNotificationPending } = useNotificationData();
+  const { isPending: isShortlinksPending } = useShortlinks(
+    !!settings?.sidebar.showShortlinks,
+  );
+  const { isPending: isBookmarksPending } = useBookmarks(
+    !!settings?.sidebar.showBookmarks,
+  );
+
+  /*
+   * Each of these arrives on its own and would push what's below it down. The
+   * column waits for all of them, and then fades in as one. A hidden card
+   * isn't fetched, so it isn't waited for.
+   */
+  const isReady =
+    !!settings &&
+    !isNotificationPending &&
+    !(settings.sidebar.showShortlinks && isShortlinksPending) &&
+    !(settings.sidebar.showBookmarks && isBookmarksPending);
+
   return (
     <div
       data-setting="sidebar.isOpen"
@@ -37,20 +59,25 @@ const Sidebar = ({ isExpanded, setIsExpanded }: Props) => {
       {/* Off-screen while collapsed, so it's skipped by the keyboard and screen readers. */}
       <div
         inert={!isExpanded}
-        className="flex h-full flex-col overflow-y-auto p-6"
+        className={cn(
+          "flex h-full flex-col overflow-y-auto p-6 transition-opacity duration-200",
+          !isReady && "opacity-0",
+        )}
       >
-        {settings && (
-          <Notification
-            showUpdates={settings.sidebar.showUpdates}
-            feedbackFrequency={settings.sidebar.feedbackFrequency}
-            isErrorReportingOn={settings.privacy.errorReporting}
-          />
+        {isReady && (
+          <>
+            <Notification
+              showUpdates={settings.sidebar.showUpdates}
+              feedbackFrequency={settings.sidebar.feedbackFrequency}
+              isErrorReportingOn={settings.privacy.errorReporting}
+            />
+            {settings.sidebar.showInfoWidget && (
+              <InfoWidget isSidebar settingId="sidebar.showInfoWidget" />
+            )}
+            {settings.sidebar.showShortlinks && <Shortlinks />}
+            {settings.sidebar.showBookmarks && <Bookmarks />}
+          </>
         )}
-        {settings?.sidebar.showInfoWidget && (
-          <InfoWidget isSidebar settingId="sidebar.showInfoWidget" />
-        )}
-        {settings?.sidebar.showShortlinks && <Shortlinks />}
-        {settings?.sidebar.showBookmarks && <Bookmarks />}
         <div className="mt-auto flex items-center gap-2 pt-6 first:mt-0">
           <Button
             className="leading-normal first:mt-0"
