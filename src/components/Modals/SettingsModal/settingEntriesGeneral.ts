@@ -2,6 +2,7 @@ import {
   BellRingingIcon,
   CalendarCheckIcon,
   CircleHalfIcon,
+  ConfettiIcon,
   ClockIcon,
   CloudSunIcon,
   HouseIcon,
@@ -13,6 +14,7 @@ import {
   ThermometerIcon,
   ThermometerSimpleIcon,
   WindIcon,
+  EggIcon,
 } from "@phosphor-icons/react";
 
 import {
@@ -172,6 +174,38 @@ export const generalEntries: SettingEntry[] = [
       checkColor,
     })),
   },
+  {
+    kind: "switch",
+    id: "appearance.disableFun",
+    section: "appearance",
+    ...field("appearance", "disableFun"),
+    title: "I don't like fun",
+    description: "No holiday surprises for you. Sinterklaas will be sad.",
+    keywords: [
+      "easter egg",
+      "sinterklaas",
+      "holiday",
+      "christmas",
+      "animation",
+      "surprise",
+    ],
+    icon: ConfettiIcon,
+  },
+  // Only while developing: the dev build sets VITE_IS_DEV, and production builds drop this.
+  ...(import.meta.env.VITE_IS_DEV === "true"
+    ? ([
+        {
+          kind: "custom",
+          id: "dev.eggs",
+          section: "appearance",
+          content: "devEggs",
+          title: "(DEV) Play an easter egg",
+          description: "Shows an egg now, whatever the date or the odds.",
+          keywords: ["easter egg", "sinterklaas", "christmas", "debug", "dev"],
+          icon: EggIcon,
+        },
+      ] satisfies SettingEntry[])
+    : []),
   {
     kind: "switch",
     id: "sidebar.showUpdates",

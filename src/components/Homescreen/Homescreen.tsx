@@ -11,6 +11,7 @@ import useKeyPress, { isEditableElement } from "@/src/hooks/useKeyPress";
 import { useRandomBackground } from "@/src/hooks/useRandomBackground/useRandomBackground";
 import { useSettings } from "@/src/hooks/useSettings";
 import { useTheme } from "@/src/hooks/useTheme";
+import { eggs } from "@/src/services/easterEggs/eggs";
 import { hotkeys } from "@/src/services/hotkeys/hotkeys";
 import { cn } from "@/src/utils";
 
@@ -32,11 +33,16 @@ const Homescreen = () => {
   } = useSettings();
   const activeModal = useModalStore((state) => state.activeModal);
   const { activeBg, onError, browse } = useRandomBackground();
+  const egg = useEasterEggs();
   const setActiveModal = useModalStore((state) => state.setActiveModal);
+  const settingsSection = useModalStore((state) => state.settingsSection);
+  const closeModal = useModalStore((state) => state.closeModal);
   const openSettingsSection = useModalStore(
     (state) => state.openSettingsSection,
   );
-  const showCredit = settings?.homescreen.showPhotoCredit && activeBg?.author;
+  // An easter egg takes over the photo, and its credit.
+  const bg = egg ? eggs[egg].background : activeBg;
+  const showCredit = settings?.homescreen.showPhotoCredit && bg?.author;
 
   const isSidebarOpen = settings?.sidebar?.isOpen;
 
@@ -84,9 +90,18 @@ const Homescreen = () => {
 
     return () => window.removeEventListener("keydown", closeSidebar);
   }, [isSidebarOpen, activeModal, setSidebarOpen]);
+  useKeyPress(hotkeys.l, () => {
+    if (!activeModal) {
+      openSettingsSection("appearance");
+    } else if (
+      activeModal === ModalIds.settings &&
+      settingsSection === "appearance"
+    ) {
+      closeModal();
+    }
+  });
   useKeyPress("ArrowRight", () => browse(1));
   useKeyPress("ArrowLeft", () => browse(-1));
-  useEasterEggs();
   useAccent();
   useTheme();
 
@@ -104,12 +119,10 @@ const Homescreen = () => {
           setIsExpanded={() => toggleSidebarSetting("isOpen")}
         />
         <Background
-          src={activeBg?.src}
+          src={bg?.src}
           onError={onError}
           alt={
-            activeBg?.author
-              ? `A great photo by ${activeBg.author}`
-              : "Background photo"
+            bg?.author ? `A great photo by ${bg.author}` : "Background photo"
           }
           className={cn(
             "flex flex-1 flex-col bg-cover bg-center duration-500",
@@ -188,20 +201,20 @@ const Homescreen = () => {
                 </div>
               )}
               {showCredit &&
-                (activeBg.link ? (
+                (bg.link ? (
                   <a
-                    href={activeBg.link}
+                    href={bg.link}
                     data-setting="homescreen.showPhotoCredit"
                     className="mr-1 ml-3 rounded-xl p-2 px-3 duration-150 text-shadow-md text-shadow-scrim/20 hover:bg-white/15 active:scale-95"
                   >
-                    Photo by {activeBg.author}
+                    Photo by {bg.author}
                   </a>
                 ) : (
                   <p
                     data-setting="homescreen.showPhotoCredit"
                     className="mr-1 ml-3 p-2 px-3 text-shadow-md text-shadow-scrim/20"
                   >
-                    Photo by {activeBg.author}
+                    Photo by {bg.author}
                   </p>
                 ))}
             </div>

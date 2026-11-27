@@ -82,6 +82,8 @@ export type ThemeId = "system" | "light" | "dark";
 export type AppearanceSettings = {
   theme: ThemeId;
   accent: AccentId;
+  /** Turns off the holiday easter eggs and other surprises. */
+  disableFun: boolean;
 };
 
 export type PrivacySettings = {
