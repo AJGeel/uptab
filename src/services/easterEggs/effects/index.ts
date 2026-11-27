@@ -1,14 +1,14 @@
 import { Effect } from "./types";
 import { EggId } from "../eggs";
 
-/**
- * Loaded when an egg plays, so the particle library stays out of the way of
- * every other tab. Each effect can be stopped, and bursts where you click.
- */
-export const startEffect = async (egg: EggId): Promise<Effect> => {
-  if (egg === "christmas") {
-    return (await import("./snow")).startSnow();
-  }
-
-  return (await import("./candy")).startCandy();
+const effects: Record<EggId, () => Promise<Effect>> = {
+  Sinterklaas: async () => (await import("./candy")).startCandy(),
+  Christmas: async () => (await import("./snow")).startSnow(),
+  "Oud & Nieuw": async () => (await import("./fireworks")).startFireworks(),
 };
+
+/**
+ * Loaded when an egg plays, so the effects stay out of the way of every other
+ * tab. Each effect can be stopped, and reacts where you click.
+ */
+export const startEffect = (egg: EggId): Promise<Effect> => effects[egg]();

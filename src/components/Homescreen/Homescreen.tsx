@@ -42,6 +42,8 @@ const Homescreen = () => {
   );
   // An easter egg takes over the photo, and its credit.
   const bg = egg ? eggs[egg].background : activeBg;
+  // Only easter eggs say how their photo looks for now: the catalogue's photos are all light.
+  const isDarkPhoto = egg ? eggs[egg].background.tone === "dark" : false;
   const showCredit = settings?.homescreen.showPhotoCredit && bg?.author;
 
   const isSidebarOpen = settings?.sidebar?.isOpen;
@@ -134,8 +136,11 @@ const Homescreen = () => {
               settingId="homescreen.showInfoWidget"
               inert={isSidebarOpen}
               className={cn(
-                // Dark text on the photo in either theme, so the weather icon stays black too.
-                "p-6 pb-16 pl-20 text-black duration-500 [--color-black:#020e2c] dark:[&_img]:invert-0",
+                "p-6 pb-16 pl-20 text-black duration-500",
+                // Text on the photo in either theme, so the weather icon follows: dark on a light photo, white on a dark one.
+                isDarkPhoto
+                  ? "[--color-black:oklch(96%_0.006_264)] [--widget-hover:rgb(0_0_0/0.35)] [&_img]:invert"
+                  : "[--color-black:#020e2c] dark:[&_img]:invert-0",
                 isSidebarOpen && "pointer-events-none translate-x-40 opacity-0",
               )}
             />

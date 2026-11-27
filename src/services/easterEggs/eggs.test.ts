@@ -13,19 +13,26 @@ describe("pickEgg", () => {
   });
 
   it("rolls against the chance of the range", () => {
-    expect(pickEgg(on(11, 20), 0.04)).toBe("sinterklaas");
+    expect(pickEgg(on(11, 20), 0.04)).toBe("Sinterklaas");
     expect(pickEgg(on(11, 20), 0.05)).toBeUndefined();
-    expect(pickEgg(on(12, 3), 0.24)).toBe("sinterklaas");
+    expect(pickEgg(on(12, 3), 0.24)).toBe("Sinterklaas");
     expect(pickEgg(on(12, 3), 0.25)).toBeUndefined();
   });
 
   it("always shows on the fifth of December", () => {
-    expect(pickEgg(on(12, 5), 0.999)).toBe("sinterklaas");
+    expect(pickEgg(on(12, 5), 0.999)).toBe("Sinterklaas");
+  });
+
+  it("shows fireworks around the turn of the year", () => {
+    expect(pickEgg(on(12, 31), 0.59)).toBe("Oud & Nieuw");
+    expect(pickEgg(on(12, 31), 0.6)).toBeUndefined();
+    expect(pickEgg(on(1, 1), 0.24)).toBe("Oud & Nieuw");
+    expect(pickEgg(on(1, 2), 0)).toBeUndefined();
   });
 
   it("includes both ends of a range", () => {
-    expect(pickEgg(on(11, 15), 0)).toBe("sinterklaas");
-    expect(pickEgg(on(12, 1), 0)).toBe("sinterklaas");
+    expect(pickEgg(on(11, 15), 0)).toBe("Sinterklaas");
+    expect(pickEgg(on(12, 1), 0)).toBe("Sinterklaas");
   });
 });
 

@@ -1,4 +1,5 @@
-export type Shape = "circle" | Path2D;
+import { createPainter } from "./draw";
+import { Piece, Shape } from "./types";
 
 /** A phosphor icon path, drawn in a 256 by 256 box. */
 export const iconShape = (path: string) => new Path2D(path);
@@ -33,31 +34,17 @@ export type Burst = {
   squash?: number;
   /** A thin border, for contrast with what's behind it. */
   outline?: string;
-};
-
-type Piece = {
-  x: number;
-  y: number;
-  vx: number;
-  vy: number;
-  rotation: number;
-  spin: number;
-  size: number;
-  age: number;
-  life: number;
-  gravity: number;
-  drag: number;
-  sway: number;
-  swayPhase: number;
-  swaySpeed: number;
-  shape: Shape;
-  color: string;
-  squash: number;
-  outline?: string;
+  /** Leaves a tail this many steps long, fading behind it, like a burning spark. */
+  trail?: number;
+  /** How often a spark dims for a moment, from 0 to 1: it glitters. */
+  flicker?: number;
+  /** Frames at 60 fps it takes to fade out, at the end of its life. */
+  fade?: number;
 };
 
 const FADE_FRAMES = 40;
-const OUTLINE_WIDTH = 2;
+/** Keeps a pile-up of fireworks from dragging the page down. */
+const MAX_PIECES = 1400;
 const random = ([min, max]: Range) => min + Math.random() * (max - min);
 const toRadians = (degrees: number) => (degrees * Math.PI) / 180;
 
@@ -68,7 +55,7 @@ const toRadians = (degrees: number) => (degrees * Math.PI) / 180;
  */
 export const createParticles = () => {
   const canvas = document.createElement("canvas");
-  const context = canvas.getContext("2d");
+  const painter = createPainter(canvas);
   const pieces: Piece[] = [];
   let frame: number | undefined;
   let lastTime = 0;
@@ -83,70 +70,25 @@ export const createParticles = () => {
     zIndex: "10",
   });
   document.body.appendChild(canvas);
-
-  const resize = () => {
-    const ratio = window.devicePixelRatio || 1;
-
-    canvas.width = window.innerWidth * ratio;
-    canvas.height = window.innerHeight * ratio;
-  };
-
-  resize();
-  window.addEventListener("resize", resize);
-
-  const draw = (piece: Piece) => {
-    if (!context) {
-      return;
-    }
-
-    const ratio = canvas.width / window.innerWidth;
-    const fade = Math.min(1, (piece.life - piece.age) / FADE_FRAMES);
-
-    context.save();
-    context.globalAlpha = Math.max(0, fade);
-    context.fillStyle = piece.color;
-    context.translate(piece.x * ratio, piece.y * ratio);
-    context.rotate(piece.rotation);
-    context.scale(ratio, ratio * piece.squash);
-
-    if (piece.shape === "circle") {
-      context.beginPath();
-      context.arc(0, 0, piece.size / 2, 0, Math.PI * 2);
-      context.fill();
-
-      if (piece.outline) {
-        context.lineWidth = OUTLINE_WIDTH;
-        context.strokeStyle = piece.outline;
-        context.stroke();
-      }
-    } else {
-      const scale = piece.size / 256;
-
-      context.scale(scale, scale);
-      context.translate(-128, -128);
-      context.fill(piece.shape);
-
-      if (piece.outline) {
-        // In the units of the icon's box, so the border stays as thin on a big piece.
-        context.lineWidth = OUTLINE_WIDTH / scale;
-        context.lineJoin = "round";
-        context.strokeStyle = piece.outline;
-        context.stroke(piece.shape);
-      }
-    }
-
-    context.restore();
-  };
+  painter.resize();
+  window.addEventListener("resize", painter.resize);
 
   const step = (time: number) => {
     // Steps of one frame at 60 fps, so a slow screen isn't a slow animation.
     const delta = Math.min(3, (time - lastTime) / (1000 / 60));
 
     lastTime = time;
-    context?.clearRect(0, 0, canvas.width, canvas.height);
+    painter.begin();
 
     for (let index = pieces.length - 1; index >= 0; index--) {
       const piece = pieces[index];
+
+      if (piece.trailX && piece.trailY) {
+        piece.trailX[piece.head] = piece.x;
+        piece.trailY[piece.head] = piece.y;
+        piece.head = (piece.head + 1) % piece.trailX.length;
+        piece.count = Math.min(piece.count + 1, piece.trailX.length);
+      }
 
       piece.age += delta;
       piece.vx *= piece.drag ** delta;
@@ -162,17 +104,31 @@ export const createParticles = () => {
         piece.x < -80 ||
         piece.x > window.innerWidth + 80
       ) {
-        pieces.splice(index, 1);
-      } else {
-        draw(piece);
+        // Swap with the last one, which is cheaper than shifting all the rest.
+        pieces[index] = pieces[pieces.length - 1];
+        pieces.pop();
+        continue;
       }
+
+      let fade = Math.min(1, (piece.life - piece.age) / piece.fade);
+
+      if (piece.flicker > 0 && Math.random() < piece.flicker) {
+        fade *= 0.3;
+      }
+
+      painter.draw(piece, Math.max(0, fade));
     }
 
+    painter.end();
     frame = pieces.length > 0 ? requestAnimationFrame(step) : undefined;
   };
 
   const throwPieces = (burst: Burst) => {
     for (let index = 0; index < burst.count; index++) {
+      if (pieces.length >= MAX_PIECES) {
+        break;
+      }
+
       const angle = toRadians(
         burst.angle + (Math.random() - 0.5) * burst.spread,
       );
@@ -197,6 +153,12 @@ export const createParticles = () => {
         color: burst.colors[Math.floor(Math.random() * burst.colors.length)],
         squash: burst.squash ?? 1,
         outline: burst.outline,
+        flicker: burst.flicker ?? 0,
+        fade: burst.fade ?? FADE_FRAMES,
+        trailX: burst.trail ? new Float32Array(burst.trail) : undefined,
+        trailY: burst.trail ? new Float32Array(burst.trail) : undefined,
+        head: 0,
+        count: 0,
       });
     }
 
@@ -208,12 +170,14 @@ export const createParticles = () => {
 
   return {
     throwPieces,
+    /** How many pieces are in the air, to hold back when it's a lot. */
+    count: () => pieces.length,
     destroy: () => {
       if (frame !== undefined) {
         cancelAnimationFrame(frame);
       }
 
-      window.removeEventListener("resize", resize);
+      window.removeEventListener("resize", painter.resize);
       canvas.remove();
     },
   };

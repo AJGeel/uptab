@@ -1,4 +1,4 @@
-export type EggId = "Sinterklaas" | "Christmas";
+export type EggId = "Sinterklaas" | "Christmas" | "Oud & Nieuw";
 
 /** A month (1–12) and a day, in any year. */
 type MonthDay = readonly [month: number, day: number];
@@ -21,12 +21,24 @@ export const eggRanges: EggRange[] = [
   { egg: "Sinterklaas", from: [12, 5], to: [12, 5], chance: 1 },
   { egg: "Christmas", from: [12, 15], to: [12, 23], chance: 0.1 },
   { egg: "Christmas", from: [12, 24], to: [12, 26], chance: 0.5 },
+  { egg: "Oud & Nieuw", from: [12, 30], to: [12, 30], chance: 0.1 },
+  { egg: "Oud & Nieuw", from: [12, 31], to: [12, 31], chance: 0.6 },
+  { egg: "Oud & Nieuw", from: [1, 1], to: [1, 1], chance: 0.25 },
 ];
 
 type Egg = {
   title: string;
   /** Replaces the photo of the day for the whole tab. Bundled, so nothing is fetched. */
-  background: { src: string; author?: string; link?: string };
+  background: {
+    src: string;
+    /**
+     * How the photo looks behind the widgets: light gets dark text, dark gets
+     * white text. Light when left out.
+     */
+    tone?: "light" | "dark";
+    author?: string;
+    link?: string;
+  };
 };
 
 export const eggs: Record<EggId, Egg> = {
@@ -42,8 +54,18 @@ export const eggs: Record<EggId, Egg> = {
     title: "🎶 't is the season to be jolly! 🎄",
     background: {
       src: "/images/eggs/christmas.webp",
-      author: "Mariana Rascão",
-      link: "https://unsplash.com/photos/red-round-fruit-on-white-plastic-container-S4GOLEDaKw4",
+      tone: "dark",
+      author: "G",
+      link: "https://unsplash.com/photos/close-up-of-a-decorated-christmas-tree-with-lights-yV_8eB2Jz9s",
+    },
+  },
+  "Oud & Nieuw": {
+    title: "🎆 Happy new year! 🥂",
+    background: {
+      src: "/images/eggs/oud-en-nieuw.webp",
+      tone: "dark",
+      author: "Bern Fresen",
+      link: "https://unsplash.com/photos/brown-and-white-round-ceramic-bowl-on-brown-wooden-table-qAWrzGCDpzM",
     },
   },
 };
