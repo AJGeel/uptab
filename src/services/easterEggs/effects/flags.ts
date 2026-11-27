@@ -6,10 +6,10 @@ import { Effect } from "./types";
 /** How solid a flag is: low, so it's something you only just notice. */
 const OPACITY = 0.3;
 
-/** Small flags that drift up slowly, now and then, and a few more from where you click. */
+/** Small flags that drift up slowly now and then, and the flag spreading out like a ripple wherever you click. */
 export const startFlags = (): Effect => {
   const { throwPieces, destroy } = createParticles();
-  const canBurst = createRateLimit(3, 500);
+  const canBurst = createRateLimit(4, 350);
 
   const flag = (x: number, y: number, angle: number, speed: number) =>
     throwPieces({
@@ -59,19 +59,29 @@ export const startFlags = (): Effect => {
       clearInterval(interval);
       destroy();
     },
+    // One flag spreading out from where you click: red, white and blue in bands.
     burst: (x, y) => {
       if (!canBurst()) {
         return;
       }
 
-      for (let index = 0; index < 3; index++) {
-        flag(
-          x + random(-30, 30),
-          y + random(-10, 20),
-          random(70, 110),
-          random(0.9, 1.6),
-        );
-      }
+      throwPieces({
+        x,
+        y,
+        angle: 90,
+        spread: 0,
+        count: 1,
+        speed: [0, 0],
+        gravity: 0,
+        size: [34, 34],
+        grow: 3.2,
+        life: [130, 130],
+        fade: 110,
+        spin: [0, 0],
+        opacity: 0.7,
+        shape: "ripple",
+        colors: ["#ffffff"],
+      });
     },
   };
 };

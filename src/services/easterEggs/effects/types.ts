@@ -6,7 +6,7 @@ export type Effect = {
 };
 
 /** A glow is a soft round light, for flashes: its colour must be a six-digit hex. */
-export type Shape = "circle" | "glow" | "flag" | Path2D;
+export type Shape = "circle" | "glow" | "flag" | "ripple" | Path2D;
 
 export type Piece = {
   x: number;
@@ -16,6 +16,8 @@ export type Piece = {
   rotation: number;
   flip: boolean;
   opacity: number;
+  /** How many pixels its size grows every frame: for a ripple. */
+  grow: number;
   spin: number;
   size: number;
   age: number;

@@ -34,6 +34,8 @@ export type Burst = {
   rotation?: Range;
   /** Mirrors the piece, for one that flies the other way. */
   flip?: boolean;
+  /** Pixels its size grows every frame, for a ring that spreads out. */
+  grow?: number;
   /** How solid a piece is at most, from 0 to 1: lower is more subtle. */
   opacity?: number;
   /** Below 1 squashes a piece, so a turning circle shows it turns. */
@@ -103,6 +105,7 @@ export const createParticles = () => {
       piece.x += (piece.vx + Math.sin(piece.swayPhase) * piece.sway) * delta;
       piece.y += piece.vy * delta;
       piece.rotation += piece.spin * delta;
+      piece.size += piece.grow * delta;
 
       if (
         piece.age >= piece.life ||
@@ -152,6 +155,7 @@ export const createParticles = () => {
           : Math.random() * Math.PI * 2,
         flip: burst.flip ?? false,
         opacity: burst.opacity ?? 1,
+        grow: burst.grow ?? 0,
         spin: toRadians(random(burst.spin)) * (Math.random() < 0.5 ? -1 : 1),
         size: random(burst.size),
         age: 0,

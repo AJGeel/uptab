@@ -6,6 +6,8 @@ type Batch = { path: Path2D; color: string; alpha: number };
 const OUTLINE_WIDTH = 2;
 /** Red, white and blue, from the top. */
 const FLAG_STRIPES = ["#ae1c28", "#ffffff", "#21468b"];
+/** How wide each band of the flag is, in a ripple. */
+const RIPPLE_BAND = 8;
 /** How opaque the three parts of a tail are, newest first, and how wide. */
 const TAIL_ALPHA = [0.75, 0.42, 0.18];
 const TAIL_WIDTH = [2.6, 1.7, 0.9];
@@ -153,6 +155,27 @@ export const createPainter = (canvas: HTMLCanvasElement) => {
       context.lineWidth = 0.8;
       context.strokeStyle = "rgba(0, 0, 0, 0.18)";
       context.strokeRect(-width / 2, -stripe * 1.5, width, stripe * 3);
+    } else if (piece.shape === "ripple") {
+      // The flag as bands around a middle: red on the outside, then white, then blue.
+      const radius = piece.size / 2;
+      // Eased, so it fades slowly at first and gently at the end.
+      context.globalAlpha = fade * fade * (3 - 2 * fade) * piece.opacity;
+
+      context.beginPath();
+      context.arc(0, 0, radius, 0, Math.PI * 2);
+      // A faint dark edge under it all, so the white band shows on a light photo.
+      context.lineWidth = RIPPLE_BAND * 3 + 3;
+      context.strokeStyle = "rgba(0, 0, 0, 0.12)";
+      context.stroke();
+
+      FLAG_STRIPES.forEach((color, index) => {
+        context.beginPath();
+        context.arc(0, 0, radius + (1 - index) * RIPPLE_BAND, 0, Math.PI * 2);
+        // A hair wider than a band, so they touch without a seam.
+        context.lineWidth = RIPPLE_BAND + 0.6;
+        context.strokeStyle = color;
+        context.stroke();
+      });
     } else if (piece.shape === "circle") {
       context.beginPath();
       context.arc(0, 0, piece.size / 2, 0, Math.PI * 2);
